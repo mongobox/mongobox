@@ -23,9 +23,9 @@ class AppKernel extends Kernel
 			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			// Mongobox
 			new Emakina\Bundle\LdapBundle\EmakinaLdapBundle(),
-            new Emk\Bundle\AuthenticationBundle\EmkAuthenticationBundle(),
-            new Emk\Bundle\TumblrBundle\EmkTumblrBundle(),
-        	new Emk\Bundle\JukeboxBundle\EmkJukeboxBundle(),
+            new Mongobox\Bundle\AuthenticationBundle\MongoboxAuthenticationBundle(),
+            new Mongobox\Bundle\TumblrBundle\MongoboxTumblrBundle(),
+        	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

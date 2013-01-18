@@ -1,0 +1,47 @@
+{% extends "MongoboxTumblrBundle:Admin/Tumblr:layout.html.twig" %}
+
+{% block title -%}
+- Administration
+{%- endblock title %}
+
+{% block body %} 
+	{{ parent() }}
+	
+	<a href="{{ path('admin_tumblr_new') }}" class="btn btn-large btn-primary pull-right">Poster un mongo pute</a>
+	<h1>Tumblr list</h1>
+	
+	{# Pagination #}
+	{% set parameter = {} %}
+	{% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+
+	<table class="table table-bordered table-striped">
+	    <thead>
+	        <tr>
+	            <th>Id</th>
+	            <th>Image</th>
+	            <th>Text</th>
+	            <th>Date</th>
+	            <th>Actions</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	    {% for entity in entities %}
+	        <tr>
+	            <td><a href="{{ path('admin_tumblr_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+	            <td>
+	            	<img src="{{ entity.image }}" title="{{ entity.text }}" width="100"/>
+	            </td>
+	            <td>{{ entity.text }}</td>
+	            <td>{% if entity.date %}le {{ entity.date|date('d/m/Y à H:i:s') }}{% endif %}</td>
+	            <td>	                
+                    <a class="btn" href="{{ path('admin_tumblr_show', { 'id': entity.id }) }}">Voir</a>                    
+                    <a class="btn" href="{{ path('admin_tumblr_edit', { 'id': entity.id }) }}"><i class="icon-ok-sign"></i> Modifier</a>	               
+	            </td>
+	        </tr>
+	    {% endfor %}
+	    </tbody>
+	</table>
+
+	{# Pagination #}
+{% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+{% endblock body %}
