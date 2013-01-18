@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> {{project_name}} {% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="{{ asset('bundles/emkjukebox/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/emkjukebox/css/jukebox.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/emkjukebox/css/fancymoves.css') }}" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="{{ asset('bundles/emkjukebox/css/bootstrap-responsive.css') }}" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="{{ asset('bundles/emkjukebox/ico/favicon.ico') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ asset('bundles/emkjukebox/ico/apple-touch-icon-144-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/emkjukebox/ico/apple-touch-icon-114-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/emkjukebox/ico/apple-touch-icon-72-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/emkjukebox/ico/apple-touch-icon-57-precomposed.png') }}">
+
+    {% block css %}{% endblock %}
+
+
+
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/jquery/jquery.1.7.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/jquery/jquery-ui-1.8.21.custom.min.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/jquery/jquery.easing.1.2.js') }}"></script>
+		<script>
+			var basepath = "{{ path('wall_index') }}";
+		</script>
+    {% block headerJs %}{% endblock %}
+  </head>
+
+  <body>
+
+  	{# Barre de navigation top #}
+	{% if app.user %}
+  	{% include "EmkJukeboxBundle::Navigation/navbar.html.twig" %}
+	{% endif %}
+
+    <div class="container">
+    <!-- CONTENT HERE -->
+
+	    {% if app.session.hasFlash('success') %}
+		    <div class="alert alert-success">
+		        {{ app.session.flash('success') }}
+		    </div>
+	 	{% endif %}
+	 	{% if app.session.hasFlash('notice') %}
+		    <div class="alert alert-error">
+		        {{ app.session.flash('notice') }}
+		    </div>
+	 	{% endif %}
+	 	{% if app.session.hasFlash('info') %}
+		    <div class="alert alert-info">
+		        {{ app.session.flash('info') }}
+		    </div>
+	 	{% endif %}
+
+      	{% block body %}{% endblock %}
+
+
+
+    </div> <!-- /container -->
+
+    <footer class="footer">
+      	<div class="container">
+	        	<p>© {{project_name}} {{version}} By {{team_name}}</p>
+        </div>
+    </footer>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/slider.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-transition.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-alert.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-modal.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-dropdown.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-scrollspy.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-tab.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-tooltip.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-popover.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-button.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-collapse.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-carousel.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-typeahead.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/vendor/bootstrap/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('bundles/emkjukebox/js/jukebox.js') }}"></script>
+
+    {% block javascripts %}{% endblock %}
+
+  </body>
+</html>

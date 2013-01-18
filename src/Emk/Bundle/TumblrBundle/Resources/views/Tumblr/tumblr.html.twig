@@ -1,0 +1,27 @@
+                <div id="slider-tumblr">
+				{% for entity in mongo_pute %}
+					<div>
+                        <img src="{{entity.image}}" style="max-height : 150px;" />
+						<p>
+                            {{entity.text}}
+                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
+                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
+                            (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
+                        </p>
+					</div>
+				{% endfor %}
+                </div>
+<script>
+	$(document).ready(function()
+	{
+        $('#slider-tumblr').movingBoxes(
+        {
+            startPanel   : 1,      // start with this panel
+            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
+            height       : 300,
+            panelWidth   : .5,     // current panel width adjusted to 70% of overall width
+            fixedHeight  : true,// if true, navigation links will be added
+            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
+        });
+	});
+</script>

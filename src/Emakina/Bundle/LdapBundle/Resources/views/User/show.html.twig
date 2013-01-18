@@ -1,0 +1,69 @@
+{% extends 'EmakinaIkaCoreBundle::layout.admin.html.twig' %}
+{% import "EmakinaIkaCoreBundle:Theme:macros.html.twig" as macros %}
+
+{% block content %}
+<h1>Utilisateur</h1>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Trigramme</th>
+            <td>{{ entity.trigramme }}</td>
+        </tr>
+		<tr>
+            <th>Email</th>
+            <td>{{ entity.email }}</td>
+        </tr>
+		<tr>
+            <th>Prénom</th>
+            <td>{{ entity.firstname }}</td>
+        </tr>
+		<tr>
+            <th>Nom</th>
+            <td>{{ entity.lastname }}</td>
+        </tr>
+		<tr>
+            <th>Titre</th>
+            <td>{{ entity.title }}</td>
+        </tr>
+		<tr>
+            <th>Photo</th>
+            <td><img src="{{ entity.photo }}"/></td>
+        </tr>
+		<tr>
+	        <th>Fait encore partie de l'entreprise ?</th>
+	        <td>{{ macros.yesno(entity.isenabled) }}</td>
+	    </tr>
+		{% if entity.manager is not empty %}
+		<tr>
+            <th>Manager</th>
+            <td><a href="{{ path('admin_user_show', { 'id': entity.manager.id }) }}">{{ entity.manager.name }}</a></td>
+        </tr>
+		{% endif %}
+		{% if entity.parrain %}
+		<tr>
+            <th>Parrain</th>
+            <td>{{ entity.parrain }}</td>
+        </tr>
+		{% endif %}
+		{% if entity.unit is not empty %}
+		<tr>
+            <th>Unité</th>
+            <td>{{ entity.unit.libelle }}</td>
+        </tr>
+		{% endif %}
+		<tr>
+            <th>LDAP Dn</th>
+            <td>{{ entity.dn }}</td>
+        </tr>
+    </tbody>
+</table>
+{{ block('tools') }}
+{% endblock content %}
+
+{% block tools %}
+<div class="">
+        <a href="{{ path('admin_user') }}" class="btn btn-inverse">Retour à la liste</a>
+        <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}" class="btn btn-warning">Editer</a>
+</div>
+{% endblock tools %}

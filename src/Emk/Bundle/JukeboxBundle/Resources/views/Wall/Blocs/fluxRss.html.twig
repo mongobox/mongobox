@@ -1,0 +1,14 @@
+{% for flux in flux_rss %}
+
+<legend>{{flux.title}}</legend>
+				{% for entity in flux.items %}
+					<div>
+						{% if flux.link %}<a href="{{ entity.link }}">{{ entity.title }}</a>{% endif %}
+                        {% if flux.description %}
+						<p>
+							{{ entity.description|raw }}
+						</p>
+                        {% endif %}
+					</div>
+				{% endfor %}
+{% endfor %}

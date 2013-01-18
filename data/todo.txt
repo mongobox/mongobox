@@ -1,0 +1,8 @@
+/* FMA */
+- Bouton pause, pour mettre en pause le décompte js.
+- Mettre un code pour être le "master" du jukebox, pour que les non "master" puissent voir la vidéo qui le "master" passe actuellement.
+- Un bouton "volume" permettant d'ajuster le volume de la musique courante, et qui garde ce volume pour ultérieurement.
+
+/* AGI */
+
+/* DBO */

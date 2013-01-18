@@ -1,0 +1,110 @@
+{% extends "EmkJukeboxBundle:Videos:layout.html.twig" %}
+
+{% block body %}
+<a href="{{ path('videos_new') }}" class="btn btn-large btn-primary pull-right">Ajouter une vidéo</a>
+<h1>Liste des vidéos</h1>
+
+<form class="form-search form-inline" id="{{ searchVideosForm.name }}" action="{{ path('videos') }}" method="POST" {{ form_enctype(searchVideosForm) }}>
+	<div class="input-append">
+	    {{ form_widget(searchVideosForm.search) }}
+	    <button type="submit" class="btn">Search</button>
+ 	</div>
+</form>
+
+{# Pagination #}
+{% set parameter = {} %}
+{% include ('EmkJukeboxBundle:Partial:pagination.html.twig') with {'route':'videos', 'parameter' : parameter, 'pagination' : pagination } %}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>    
+            <th>Id provider</th>        
+            <th>
+            	{% if filters.sortBy == 'lastBroadcast' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'lastBroadcast', 'orderBy': 'asc'}) }}">Dernière diffusion <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'lastBroadcast', 'orderBy': 'desc'}) }}">Dernière diffusion <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'lastBroadcast', 'orderBy': 'desc'}) }}">Dernière diffusion</a>
+				{% endif %}
+            </th>
+            <th>          	
+            	{% if filters.sortBy == 'diffusion' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'diffusion', 'orderBy': 'asc'}) }}">Nb Diffusions <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'diffusion', 'orderBy': 'desc'}) }}">Nb Diffusions <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'diffusion', 'orderBy': 'desc'}) }}">Nb Diffusions</a>
+				{% endif %}
+            </th>
+            <th>            	
+            	{% if filters.sortBy == 'votes' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'votes', 'orderBy': 'asc'}) }}">Nb Votes <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'votes', 'orderBy': 'desc'}) }}">Nb Votes <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'votes', 'orderBy': 'desc'}) }}">Nb Votes</a>
+				{% endif %}				
+            </th>
+            <th>			
+				{% if filters.sortBy == 'vendredi' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vendredi', 'orderBy': 'asc'}) }}">Vendredi <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vendredi', 'orderBy': 'desc'}) }}">Vendredi <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'vendredi', 'orderBy': 'desc'}) }}">Vendredi</a>
+				{% endif %}            	
+            </th>
+			<th>			
+				{% if filters.sortBy == 'user' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'user':'user', 'orderBy': 'asc'}) }}">User <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'user':'user', 'orderBy': 'desc'}) }}">User <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'user':'user', 'orderBy': 'desc'}) }}">User</a>
+				{% endif %}
+			</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('videos_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.title }}</td>
+            <td>{{ entity.lien }}</td>
+            <td>{% if entity.lastBroadcast %}{{ entity.lastBroadcast|date('d-m-Y H:i:s') }}{% endif %}</td>
+            <td>{{ entity.diffusion }}</td>            
+            <td>{{ entity.votes }}</td>
+            <td>{{ entity.vendredi }}</td>
+			<td>
+				{% if entity.user is not empty %}{{ entity.user.name  }}{% endif %}
+			</td>
+            <td>
+            	<a href="{{ path('videos_show', { 'id': entity.id }) }}" class="btn">Voir</a>
+                <a href="{{ path('videos_edit', { 'id': entity.id }) }}" class="btn">Modifier</a>
+            	<a href="{{ path('videos_add_to_playlist', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{# Pagination #}
+{% include ('EmkJukeboxBundle:Partial:pagination.html.twig') with {'route':'videos', 'parameter' : parameter, 'pagination' : pagination } %}
+
+
+
+{% endblock body %}

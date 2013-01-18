@@ -1,0 +1,66 @@
+/* --------------------------------------------------------
+
+GENERAL
+
+-------------------------------------------------------- */
+
+body {
+    padding-top: 40px;
+    position: relative;
+}
+
+
+.footer {
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 70px;
+    padding: 70px 0;
+}
+
+.marketing {
+    color: #5A5A5A;
+    text-align: center;
+}
+
+.marketing h1 {
+    font-size: 60px;
+    font-weight: 200;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin: 40px 0 10px;
+}
+
+.hero-unit
+{
+	padding : 40px;
+}
+
+.photo-small
+{
+	max-width : 20px;
+	max-height : 20px;
+}
+
+.thumbnail-hq
+{
+	float : left;
+	max-height : 52px;
+}
+
+.user-box
+{
+	float : right;
+}
+
+/* --------------------------------------------------------
+
+Video en cours
+
+-------------------------------------------------------- */
+
+#video_en_cours .progress
+{
+	height : 16px;
+    width : 50%;
+    margin-left : 5px;
+}

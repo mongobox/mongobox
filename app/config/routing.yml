@@ -1,0 +1,34 @@
+EmkTumblrBundle:
+    resource: "@EmkTumblrBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+emk_authentication:
+    resource: "@EmkAuthenticationBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+homepage:
+    pattern:  /
+    defaults: { _controller: EmkJukeboxBundle:Wall:index }
+    
+EmkJukeboxBundle:
+    resource: "@EmkJukeboxBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+_login_check:
+    pattern: /login_check
+    requirements: {_method : POST }
+
+_logout:
+    pattern: /logout
+        
+# Internal routing configuration to handle ESI
+#_internal:
+#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#   prefix:   /_internal
+
+_imagine:
+    resource: .
+    type:     imagine

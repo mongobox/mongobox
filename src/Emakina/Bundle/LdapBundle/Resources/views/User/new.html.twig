@@ -1,0 +1,15 @@
+{% extends 'EmakinaIkaCoreBundle::layout.admin.html.twig' %}
+{% form_theme form 'EmakinaIkaCoreBundle:Theme:form.html.twig' %}
+
+{% block content %}
+<h1>Création<span class="hidden-phone">  d'un utilisateur</span></h1>
+
+<form action="{{ path('admin_user_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <div class="">
+        <button type="submit" class="btn btn-success">Créer</button>&nbsp;
+		<a href="{{ path('user') }}" class="btn btn-inverse">Retour à la liste</a>
+    </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,42 @@
+			Total vidéo : {{total_video}}<br />
+			<legend>Playlist</legend>
+			<ul class="unstyled">
+			{% set total = (video_en_cours.id.duration - ("now"|date("U") - video_en_cours.date|date("U"))) %}
+			{% for pl in playlist %}
+                {% set heure = total + "now"|date("U") %}
+				<li>
+					<small>
+                        {% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.video.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}
+                        <img src="{{ pl.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.video.thumbnailHq }}' />" data-html="true" />
+						<a href="{{pl.video.youtubeUrl}}" title="Posté par {{pl.video.AddressIp}} - Dans {{total|niceTime}} à {{heure|date("H:i")}} - Points : {{pl.video.votes - pl.video.diffusion}}"{% if somme_pl[pl.video.id] is defined and somme_pl[pl.video.id] <= -2%} style="color : red;"{% endif %}>{{pl.video.title}} ({{pl.video.duration|niceTime}} mins)</a>
+                        <a href="{{path('vote', {'sens' : 1, 'id' : pl.video.id, 'current' : 0})}}" class="btn-vote" rel="nb_vote_video_{{pl.video.id}}"><i class="icon-thumbs-up"></i></a>
+                        / <a href="{{path('vote', {'sens' : -1, 'id' : pl.video.id, 'current' : 0})}}" class="btn-vote" rel="nb_vote_video_{{pl.video.id}}"><i class="icon-thumbs-down"></i></a>
+                        (<span id="nb_vote_video_{{pl.video.id}}">{% if somme_pl[pl.video.id] is defined %}{{somme_pl[pl.video.id]}}{% else %}0{% endif %}</span>)
+                    </small>
+					{% if pl.video.user is not empty %}
+					<div class="user-box">
+						<img src="{{ pl.video.user.photo }}" alt="{{ pl.video.user.trigramme }}" class="photo-small"/>
+						{{ pl.video.user.trigramme }}
+					</div>
+					{% endif %}
+				</li>
+				{% if somme_pl[pl.video.id] is not defined or somme_pl[pl.video.id] > -2 %}{% set total = total + pl.video.duration %}{% endif %}
+			{% endfor %}
+			</ul>
+			<legend>Historique</legend>
+			{% for video_hist in videos_historique %}
+				<li><a href="{{video_hist.youtubeUrl}}">{{video_hist.title}} ({{video_hist.lastBroadCast|date('d-m-Y H:i:s')}})</a></li>
+				{% if video_hist.user is not empty %}
+				<div class="user-box">
+					<img src="{{ video_hist.user.photo }}" alt="{{ video_hist.user.trigramme }}" class="photo-small"/>
+					{{ video_hist.user.trigramme }}
+				</div>
+				{% endif %}
+			{% endfor %}
+<script>
+	$(document).ready(function()
+	{
+		$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'})
+	});
+</script>
+

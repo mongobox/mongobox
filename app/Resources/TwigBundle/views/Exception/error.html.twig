@@ -1,0 +1,7 @@
+{% extends "IcPslwebBundle::layout.html.twig" %}
+
+
+{% block body %}
+    <h1>Erreur {{ status_code }}</h1>
+    <h2>Le serveur a renvoyé : "{{ status_code }} {{ status_text }}".</h2>
+{% endblock body %}

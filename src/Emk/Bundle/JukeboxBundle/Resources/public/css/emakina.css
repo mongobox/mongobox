@@ -1,0 +1,41 @@
+/* --------------------------------------------------------
+
+GENERAL
+
+-------------------------------------------------------- */
+
+body {
+    padding-top: 40px;
+    position: relative;
+}
+
+
+.footer {
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 70px;
+    padding: 70px 0;
+}
+
+.marketing {
+    color: #5A5A5A;
+    text-align: center;
+}
+
+.marketing h1 {
+    font-size: 60px;
+    font-weight: 200;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin: 40px 0 10px;
+}
+
+.hero-unit
+{
+	padding : 40px;
+}
+
+
+.photo-small {
+	width:50px;
+}
