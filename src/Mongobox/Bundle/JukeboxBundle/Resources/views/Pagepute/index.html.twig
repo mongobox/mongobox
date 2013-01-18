@@ -1,0 +1,20 @@
+{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+
+{% block title -%}- Accueil{%- endblock title %}
+
+{% block body %}
+<div class="marketing"><h1>{{project_name}}</h1></div>
+<div class="hero-unit">
+	<h2>{{ title }}</h2>
+	{% for entity in entities %}
+		<div>
+			<a href="{{ entity.link }}">{{ entity.title }}</a>
+			<p>
+				{{ entity.description|raw }}
+			</p>
+		</div>
+	{% endfor %}
+
+
+</div>
+{% endblock body %}

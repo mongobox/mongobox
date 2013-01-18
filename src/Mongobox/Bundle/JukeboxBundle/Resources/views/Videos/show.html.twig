@@ -1,0 +1,47 @@
+{% extends "MongoboxJukeboxBundle:Videos:layout.html.twig" %}
+
+{% block body %}
+<h1>Videos</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Lien</th>
+            <td>{{ entity.lien }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
+        </tr>
+		{% if entity.user is not empty %}
+        <tr>
+            <th>User</th>
+            <td>{{ entity.user.name }}</td>
+        </tr>
+		{% endif %}
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('videos') }}" class="btn">
+            Retour à la liste
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('videos_edit', { 'id': entity.id }) }}" class="btn">
+            Modifier
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('videos_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+        </form>
+    </li>
+</ul>
+{% endblock body %}

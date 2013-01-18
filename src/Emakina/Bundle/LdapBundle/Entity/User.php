@@ -78,7 +78,7 @@ class User
     protected $is_enabled;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Emk\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
 	 **/
 	private $videos;
 	
@@ -298,10 +298,10 @@ class User
     /**
      * Add videos
      *
-     * @param \Emk\Bundle\JukeboxBundle\Entity\Videos $videos
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos
      * @return User
      */
-    public function addVideo(\Emk\Bundle\JukeboxBundle\Entity\Videos $videos)
+    public function addVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos)
     {
         $this->videos[] = $videos;
     
@@ -311,9 +311,9 @@ class User
     /**
      * Remove videos
      *
-     * @param \Emk\Bundle\JukeboxBundle\Entity\Videos $videos
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos
      */
-    public function removeVideo(\Emk\Bundle\JukeboxBundle\Entity\Videos $videos)
+    public function removeVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos)
     {
         $this->videos->removeElement($videos);
     }

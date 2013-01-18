@@ -1,0 +1,23 @@
+{% extends "MongoboxTumblrBundle:Admin/Tumblr:layout.html.twig" %}
+
+{% block title -%}
+- Administration
+{%- endblock title %}
+
+{% block body %} 
+	{{ parent() }}
+	
+	<a class="btn" href="{{ path('admin_tumblr') }}">
+    	<i class="icon-arrow-left"></i> Retour
+    </a>
+    
+	<h1>Tumblr creation</h1>
+	        
+	<form action="{{ path('admin_tumblr_create') }}" method="post" {{ form_enctype(form) }}>
+	    {{ form_widget(form) }}
+	    <p>
+	        <button class="btn btn-primary" type="submit">Create</button>
+	    </p>
+	</form>
+	
+{% endblock body %}

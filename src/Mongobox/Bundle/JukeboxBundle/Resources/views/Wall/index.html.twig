@@ -1,0 +1,32 @@
+{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+
+{% block title -%}- Accueil{%- endblock title %}
+
+{% block body %}
+<!--
+<div class="marketing"><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" alt="{{project_name}}" title="{{project_name}}" /></div>
+-->
+<div id="tumblr">
+    {% render "MongoboxTumblrBundle:Tumblr:tumblr" %}
+</div>
+<div class="hero-unit">
+	<div class="row-fluid">
+		<div class="span6">
+			<div id="statistiques">
+				{% include "MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig" %}
+			</div>
+			<form method="post">
+				<legend>Ajouter une vidéo</legend>
+
+				{{form_rest(form)}}
+				<input class="btn btn-primary" type="submit" value="Ajouter" />
+			</form>
+		</div>
+		<div class="span6">
+			<div id="flux_rss">
+				{% render "MongoboxJukeboxBundle:Wall:fluxRss" %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock body %}

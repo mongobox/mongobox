@@ -1,0 +1,19 @@
+{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+
+{% block title -%}- Accueil{%- endblock title %}
+
+{% block body %}
+<div class="marketing"><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" alt="{{project_name}}" title="{{project_name}}" /></div>
+<div class="hero-unit">
+	<div class="row-fluid">
+		<div class="span4">
+			<form method="post">
+				<legend>Ajouter un tumblr</legend>
+
+				{{form_rest(form)}}
+				<input class="btn btn-primary" type="submit" value="Ajouter" />
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock body %}
