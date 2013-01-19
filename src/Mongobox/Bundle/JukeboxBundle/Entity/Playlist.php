@@ -19,6 +19,13 @@ class Playlist
     protected $video;
 
     /**
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="\Mongobox\Bundle\GroupBundle\Entity\Group", inversedBy="playlists")
+     * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
+     */
+    protected $group;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $date;
@@ -29,7 +36,7 @@ class Playlist
      */
     protected $random = 0;
 
-    public function setVideo($video)
+	public function setVideo($video)
     {
         $this->video = $video;
 
@@ -41,7 +48,19 @@ class Playlist
         return $this->video;
     }
 
-    public function setDate($date)
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+	public function setDate($date)
     {
         $this->date = $date;
 

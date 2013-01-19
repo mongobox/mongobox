@@ -99,13 +99,17 @@ class User implements AdvancedUserInterface
 	 **/
 	private $videos;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
+     */
+    protected $groups;
+
 	public function __construct()
     {
 		//valeurs par défaut
     	$this->date_create = new \DateTime();
 		$this->actif = 1;
-		$this->ideas = new ArrayCollection();
-		$this->solutions = new ArrayCollection();
+		$this->groups = new ArrayCollection();
     }
 
     /**
@@ -152,29 +156,6 @@ class User implements AdvancedUserInterface
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set the value of type_email.
-     *
-     * @param string $type_email
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setTypeEmail($type_email)
-    {
-        $this->type_email = $type_email;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of type_email.
-     *
-     * @return string
-     */
-    public function getTypeEmail()
-    {
-        return $this->type_email;
     }
 
     /**
@@ -438,6 +419,23 @@ class User implements AdvancedUserInterface
     public function getVideos()
     {
         return $this->videos;
+    }
+
+    public function addGroup($group)
+    {
+    	$this->groups[] = $group;
+    	return $this;
+    }
+    
+    public function getGroups()
+    {
+    	return $this->groups;
+    }
+    
+    public function setGroups($groups)
+    {
+    	$this->groups = $groups;
+    	return $this;
     }
 
 	/**

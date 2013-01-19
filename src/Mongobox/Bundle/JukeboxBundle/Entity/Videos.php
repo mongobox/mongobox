@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\JukeboxBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Mongobox\Bundle\JukeboxBundle\Entity\Videos
@@ -96,7 +97,22 @@ class Videos
      */
     protected $user;
 
-    public function setId($id)
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="videos", cascade={"persist"})
+     */
+    protected $groups;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->videoCurrent = new ArrayCollection();
+        $this->playlist = new ArrayCollection();
+		$this->groups = new ArrayCollection();
+    }
+	
+	public function setId($id)
     {
         $this->id = $id;
 
@@ -324,6 +340,23 @@ class Videos
         return $this->votes;
     }
 
+    public function addGroup($group)
+    {
+    	$this->groups[] = $group;
+    	return $this;
+    }
+    
+    public function getGroups()
+    {
+    	return $this->groups;
+    }
+    
+    public function setGroups($groups)
+    {
+    	$this->groups = $groups;
+    	return $this;
+    }
+
     public function getTitleFromYoutube()
     {
         $feed = 'http://gdata.youtube.com/feeds/api/videos/'.$this->getLien();
@@ -366,15 +399,6 @@ class Videos
 
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->videoCurrent = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->playlist = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Add videoCurrent
      *

@@ -19,6 +19,13 @@ class VideoCurrent
     protected $id_video;
 
     /**
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="\Mongobox\Bundle\GroupBundle\Entity\Group", inversedBy="videos_current")
+     * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
+     */
+    protected $group;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $date;
@@ -35,7 +42,19 @@ class VideoCurrent
         return $this->id_video;
     }
 
-    public function setDate($date)
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+	public function setDate($date)
     {
         $this->date = $date;
 
@@ -47,7 +66,7 @@ class VideoCurrent
         return $this->date;
     }
 
-    /**
+	/**
      * Set id_video
      *
      * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $idVideo

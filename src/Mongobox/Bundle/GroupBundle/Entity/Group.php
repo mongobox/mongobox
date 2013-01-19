@@ -33,10 +33,50 @@ class Group
      */
     protected $private;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
+     * @ORM\JoinTable(name="users_groups",
+     * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
+     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_user", referencedColumnName="id")}
+     * )
+     */
+    protected $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
+     * @ORM\JoinTable(name="tumblrs_groups",
+     * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
+     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_tumblr", referencedColumnName="id")}
+     * )
+     */
+    protected $tumblrs;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\Videos", inversedBy="groups")
+     * @ORM\JoinTable(name="videos_groups",
+     * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
+     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_video", referencedColumnName="id")}
+     * )
+     */
+    protected $videos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\Playlist", mappedBy="group", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
+     */
+	protected $playlists;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent", mappedBy="group", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
+     */
+    protected $videos_current;
+
 	public function __construct()
     {
 		//valeurs par défaut
 		$this->private = 1;
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -106,5 +146,22 @@ class Group
     public function getPrivate()
     {
         return $this->private;
+    }
+
+    public function addUser($user)
+    {
+    	$this->users[] = $user;
+    	return $this;
+    }
+    
+    public function getUsers()
+    {
+    	return $this->users;
+    }
+    
+    public function setUsers($users)
+    {
+    	$this->users = $users;
+    	return $this;
     }
 }
