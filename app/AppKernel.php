@@ -22,10 +22,11 @@ class AppKernel extends Kernel
             new DMS\Bundle\FilterBundle\DMSFilterBundle(),
 			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 			// Mongobox
-			new Emakina\Bundle\LdapBundle\EmakinaLdapBundle(),
-            new Mongobox\Bundle\AuthenticationBundle\MongoboxAuthenticationBundle(),
+			//new Emakina\Bundle\LdapBundle\EmakinaLdapBundle(),
+            //new Emk\Bundle\AuthenticationBundle\EmkAuthenticationBundle(),
             new Mongobox\Bundle\TumblrBundle\MongoboxTumblrBundle(),
         	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),
+			new Mongobox\Bundle\UsersBundle\MongoboxUsersBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

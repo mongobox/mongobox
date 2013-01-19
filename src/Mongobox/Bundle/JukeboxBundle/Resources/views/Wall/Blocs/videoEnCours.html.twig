@@ -19,8 +19,8 @@
     <span class="pull-right">{{video_en_cours.id.duration|niceTime}}</span>
 	{% if video_en_cours.id.user is not empty %}
 	<div class="user-box">
-		<img src="{{ video_en_cours.id.user.photo }}" alt="{{ video_en_cours.id.user.trigramme }}" class="photo-small" />
-		{{ video_en_cours.id.user.trigramme }}
+		<img src="{{ video_en_cours.id.user.avatar }}" alt="{{ video_en_cours.id.user.login }}" class="photo-small" />
+		{{ video_en_cours.id.user.login }}
 	</div>
 	{% endif %}
 {% endif %}

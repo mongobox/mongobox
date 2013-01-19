@@ -71,13 +71,3 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
-    
-emakina_ldap:
-  options:
-    host: %ldap_host%
-    username: %ldap_username%
-    password: %ldap_password%
-    accountDomainName: 
-    accountDomainNameShort: 
-    baseDn: 
-    useStartTls: false

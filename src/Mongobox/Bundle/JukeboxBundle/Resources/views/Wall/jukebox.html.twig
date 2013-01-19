@@ -22,7 +22,7 @@
 		<input type="hidden" id="id_video" value="{{id_video}}" /><br />
 		{% if video.user is not empty %}
 		<div class="user-box">
-			<img src="{{ video.user.photo }}" alt="{{ video.user.name }}" />
+			<img src="{{ video.user.avatar }}" alt="{{ video.user.name }}" />
 			{{ video.user.name }}
 		</div>
 		{% endif %}

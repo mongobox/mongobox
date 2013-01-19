@@ -2,33 +2,26 @@
 
 security:
     encoders:
-        Emakina\Bundle\LdapBundle\Security\User\LdapUser: plaintext
+        Mongobox\Bundle\UsersBundle\Entity\User:
+             algorithm: sha512
+             iterations: 2000
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        ldap:
-            id: emakina_ldap.user_provider
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+         users:
+             entity: { class: MongoboxUsersBundle:User, property: login }
 
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        login:
-            pattern:  ^/login$
-            security: false
-
         secured_area:
             pattern:    ^/
-            provider:   ldap
+            provider:   users
             form_login:
                 check_path: /login_check
                 login_path: /login
@@ -43,6 +36,7 @@ security:
         - { path: ^/$, roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/esi, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ]}
         - { path: ^/(login), roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
+        - { path: ^/registration, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: [ IS_AUTHENTICATED_FULLY ]}
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
