@@ -13,18 +13,13 @@ class Vote
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Playlist", inversedBy="votes")
+     * @ORM\JoinColumn(name="id_playlist", referencedColumnName="id")
      */
-    protected $ip;
+    protected $playlist;
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Videos", inversedBy="playlist")
-     * @ORM\JoinColumn(name="id_video", referencedColumnName="id")
-     */
-    protected $video;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */

@@ -131,4 +131,21 @@ class VideosRepository extends EntityRepository
             }
         }
     }
+
+	public function findGroupAll($group)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+
+		$qb->select('v')
+		->from('MongoboxJukeboxBundle:Videos', 'v')
+		->innerJoin('v.video_groups', 'vg')
+		->where("vg.group = :group")
+		->setParameters( array(
+				'group' => $group
+		));
+
+		$query = $qb->getQuery();
+		return $query->getResult();
+	}
 }

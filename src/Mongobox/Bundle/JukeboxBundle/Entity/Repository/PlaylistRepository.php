@@ -14,14 +14,16 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
  */
 class PlaylistRepository extends EntityRepository
 {
-    public function next($max)
+    public function next($max, $group)
     {
         $q = $this
                 ->createQueryBuilder('p')
                 ->select('p')
+				->where('p.group = :group')
                 ->orderBy('p.random', 'ASC')
                 ->addOrderBy('p.date', 'ASC')
                 ->setMaxResults($max)
+				->setParameters(array('group' => $group))
                 ->getQuery()
         ;
 

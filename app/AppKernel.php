@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Mongobox\Bundle\TumblrBundle\MongoboxTumblrBundle(),
         	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),
 			new Mongobox\Bundle\UsersBundle\MongoboxUsersBundle(),
+			new Mongobox\Bundle\GroupBundle\MongoboxGroupBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

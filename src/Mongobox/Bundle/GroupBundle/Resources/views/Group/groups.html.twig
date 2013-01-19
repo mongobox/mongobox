@@ -1,0 +1,13 @@
+{% extends "MongoboxGroupBundle:Group:layout.html.twig" %}
+
+{% block title -%}- Accueil{%- endblock title %}
+
+{% block body %}
+<div class="hero-unit">
+	<div class="groups">
+		{% for group in groups %}
+			{{group.title}} <a href="{{path('group_inscription', {'id' : group.id})}}">S'inscrire</a>
+		{% endfor %}
+	</div>
+</div>
+{% endblock body %}

@@ -1,26 +1,26 @@
 {% if video_en_cours is defined and video_en_cours is not empty %}
 	<div id="video_image">
-		<img src="{{video_en_cours.id.thumbnailHq}}" alt="" class="thumbnail-hq" />
+		<img src="{{video_en_cours.videoGroup.video.thumbnailHq}}" alt="" class="thumbnail-hq" />
 	</div>
 	<div id="video_infos">
-        <a href="{{video_en_cours.id.youtubeUrl}}">
-			{% if video_en_cours.id.diffusion == 0 %}<i class="icon-star"></i>{% endif %}
-			{{video_en_cours.id.title}}
+        <a href="{{video_en_cours.videoGroup.video.youtubeUrl}}">
+			{% if video_en_cours.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% endif %}
+			{{video_en_cours.videoGroup.video.title}}
 		 </a>		<div class="vote pull-right">
-			<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.id.id, 'current' : true})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-up icon-white"></i></a>
-             / <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id.id, 'current' : true})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
+			<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.videoGroup.id, 'current' : true})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-up icon-white"></i></a>
+             / <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.videoGroup.id, 'current' : true})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
              - Vote : <span id="nb_vote_video_en_cours">{{somme}}</span>
         </div>
     </div>
     <span class="pull-left">{{(date_actuelle | date('U') - video_en_cours.date| date('U'))|niceTime}}</span>
     <div class="progress pull-left">
-        <div class="bar bar-success" style="width: {{(date_actuelle | date('U') - video_en_cours.date| date('U')) / video_en_cours.id.duration * 100}}%;"></div>
+        <div class="bar bar-success" style="width: {{(date_actuelle | date('U') - video_en_cours.date| date('U')) / video_en_cours.videoGroup.video.duration * 100}}%;"></div>
     </div>
-    <span class="pull-right">{{video_en_cours.id.duration|niceTime}}</span>
-	{% if video_en_cours.id.user is not empty %}
+    <span class="pull-right">{{video_en_cours.videoGroup.video.duration|niceTime}}</span>
+	{% if video_en_cours.videoGroup.user is not empty %}
 	<div class="user-box">
-		<img src="{{ video_en_cours.id.user.avatar }}" alt="{{ video_en_cours.id.user.login }}" class="photo-small" />
-		{{ video_en_cours.id.user.login }}
+		<img src="{{ video_en_cours.videoGroup.user.avatar }}" alt="{{ video_en_cours.videoGroup.user.login }}" class="photo-small" />
+		{{ video_en_cours.videoGroup.user.login }}
 	</div>
 	{% endif %}
 {% endif %}

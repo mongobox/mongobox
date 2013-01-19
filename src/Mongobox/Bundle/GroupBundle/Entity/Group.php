@@ -52,25 +52,16 @@ class Group
     protected $tumblrs;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\Videos", inversedBy="groups")
-     * @ORM\JoinTable(name="videos_groups",
-     * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
-     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_video", referencedColumnName="id")}
-     * )
-     */
-    protected $videos;
-
-    /**
      * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\Playlist", mappedBy="group", cascade={"persist"})
      * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
      */
 	protected $playlists;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent", mappedBy="group", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="group", cascade={"persist"})
      * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
      */
-    protected $videos_current;
+	protected $videos_group;
 
 	public function __construct()
     {

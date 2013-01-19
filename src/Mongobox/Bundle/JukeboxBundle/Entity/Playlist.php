@@ -13,13 +13,18 @@ class Playlist
 {
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Videos", inversedBy="playlist")
-     * @ORM\JoinColumn(name="id_video", referencedColumnName="id")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $video;
+    protected $id;
 
     /**
-     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="VideoGroup", inversedBy="playlist")
+     * @ORM\JoinColumn(name="id_video_group", referencedColumnName="id")
+     */
+    protected $video_group;
+
+    /**
      * @ORM\ManyToOne(targetEntity="\Mongobox\Bundle\GroupBundle\Entity\Group", inversedBy="playlists")
      * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
      */
@@ -36,16 +41,34 @@ class Playlist
      */
     protected $random = 0;
 
-	public function setVideo($video)
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $current = 0;
+
+	public function setId($id)
     {
-        $this->video = $video;
+        $this->id = $id;
 
         return $this;
     }
 
-    public function getVideo()
+    public function getId()
     {
-        return $this->video;
+        return $this->id;
+    }
+
+	public function setVideoGroup($video_group)
+    {
+        $this->video_group = $video_group;
+
+        return $this;
+    }
+
+    public function getVideoGroup()
+    {
+        return $this->video_group;
     }
 
     public function setGroup($group)
@@ -82,5 +105,17 @@ class Playlist
     public function getRandom()
     {
         return $this->random;
+    }
+
+    public function setCurrent($current)
+    {
+        $this->current = $current;
+
+        return $this;
+    }
+
+    public function getCurrent()
+    {
+        return $this->current;
     }
 }

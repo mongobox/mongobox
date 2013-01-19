@@ -12,25 +12,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class VoteRepository extends EntityRepository
 {
-    public function wipe($id_video)
+    public function wipe($playlist)
     {
         $em = $this->getEntityManager();
         $query = $em
-                ->createQuery('DELETE FROM MongoboxJukeboxBundle:Vote v WHERE v.video = :id_video' )
-				->setParameter('id_video', $id_video)
+                ->createQuery('DELETE FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :playlist' )
+				->setParameter('playlist', $playlist)
         ;
 
         return $query->getResult();
     }
 
-    public function sommeVotes($video)
+    public function sommeVotes($playlist)
     {
         $em = $this->getEntityManager();
         $query = $em
-                ->createQuery('SELECT SUM(v.sens) FROM MongoboxJukeboxBundle:Vote v WHERE v.video = :id_video')
-				->setParameter('id_video', $video->getId()  )
+                ->createQuery('SELECT SUM(v.sens) FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :id_playlist')
+				->setParameter('id_playlist', $playlist  )
         ;
-		
+
         $result = $query->getResult();
         if(is_null($result[0][1])) $somme = 0;
         else $somme = (int) $result[0][1];
@@ -40,7 +40,7 @@ class VoteRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $query = $em
-                ->createQuery('SELECT v, SUM(v.sens) as total FROM MongoboxJukeboxBundle:Vote v GROUP BY v.video')
+                ->createQuery('SELECT v, SUM(v.sens) as total FROM MongoboxJukeboxBundle:Vote v GROUP BY v.playlist')
                 ;
         $result = $query->getResult();
         $somme = array();

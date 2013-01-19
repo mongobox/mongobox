@@ -1,7 +1,6 @@
 <?php
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
-use Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
