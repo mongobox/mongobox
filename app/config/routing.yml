@@ -1,19 +1,19 @@
-EmkTumblrBundle:
-    resource: "@EmkTumblrBundle/Controller/"
+MongoboxTumblrBundle:
+    resource: "@MongoboxTumblrBundle/Controller/"
     type:     annotation
     prefix:   /
 
-emk_authentication:
-    resource: "@EmkAuthenticationBundle/Controller/"
+Mongobox_authentication:
+    resource: "@MongoboxAuthenticationBundle/Controller/"
     type:     annotation
     prefix:   /
 
 homepage:
     pattern:  /
-    defaults: { _controller: EmkJukeboxBundle:Wall:index }
+    defaults: { _controller: MongoboxJukeboxBundle:Wall:index }
     
-EmkJukeboxBundle:
-    resource: "@EmkJukeboxBundle/Controller/"
+MongoboxJukeboxBundle:
+    resource: "@MongoboxJukeboxBundle/Controller/"
     type:     annotation
     prefix:   /
 

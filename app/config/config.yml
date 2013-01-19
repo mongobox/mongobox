@@ -41,8 +41,8 @@ services:
         class: Twig_Extensions_Extension_Text
         tags:
           - { name: twig.extension }
-    Emk.twig.niceTime_extension:
-        class: Emk\Bundle\JukeboxBundle\Twig\NiceTimeExtension
+    Mongobox.twig.niceTime_extension:
+        class: Mongobox\Bundle\JukeboxBundle\Twig\NiceTimeExtension
         tags:
           - { name: twig.extension }
 # Assetic Configuration

@@ -1,0 +1,35 @@
+{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+
+{% block title -%}- Accueil{%- endblock title %}
+
+{% block body %}
+<div class="marketing">
+	<h1><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
+	<h2>Mongo pute</h2>
+</div>
+<div class="vote"></div>
+<div class="hero-unit" style="text-align:center;">
+	{% for entity in mongo_pute %}
+		<div class="row">
+			{% if loop.index > 1 %}
+				<hr />
+			{% endif %}
+
+			<h2>
+                {{entity.text}}
+                <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
+                / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
+                (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
+            </h2>
+			<img src="{{entity.image}}" />
+
+
+		</div>
+	{% endfor %}
+</div>
+
+{# Pagination #}
+{% set parameter = {} %}
+{% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'mongo_pute', 'parameter' : parameter, 'pagination' : pagination } %}
+
+{% endblock body %}
