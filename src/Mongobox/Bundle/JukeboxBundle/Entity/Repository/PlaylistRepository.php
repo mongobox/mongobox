@@ -20,6 +20,7 @@ class PlaylistRepository extends EntityRepository
                 ->createQueryBuilder('p')
                 ->select('p')
 				->where('p.group = :group')
+				->andWhere('p.current = 0')
                 ->orderBy('p.random', 'ASC')
                 ->addOrderBy('p.date', 'ASC')
                 ->setMaxResults($max)
@@ -32,15 +33,16 @@ class PlaylistRepository extends EntityRepository
         return $result;
     }
 
-    public function generate()
+    public function generate($group)
     {
         $continue= true;
-        while (count($this->findAll()) < 10 AND $continue) {
-            $random = $this->_em->getRepository('MongoboxJukeboxBundle:Videos')->random();
+        while (count($this->findBy(array('group' => $group))) < 10 AND $continue) {
+            $random = $this->_em->getRepository('MongoboxJukeboxBundle:VideoGroup')->random($group);
             if(is_null($random)) $continue = false;
             else {
                 $playlist_add = new Playlist();
-                $playlist_add->setVideo($random);
+                $playlist_add->setVideoGroup($random);
+                $playlist_add->set=Group($group);
                 $playlist_add->setRandom(1);
                 $playlist_add->setDate(new \Datetime());
                 $this->_em->persist($playlist_add);

@@ -155,47 +155,36 @@ class WallController extends Controller
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
 
         $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-        if (count($video_en_cours) > 0) {
-            $total_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours[0]->getId());
-            $video_en_cours[0]->getId()->setVotes($video_en_cours[0]->getId()->getVotes() + $total_vote);
+        if (count($video_en_cours) > 0)
+		{
+            $total_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+            $video_en_cours->getVideoGroup()->setVotes($video_en_cours->getVideoGroup()->getVotes() + $total_vote);
             //On wipe les votes de la vidéo d'avant !
-            $em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($video_en_cours[0]->getId()->getId());
+            $em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($video_en_cours->getVideoGroup()->getId());
         }
 
         //On regénère la playlist
-        $em->getRepository('MongoboxJukeboxBundle:Playlist')->generate();
+        $em->getRepository('MongoboxJukeboxBundle:Playlist')->generate($group);
 
         //On va chercher la prochaine vidéo de la playlist
-        $playlist_next = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1);
-        $video = $playlist_next->getVideo();
+        $playlist_next = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
+		$playlist_next->setCurrent(1);
 
-        $video->setDiffusion($video->getDiffusion() + 1);
-        $video->setDone(1);
-        $video->setLastBroadcast(new \Datetime()); // date de diffusion
+        $video_group = $playlist_next->getVideoGroup();
+        $video_group->setDiffusion($video_group->getDiffusion() + 1);
+        $video_group->setLastBroadcast(new \Datetime()); // date de diffusion
 
         //On la supprime de la playlist
-        $em->remove($playlist_next);
+        $em->remove($video_en_cours);
 
         $total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findAll());
-        $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10);
+        $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);
 
-        //$video_old = $em->getRepository('MongoboxJukeboxBundle:Videos')->next();
-        //$video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($video_old->getId());
-
-        //$em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->wipe();
-
-        /*$current = new VideoCurrent();
-        $current->setId($video);
-        $current->setDate(new \Datetime());
-
-        $em->persist($current);*/
         $em->flush();
 
         return array
         (
-            'next_video' => $video->getLien(),
-            'id_video' => $video->getId(),
-            'video' => $video,
+            'video_group' => $video_group,
             'total_video' => $total_video,
             'playlist' => $playlist
         );

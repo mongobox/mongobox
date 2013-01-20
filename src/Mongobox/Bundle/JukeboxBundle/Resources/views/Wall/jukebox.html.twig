@@ -1,13 +1,13 @@
 {% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
 
-{% block title %}{{video.title}}{% endblock title %}
+{% block title %}{{video_group.video.title}}{% endblock title %}
 
 {% block body %}
 
 <!DOCTYPE html>
 	<div class="marketing">
 		<h1><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" title="{{project_name}}" /></h1>
-		<h2>{{video.title}}</h2>
+		<h2>{{video_group.video.title}}</h2>
 	</div>
 	<div class="hero-unit">
 		<object id="video" width="1090" height="700" data="http://www.youtube.com/v/{{next_video}}?enablejsapi=1&autoplay=1&iv_load_policy=3" type="application/x-shockwave-flash">
@@ -16,14 +16,14 @@
 			<param value="always"></param>
 		</object>
 		<br />
-		<a href="{{path('delete_video', {'id_video' : id_video})}}" class="btn">Delete</a>
-		<a href="{{path('ajax_flag_vendredi_video', {'id_video' : id_video})}}" class="btn" onclick="$('#load_vendredi').load($(this).attr('href')); return false;">Flagger Vendredi</a>
+		<!-- <a href="{{path('delete_video', {'id_video' : id_video})}}" class="btn">Delete</a> -->
+		<!-- <a href="{{path('ajax_flag_vendredi_video', {'id_video' : id_video})}}" class="btn" onclick="$('#load_vendredi').load($(this).attr('href')); return false;">Flagger Vendredi</a> -->
 		<div id="load_vendredi"></div>
-		<input type="hidden" id="id_video" value="{{id_video}}" /><br />
-		{% if video.user is not empty %}
+		<input type="hidden" id="id_video" value="{{video_group.id}}" /><br />
+		{% if video_group.user is not empty %}
 		<div class="user-box">
-			<img src="{{ video.user.avatar }}" alt="{{ video.user.name }}" />
-			{{ video.user.name }}
+			<img src="{{ video_group.user.avatar }}" alt="{{ video_group.user.name }}" />
+			{{ video_group.user.name }}
 		</div>
 		{% endif %}
 	</div>
@@ -48,9 +48,9 @@
 
 		$(document).ready(function()
 		{
-			{% if video is defined and video.duration is defined %}
+			{% if video_group is defined and video_group.video.duration is defined %}
 
-				var duration = ( parseInt({{ video.duration }}) +3 )* 1000;
+				var duration = ( parseInt({{ video_group.video.duration }}) +3 )* 1000;
 
 				setTimeout(function(){ window.location.reload(); },duration);
 
