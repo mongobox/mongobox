@@ -63,11 +63,21 @@ class Group
      */
 	protected $videos_group;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups_invitations")
+     * @ORM\JoinTable(name="users_invitations",
+     * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
+     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_user", referencedColumnName="id")}
+     * )
+     */
+    protected $users_invitations;
+
 	public function __construct()
     {
 		//valeurs par défaut
 		$this->private = true;
         $this->users = new ArrayCollection();
+        $this->users_invitations = new ArrayCollection();
     }
 
     /**
@@ -153,6 +163,17 @@ class Group
     public function setUsers($users)
     {
     	$this->users = $users;
+    	return $this;
+    }
+    
+    public function getUsersInvitations()
+    {
+    	return $this->users_invitations;
+    }
+    
+    public function setUsersInvitations($users_invitations)
+    {
+    	$this->users_invitations = $users_invitations;
     	return $this;
     }
 }

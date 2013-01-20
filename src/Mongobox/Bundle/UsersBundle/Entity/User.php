@@ -104,12 +104,18 @@ class User implements AdvancedUserInterface
      */
     protected $groups;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users_invitations", cascade={"persist"})
+     */
+    protected $groups_invitations;
+
 	public function __construct()
     {
 		//valeurs par défaut
     	$this->date_create = new \DateTime();
 		$this->actif = 1;
 		$this->groups = new ArrayCollection();
+		$this->groups_invitations = new ArrayCollection();
     }
 
     /**
@@ -435,6 +441,17 @@ class User implements AdvancedUserInterface
     public function setGroups($groups)
     {
     	$this->groups = $groups;
+    	return $this;
+    }
+
+    public function getGroupsInvitations()
+    {
+    	return $this->groups_invitations;
+    }
+    
+    public function setGroupsInvitations($groups_invitations)
+    {
+    	$this->groups_invitations = $groups_invitations;
     	return $this;
     }
 

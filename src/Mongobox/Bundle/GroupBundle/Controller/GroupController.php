@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 
 use Mongobox\Bundle\GroupBundle\Entity\Group;
 use Mongobox\Bundle\GroupBundle\Form\GroupType;
+use Mongobox\Bundle\UsersBundle\Form\UserSearchType;
 
 /**
  * @Route( "/group")
@@ -26,7 +27,6 @@ class GroupController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-		$user = $this->get('security.context')->getToken()->getUser();
 		$groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
 
 		return array(
@@ -97,10 +97,47 @@ class GroupController extends Controller
 		return $this->redirect($this->generateUrl('homepage'));
 	}
 
+    /**
+     * @Template()
+     * @Route( "/invite/{id}", name="group_invite")
+     * @ParamConverter("group", class="MongoboxGroupBundle:Group")
+     */
+    public function groupInviteAction(Request $request, Group $group)
+    {
+		if($group->getPrivate())
+		{
+			$em = $this->getDoctrine()->getEntityManager();
+
+			//On créer le formulaire en utilisant un utilisateur vide
+			$form = $this->createForm(new UserSearchType());
+
+			if('POST' === $request->getMethod())
+			{
+				$form->bindRequest($request);
+				if($form->isValid())
+				{
+					$user = $form->get('user')->getData();
+					if(is_object($user))
+					{
+						$group->getUsersInvitations()->add($user);
+						$em->flush();
+
+						$this->get('session')->setFlash('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
+						return $this->redirect($this->generateUrl('homepage'));
+					}
+				}
+			}
+			return array(
+					'form' => $form->createView(),
+					'group' => $group
+			);
+		}
+	}
+
 	/**
-	 * @Route("/change_group/{id_group}", name="change_group")
+	 * @Route("/change/{id_group}", name="group_change")
 	 * 
-	 * @author pbo
+	 * @author Coleyra
 	 * Change la groupe courante (via la liste de selection)
 	 */
 	public function changeGroupAction(Request $request, $id_group)
