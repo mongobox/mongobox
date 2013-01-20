@@ -46,7 +46,7 @@ class Group
      * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
      * @ORM\JoinTable(name="tumblrs_groups",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
-     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_tumblr", referencedColumnName="id")}
+     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_tumblr", referencedColumnName="id_tumblr")}
      * )
      */
     protected $tumblrs;

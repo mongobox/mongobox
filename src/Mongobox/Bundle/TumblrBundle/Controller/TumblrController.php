@@ -31,6 +31,7 @@ class TumblrController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $entitiesMongoPute = $tumblrRepository->findBy(
                 array(),
@@ -118,8 +119,10 @@ class TumblrController extends Controller
     public function tumblrAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-        $mongo_pute = $em->createQuery('SELECT t FROM MongoboxTumblrBundle:Tumblr t ORDER BY t.date DESC')->setMaxResults(5)->getResult();
+        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast(5, $group);
         return array
         (
             'mongo_pute' => $mongo_pute

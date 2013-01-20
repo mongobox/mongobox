@@ -162,7 +162,7 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_communaute'));
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
         if (count($video_en_cours) > 0)
