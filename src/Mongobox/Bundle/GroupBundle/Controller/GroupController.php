@@ -20,6 +20,21 @@ class GroupController extends Controller
 {
     /**
      * @Template()
+     * @Route( "/", name="group_index")
+     */
+    public function indexAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		$groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
+
+		return array(
+				'groups' => $groups
+		);
+	}
+
+    /**
+     * @Template()
      * @Route( "/inscription/{id}", name="group_inscription")
      * @ParamConverter("group", class="MongoboxGroupBundle:Group")
      */
@@ -55,6 +70,6 @@ class GroupController extends Controller
 		$response->headers->setCookie(new Cookie('id_group', $id_group));
 		$response->send();
 
-		return $this->redirect($this->generateUrl('homepage'));
+		return $this->redirect($this->generateUrl('wall_index'));
 	}
 }

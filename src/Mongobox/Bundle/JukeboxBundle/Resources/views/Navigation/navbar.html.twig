@@ -14,12 +14,12 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.username }}<b class="caret"></b></a>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a href="#" title="Groupes">Liste des Groupes</a>
+						<a href="{{path('group_index')}}" title="Groupes">Liste des Groupes</a>
 					</li>
 					<li class="divider"></li>
 					{% for group in app.user.groups %}
 						<li>
-							<a href="{{path('change_group', {'id_group' : group.id})}}" title="Groupes">{{group.title}}</a>
+							<a href="{{path('change_group', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="icon-ok"></span>{% endif %}</a>
 						</li>
 					{% endfor %}
 					<li class="divider"></li>

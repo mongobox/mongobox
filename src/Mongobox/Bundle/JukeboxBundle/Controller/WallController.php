@@ -150,14 +150,7 @@ class WallController extends Controller
 		//Si l'utilisateur n'a pas de groupe, on propose une liste de group publics
 		else
 		{
-			$groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
-
-			return $this->render
-			(
-				'MongoboxGroupBundle:Group:groups.html.twig',
-				array(
-					'groups' => $groups
-			));
+			return $this->redirect($this->generateUrl('group_index'));
 		}
     }
 
