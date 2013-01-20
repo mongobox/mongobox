@@ -9,9 +9,26 @@
       <a class="brand" href="{{ path('wall_index') }}" style="padding : 0;"><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" /></a>
       <div class="nav-collapse">
 		{% if app.user %}
-		<p class="navbar-text pull-right">
-			Logged in as <a href="{{ path('_logout')}}" title="Déconnexion" class="navbar-link">{{ app.user.username }}<i class="icon-off icon-white"></i></a>
-		</p>
+		<ul class="nav pull-right">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.username }}<b class="caret"></b></a>
+				<ul class="dropdown-menu" role="menu">
+					<li>
+						<a href="#" title="Groupes">Liste des Groupes</a>
+					</li>
+					<li class="divider"></li>
+					{% for group in app.user.groups %}
+						<li>
+							<a href="{{path('change_group', {'id_group' : group.id})}}" title="Groupes">{{group.title}}</a>
+						</li>
+					{% endfor %}
+					<li class="divider"></li>
+					<li>
+						<a href="{{ path('_logout')}}" title="Déconnexion"><span class="icon-off"></span> Déconnexion</a>
+					</li>
+				</ul>
+			 </li>
+		 </ul>
 		{% endif %}
         <ul class="nav">
 

@@ -53,8 +53,24 @@ class WallController extends Controller
 		//Si l'utilisateur a au moins un groupe
 		if(count($user->getGroups()) > 0)
 		{
+			$session = $request->getSession();
+
+			//Si on a pas déjà de communauté définie, on va en trouver une
+			if(is_null($session->get('id_group')))
+			{
+				//On regarde si ya un cookie
+				if($request->cookies->has('id_group'))
+				{
+					$id_group = $request->cookies->get('id_group');
+				}
+				else
+				{
+					$id_group = $user->getGroupDefault();
+				}
+				$session->set('id_group', $id_group);
+			}
 			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
-			$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
+			$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
 			$video = new Videos();
 			$form = $this->createForm(new VideoType(), $video);
@@ -152,7 +168,8 @@ class WallController extends Controller
     public function jukeboxAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_communaute'));
 
         $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
         if (count($video_en_cours) > 0)
@@ -355,7 +372,7 @@ class WallController extends Controller
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
 			return array(
-				'video_en_cours' => $video_en_cours[0],
+				'video_en_cours' => $video_en_cours,
 				'total_video' => $total_video,
 				'playlist' => $playlist,
 				'videos_historique' => $videos_historique,

@@ -438,6 +438,12 @@ class User implements AdvancedUserInterface
     	return $this;
     }
 
+	public function getGroupDefault()
+	{
+        $groups = $this->getGroups();
+		return $groups[0]->getId();
+	}
+
 	/**
 	 * Fonction permettant de faire la correspondance entre les rôles en BDD et ceux de Symfony
 	 * @param integer $id_role

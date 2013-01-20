@@ -100,23 +100,22 @@ class LiveController extends Controller
     public function indexAction(Request $request)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-    	$results = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
+    	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
 
-    	if (count($results) > 0) {
-    		$currentPlayed = $results[0];
+    	if (is_object($video_en_cours)) {
+    		$currentPlayed = $video_en_cours;
     	} else {
     		$currentPlayed = $this->_initJukebox();
     	}
 
-		$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array(
-			'id' => $currentPlayed->getId()
-		));
+		$currentVideo	= $video_en_cours->getVideoGroup()->getVideo();
 
 		// TODO: define users permissions
 		$playerMode = $request->get('mode') ? $request->get('mode') : 'showOnly';
 
 		$currentDate	= new \DateTime();
-		$startDate		= $currentPlayed->getDate();
+		$startDate		= $currentPlayed->getVideoGroup()->getLastBroadcast();
 
 		$secondsElapsed = $currentDate->getTimestamp() - $startDate->getTimestamp();
 		if ($secondsElapsed < $currentVideo->getDuration()) {
