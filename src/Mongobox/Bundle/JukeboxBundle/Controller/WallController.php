@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
@@ -65,40 +66,54 @@ class WallController extends Controller
 			else $somme = 0;
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
-			if ( 'POST' === $request->getMethod() ) {
+			if ( 'POST' === $request->getMethod() )
+			{
 				$form->bindRequest($request);
-				if ( $form->isValid() ) {
+				if ( $form->isValid() )
+				{
 					$video->setLien(Videos::parse_url_detail($video->getLien()));
 					//On vérifie qu'elle n'existe pas déjà
-					$isVideo = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
-					if (!is_object($isVideo)) {
+					$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
+					if (!is_object($video_new))
+					{
 						$dataYt = $video->getDataFromYoutube();
 
 						$video->setDate(new \Datetime())
-								->setDone(0)
 								->setTitle( $dataYt->title )
-								->setAddressIp( $_SERVER['REMOTE_ADDR'])
-								->setDiffusion(0)
-								->setVendredi(0)
 								->setDuration($dataYt->duration)
 								->setThumbnail( $dataYt->thumbnail->hqDefault )
-								->setThumbnailHq( $dataYt->thumbnail->sqDefault )
-								->setuser($user);
+								->setThumbnailHq( $dataYt->thumbnail->sqDefault );
 						$em->persist($video);
 						$em->flush();
+						$video_new = $video;
 
-						//On l'ajoute à la playlist
-						$playlist_add = new Playlist();
-						$playlist_add->setVideo($video);
-						$playlist_add->setRandom(0);
-						$playlist_add->setDate(new \Datetime());
-						$em->persist($playlist_add);
-
-						$em->flush();
 						$this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
-					} else {
-						$this->get('session')->setFlash('success', 'Cette vidéo existe déjà');
 					}
+					//On vérifie qu'elle n'existe pas pour ce groupe
+					$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
+					if(!is_object($video_group))
+					{
+						$video_group = new VideoGroup();
+						$video_group->setVideo($video_new)
+									->setGroup($group)
+									->setUser($user)
+									->setDiffusion(0)
+									->setVendredi(0)
+									->setVolume(100)
+									->setVotes(0);
+						$em->persist($video_group);
+						$em->flush();
+					}
+					//On l'ajoute à la playlist
+					$playlist_add = new Playlist();
+					$playlist_add->setVideoGroup($video_group)
+									->setGroup($group)
+									->setDate(new \Datetime())
+									->setRandom(0)
+									->setCurrent(0);
+					$em->persist($playlist_add);
+
+					$em->flush();
 
 					return $this->redirect($this->generateUrl('wall_index'));
 				}
@@ -221,11 +236,11 @@ class WallController extends Controller
 
     /**
      * @Template()
-     * @Route( "/vote/{id}/{sens}/{current}", name="vote")
-     * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos")
+     * @Route( "/vote/{id}/{sens}", name="vote")
+     * @ParamConverter("playlist", class="MongoboxJukeboxBundle:Playlist")
      * 
      */
-    public function voteAction(Request $request, $video, $sens, $current = false)
+    public function voteAction(Request $request, $playlist, $sens)
     {
 		$em = $this->getDoctrine()->getEntityManager();
 		
@@ -235,30 +250,26 @@ class WallController extends Controller
         $old_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')
 						->findOneBy(array(
 							'user'	=> $user,
-							'video' => $video, 
-							'ip' => $this->getRequest()->server->get('REMOTE_ADDR')
+							'playlist' => $playlist,
 							)
 						);
 		if (!is_null($old_vote)) {
             $em->remove($old_vote);
             $em->flush();
         }
-		
-        $vote = new Vote();
-        $vote->setIp($this->getRequest()->server->get('REMOTE_ADDR'))
-				->setSens($sens)
-				->setVideo($video)
-				->setUser($user);
 
-        /*if ($current) {
-            $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
-            $video_en_cours[0]->getId()->setVotes($video_en_cours[0]->getId()->getVotes() + (int) $sens);
-        }*/
+		if($sens != 0)
+		{
+			$vote = new Vote();
+			$vote->setSens($sens)
+					->setPlaylist($playlist)
+					->setUser($user);
 
-        $em->persist($vote);
-        $em->flush();
+			$em->persist($vote);
+			$em->flush();
+		}
 
-        return new Response($em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video));
+        return new Response($em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist));
     }
 
     /**

@@ -45,7 +45,7 @@ class VoteRepository extends EntityRepository
         $result = $query->getResult();
         $somme = array();
         foreach ($result as $r) {
-            $somme[$r[0]->getVideo()->getId()] = $r['total'];
+            $somme[$r[0]->getPlaylist()->getId()] = $r['total'];
         }
 
         return $somme;

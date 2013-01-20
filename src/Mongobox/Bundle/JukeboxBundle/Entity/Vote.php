@@ -30,16 +30,16 @@ class Vote
      */
     protected $sens;
 
-    public function setVideo($video)
+    public function setPlaylist($playlist)
     {
-        $this->video = $video;
+        $this->playlist = $playlist;
 
         return $this;
     }
 
-    public function getVideo()
+    public function getPlaylist()
     {
-        return $this->video;
+        return $this->playlist;
     }
 
     public function setIp($ip)
