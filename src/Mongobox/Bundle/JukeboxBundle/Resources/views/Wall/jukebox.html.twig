@@ -10,20 +10,20 @@
 		<h2>{{video_group.video.title}}</h2>
 	</div>
 	<div class="hero-unit">
-		<object id="video" width="1090" height="700" data="http://www.youtube.com/v/{{next_video}}?enablejsapi=1&autoplay=1&iv_load_policy=3" type="application/x-shockwave-flash">
-			<param value="http://www.youtube.com/embed/{{next_video}}"></param>
+		<object id="video" width="1090" height="700" data="http://www.youtube.com/v/{{video_group.video.lien}}?enablejsapi=1&autoplay=1&iv_load_policy=3" type="application/x-shockwave-flash">
+			<param value="http://www.youtube.com/embed/{{video_group.video.lien}}"></param>
 			<param name="allowFullScreen" value="true"></param>
 			<param value="always"></param>
 		</object>
 		<br />
-		<!-- <a href="{{path('delete_video', {'id_video' : id_video})}}" class="btn">Delete</a> -->
-		<!-- <a href="{{path('ajax_flag_vendredi_video', {'id_video' : id_video})}}" class="btn" onclick="$('#load_vendredi').load($(this).attr('href')); return false;">Flagger Vendredi</a> -->
+		<!-- <a href="{{path('delete_video', {'id_video' : video_group.id})}}" class="btn">Delete</a> -->
+		<!-- <a href="{{path('ajax_flag_vendredi_video', {'id_video' : video_group.id})}}" class="btn" onclick="$('#load_vendredi').load($(this).attr('href')); return false;">Flagger Vendredi</a> -->
 		<div id="load_vendredi"></div>
 		<input type="hidden" id="id_video" value="{{video_group.id}}" /><br />
 		{% if video_group.user is not empty %}
 		<div class="user-box">
-			<img src="{{ video_group.user.avatar }}" alt="{{ video_group.user.name }}" />
-			{{ video_group.user.name }}
+			<img src="{{ video_group.user.avatar }}" alt="{{ video_group.user.login }}" />
+			{{ video_group.user.login }}
 		</div>
 		{% endif %}
 	</div>

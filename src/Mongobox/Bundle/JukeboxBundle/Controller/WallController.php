@@ -160,7 +160,7 @@ class WallController extends Controller
             $total_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
             $video_en_cours->getVideoGroup()->setVotes($video_en_cours->getVideoGroup()->getVotes() + $total_vote);
             //On wipe les votes de la vidéo d'avant !
-            $em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($video_en_cours->getVideoGroup()->getId());
+            $em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($video_en_cours->getId());
         }
 
         //On regénère la playlist
@@ -175,7 +175,10 @@ class WallController extends Controller
         $video_group->setLastBroadcast(new \Datetime()); // date de diffusion
 
         //On la supprime de la playlist
-        $em->remove($video_en_cours);
+        if(is_object($video_en_cours))
+		{
+			$em->remove($video_en_cours);
+		}
 
         $total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findAll());
         $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);

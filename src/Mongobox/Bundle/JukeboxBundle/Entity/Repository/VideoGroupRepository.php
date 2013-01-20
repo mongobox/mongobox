@@ -33,25 +33,30 @@ class VideoGroupRepository extends EntityRepository
 
     public function random($group)
     {
-        $em = $this->getEntityManager();
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+
         $date = new \Datetime();
         $day = $date->format('w');
-        if($day != 5) $where = 'vg.vendredi = false';
-        else $where = '1';
+        if($day != 5) $vendredi = 0;
+        else $vendredi = 1;
 
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup', 'vg');
-        $rsm->addFieldResult('vg', 'id', 'id');
-        $rsm->addFieldResult('vg', 'diffusion', 'diffusion');
-        $rsm->addFieldResult('vg', 'last_broadcast', 'lastBroadcast');
-        $rsm->addFieldResult('vg', 'votes', 'votes');
-        $q = $em
-                ->createNativeQuery('SELECT * FROM videos_groups vg LEFT JOIN playlist p ON p.id_video_group = vg.id WHERE
-					'.$where.' AND (DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL)
-					AND p.id_group = '.$group->getId().'
-					AND p.id_video_group IS NULL', $rsm);
+		$qb->select('vg')
+		->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+		->leftJoin('vg.playlist', 'p')
+		->where("vg.vendredi = :vendredi")
+		->andWhere("vg.group = :group")
+		->setParameters( array(
+				'group' => $group,
+				'vendredi' => $vendredi
+		));
 
-        $results = $q->getResult();
+		/* TODO */
+		/* AND (DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL) */
+		
+		$query = $qb->getQuery();
+		$results = $query->getResult();
+		//var_dump($results);
         if (count($results) > 0)
 		{
             $songs = array();

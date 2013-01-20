@@ -7,8 +7,8 @@
 			{% if video_en_cours.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% endif %}
 			{{video_en_cours.videoGroup.video.title}}
 		 </a>		<div class="vote pull-right">
-			<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.videoGroup.id, 'current' : true})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-up icon-white"></i></a>
-             / <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.videoGroup.id, 'current' : true})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
+			<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-up icon-white"></i></a>
+             / <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
              - Vote : <span id="nb_vote_video_en_cours">{{somme}}</span>
         </div>
     </div>

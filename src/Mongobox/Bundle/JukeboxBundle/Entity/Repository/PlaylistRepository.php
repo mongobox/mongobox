@@ -42,7 +42,7 @@ class PlaylistRepository extends EntityRepository
             else {
                 $playlist_add = new Playlist();
                 $playlist_add->setVideoGroup($random);
-                $playlist_add->set=Group($group);
+                $playlist_add->setGroup($group);
                 $playlist_add->setRandom(1);
                 $playlist_add->setDate(new \Datetime());
                 $this->_em->persist($playlist_add);
