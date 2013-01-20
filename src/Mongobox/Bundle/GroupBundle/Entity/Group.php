@@ -66,7 +66,7 @@ class Group
 	public function __construct()
     {
 		//valeurs par défaut
-		$this->private = 1;
+		$this->private = true;
         $this->users = new ArrayCollection();
     }
 

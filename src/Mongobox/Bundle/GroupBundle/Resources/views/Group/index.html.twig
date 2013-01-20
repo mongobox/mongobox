@@ -6,8 +6,11 @@
 <div class="hero-unit">
 	<div class="groups">
 		{% for group in groups %}
-			{{group.title}} <a href="{{path('group_inscription', {'id' : group.id})}}">S'inscrire</a>
+			<div class="well">
+				{{group.title}} <a href="{{path('group_inscription', {'id' : group.id})}}">S'inscrire</a>
+			</div>
 		{% endfor %}
 	</div>
+	<a href="{{path('group_create')}}" class="btn btn-large">Créer un groupe</a>
 </div>
 {% endblock body %}

@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Cookie;
 
 use Mongobox\Bundle\GroupBundle\Entity\Group;
+use Mongobox\Bundle\GroupBundle\Form\GroupType;
 
 /**
  * @Route( "/group")
@@ -35,19 +36,63 @@ class GroupController extends Controller
 
     /**
      * @Template()
+     * @Route( "/create", name="group_create")
+     */
+    public function groupCreateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+
+		//On créer le formulaire en utilisant un utilisateur vide
+		$group = new Group();
+		$form = $this->createForm(new GroupType(), $group);
+		
+		if('POST' === $request->getMethod())
+		{
+			$form->bindRequest($request);
+			if($form->isValid())
+			{
+				$em->persist($group);
+				$em->flush();
+				
+				//On rajoute l'utilisateur courant dans le groupe
+				$group->getUsers()->add($user);
+
+				$em->flush();
+
+				$this->get('session')->setFlash('success', 'Groupe créé avec succès');
+
+				return $this->redirect($this->generateUrl('homepage'));
+			}
+		}
+
+		return array(
+				'form' => $form->createView()
+		);
+	}
+
+    /**
+     * @Template()
      * @Route( "/inscription/{id}", name="group_inscription")
      * @ParamConverter("group", class="MongoboxGroupBundle:Group")
      */
     public function groupInscriptionAction(Request $request, Group $group)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-		$user = $this->get('security.context')->getToken()->getUser();
+		if(!$group->getPrivate())
+		{
+			$em = $this->getDoctrine()->getEntityManager();
+			$user = $this->get('security.context')->getToken()->getUser();
 
-		$group->getUsers()->add($user);
+			$group->getUsers()->add($user);
 
-		$em->flush();
+			$em->flush();
 
-		$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+			$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+		}
+		else
+		{
+			$this->get('session')->setFlash('notice', 'Vous ne pouvez pas vous inscrire à un groupe privé.');
+		}
 
 		return $this->redirect($this->generateUrl('homepage'));
 	}
