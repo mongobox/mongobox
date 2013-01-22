@@ -43,7 +43,7 @@ class Group
     protected $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\TUmblrBundle\Entity\Tumblr", inversedBy="groups")
      * @ORM\JoinTable(name="tumblrs_groups",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
      * 		inverseJoinColumns={@ORM\JoinColumn(name="id_tumblr", referencedColumnName="id_tumblr")}
@@ -78,6 +78,7 @@ class Group
 		$this->private = true;
         $this->users = new ArrayCollection();
         $this->users_invitations = new ArrayCollection();
+		$this->tumblrs = new ArrayCollection();
     }
 
     /**
@@ -166,6 +167,17 @@ class Group
     	return $this;
     }
     
+    public function getTumblrs()
+    {
+    	return $this->tumblrs;
+    }
+    
+    public function setTumblrs($tumblrs)
+    {
+    	$this->tumblrs = $tumblrs;
+    	return $this;
+    }
+
     public function getUsersInvitations()
     {
     	return $this->users_invitations;
