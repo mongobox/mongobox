@@ -15,7 +15,7 @@
                     </small>
 					{% if pl.videoGroup.user is not empty %}
 					<div class="user-box">
-						<img src="{{ pl.videoGroup.user.avatar }}" alt="{{ pl.videoGroup.user.login }}" class="photo-small"/>
+						<img src="{{ pl.videoGroup.user.gravatar }}" alt="{{ pl.videoGroup.user.login }}" class="photo-small"/>
 						{{ pl.videoGroup.user.login }}
 					</div>
 					{% endif %}
@@ -28,7 +28,7 @@
 				<li><a href="{{video_hist.video.youtubeUrl}}">{{video_hist.video.title}} ({{video_hist.lastBroadCast|date('d-m-Y H:i:s')}})</a></li>
 				{% if video_hist.user is not empty %}
 				<div class="user-box">
-					<img src="{{ video_hist.user.avatar }}" alt="{{ video_hist.user.login }}" class="photo-small"/>
+					<img src="{{ video_hist.user.gravatar }}" alt="{{ video_hist.user.login }}" class="photo-small"/>
 					{{ video_hist.user.login }}
 				</div>
 				{% endif %}
