@@ -66,13 +66,20 @@ class TumblrController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $tumblr = new Tumblr();
-        $form = $this->createForm(new TumblrType(), $tumblr);
+        $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
 
         if ( 'POST' === $request->getMethod() ) {
             $form->bindRequest($request);
-            if ( $form->isValid() ) {
+            if ( $form->isValid() )
+			{
                 $tumblr->setDate(new \Datetime());
                 $em->persist($tumblr);
+                $em->flush();
+				foreach($form->get('groups')->getData() as $group_id)
+				{
+					$group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+					$group->getTumblrs()->add($tumblr);
+				}
                 $em->flush();
                 $this->get('session')->setFlash('success', 'Tumblr posté avec succès');
 
@@ -120,9 +127,9 @@ class TumblrController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$user = $this->get('security.context')->getToken()->getUser();
 
-        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast(5, $group);
+        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast(5, $user->getGroupsIds());
         return array
         (
             'mongo_pute' => $mongo_pute

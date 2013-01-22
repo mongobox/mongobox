@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class TumblrRepository extends EntityRepository
 {
-	public function findLast($maxResults, $group)
+	public function findLast($maxResults, $groups)
 	{
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
@@ -20,11 +20,11 @@ class TumblrRepository extends EntityRepository
 		$qb->select('t')
 		->from('MongoboxTumblrBundle:Tumblr', 't')
 		->leftJoin('t.groups', 'g')
-		->where("g.id = :group")
+		->where("g.id IN (:groups)")
 		->orderBy('t.date', 'DESC')
 		->setMaxResults($maxResults)
 		->setParameters( array(
-				'group' => $group
+				'groups' => $groups
 		));
 
 		$query = $qb->getQuery();

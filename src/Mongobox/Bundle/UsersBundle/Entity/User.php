@@ -491,7 +491,15 @@ class User implements AdvancedUserInterface
     }
     
     
-    
+    public function getGroupsIds()
+	{
+		$groups_ids = array();
+		foreach($this->getGroups() as $group)
+		{
+			$groups_ids[] = $group->getId();
+		}
+		return $groups_ids;
+	}
 
 	/**
 	 * Encode le mot de passe
@@ -556,6 +564,11 @@ class User implements AdvancedUserInterface
 	public function getRole()
 	{
 		return 'User';
+	}
+	
+	public function getGravatar($s = 50)
+	{
+		return 'http://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->getEmail() ) ) ).'?s='.$s;
 	}
 
 	//Génère un lastname utilisable via l'url
