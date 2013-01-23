@@ -42,20 +42,24 @@ class VideosRepository extends EntityRepository
      * @param unknown_type $filters
      * @return unknown
      */
-    public function search($search, $page, $limit, $filters )
+    public function search($group, $search, $page, $limit, $filters )
     {
+		$parameters = array('group' => $group);
         $q = $this
                 ->createQueryBuilder('v')
                 ->select('v')
+				->leftJoin('v.video_groups', 'vg')
+				->where('vg.group = :group')
                 ->orderBy('v.'. $filters['sortBy'], strtoupper($filters['orderBy']) )
                 ->setMaxResults($limit)
                 ->setFirstResult($limit * ($page-1));
 
         if (array_key_exists('title', $search)) {
             $q
-                ->where('v.title LIKE :title')
-                ->setParameter('title', '%'.$search['title'].'%');
+                ->andWhere('v.title LIKE :title');
+                $parameters['title'] = '%'.$search['title'].'%';
         }
+		$q->setParameters($parameters);
         
         
         $q = $q->getQuery();

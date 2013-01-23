@@ -33,6 +33,7 @@ class VideosController extends Controller
     public function indexAction(Request $request, $page)
     {
         $em = $this->getDoctrine()->getManager();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($request->getSession()->get('id_group'));
         $videosRepository = $em->getRepository('MongoboxJukeboxBundle:Videos');
 
         $formSearchVideos = $this->createForm(new SearchVideosType());
@@ -58,6 +59,7 @@ class VideosController extends Controller
         }
         
         $entities = $videosRepository->search(
+				$group,
                 $criteria,
                 $page,
                 $this->_limitPagination,

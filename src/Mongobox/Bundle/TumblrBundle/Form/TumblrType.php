@@ -31,7 +31,7 @@ class TumblrType extends AbstractType
             ))
         ;
 			$builder->add('groups', 'choice', array(
-            	'label' => 'Partager dans ces groups',
+            	'label' => 'Partager dans ces groupes',
 				'choices' => $this->groups,
 				'multiple' => true,
 				'expanded' => true,
