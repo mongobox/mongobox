@@ -5,6 +5,7 @@ Qu'est-ce que Mongobox
 -----------------
 
 Mongobox est un jukebox participatif fait en Symfony 2.
+
 Il comprend :
 - La lecture de la même vidéo sur plusieurs ordinateurs différents, avec un administrateur qui peut accélérer, mettre en pause, etc.
 - Un système de vote pour passer à la chanson suivante
