@@ -21,10 +21,15 @@
 						<li>
 							<a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="icon-ok"></span>{% endif %}</a>
 						</li>
-						{% if group.id == app.session.get('id_group') and group.private %}
-						<li>
-							<a href="{{path('group_invite', {'id' : group.id})}}" title="Groupes">--> Inviter un utilisateur</a>
-						</li>
+						{% if group.id == app.session.get('id_group') %}
+							<li>
+								<a href="{{path('group_edit', {'id' : group.id})}}" title="Groupes">--> Modifier le groupe</a>
+							</li>
+							{% if group.private %}
+							<li>
+								<a href="{{path('group_invite', {'id' : group.id})}}" title="Groupes">--> Inviter un utilisateur</a>
+							</li>
+							{% endif %}
 						{% endif %}
 					{% endfor %}
 					<li class="divider"></li>

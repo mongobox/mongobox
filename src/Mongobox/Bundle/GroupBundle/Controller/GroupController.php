@@ -73,6 +73,38 @@ class GroupController extends Controller
 
     /**
      * @Template()
+     * @Route( "/edit", name="group_edit")
+     */
+    public function groupEditAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		//On créer le formulaire en utilisant un utilisateur vide
+		$form = $this->createForm(new GroupType(), $group);
+
+		if('POST' === $request->getMethod())
+		{
+			$form->bindRequest($request);
+			if($form->isValid())
+			{
+				$em->flush();
+
+				$this->get('session')->setFlash('success', 'Groupe édité avec succès');
+
+				return $this->redirect($this->generateUrl('homepage'));
+			}
+		}
+
+		return array(
+				'form' => $form->createView()
+		);
+	}
+
+	/**
+     * @Template()
      * @Route( "/inscription/{id}", name="group_inscription")
      * @ParamConverter("group", class="MongoboxGroupBundle:Group")
      */
@@ -136,7 +168,7 @@ class GroupController extends Controller
 
 	/**
 	 * @Route("/change/{id_group}", name="group_change")
-	 * 
+	 * @Template()
 	 * @author Coleyra
 	 * Change la groupe courante (via la liste de selection)
 	 */
