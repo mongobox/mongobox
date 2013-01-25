@@ -8,7 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 
 // Forms
@@ -35,6 +37,7 @@ class VideosController extends Controller
         $em = $this->getDoctrine()->getManager();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($request->getSession()->get('id_group'));
         $videosRepository = $em->getRepository('MongoboxJukeboxBundle:Videos');
+        $videoGroupRepository = $em->getRepository('MongoboxJukeboxBundle:VideoGroup');
 
         $formSearchVideos = $this->createForm(new SearchVideosType());
 
@@ -46,7 +49,7 @@ class VideosController extends Controller
 
      	// filtre par defaut
         $filters = array('sortBy' => 'date', 'orderBy' => 'asc');
-        
+
         // $_GET parameters
         $sortBy = $request->query->get('sortBy');
         $orderBy = $request->query->get('orderBy');
@@ -57,7 +60,7 @@ class VideosController extends Controller
         		'orderBy' => $orderBy		
         	);
         }
-        
+
         $entities = $videosRepository->search(
 				$group,
                 $criteria,
@@ -66,7 +69,7 @@ class VideosController extends Controller
         		$filters
         );
 
-        $nbPages = (int) (count($videosRepository->findAll())  / $this->_limitPagination);
+        $nbPages = (int) (count($videoGroupRepository->findBy(array('group' => $group->getId())))  / $this->_limitPagination);
 
         $displayFilters = $filters;
         ( 'DESC' === $displayFilters['orderBy'] ) ? $displayFilters['orderBy'] = 'ASC' : $displayFilters['orderBy'] = 'DESC';
@@ -244,15 +247,19 @@ class VideosController extends Controller
      * Add the video to the playlist entity.
      *
      * @Route("/{id}/add_to_playlist", name="videos_add_to_playlist")
-     * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos")
+     * @ParamConverter("video", class="MongoboxJukeboxBundle:VideoGroup")
      */
-    public function addToPlaylistAction(Videos $video)
+    public function addToPlaylistAction(Request $request, VideoGroup $video)
     {
         $em = $this->getDoctrine()->getManager();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $playlist_add = new Playlist();
-        $playlist_add->setVideo($video);
+        $playlist_add->setVideoGroup($video);
+		$playlist_add->setGroup($group);
         $playlist_add->setRandom(0);
+		$playlist_add->setCurrent(0);
         $playlist_add->setDate(new \Datetime());
         $em->persist($playlist_add);
         $em->flush();

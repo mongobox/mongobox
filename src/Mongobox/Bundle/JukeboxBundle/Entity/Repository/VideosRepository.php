@@ -45,12 +45,13 @@ class VideosRepository extends EntityRepository
     public function search($group, $search, $page, $limit, $filters )
     {
 		$parameters = array('group' => $group);
-        $q = $this
-                ->createQueryBuilder('v')
-                ->select('v')
-				->leftJoin('v.video_groups', 'vg')
+        $q = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('vg')
+				->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+				->leftJoin('vg.video', 'v')
 				->where('vg.group = :group')
-                ->orderBy('v.'. $filters['sortBy'], strtoupper($filters['orderBy']) )
+                ->orderBy($filters['sortBy'], strtoupper($filters['orderBy']) )
                 ->setMaxResults($limit)
                 ->setFirstResult($limit * ($page-1));
 
