@@ -18,3 +18,5 @@ app/SymfonyRequirements.php
 app/check.php
 
 app/config/parameters.yml.dist
+
+app/check.php
