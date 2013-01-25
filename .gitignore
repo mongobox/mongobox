@@ -8,15 +8,3 @@ php-cs-fixer.phar
 *.*~
 .DS_Store
 /composer.lock
-
-bin/doctrine.php
-
-bin/doctrine
-
-app/SymfonyRequirements.php
-
-app/check.php
-
-app/config/parameters.yml.dist
-
-app/check.php
