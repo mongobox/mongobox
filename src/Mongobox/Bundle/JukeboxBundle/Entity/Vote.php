@@ -25,7 +25,7 @@ class Vote
     protected $video;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Emakina\Bundle\LdapBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -76,10 +76,10 @@ class Vote
     /**
      * Set user
      *
-     * @param \Emakina\Bundle\LdapBundle\Entity\User $user
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
      * @return Vote
      */
-    public function setUser(\Emakina\Bundle\LdapBundle\Entity\User $user = null)
+    public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
     {
         $this->user = $user;
     
@@ -89,7 +89,7 @@ class Vote
     /**
      * Get user
      *
-     * @return \Emakina\Bundle\LdapBundle\Entity\User 
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User 
      */
     public function getUser()
     {

@@ -3,11 +3,6 @@ MongoboxTumblrBundle:
     type:     annotation
     prefix:   /
 
-Mongobox_authentication:
-    resource: "@MongoboxAuthenticationBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 homepage:
     pattern:  /
     defaults: { _controller: MongoboxJukeboxBundle:Wall:index }
@@ -17,6 +12,11 @@ MongoboxJukeboxBundle:
     type:     annotation
     prefix:   /
 
+MongoboxUsersBundle:
+    resource: "@MongoboxUsersBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
 _login_check:
     pattern: /login_check
     requirements: {_method : POST }
