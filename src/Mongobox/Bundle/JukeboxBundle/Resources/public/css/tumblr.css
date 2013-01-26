@@ -1,6 +1,6 @@
 #tumblr-slider
 {
-    width: 600px;
+    width: 400px;
     padding-right: 250px;
     position: relative;
     height: 300px;
@@ -19,7 +19,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 450px;
+    width: 250px;
 }
 
 #tumblr-slider ul.ui-tabs-nav li
