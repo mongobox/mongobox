@@ -1,20 +1,42 @@
-                <div id="slider-tumblr">
-				{% for entity in mongo_pute %}
-					<div>
-                        <img src="{{entity.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
-                        </p>
-					</div>
-				{% endfor %}
-                </div>
+{#<div id="slider-tumblr">
+    {% for entity in mongo_pute %}
+    	<div>
+            <img src="{{entity.image}}" style="max-height : 150px;" />
+    		<p>
+                {{entity.text}}
+                <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
+                / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
+                (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
+            </p>
+    	</div>
+    {% endfor %}
+</div>#}
+
+<div id="tumblr-slider" > 
+    <ul class="ui-tabs-nav">
+    {% for entity in mongo_pute %}
+        <li class="ui-tabs-nav-item ui-tabs-selected" id="tumblr-pic-{{ loop.index }}">
+            <a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr" data-content='{% include 'MongoboxTumblrBundle:Tumblr:vote.html.twig' %}'>
+                <img src="{{entity.image}}" alt="{{ entity.text }}" class="preview-tumblr" />
+                <span>{{ entity.text }}</span>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+    {% for entity in mongo_pute %}
+        <div id="tumblr-{{ loop.index }}" class="ui-tabs-panel">
+            <img src="{{ entity.image }}" alt="{{ entity.text }}" class="image-tumblr" />  
+            <div class="info" >  
+                <p>{{ entity.text }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 <script>
 	$(document).ready(function()
 	{
-        $('#slider-tumblr').movingBoxes(
+        /*$('#slider-tumblr').movingBoxes(
         {
             startPanel   : 1,      // start with this panel
             width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
@@ -22,6 +44,31 @@
             panelWidth   : .5,     // current panel width adjusted to 70% of overall width
             fixedHeight  : true,// if true, navigation links will be added
             navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
+        });*/
+
+        $("#tumblr-slider").tabs({fx:{opacity: "toggle"}});
+
+        $('.link-popover-tumblr').clickover({
+            trigger: 'hover',
+            html: true,
+            placement: 'bottom',
+            title: 'Votes',
+            global_close: true,
+            esc_close: true,
+            allow_multiple: false,
+            onHidden: function(e)
+            {
+                // récupération du contenu actuel de la popover
+                var actuel_content = $(this.$tip[0]).html();
+
+                var content_start = '<div class="popover-content"><p>';
+                var content_end = '</p></div></div>';
+
+                content_final = actuel_content.substr(actuel_content.indexOf(content_start) + content_start.length, actuel_content.indexOf(content_end) - content_end.length);
+
+                // modification de l'attribut du lien pour l'affichage par la suite de la nouvelle note
+                $(this.$element[0]).attr('data-content', content_final);
+            }
         });
 	});
 </script>
