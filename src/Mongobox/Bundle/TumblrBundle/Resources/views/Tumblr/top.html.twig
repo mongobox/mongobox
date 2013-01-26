@@ -12,8 +12,8 @@
                         <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
 						<p>
                             {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
+                            <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
+                            / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
                             (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
                         </p>
 					</div>
@@ -26,8 +26,8 @@
                         <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
 						<p>
                             {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
+                            <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
+                            / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
                             (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
                         </p>
 					</div>
@@ -40,8 +40,8 @@
                         <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
 						<p>
                             {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
+                            <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
+                            / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
                             (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
                         </p>
 					</div>

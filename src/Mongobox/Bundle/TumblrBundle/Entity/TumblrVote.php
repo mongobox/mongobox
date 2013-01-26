@@ -13,9 +13,10 @@ class TumblrVote
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="tumblr_vote")
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      */
-    protected $ip;
+    protected $user;
 
     /**
      * @ORM\Id
@@ -27,7 +28,7 @@ class TumblrVote
     /**
      * @ORM\Column(type="integer")
      */
-    protected $sens;
+    protected $note;
 
     public function setTumblr($tumblr)
     {
@@ -41,27 +42,27 @@ class TumblrVote
         return $this->tumblr;
     }
 
-    public function setIp($ip)
+    public function setUser($user)
     {
-        $this->ip = $ip;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getIp()
+    public function getUser()
     {
-        return $this->ip;
+        return $this->user;
     }
 
-    public function setSens($sens)
+    public function setNote($note)
     {
-        $this->sens = $sens;
+        $this->note = $note;
 
         return $this;
     }
 
-    public function getSens()
+    public function getNote()
     {
-        return $this->sens;
+        return $this->note;
     }    
 }

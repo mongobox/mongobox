@@ -27,10 +27,11 @@ class TumblrController extends Controller
      * @Route("/{page}", name="mongo_pute",requirements={"page" = "\d+"}, defaults={"page" = 1})
      * @Template()
      */
-    public function indexAction(Request $resquest, $page)
+    public function indexAction(Request $request, $page)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
+		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $entitiesMongoPute = $tumblrRepository->findBy(
@@ -94,23 +95,26 @@ class TumblrController extends Controller
 
     /**
      * @Template()
-     * @Route( "/tumblr_vote/{id_tumblr}/{sens}", name="tumblr_vote")
+     * @Route( "/tumblr_vote/{id_tumblr}/{note}", name="tumblr_vote")
      */
-    public function voteAction(Request $request, $sens, $id_tumblr)
+    public function voteAction(Request $request, $note, $id_tumblr)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $tumblr_vote = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
-
+		$session = $request->getSession();
+		$user = $this->get('security.context')->getToken()->getUser();
         //Wipe de son ancien vote
-        $old_vote = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->findOneBy(array('tumblr' => $id_tumblr, 'ip' => $_SERVER['REMOTE_ADDR']));
+        $old_vote = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->findOneBy(array('tumblr' => $id_tumblr, 'user' => $user));
         if (!is_null($old_vote)) {
             $em->remove($old_vote);
             $em->flush();
         }
+		if((int)$note > 5) $note = 5;
+		elseif((int)$note < 0) $note = 0;
 
         $vote = new TumblrVote();
-        $vote->setIp($_SERVER['REMOTE_ADDR']);
-        $vote->setSens($sens);
+        $vote->setUser($user);
+        $vote->setNote($note);
         $vote->setTumblr($tumblr_vote);
 
         $em->persist($vote);

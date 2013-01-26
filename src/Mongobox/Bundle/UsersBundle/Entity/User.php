@@ -94,6 +94,11 @@ class User implements AdvancedUserInterface
      */
     protected $last_connect;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
+     */
+	private $tumblr_vote;
+	
 	/**
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
 	 **/

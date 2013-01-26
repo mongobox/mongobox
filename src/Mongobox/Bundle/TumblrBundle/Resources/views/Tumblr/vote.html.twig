@@ -22,12 +22,12 @@
 	</tr>
 	<tr>
 		<td style="text-align: center;">
-			<a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn btn-vote btn-large" rel="nb_vote_tumblr_{{entity.id}}">
+			<a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity.id})}}" class="btn btn-vote btn-large" rel="nb_vote_tumblr_{{entity.id}}">
 				<i class="icon-thumbs-up"></i>
 			</a>
 		</td>
 		<td style="text-align: center;">
-			<a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn btn-vote btn-large" rel="nb_vote_tumblr_{{entity.id}}">
+			<a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity.id})}}" class="btn btn-vote btn-large" rel="nb_vote_tumblr_{{entity.id}}">
 				<i class="icon-thumbs-down"></i>
 			</a>
 		</td>
