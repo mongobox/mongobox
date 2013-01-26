@@ -22,7 +22,6 @@ class UserEditType extends AbstractType
             	'label' => 'Last name',
             	'attr' => array('size' => 15),
             ))
-            ->add('avatar', 'file', array('label' => ' ', 'required' => false))
         ;
     }
 
