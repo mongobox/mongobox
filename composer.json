@@ -23,7 +23,6 @@
 		"dms/dms-filter-bundle": "dev-master",
 		"avalanche123/imagine-bundle": "dev-master",
 		"guzzle/guzzle": "2.8.*",
-		"zendframework/zend-ldap" : "2.0.*",
 		"cboden/Ratchet": "0.2.*"
     },
     "scripts": {
@@ -40,12 +39,6 @@
 			"Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ]
     },
-	"repositories": [
-	    {
-	        "type": "composer",
-	        "url": "http://packages.zendframework.com/"
-	    }
-	],
     "config": {
         "bin-dir": "bin"
     },

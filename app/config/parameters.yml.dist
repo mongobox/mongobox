@@ -12,8 +12,4 @@ parameters:
     mailer_password:   ~
 
     locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
-    
-    ldap_host:           
-    ldap_username:          
-    ldap_password:      
+    secret:            ThisTokenIsNotSoSecretChangeIt   

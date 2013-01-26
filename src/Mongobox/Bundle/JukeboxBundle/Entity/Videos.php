@@ -91,7 +91,7 @@ class Videos
     protected $playlist;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Emakina\Bundle\LdapBundle\Entity\User", inversedBy="videos")
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="videos")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -444,10 +444,10 @@ class Videos
     /**
      * Set user
      *
-     * @param \Emakina\Bundle\LdapBundle\Entity\User $user
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
      * @return Videos
      */
-    public function setUser(\Emakina\Bundle\LdapBundle\Entity\User $user = null)
+    public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
     {
         $this->user = $user;
     
@@ -457,7 +457,7 @@ class Videos
     /**
      * Get user
      *
-     * @return \Emakina\Bundle\LdapBundle\Entity\User 
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User 
      */
     public function getUser()
     {
