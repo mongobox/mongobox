@@ -110,7 +110,7 @@ class Tumblr
     {
         $somme = 0;
         $liste_vote = $this->getTumblrVote();
-        foreach($liste_vote as $vote) $somme += $vote->getSens();
+        foreach($liste_vote as $vote) $somme += $vote->getNote();
         return $somme;
     }
 
