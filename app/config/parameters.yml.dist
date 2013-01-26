@@ -12,4 +12,10 @@ parameters:
     mailer_password:   ~
 
     locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt   
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+twig:
+    globals:
+      project_name:      MongoBox
+      team_name:         Mongo Application
+      version:           "1.5"
