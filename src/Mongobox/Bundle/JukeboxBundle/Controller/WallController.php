@@ -48,7 +48,7 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 		$user = $this->get('security.context')->getToken()->getUser();
-		$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
+		//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
 		
         $video = new Videos();
         $form = $this->createForm(new VideoType(), $video);
@@ -77,7 +77,7 @@ class WallController extends Controller
 							->setDuration($dataYt->duration)
                             ->setThumbnail( $dataYt->thumbnail->hqDefault )
                             ->setThumbnailHq( $dataYt->thumbnail->sqDefault )
-							->setuser($userDb);
+							->setuser($user);
                     $em->persist($video);
                     $em->flush();
 
@@ -210,12 +210,11 @@ class WallController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 		
 		$user = $this->get('security.context')->getToken()->getUser();
-		$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
 		
         //Wipe de son ancien vote
         $old_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')
 						->findOneBy(array(
-							'user'	=> $userDb,
+							'user'	=> $user,
 							'video' => $video, 
 							'ip' => $this->getRequest()->server->get('REMOTE_ADDR')
 							)
@@ -229,7 +228,7 @@ class WallController extends Controller
         $vote->setIp($this->getRequest()->server->get('REMOTE_ADDR'))
 				->setSens($sens)
 				->setVideo($video)
-				->setUser($userDb);
+				->setUser($user);
 
         if ($current) {
             $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
