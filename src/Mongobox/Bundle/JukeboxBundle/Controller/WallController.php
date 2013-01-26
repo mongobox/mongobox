@@ -276,13 +276,13 @@ class WallController extends Controller
 
     /**
      * @Template()
-     * @Route( "/ajax_flag_vendredi_video/{id_video}", name="ajax_flag_vendredi_video")
+     * @Route( "/ajax_flag_vendredi_video/{id}/{value}", name="ajax_flag_vendredi_video")
      */
-    public function ajaxFlagVendrediVideoAction(Request $request, $id_video)
+    public function ajaxFlagVendrediVideoAction(Request $request, $id, $value)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id_video);
-        $video->setVendredi(1);
+        $video = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->find($id);
+        $video->setVendredi($value);
         $em->flush();
 
         return new Response();

@@ -17,7 +17,7 @@
 		</object>
 		<br />
 		<!-- <a href="{{path('delete_video', {'id_video' : video_group.id})}}" class="btn">Delete</a> -->
-		<!-- <a href="{{path('ajax_flag_vendredi_video', {'id_video' : video_group.id})}}" class="btn" onclick="$('#load_vendredi').load($(this).attr('href')); return false;">Flagger Vendredi</a> -->
+		<!-- <a href="{{path('ajax_flag_vendredi_video', {'id' : video_group.id, 'value' : 1})}}" class="btn" onclick="$('#load_vendredi').load($(this).attr('href')); return false;">Flagger Vendredi</a> -->
 		<div id="load_vendredi"></div>
 		<input type="hidden" id="id_video" value="{{video_group.id}}" /><br />
 		{% if video_group.user is not empty %}

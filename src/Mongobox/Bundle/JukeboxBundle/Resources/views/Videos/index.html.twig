@@ -97,8 +97,7 @@
 			{% if entity.user is not empty %}{{ entity.user.login }}{% endif %}
 			</td>
             <td>
-            	<a href="{{ path('videos_show', { 'id': entity.id }) }}" class="btn">Voir</a>
-                <a href="{{ path('videos_edit', { 'id': entity.id }) }}" class="btn">Modifier</a>
+            	<a href="{{ path('ajax_flag_vendredi_video', { 'id': entity.id, 'value' : 1 }) }}" class="btn">Définir comme vendredi</a>
             	<a href="{{ path('videos_add_to_playlist', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
             </td>
         </tr>

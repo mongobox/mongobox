@@ -48,7 +48,7 @@ class VideosController extends Controller
          }
 
      	// filtre par defaut
-        $filters = array('sortBy' => 'date', 'orderBy' => 'asc');
+        $filters = array('sortBy' => 'vg.lastBroadcast', 'orderBy' => 'desc');
 
         // $_GET parameters
         $sortBy = $request->query->get('sortBy');
