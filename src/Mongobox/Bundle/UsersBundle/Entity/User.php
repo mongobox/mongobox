@@ -585,4 +585,14 @@ class User implements AdvancedUserInterface
 		return preg_replace('#[^a-zA-Z0-9\-\._]#', '', $lastname);
 		//return $lastname;
 	}
+
+    // Fonction pour récupérer le vote d'un utilisateur pour un tumblr donnée
+    public function getNoteForTumblr($id_tumblr)
+    {
+        foreach($this->tumblr_vote as $tumblrVote)
+        {
+            if($tumblrVote->getTumblr()->getId() === $id_tumblr) return floatval($tumblrVote->getNote());
+        }
+        return 0;
+    }
 }

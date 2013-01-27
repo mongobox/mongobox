@@ -26,7 +26,7 @@ class TumblrVote
     protected $tumblr;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     protected $note;
 

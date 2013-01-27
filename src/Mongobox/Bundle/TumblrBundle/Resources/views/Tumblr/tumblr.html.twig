@@ -12,13 +12,42 @@
     {% endfor %}
 </div>#}
 
+<script>
+$(document).ready(function()
+{
+    $('.star').raty({
+        cancel: false,
+        click : function(score, evt) {
+            star_clicked = $(this);
+            // récupération de l'id du tumblr
+            var id_tumblr_vote = $(this).attr('id').match(/^rating-(\d+)/)[1];
+            // envoie ajax de la note
+            $.ajax({
+                type: 'POST',
+                url: basepath+"mongo-pute/tumblr_vote/"+id_tumblr_vote+"/"+score,
+                success:function(data)
+                {
+                    // modification de l'affichage de la note globale
+                    star_clicked.siblings('.vote-tumblr').html('Note globale : '+data);
+                }
+            });
+        },
+        half: true,
+        hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
+        number: 5,
+        path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
+        score: 1
+    });
+});
+</script>
+
 <div id="tumblr-slider" > 
     <ul class="ui-tabs-nav">
     {% for entity in mongo_pute %}
         <li class="ui-tabs-nav-item ui-tabs-selected" id="tumblr-pic-{{ loop.index }}">
-            <a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr" data-content='{% include 'MongoboxTumblrBundle:Tumblr:vote.html.twig' %}'>
+            <a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr">
                 <img src="{{entity.image}}" alt="{{ entity.text }}" class="preview-tumblr" />
-                <span>{{ entity.text }}</span>
+                <span>{{ entity.text }}</span>                
             </a>
         </li>
     {% endfor %}
@@ -26,8 +55,11 @@
     {% for entity in mongo_pute %}
         <div id="tumblr-{{ loop.index }}" class="ui-tabs-panel">
             <img src="{{ entity.image }}" alt="{{ entity.text }}" class="image-tumblr" />  
-            <div class="info" >  
-                <p>{{ entity.text }}</p>
+            <div class="info" >
+                <p>
+                    {{ entity.text }}
+                </p>
+                {% include 'MongoboxTumblrBundle:Tumblr:vote.html.twig' %}
             </div>
         </div>
     {% endfor %}
@@ -36,39 +68,7 @@
 <script>
 	$(document).ready(function()
 	{
-        /*$('#slider-tumblr').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .5,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });*/
-
         $("#tumblr-slider").tabs({fx:{opacity: "toggle"}});
-
-        $('.link-popover-tumblr').clickover({
-            trigger: 'hover',
-            html: true,
-            placement: 'bottom',
-            title: 'Votes',
-            global_close: true,
-            esc_close: true,
-            allow_multiple: false,
-            onHidden: function(e)
-            {
-                // récupération du contenu actuel de la popover
-                var actuel_content = $(this.$tip[0]).html();
-
-                var content_start = '<div class="popover-content"><p>';
-                var content_end = '</p></div></div>';
-
-                content_final = actuel_content.substr(actuel_content.indexOf(content_start) + content_start.length, actuel_content.indexOf(content_end) - content_end.length);
-
-                // modification de l'attribut du lien pour l'affichage par la suite de la nouvelle note
-                $(this.$element[0]).attr('data-content', content_final);
-            }
-        });
+        $('.groupes-tooltip').tooltip();
 	});
 </script>

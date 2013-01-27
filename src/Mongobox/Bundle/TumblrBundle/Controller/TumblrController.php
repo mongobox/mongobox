@@ -97,7 +97,7 @@ class TumblrController extends Controller
      * @Template()
      * @Route( "/tumblr_vote/{id_tumblr}/{note}", name="tumblr_vote")
      */
-    public function voteAction(Request $request, $note, $id_tumblr)
+    public function voteAction(Request $request, $id_tumblr, $note)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $tumblr_vote = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);

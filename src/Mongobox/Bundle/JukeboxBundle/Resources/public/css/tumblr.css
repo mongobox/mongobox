@@ -1,6 +1,6 @@
 #tumblr-slider
 {
-    width: 400px;
+    width: 355px;
     padding-right: 250px;
     position: relative;
     height: 300px;
@@ -15,7 +15,7 @@
 {
     position: absolute;
     top: 0;
-    left: 400px;
+    left: 355px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -32,7 +32,7 @@
 
 #tumblr-slider .ui-tabs-panel
 {
-    width: 400px;
+    width: 355px;
     height: 300px;
     background: #999;
     position: relative;
@@ -44,7 +44,7 @@
     display:none;
 }
 
-#tumblr-slider li.ui-tabs-nav-item a
+#tumblr-slider li.ui-tabs-nav-item a.link-popover-tumblr
 {
     display: block;
     height: 60px;
@@ -54,12 +54,12 @@
     outline: none;
 }
 
-#tumblr-slider li.ui-tabs-nav-item a:hover
+#tumblr-slider li.ui-tabs-nav-item a:hover.link-popover-tumblr
 {
     background: #f2f2f2;
 }
 
-#tumblr-slider ul.ui-tabs-nav li.ui-tabs-selected a
+#tumblr-slider ul.ui-tabs-nav li.ui-tabs-selected a.link-popover-tumblr
 {
     background: #ccc;
 }
@@ -77,7 +77,7 @@
 .image-tumblr
 {
     width: 100%;
-    height: 100%;
+    height: 80%;
 }
 
 .preview-tumblr
@@ -94,45 +94,53 @@
 #tumblr-slider .ui-tabs-panel .info
 {
     position: absolute;
-    top: 180px;
-    left: 0;
-    height: 70px;
-    width: 400px;
-    background: url('../img/transparent-bg.png');
+    top: 237px;
+    width: 355px;
+    height: 65px;
+    background: grey;
 }
 
 #tumblr-slider .info p
 {
-    margin: 17px 15px;
     font-family: Georgia, serif;
     font-size: 15px;
     line-height: 15px;
     color: #f0f0f0;
+    margin: 5px 5px;
 }
 
-#tumblr-slider .info a
+#tumblr-slider .info span
 {
+    margin-right: 5px;
+}
+
+.div-vote-tumblr
+{
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+    text-align: right;
+}
+
+.vote-tumblr
+{
+    position: absolute;
+    left: 40%;
+}
+
+.star
+{
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+.groupes-tooltip
+{
+    position: absolute;
     text-decoration: none;
-    color: #fff;
-}
-
-#tumblr-slider .info a:hover
-{
-    text-decoration: underline;
-}
-
-.box-vote
-{
-    background-color: #444;
-    color: #C4BE92;
-    text-align: center;
-
-    -webkit-border-radius: 12px;
-    border-radius: 12px; 
-    -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
-    padding: .8em .8em 1em;
-    width: 8em;
-    margin: 0 auto; 
-    -webkit-box-shadow: 0px 0px 12px 0px #000;
-    box-shadow: 0px 0px 12px 0px #000;
+    width: 60px;
+    padding-right: 10px;
+    color: black;
+    background-color: lightgrey;
+    cursor: pointer;
 }
