@@ -32,17 +32,11 @@ class TumblrController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
 		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$user = $this->get('security.context')->getToken()->getUser();
 
-        $entitiesMongoPute = $tumblrRepository->findBy(
-                array('id_group' => $group),
-                array('date' => 'DESC'),
-                $this->_limitPagination,
-                $this->_limitPagination * ($page-1)
+        $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1));
 
-        );
-
-        $nbPages = (int) (count($tumblrRepository->findAll())  / $this->_limitPagination);
+        $nbPages = (int) (count($tumblrRepository->findLast($user->getGroupsIds()))  / $this->_limitPagination);
 
         return array(
             'mongo_pute' => $entitiesMongoPute,
@@ -133,7 +127,7 @@ class TumblrController extends Controller
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
 
-        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast(5, $user->getGroupsIds());
+        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
         return array
         (
             'mongo_pute' => $mongo_pute
