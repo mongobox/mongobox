@@ -11,7 +11,7 @@ use Mongobox\Bundle\StatisticsBundle\Statistics;
 class TumblrController extends Controller
 {
     /**
-     * @Route("/tumblr/stats")
+     * @Route("/tumblr/stats", name="tumblr_stats")
      * @Template()
      */
     public function indexAction()
@@ -19,10 +19,8 @@ class TumblrController extends Controller
         $dm     = $this->getDoctrine()->getManager();
         $object = new Statistics\Tumblr($dm);
 
-        $statistics = $object->getStatistics();
-
         return array(
-            'timeline'  => $statistics['timeline']
+            'statistics' => $object->getStatistics()
         );
     }
 }
