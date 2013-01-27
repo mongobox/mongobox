@@ -22,7 +22,10 @@ class UserEditType extends AbstractType
             	'label' => 'Last name',
             	'attr' => array('size' => 15),
             ))
-        ;
+            ->add('email', 'text', array(
+            	'label' => 'Email',
+            	'attr' => array('size' => 40, 'placeholder' => 'Email'),
+            ));
     }
 
     public function getName()
