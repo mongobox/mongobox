@@ -45,7 +45,7 @@
 		          		player = new YT.Player('player', {
 		          			height: '500px',
 		          			width: '800px',
-		          			videoId: '{{ current_video.lien }}',
+		          			videoId: '{{ current_video.videoGroup.video.lien }}',
 		          			playerVars: {{ player_vars }},
 		          			events: {{ player_events }}
 		          		});
@@ -55,7 +55,7 @@
 			<script type="text/javascript">
 				$(document).ready(function() {
 					livePlayer = new LivePlayer();
-					livePlayer.initialize('{{ current_video.lien }}');
+					livePlayer.initialize('{{ current_video.id }}');
 
 					connection = new WebSocket('{{ socket_params }}');
 					connection.onmessage = function(e) {
@@ -63,7 +63,7 @@
 
 						params = JSON.parse(json);
 						params.mode	= '{{ player_mode }}';
-						params.currentVideo = '{{ current_video.lien }}';
+						params.currentVideo = '{{ current_video.id }}';
 
 						livePlayer.synchronizePlayerState(params);
 					};

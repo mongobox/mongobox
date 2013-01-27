@@ -94,18 +94,33 @@ class User implements AdvancedUserInterface
      */
     protected $last_connect;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
+     */
+	private $tumblr_vote;
+	
 	/**
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
 	 **/
 	private $videos;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
+     */
+    protected $groups;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users_invitations", cascade={"persist"})
+     */
+    protected $groups_invitations;
 
 	public function __construct()
     {
 		//valeurs par défaut
     	$this->date_create = new \DateTime();
 		$this->actif = 1;
-		$this->ideas = new ArrayCollection();
-		$this->solutions = new ArrayCollection();
+		$this->groups = new ArrayCollection();
+		$this->groups_invitations = new ArrayCollection();
     }
 
     /**
@@ -152,29 +167,6 @@ class User implements AdvancedUserInterface
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set the value of type_email.
-     *
-     * @param string $type_email
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setTypeEmail($type_email)
-    {
-        $this->type_email = $type_email;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of type_email.
-     *
-     * @return string
-     */
-    public function getTypeEmail()
-    {
-        return $this->type_email;
     }
 
     /**
@@ -440,6 +432,40 @@ class User implements AdvancedUserInterface
         return $this->videos;
     }
 
+    public function addGroup($group)
+    {
+    	$this->groups[] = $group;
+    	return $this;
+    }
+    
+    public function getGroups()
+    {
+    	return $this->groups;
+    }
+    
+    public function setGroups($groups)
+    {
+    	$this->groups = $groups;
+    	return $this;
+    }
+
+    public function getGroupsInvitations()
+    {
+    	return $this->groups_invitations;
+    }
+    
+    public function setGroupsInvitations($groups_invitations)
+    {
+    	$this->groups_invitations = $groups_invitations;
+    	return $this;
+    }
+
+	public function getGroupDefault()
+	{
+        $groups = $this->getGroups();
+		return $groups[0]->getId();
+	}
+
 	/**
 	 * Fonction permettant de faire la correspondance entre les rôles en BDD et ceux de Symfony
 	 * @param integer $id_role
@@ -470,7 +496,15 @@ class User implements AdvancedUserInterface
     }
     
     
-    
+    public function getGroupsIds()
+	{
+		$groups_ids = array();
+		foreach($this->getGroups() as $group)
+		{
+			$groups_ids[] = $group->getId();
+		}
+		return $groups_ids;
+	}
 
 	/**
 	 * Encode le mot de passe
@@ -536,6 +570,11 @@ class User implements AdvancedUserInterface
 	{
 		return 'User';
 	}
+	
+	public function getGravatar($s = 50)
+	{
+		return 'http://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->getEmail() ) ) ).'?s='.$s;
+	}
 
 	//Génère un lastname utilisable via l'url
 	public function getLastnameUrl()
@@ -546,4 +585,14 @@ class User implements AdvancedUserInterface
 		return preg_replace('#[^a-zA-Z0-9\-\._]#', '', $lastname);
 		//return $lastname;
 	}
+
+    // Fonction pour récupérer le vote d'un utilisateur pour un tumblr donnée
+    public function getNoteForTumblr($id_tumblr)
+    {
+        foreach($this->tumblr_vote as $tumblrVote)
+        {
+            if($tumblrVote->getTumblr()->getId() === $id_tumblr) return floatval($tumblrVote->getNote());
+        }
+        return 0;
+    }
 }

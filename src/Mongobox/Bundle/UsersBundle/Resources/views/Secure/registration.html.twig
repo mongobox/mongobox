@@ -1,7 +1,9 @@
 {% extends "MongoboxUsersBundle:Secure:layout.html.twig" %}
 
 {% block body %}
-        
+<div class="hero-unit">
+	<h1>{{project_name}}</h1>
+</div>
 	<h1>Registration</h1>
 	<form action="{{ path('registration') }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
 		{{ form_widget(form) }}

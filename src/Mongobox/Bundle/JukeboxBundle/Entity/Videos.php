@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\JukeboxBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Mongobox\Bundle\JukeboxBundle\Entity\Videos
@@ -29,44 +30,14 @@ class Videos
     protected $date;
 
     /**
-     * @ORM\Column(type="datetime", name="last_broadcast", nullable=true)
-     */
-    protected $lastBroadcast;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $diffusion;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    protected $addressIp;
-
-    /**
      * @ORM\Column(type="integer")
      */
     protected $duration;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $vendredi;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $volume = 100;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $votes = 0;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -79,24 +50,20 @@ class Videos
     protected $thumbnailHq;
 
     /**
-     * @ORM\OneToMany(targetEntity="VideoCurrent", mappedBy="id_video", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_video", referencedColumnName="id_video")
+     * @ORM\OneToMany(targetEntity="VideoGroup", mappedBy="video", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_video", referencedColumnName="id")
      */
-    protected $videoCurrent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Playlist", mappedBy="video", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_video", referencedColumnName="id_video")
-     */
-    protected $playlist;
+	protected $video_groups;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="videos")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * Constructor
      */
-    protected $user;
-
-    public function setId($id)
+    public function __construct()
+    {
+        $this->playlist = new ArrayCollection();
+    }
+	
+	public function setId($id)
     {
         $this->id = $id;
 
@@ -154,75 +121,6 @@ class Videos
         return $this->date;
     }
 
-    /**
-     * Set the value of lastBroadcast.
-     *
-     * @param  string                                  $lastBroadcast
-     * @return \Mongobox\Bundle\JukeboxBundle\Entity\Videos
-     */
-    public function setLastBroadcast($lastBroadcast)
-    {
-        $this->lastBroadcast = $lastBroadcast;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of lastBroadcast.
-     *
-     * @return string
-     */
-    public function getLastBroadcast()
-    {
-        return $this->lastBroadcast;
-    }
-
-    /**
-     * Set the value of done.
-     *
-     * @param  string                                  $done
-     * @return \Mongobox\Bundle\JukeboxBundle\Entity\Videos
-     */
-    public function setDone($done)
-    {
-        $this->done = $done;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of done.
-     *
-     * @return string
-     */
-    public function getDone()
-    {
-        return $this->done;
-    }
-
-    /**
-     * Set the value of diffusion.
-     *
-     * @param  string                                  $diffusion
-     * @return \Mongobox\Bundle\JukeboxBundle\Entity\Videos
-     */
-    public function setDiffusion($diffusion)
-    {
-        $this->diffusion = $diffusion;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of diffusion.
-     *
-     * @return string
-     */
-    public function getDiffusion()
-    {
-        return $this->diffusion;
-    }
-
     public function getTitle()
     {
         return $this->title;
@@ -259,18 +157,6 @@ class Videos
         return $this;
     }
 
-    public function getAddressIp()
-    {
-        return $this->addressIp;
-    }
-
-    public function setAddressIp($addressIp)
-    {
-        $this->addressIp = $addressIp;
-
-        return $this;
-    }
-
     public function getDuration()
     {
         return $this->duration;
@@ -283,46 +169,6 @@ class Videos
         return $this;
     }
 
-    public function isVendredi()
-    {
-        return $this->vendredi;
-    }
-    
-    public function getVendredi()
-    {
-        return $this->vendredi;
-    }
-
-    public function setVendredi($vendredi)
-    {
-        $this->vendredi = $vendredi;
-
-        return $this;
-    }
-
-    public function getVolume()
-    {
-        return $this->volume;
-    }
-
-    public function setVolume($volume)
-    {
-        $this->volume = $volume;
-
-        return $this;
-    }
-
-    public function setVotes($votes)
-    {
-        $this->votes = $votes;
-
-        return $this;
-    }
-
-    public function getVotes()
-    {
-        return $this->votes;
-    }
 
     public function getTitleFromYoutube()
     {
@@ -367,48 +213,6 @@ class Videos
     }
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->videoCurrent = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->playlist = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add videoCurrent
-     *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent $videoCurrent
-     * @return Videos
-     */
-    public function addVideoCurrent(\Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent $videoCurrent)
-    {
-        $this->videoCurrent[] = $videoCurrent;
-    
-        return $this;
-    }
-
-    /**
-     * Remove videoCurrent
-     *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent $videoCurrent
-     */
-    public function removeVideoCurrent(\Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent $videoCurrent)
-    {
-        $this->videoCurrent->removeElement($videoCurrent);
-    }
-
-    /**
-     * Get videoCurrent
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getVideoCurrent()
-    {
-        return $this->videoCurrent;
-    }
-
-    /**
      * Add playlist
      *
      * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist
@@ -439,28 +243,5 @@ class Videos
     public function getPlaylist()
     {
         return $this->playlist;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
-     * @return Videos
-     */
-    public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-    
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }

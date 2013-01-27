@@ -1,0 +1,25 @@
+<div id="{{nom_affichage_tumblr}}" class="tumblr-slider"> 
+    <ul class="ui-tabs-nav">
+    {% for entity in mongo_pute %}
+        {% if top is defined and top is sameas(true) %}{% set entity = entity[0] %}{%endif%}
+        <li class="ui-tabs-nav-item ui-tabs-selected" id="{{nom_affichage_tumblr}}-pic-{{ loop.index }}">
+            <a href="#{{nom_affichage_tumblr}}-{{ loop.index }}" class="link-popover-tumblr">
+                <img src="{{entity.image}}" alt="{{ entity.text }}" class="preview-tumblr" />
+                <span>{{ entity.text }}</span>                
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+    {% for entity in mongo_pute %}
+        {% if top is defined and top is sameas(true) %}{% set entity = entity[0] %}{%endif%}
+        <div id="{{nom_affichage_tumblr}}-{{ loop.index }}" class="ui-tabs-panel">
+            <img src="{{ entity.image }}" alt="{{ entity.text }}" class="image-tumblr" />  
+            <div class="info" >
+                <p>
+                    {{ entity.text }}
+                </p>
+                {% include 'MongoboxTumblrBundle:Tumblr:vote.html.twig' %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

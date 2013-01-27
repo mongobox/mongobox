@@ -29,14 +29,11 @@ class TumblrController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
-        $entities = $tumblrRepository->findBy(
-	        		array(),
-	        		array("date"=>'DESC'),
-	        		$this->_limitPagination,
-	        		$this->_limitPagination * ($page-1)
-	    );
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        $nbPages = (int) (count($tumblrRepository->findAll())  / $this->_limitPagination);
+        $entities = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1));
+
+        $nbPages = (int) (count($tumblrRepository->findLast($user->getGroupsIds()))  / $this->_limitPagination);
         
         return array(
             'entities' => $entities,

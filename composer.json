@@ -23,6 +23,7 @@
 		"dms/dms-filter-bundle": "dev-master",
 		"avalanche123/imagine-bundle": "dev-master",
 		"guzzle/guzzle": "2.8.*",
+        "genemu/form-bundle": "2.1.x-dev",
 		"cboden/Ratchet": "0.2.*"
     },
     "scripts": {

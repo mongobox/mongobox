@@ -27,20 +27,16 @@ class TumblrController extends Controller
      * @Route("/{page}", name="mongo_pute",requirements={"page" = "\d+"}, defaults={"page" = 1})
      * @Template()
      */
-    public function indexAction(Request $resquest, $page)
+    public function indexAction(Request $request, $page)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
+		$session = $request->getSession();
+		$user = $this->get('security.context')->getToken()->getUser();
 
-        $entitiesMongoPute = $tumblrRepository->findBy(
-                array(),
-                array('date' => 'DESC'),
-                $this->_limitPagination,
-                $this->_limitPagination * ($page-1)
+        $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1));
 
-        );
-
-        $nbPages = (int) (count($tumblrRepository->findAll())  / $this->_limitPagination);
+        $nbPages = (int) (count($tumblrRepository->findLast($user->getGroupsIds()))  / $this->_limitPagination);
 
         return array(
             'mongo_pute' => $entitiesMongoPute,
@@ -65,13 +61,20 @@ class TumblrController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         $tumblr = new Tumblr();
-        $form = $this->createForm(new TumblrType(), $tumblr);
+        $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
 
         if ( 'POST' === $request->getMethod() ) {
             $form->bindRequest($request);
-            if ( $form->isValid() ) {
+            if ( $form->isValid() )
+			{
                 $tumblr->setDate(new \Datetime());
                 $em->persist($tumblr);
+                $em->flush();
+				foreach($form->get('groups')->getData() as $group_id)
+				{
+					$group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+					$group->getTumblrs()->add($tumblr);
+				}
                 $em->flush();
                 $this->get('session')->setFlash('success', 'Tumblr posté avec succès');
 
@@ -86,23 +89,26 @@ class TumblrController extends Controller
 
     /**
      * @Template()
-     * @Route( "/tumblr_vote/{id_tumblr}/{sens}", name="tumblr_vote")
+     * @Route( "/tumblr_vote/{id_tumblr}/{note}", name="tumblr_vote")
      */
-    public function voteAction(Request $request, $sens, $id_tumblr)
+    public function voteAction(Request $request, $id_tumblr, $note)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $tumblr_vote = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
-
+		$session = $request->getSession();
+		$user = $this->get('security.context')->getToken()->getUser();
         //Wipe de son ancien vote
-        $old_vote = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->findOneBy(array('tumblr' => $id_tumblr, 'ip' => $_SERVER['REMOTE_ADDR']));
+        $old_vote = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->findOneBy(array('tumblr' => $id_tumblr, 'user' => $user));
         if (!is_null($old_vote)) {
             $em->remove($old_vote);
             $em->flush();
         }
+		if((int)$note > 5) $note = 5;
+		elseif((int)$note < 0) $note = 0;
 
         $vote = new TumblrVote();
-        $vote->setIp($_SERVER['REMOTE_ADDR']);
-        $vote->setSens($sens);
+        $vote->setUser($user);
+        $vote->setNote($note);
         $vote->setTumblr($tumblr_vote);
 
         $em->persist($vote);
@@ -118,11 +124,14 @@ class TumblrController extends Controller
     public function tumblrAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
+		$session = $request->getSession();
+		$user = $this->get('security.context')->getToken()->getUser();
 
-        $mongo_pute = $em->createQuery('SELECT t FROM MongoboxTumblrBundle:Tumblr t ORDER BY t.date DESC')->setMaxResults(5)->getResult();
+        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
         return array
         (
-            'mongo_pute' => $mongo_pute
+            'mongo_pute' => $mongo_pute,
+            'nom_affichage_tumblr' => 'tumblr_slider'
         );
     }
 
@@ -132,14 +141,16 @@ class TumblrController extends Controller
 	 * @Route("/top", name="tumblr_top")
 	 * @Template()
 	 */
-	public function topAction(Request $resquest){
+	public function topAction(Request $request){
 		
 		$em = $this->getDoctrine()->getEntityManager();
 		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
-		
-		$top7 = $tumblrRepository->topPeriod();
-		$top30 = $tumblrRepository->topPeriod(30);
-		$topTumblr = $tumblrRepository->top();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$top7 = $tumblrRepository->topPeriod($group);
+		$top30 = $tumblrRepository->topPeriod($group, 30);
+		$topTumblr = $tumblrRepository->top($group);
 		
 		return array(
 			'top7' => $top7,

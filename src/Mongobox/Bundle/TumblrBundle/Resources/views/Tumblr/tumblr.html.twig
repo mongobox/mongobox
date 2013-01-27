@@ -1,27 +1,37 @@
-                <div id="slider-tumblr">
-				{% for entity in mongo_pute %}
-					<div>
-                        <img src="{{entity.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
-                        </p>
-					</div>
-				{% endfor %}
-                </div>
+{# Le scrpt est avant l'initialisation des étoiles #}
 <script>
-	$(document).ready(function()
-	{
-        $('#slider-tumblr').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .5,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
-	});
+$(document).ready(function()
+{
+    $('.star').raty({
+        cancel: false,
+        click : function(score, evt) {
+            star_clicked = $(this);
+            // récupération de l'id du tumblr
+            //var id_tumblr_vote = $(this).attr('id').match(/^rating-(\d+)/)[1];
+            var str_tumblr = $(this).attr('id');
+            var search_id = 'rating-';
+            var id_tumblr_vote = str_tumblr.substring( str_tumblr.indexOf(search_id) + search_id.length );
+            // envoie ajax de la note
+            $.ajax({
+                type: 'POST',
+                url: basepath+"mongo-pute/tumblr_vote/"+id_tumblr_vote+"/"+score,
+                success:function(data)
+                {
+                    // modification de l'affichage de la note globale
+                    star_clicked.siblings('.vote-tumblr').html('Note globale : '+data);
+                }
+            });
+        },
+        half: true,
+        hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
+        number: 5,
+        path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
+        score: 1
+    });
+
+    $(".tumblr-slider").tabs({fx:{opacity: "toggle"}});
+    $('.groupes-tooltip').tooltip();
+});
 </script>
+
+{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider', 'mongo_pute': mongo_pute } %}

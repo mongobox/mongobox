@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\TumblrBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Mongobox\Bundle\TumblrBundle\Entity\Tumblr
@@ -39,7 +40,20 @@ class Tumblr
      */
     protected $tumblr_vote;
 
-    public function setId($id_tumblr)
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="tumblrs", cascade={"persist"})
+     */
+    protected $groups;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+		$this->groups = new ArrayCollection();
+    }
+
+	public function setId($id_tumblr)
     {
         $this->id_tumblr = $id_tumblr;
 
@@ -96,7 +110,7 @@ class Tumblr
     {
         $somme = 0;
         $liste_vote = $this->getTumblrVote();
-        foreach($liste_vote as $vote) $somme += $vote->getSens();
+        foreach($liste_vote as $vote) $somme += $vote->getNote();
         return $somme;
     }
 
@@ -108,5 +122,22 @@ class Tumblr
     public function getIdTumblr()
     {
         return $this->id_tumblr;
+    }
+
+    public function addGroup($group)
+    {
+    	$this->groups[] = $group;
+    	return $this;
+    }
+    
+    public function getGroups()
+    {
+    	return $this->groups;
+    }
+    
+    public function setGroups($groups)
+    {
+    	$this->groups = $groups;
+    	return $this;
     }
 }
