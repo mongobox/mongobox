@@ -34,6 +34,8 @@ INSERT INTO `mongobox`.`groups` (
 `private`
 )
 VALUES (
+NULL , 'Digital App', '0'
+), (
 NULL , 'Mongo', '1'
 );
 
@@ -45,4 +47,11 @@ INSERT INTO `users_groups` (`id_group`, `id_user`) VALUES
 (1, 5),
 (1, 6),
 (1, 7),
-(1, 8);
+(1, 8),
+(2, 1),
+(2, 2),
+(2, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(2, 8);

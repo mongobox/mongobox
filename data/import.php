@@ -52,7 +52,7 @@ $db = mysql_select_db('mongobox', $link);
 $req = mysql_query("SELECT * FROM tumblr");
 while($row = mysql_fetch_assoc($req))
 {
-	$requete[] = "(".$row['id_tumblr'].", 1)";
+	$requete[] = "(".$row['id_tumblr'].", 2)";
 }
 
 $requete = "INSERT INTO `tumblrs_groups` (`id_tumblr`, `id_group`) VALUES ".implode(', ', $requete).";";
