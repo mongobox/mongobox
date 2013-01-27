@@ -1,0 +1,13 @@
+<div class="div-vote-tumblr">
+     <span class="groupes-tooltip" title="<ul style='list-style-type:none;margin: 0 auto;'>{%for groupe in entity.groups %}{{groupe.title}}{%endfor%}</ul>">Groupes</span>
+     <span class="vote-tumblr" id="nb_vote_{{nom_affichage_tumblr}}_{{entity.id}}">Note globale : {{entity.somme}}</span>
+
+     <div class="star" id="{{nom_affichage_tumblr}}-rating-{{entity.id}}"></div>
+
+     <script>
+     	$(document).ready(function()
+		{
+			$('#{{nom_affichage_tumblr}}-rating-{{ entity.id }}').raty('score', {{ app.user.getNoteForTumblr(entity.id) }} );
+		});
+     </script>
+</div>

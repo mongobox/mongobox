@@ -13,38 +13,40 @@ function onPlayerStateChange(event)
 
 var livePlayer;
 var connection;
+var playlistId;
 
 LivePlayer = function()
 {
-	this.initialize = function(currentVideoId)
+	this.initialize = function(currentPlaylistId)
 	{
-		this.getVideoScores(currentVideoId);
-		
+		playlistId = currentPlaylistId;
+		this.getPlaylistScores(currentPlaylistId);
+
 		$('#up-vote a').unbind('click');
 		$('#up-vote a').click(function(event) {
 			event.preventDefault();
-			var videoId = this.getCurrentVideoId();
+			var playlistId = this.getCurrentPlaylistId();
 			
 			$.post(voteUrl, {
-				video: videoId,
+				playlist: playlistId,
 				vote: 'up',
 				current: 1
 			}, function(response) {
-				this.videoScoresUpdate(response);
+				this.playlistScoresUpdate(response);
 			}.bind(this));
 		}.bind(this));
 		
 		$('#down-vote a').unbind('click');
 		$('#down-vote a').click(function(event) {
 			event.preventDefault();
-			var videoId = this.getCurrentVideoId();
+			var playlistId = this.getCurrentPlaylistId();
 			
 			$.post(voteUrl, {
-				video: videoId,
+				playlist: playlistId,
 				vote: 'down',
 				current: 1
 			}, function(response) {
-				this.videoScoresUpdate(response);
+				this.playlistScoresUpdate(response);
 			}.bind(this));
 		}.bind(this));
 	},
@@ -53,7 +55,7 @@ LivePlayer = function()
 	{
 		if (params.action == 'update_scores') {
 			var scores = JSON.parse(params.scores);
-			this.updateVideoScores(scores);
+			this.updatePlaylistScores(scores);
 		}
 		
 		if (params.mode != 'admin') {
@@ -86,17 +88,9 @@ LivePlayer = function()
 		}
 	},
 	
-	this.getCurrentVideoId = function()
+	this.getCurrentPlaylistId = function()
 	{
-		var videoUrl	= player.getVideoUrl();
-		var videoId		= videoUrl.split('v=')[1];
-		
-		var andPosition = videoId.indexOf('&');
-		if (andPosition != -1) {
-			videoId = videoId.substring(0, andPosition);
-		}
-		
-		return videoId;
+		return playlistId;
 	},
 	
 	this.checkCurrentVideoId = function(params)
@@ -131,17 +125,17 @@ LivePlayer = function()
 		connection.send(json);
 	},
 	
-	this.getVideoScores = function(videoId)
+	this.getPlaylistScores = function(playlistId)
 	{
 		$.get(scoreUrl, {
-			video: videoId,
+			playlist: playlistId,
 		}, function(response) {
 			scores = JSON.parse(response);
-			this.updateVideoScores(scores);
+			this.updatePlaylistScores(scores);
 		}.bind(this));
 	},
 	
-	this.updateVideoScores = function(scores)
+	this.updatePlaylistScores = function(scores)
 	{
 		$('#up-score').text('(' + scores.upVotes + ')');
 		$('#down-score').text('(' + scores.downVotes + ')');
@@ -155,11 +149,11 @@ LivePlayer = function()
 		}
 	}
 	
-	this.videoScoresUpdate = function(data)
+	this.playlistScoresUpdate = function(data)
 	{
 		scores = JSON.parse(data);
-		this.updateVideoScores(scores);
-		
+		this.updatePlaylistScores(scores);
+
 		var params = new Object();
 		params.action	= 'update_scores';
 		params.scores	= data;

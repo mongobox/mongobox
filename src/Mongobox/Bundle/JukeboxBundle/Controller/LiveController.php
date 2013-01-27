@@ -1,7 +1,6 @@
 <?php
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
-use Mongobox\Bundle\JukeboxBundle\Entity\VideoCurrent;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,7 +29,8 @@ class LiveController extends Controller
 		$em = $this->getDoctrine()->getEntityManager();
 
 		$results = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
-		if (count($results) > 0) {
+		if (count($results) > 0)
+		{
 			$currentPlayed = $results[0];
 
 			$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array(
@@ -62,22 +62,22 @@ class LiveController extends Controller
 	}
 
 	/**
-	 * Retrieves scores of the video
+	 * Retrieves scores of the playlist
 	 *
-	 * @param int $videoId
+	 * @param int $playlistId
 	 * @return array
 	 */
-	protected function _getVideoScores($videoId)
+	protected function _getPlaylistScores($playlistId)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 
 		$upVotes = count($em->getRepository('MongoboxJukeboxBundle:Vote')->findBy(array(
-				'video'	=> $videoId,
+				'playlist'	=> $playlistId,
 				'sens'	=> self::UP_VOTE_VALUE,
 		)));
 
 		$downVotes	= count($em->getRepository('MongoboxJukeboxBundle:Vote')->findBy(array(
-				'video'	=> $videoId,
+				'playlist'	=> $playlistId,
 				'sens'	=> self::DOWN_VOTE_VALUE,
 		)));
 
@@ -101,26 +101,24 @@ class LiveController extends Controller
     public function indexAction(Request $request)
     {
     	$em = $this->getDoctrine()->getEntityManager();
-    	$results = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+    	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
 
-    	if (count($results) > 0) {
-    		$currentPlayed = $results[0];
+    	if (is_object($video_en_cours)) {
+    		$currentPlayed = $video_en_cours;
     	} else {
     		$currentPlayed = $this->_initJukebox();
     	}
-
-		$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array(
-			'id' => $currentPlayed->getId()
-		));
 
 		// TODO: define users permissions
 		$playerMode = $request->get('mode') ? $request->get('mode') : 'showOnly';
 
 		$currentDate	= new \DateTime();
-		$startDate		= $currentPlayed->getDate();
+		$startDate		= $currentPlayed->getVideoGroup()->getLastBroadcast();
 
 		$secondsElapsed = $currentDate->getTimestamp() - $startDate->getTimestamp();
-		if ($secondsElapsed < $currentVideo->getDuration()) {
+		if ($secondsElapsed < $video_en_cours->getVideoGroup()->getVideo()->getDuration()) {
 			$playerStart = $secondsElapsed;
 		} else {
 			$playerStart = 0;
@@ -136,7 +134,7 @@ class LiveController extends Controller
 
     	return array(
     		'page_title'	=> 'Jukebox - Live stream',
-    		'current_video'	=> $currentVideo,
+    		'current_video'	=> $video_en_cours,
     		'player_mode'	=> $playerMode,
     		'player_vars'	=> $playerVars,
     		'player_events'	=> $playerEvents,
@@ -166,19 +164,21 @@ class LiveController extends Controller
     public function voteAction(Request $request)
     {
     	$em = $this->getDoctrine()->getEntityManager();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$user = $this->get('security.context')->getToken()->getUser();
 
-    	$videoId		= $request->get('video');
+    	$playlistId		= $request->get('playlist');
     	$voteType		= $request->get('vote');
-    	$currentVideo	= $request->get('currentVideo') ? (int) $request->get('currentVideo') : 0;
 
-    	$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $videoId));
-    	if (is_null($currentVideo) || !in_array($voteType, array('up', 'down'))) {
+    	$currentPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+    	if (is_null($currentPlaylist) || !in_array($voteType, array('up', 'down'))) {
     		return new Response();
     	}
 
     	$oldVote = $em->getRepository('MongoboxJukeboxBundle:Vote')->findOneBy(array(
-			'ip'	=> $_SERVER['REMOTE_ADDR'],
-			'video'	=> $currentVideo->getId(),
+			'user'	=> $user->getId(),
+			'playlist'	=> $playlistId
     	));
 
     	if (!is_null($oldVote)) {
@@ -187,24 +187,14 @@ class LiveController extends Controller
     	}
 
     	$vote = new Vote();
-    	$vote->setIp($_SERVER['REMOTE_ADDR']);
+    	$vote->setUser($user);
     	$vote->setSens(($request->get('vote') === 'up') ? self::UP_VOTE_VALUE : self::DOWN_VOTE_VALUE);
-    	$vote->setVideo($currentVideo);
+    	$vote->setPlaylist($currentPlaylist);
 
     	$em->persist($vote);
     	$em->flush();
 
-    	if ($currentVideo === 1) {
-    		$currentPlayed = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
-
-    		$currentVideo = $currentPlayed[0];
-    		$currentVideo->getId()->setVotes($currentVideo[0]->getId()->getVotes() + $vote->getSens());
-
-    		$em->persist($currentVideo);
-    		$em->flush();
-    	}
-
-    	$data = $this->_getVideoScores($currentVideo->getId());
+    	$data = $this->_getPlaylistScores($currentPlaylist->getId());
 
     	$response = new Response(json_encode($data));
     	return $response;
@@ -217,14 +207,14 @@ class LiveController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
 
-    	$videoId		= $request->get('video');
-    	$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $videoId));
+    	$playlist		= $request->get('playlist');
+    	$currentPlaylist	= $em->getRepository('MongoboxJukeboxBundle:Playlist')->find($playlist);
 
-    	if (is_null($currentVideo)) {
+    	if (is_null($currentPlaylist)) {
     		return new Response();
     	}
 
-    	$data = $this->_getVideoScores($currentVideo->getId());
+    	$data = $this->_getPlaylistScores($currentPlaylist->getId());
 
     	$response = new Response(json_encode($data));
     	return $response;

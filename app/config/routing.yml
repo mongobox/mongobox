@@ -17,6 +17,11 @@ MongoboxUsersBundle:
     type:     annotation
     prefix:   /
     
+MongoboxGroupBundle:
+    resource: "@MongoboxGroupBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
 _login_check:
     pattern: /login_check
     requirements: {_method : POST }

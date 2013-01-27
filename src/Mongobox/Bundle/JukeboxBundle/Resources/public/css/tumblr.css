@@ -1,0 +1,146 @@
+.tumblr-slider
+{
+    width: 355px;
+    padding-right: 250px;
+    position: relative;
+    height: 300px;
+    background: #fff;
+    border: 5px solid #ccc;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.tumblr-slider ul.ui-tabs-nav
+{
+    position: absolute;
+    top: 0;
+    left: 355px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 250px;
+}
+
+.tumblr-slider ul.ui-tabs-nav li
+{
+    font-size: 12px;
+    color: #666;
+    line-height: auto;
+    width: 100%
+}
+
+.tumblr-slider .ui-tabs-panel
+{
+    width: 355px;
+    height: 300px;
+    background: #999;
+    position: relative;
+    overflow: hidden;
+}
+
+.tumblr-slider .ui-tabs-hide
+{
+    display:none;
+}
+
+.tumblr-slider li.ui-tabs-nav-item a.link-popover-tumblr
+{
+    display: block;
+    height: 60px;
+    color: #333;
+    background: #fff;
+    line-height: 20px;
+    outline: none;
+}
+
+.tumblr-slider li.ui-tabs-nav-item a:hover.link-popover-tumblr
+{
+    background: #f2f2f2;
+}
+
+.tumblr-slider ul.ui-tabs-nav li.ui-tabs-selected a.link-popover-tumblr
+{
+    background: #ccc;
+}
+
+/.tumblr-slider ul.ui-tabs-nav
+{
+    float: left;
+    margin: 2px 5px;
+    background: #fff;
+    padding: 2px;
+    border: 1px solid #eee;
+    width: 15%;
+}
+
+.image-tumblr
+{
+    width: 100%;
+    height: 80%;
+}
+
+.preview-tumblr
+{
+    float: left;
+    margin: 2px 5px;
+    background: #fff;
+    padding: 2px;
+    border: 1px solid #eee;
+    width: 15%;
+    height: 70%
+}
+
+.tumblr-slider .ui-tabs-panel .info
+{
+    position: absolute;
+    top: 237px;
+    width: 355px;
+    height: 65px;
+    background: grey;
+}
+
+.tumblr-slider .info p
+{
+    font-family: Georgia, serif;
+    font-size: 15px;
+    line-height: 15px;
+    color: #f0f0f0;
+    margin: 5px 5px;
+}
+
+.tumblr-slider .info span
+{
+    margin-right: 5px;
+}
+
+.div-vote-tumblr
+{
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+    text-align: right;
+}
+
+.vote-tumblr
+{
+    position: absolute;
+    left: 40%;
+}
+
+.star
+{
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+.groupes-tooltip
+{
+    position: absolute;
+    text-decoration: none;
+    width: 60px;
+    padding-right: 10px;
+    color: black;
+    background-color: lightgrey;
+    cursor: pointer;
+}

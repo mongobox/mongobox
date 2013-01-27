@@ -17,8 +17,8 @@
 
 			<h2>
                 {{entity.text}}
-                <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
-                / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
+                <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
+                / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
                 (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
             </h2>
 			<img src="{{entity.image}}" />

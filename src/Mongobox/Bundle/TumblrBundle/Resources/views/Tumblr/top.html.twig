@@ -3,82 +3,50 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<div class="vote"></div>
-<div class="hero-unit" style="text-align:center;">
-    <h2>Top des 7 derniers jours</h2>
-                <div id="slider-top7">
-				{% for entity in top7 %}
-					<div>
-                        <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
-                        </p>
-					</div>
-				{% endfor %}
-                </div>
-    <h2>Top des 30 derniers jours</h2>
-                <div id="slider-top30">
-				{% for entity in top30 %}
-					<div>
-                        <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
-                        </p>
-					</div>
-				{% endfor %}
-                </div>
-    <h2>Top de tous les temps</h2>
-                <div id="slider-topTumblr">
-				{% for entity in topTumblr %}
-					<div>
-                        <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
-                        </p>
-					</div>
-				{% endfor %}
-                </div>
-</div>
-
 <script>
 	$(document).ready(function()
 	{
-        $('#slider-top7').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .4,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
-        $('#slider-top30').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .4,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
-        $('#slider-topTumblr').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .4,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
+		$('.star').raty({
+	        	cancel: false,
+	        	click : function(score, evt) {
+	            	star_clicked = $(this);
+	            	// récupération de l'id du tumblr
+	            	var str_tumblr = $(this).attr('id');
+	            	var search_id = 'rating-';
+	            	var id_tumblr_vote = str_tumblr.substring( str_tumblr.indexOf(search_id) + search_id.length );
+	            	// envoie ajax de la note
+	            	$.ajax({
+	                	type: 'POST',
+	                	url: basepath+"mongo-pute/tumblr_vote/"+id_tumblr_vote+"/"+score,
+	                	success:function(data)
+	                	{
+	                    	// modification de l'affichage de la note globale
+	                    	star_clicked.siblings('.vote-tumblr').html('Note globale : '+data);
+	                	}
+	            	});
+	        	},
+	        	half: true,
+	        	hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
+	        	number: 5,
+	        	path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
+	        	score: 1
+	    	});
+
+	    	$(".tumblr-slider").tabs({fx:{opacity: "toggle"}});
+	    	$('.groupes-tooltip').tooltip();
 	});
 </script>
+
+
+<div class="vote"></div>
+<div class="hero-unit" style="text-align:center;">
+    	<h2>Top des 7 derniers jours</h2>
+    	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_top7', 'mongo_pute': top7, 'top': true} %}
+
+    	<h2>Top des 30 derniers jours</h2>
+    	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_top30', 'mongo_pute': top30, 'top': true} %}
+
+    	<h2>Top de tous les temps</h2>
+    	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_topTumblr', 'mongo_pute': topTumblr, 'top': true} %}
+</div>
 {% endblock body %}

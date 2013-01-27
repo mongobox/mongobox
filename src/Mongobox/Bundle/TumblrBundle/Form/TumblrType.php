@@ -11,6 +11,15 @@ use Symfony\Component\Form\FormError;
 
 class TumblrType extends AbstractType
 {
+	public function __construct($groups = array())
+	{
+		$this->groups = array();
+		foreach($groups as $group)
+		{
+			$this->groups[$group->getId()] = $group->getTitle();
+		}
+	}
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -21,6 +30,13 @@ class TumblrType extends AbstractType
             	'label' => 'Texte'
             ))
         ;
+			$builder->add('groups', 'choice', array(
+            	'label' => 'Partager dans ces groupes',
+				'choices' => $this->groups,
+				'multiple' => true,
+				'expanded' => true,
+				'property_path' => false
+            ));
 	}
 
     public function getName()

@@ -9,9 +9,39 @@
       <a class="brand" href="{{ path('wall_index') }}" style="padding : 0;"><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" /></a>
       <div class="nav-collapse">
 		{% if app.user %}
-		<p class="navbar-text pull-right">
-			Logged in as <a href="{{ path('_logout')}}" title="Déconnexion" class="navbar-link">{{ app.user.username }}<i class="icon-off icon-white"></i></a>
-		</p>
+		<ul class="nav pull-right">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ app.user.gravatar(20) }}" /> {{ app.user.username }}<b class="caret"></b></a>
+				<ul class="dropdown-menu" role="menu">
+					<li>
+						<a href="{{path('group_index')}}" title="Groupes">Liste des Groupes</a>
+					</li>
+					<li class="divider"></li>
+					{% for group in app.user.groups %}
+						<li>
+							<a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="icon-ok"></span>{% endif %}</a>
+						</li>
+						{% if group.id == app.session.get('id_group') %}
+							<li>
+								<a href="{{path('group_edit', {'id' : group.id})}}" title="Groupes">--> Modifier le groupe</a>
+							</li>
+							{% if group.private %}
+							<li>
+								<a href="{{path('group_invite', {'id' : group.id})}}" title="Groupes">--> Inviter un utilisateur</a>
+							</li>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+					<li class="divider"></li>
+					<li>
+						<a href="{{ path('user_edit')}}" title="Modifier votre compte"><span class="icon-edit"></span> Modifier votre compte</a>
+					</li>
+					<li>
+						<a href="{{ path('_logout')}}" title="Déconnexion"><span class="icon-off"></span> Déconnexion</a>
+					</li>
+				</ul>
+			 </li>
+		 </ul>
 		{% endif %}
         <ul class="nav">
 

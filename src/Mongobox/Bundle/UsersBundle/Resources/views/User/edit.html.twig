@@ -1,0 +1,23 @@
+{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+
+{% block title %}Modification de mon compte | {% endblock title %}
+
+{% block body %}
+     <div class="content-block clearfix">
+		<form action="{{path('user_edit')}}" class="form-inline" method="POST" {{ form_enctype(form) }} novalidate>
+			{{ form_widget(form) }}
+			<div class="container-btn clearfix">
+				<input type="submit" class="btn btn-large btn-primary pull-right" value="Enregistrer">
+			</div>
+		</form>
+	</div>
+	<div class="content-block clearfix">
+		<h2>Modification du mot de passe</h2>
+		<form action="{{ path('user_edit') }}" method="POST" {{ form_enctype(form_password) }} novalidate>
+			{{ form_widget(form_password) }}
+			<div class="container-btn clearfix">
+				<input type="submit" class="btn btn-large btn-primary pull-right" value="Modifier mon mot de passe">
+			</div>
+		</form>
+	</div>
+{% endblock body %}

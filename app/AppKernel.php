@@ -21,12 +21,14 @@ class AppKernel extends Kernel
             new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
             new DMS\Bundle\FilterBundle\DMSFilterBundle(),
 			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Genemu\Bundle\FormBundle\GenemuFormBundle(),
 			// Mongobox
 			//new Emakina\Bundle\LdapBundle\EmakinaLdapBundle(),
             //new Emk\Bundle\AuthenticationBundle\EmkAuthenticationBundle(),
             new Mongobox\Bundle\TumblrBundle\MongoboxTumblrBundle(),
         	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),
 			new Mongobox\Bundle\UsersBundle\MongoboxUsersBundle(),
+			new Mongobox\Bundle\GroupBundle\MongoboxGroupBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

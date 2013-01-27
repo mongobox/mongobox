@@ -3,7 +3,6 @@
 namespace Mongobox\Bundle\JukeboxBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * VideosRepository
@@ -34,48 +33,6 @@ class VideosRepository extends EntityRepository
         return $result;
     }
 
-    public function random()
-    {
-        $em = $this->getEntityManager();
-        $date = new \Datetime();
-        $day = $date->format('w');
-        if($day != 5) $where = 'v.vendredi = false';
-        else $where = '1';
-
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('Mongobox\Bundle\JukeboxBundle\Entity\Videos', 'v');
-        $rsm->addFieldResult('v', 'lien', 'lien');
-        $rsm->addFieldResult('v', 'id', 'id');
-        $rsm->addFieldResult('v', 'duration', 'duration');
-        $rsm->addFieldResult('v', 'title', 'title');
-        $rsm->addFieldResult('v', 'diffusion', 'diffusion');
-        $rsm->addFieldResult('v', 'last_broadcast', 'lastBroadcast');
-        $rsm->addFieldResult('v', 'done', 'done');
-        $rsm->addFieldResult('v', 'date', 'date');
-        $q = $em
-                ->createNativeQuery('SELECT * FROM videos v LEFT JOIN playlist p ON p.id_video = v.id WHERE '.$where.' AND (DATE(v.last_broadcast) < DATE(NOW()) OR v.last_broadcast IS NULL) AND p.id_video IS NULL', $rsm);
-
-        $results = $q->getResult();
-        if (count($results) > 0) {
-            $songs = array();
-            foreach ($results as $song) {
-                $songs[] = $song->getDiffusion() - $song->getVotes();
-            }
-            $max = max($songs);
-
-            $songs = array();
-            foreach ($results as $song) {
-                $value = $max - ($song->getDiffusion() - $song->getVotes()) + 1;
-                $songs[$song->getId()] = $value;
-            }
-
-            $rand = $this->getRandomWeightedElement($songs);
-            $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($rand);
-
-            return $video;
-        } else return null;
-    }
-
     /**
      * Fonction de recherche des vidéos
      * 
@@ -85,20 +42,25 @@ class VideosRepository extends EntityRepository
      * @param unknown_type $filters
      * @return unknown
      */
-    public function search($search, $page, $limit, $filters )
+    public function search($group, $search, $page, $limit, $filters )
     {
-        $q = $this
-                ->createQueryBuilder('v')
-                ->select('v')
-                ->orderBy('v.'. $filters['sortBy'], strtoupper($filters['orderBy']) )
+		$parameters = array('group' => $group);
+        $q = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('vg')
+				->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+				->leftJoin('vg.video', 'v')
+				->where('vg.group = :group')
+                ->orderBy($filters['sortBy'], strtoupper($filters['orderBy']) )
                 ->setMaxResults($limit)
                 ->setFirstResult($limit * ($page-1));
 
         if (array_key_exists('title', $search)) {
             $q
-                ->where('v.title LIKE :title')
-                ->setParameter('title', '%'.$search['title'].'%');
+                ->andWhere('v.title LIKE :title');
+                $parameters['title'] = '%'.$search['title'].'%';
         }
+		$q->setParameters($parameters);
         
         
         $q = $q->getQuery();
@@ -108,27 +70,20 @@ class VideosRepository extends EntityRepository
         return $result;
     }
 
-    /**
-    * getRandomWeightedElement()
-    * Utility function for getting random values with weighting.
-    * Pass in an associative array, such as array('A'=>5, 'B'=>45, 'C'=>50)
-    * An array like this means that "A" has a 5% chance of being selected, "B" 45%, and "C" 50%.
-    * The return value is the array key, A, B, or C in this case.  Note that the values assigned
-    * do not have to be percentages.  The values are simply relative to each other.  If one value
-    * weight was 2, and the other weight of 1, the value with the weight of 2 has about a 66%
-    * chance of being selected.  Also note that weights should be integers.
-    *
-    * @param array $weightedValues
-    */
-    public function getRandomWeightedElement(array $weightedValues)
-    {
-        $rand = mt_rand(1, (int) array_sum($weightedValues));
+	public function findGroupAll($group)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
 
-        foreach ($weightedValues as $key => $value) {
-            $rand -= $value;
-            if ($rand <= 0) {
-                return $key;
-            }
-        }
-    }
+		$qb->select('v')
+		->from('MongoboxJukeboxBundle:Videos', 'v')
+		->innerJoin('v.video_groups', 'vg')
+		->where("vg.group = :group")
+		->setParameters( array(
+				'group' => $group
+		));
+
+		$query = $qb->getQuery();
+		return $query->getResult();
+	}
 }
