@@ -130,7 +130,8 @@ class TumblrController extends Controller
         $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
         return array
         (
-            'mongo_pute' => $mongo_pute
+            'mongo_pute' => $mongo_pute,
+            'nom_affichage_tumblr' => 'tumblr_slider'
         );
     }
 

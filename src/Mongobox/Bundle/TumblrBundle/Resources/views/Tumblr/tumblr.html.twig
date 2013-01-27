@@ -1,17 +1,4 @@
-{#<div id="slider-tumblr">
-    {% for entity in mongo_pute %}
-    	<div>
-            <img src="{{entity.image}}" style="max-height : 150px;" />
-    		<p>
-                {{entity.text}}
-                <a href="{{path('tumblr_vote', {'sens' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
-                / <a href="{{path('tumblr_vote', {'sens' : -1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
-                (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
-            </p>
-    	</div>
-    {% endfor %}
-</div>#}
-
+{# Le scrpt est avant l'initialisation des étoiles #}
 <script>
 $(document).ready(function()
 {
@@ -20,7 +7,10 @@ $(document).ready(function()
         click : function(score, evt) {
             star_clicked = $(this);
             // récupération de l'id du tumblr
-            var id_tumblr_vote = $(this).attr('id').match(/^rating-(\d+)/)[1];
+            //var id_tumblr_vote = $(this).attr('id').match(/^rating-(\d+)/)[1];
+            var str_tumblr = $(this).attr('id');
+            var search_id = 'rating-';
+            var id_tumblr_vote = str_tumblr.substring( str_tumblr.indexOf(search_id) + search_id.length );
             // envoie ajax de la note
             $.ajax({
                 type: 'POST',
@@ -38,37 +28,10 @@ $(document).ready(function()
         path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
         score: 1
     });
+
+    $(".tumblr-slider").tabs({fx:{opacity: "toggle"}});
+    $('.groupes-tooltip').tooltip();
 });
 </script>
 
-<div id="tumblr-slider" class="tumblr-slider"> 
-    <ul class="ui-tabs-nav">
-    {% for entity in mongo_pute %}
-        <li class="ui-tabs-nav-item ui-tabs-selected" id="tumblr-pic-{{ loop.index }}">
-            <a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr">
-                <img src="{{entity.image}}" alt="{{ entity.text }}" class="preview-tumblr" />
-                <span>{{ entity.text }}</span>                
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-    {% for entity in mongo_pute %}
-        <div id="tumblr-{{ loop.index }}" class="ui-tabs-panel">
-            <img src="{{ entity.image }}" alt="{{ entity.text }}" class="image-tumblr" />  
-            <div class="info" >
-                <p>
-                    {{ entity.text }}
-                </p>
-                {% include 'MongoboxTumblrBundle:Tumblr:vote.html.twig' %}
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-<script>
-	$(document).ready(function()
-	{
-        $("#tumblr-slider").tabs({fx:{opacity: "toggle"}});
-        $('.groupes-tooltip').tooltip();
-	});
-</script>
+{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider', 'mongo_pute': mongo_pute } %}

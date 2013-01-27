@@ -1,21 +1,13 @@
 <div class="div-vote-tumblr">
-     {#<a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}">
-         <i class="icon-thumbs-up"></i>
-     </a>
-     / 
-     <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}">
-         <i class="icon-thumbs-down"></i>
-     </a>
-     <span>Groupe : </span>#}
      <span class="groupes-tooltip" title="<ul style='list-style-type:none;margin: 0 auto;'>{%for groupe in entity.groups %}{{groupe.title}}{%endfor%}</ul>">Groupes</span>
-     <span class="vote-tumblr" id="nb_vote_tumblr_{{entity.id}}">Note globale : {{entity.somme}}</span>
+     <span class="vote-tumblr" id="nb_vote_{{nom_affichage_tumblr}}_{{entity.id}}">Note globale : {{entity.somme}}</span>
 
-     <div class="star" id="rating-{{entity.id}}"></div>
+     <div class="star" id="{{nom_affichage_tumblr}}-rating-{{entity.id}}"></div>
 
      <script>
      	$(document).ready(function()
 		{
-			$('#rating-{{ entity.id }}').raty('score', {{ app.user.getNoteForTumblr(entity.id) }} );
+			$('#{{nom_affichage_tumblr}}-rating-{{ entity.id }}').raty('score', {{ app.user.getNoteForTumblr(entity.id) }} );
 		});
      </script>
 </div>
