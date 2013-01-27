@@ -35,7 +35,7 @@ class TumblrController extends Controller
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $entitiesMongoPute = $tumblrRepository->findBy(
-                array(),
+                array('id_group' => $group),
                 array('date' => 'DESC'),
                 $this->_limitPagination,
                 $this->_limitPagination * ($page-1)
@@ -146,14 +146,16 @@ class TumblrController extends Controller
 	 * @Route("/top", name="tumblr_top")
 	 * @Template()
 	 */
-	public function topAction(Request $resquest){
+	public function topAction(Request $request){
 		
 		$em = $this->getDoctrine()->getEntityManager();
 		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
-		
-		$top7 = $tumblrRepository->topPeriod();
-		$top30 = $tumblrRepository->topPeriod(30);
-		$topTumblr = $tumblrRepository->top();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$top7 = $tumblrRepository->topPeriod($group);
+		$top30 = $tumblrRepository->topPeriod($group, 30);
+		$topTumblr = $tumblrRepository->top($group);
 		
 		return array(
 			'top7' => $top7,
