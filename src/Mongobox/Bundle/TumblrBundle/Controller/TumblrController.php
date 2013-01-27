@@ -32,17 +32,11 @@ class TumblrController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
 		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$user = $this->get('security.context')->getToken()->getUser();
 
-        $entitiesMongoPute = $tumblrRepository->findBy(
-                array(),
-                array('date' => 'DESC'),
-                $this->_limitPagination,
-                $this->_limitPagination * ($page-1)
+        $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1));
 
-        );
-
-        $nbPages = (int) (count($tumblrRepository->findAll())  / $this->_limitPagination);
+        $nbPages = (int) (count($tumblrRepository->findLast($user->getGroupsIds()))  / $this->_limitPagination);
 
         return array(
             'mongo_pute' => $entitiesMongoPute,
@@ -133,7 +127,7 @@ class TumblrController extends Controller
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
 
-        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast(5, $user->getGroupsIds());
+        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
         return array
         (
             'mongo_pute' => $mongo_pute
@@ -146,14 +140,16 @@ class TumblrController extends Controller
 	 * @Route("/top", name="tumblr_top")
 	 * @Template()
 	 */
-	public function topAction(Request $resquest){
+	public function topAction(Request $request){
 		
 		$em = $this->getDoctrine()->getEntityManager();
 		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
-		
-		$top7 = $tumblrRepository->topPeriod();
-		$top30 = $tumblrRepository->topPeriod(30);
-		$topTumblr = $tumblrRepository->top();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$top7 = $tumblrRepository->topPeriod($group);
+		$top30 = $tumblrRepository->topPeriod($group, 30);
+		$topTumblr = $tumblrRepository->top($group);
 		
 		return array(
 			'top7' => $top7,

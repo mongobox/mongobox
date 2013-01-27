@@ -6,79 +6,76 @@
 <div class="vote"></div>
 <div class="hero-unit" style="text-align:center;">
     <h2>Top des 7 derniers jours</h2>
-                <div id="slider-top7">
-				{% for entity in top7 %}
-					<div>
-                        <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
-                        </p>
-					</div>
-				{% endfor %}
-                </div>
+		<div id="tumblr-slider-top7" class="tumblr-slider"> 
+		<ul class="ui-tabs-nav">
+		{% for entity in top7 %}
+			<li class="ui-tabs-nav-item ui-tabs-selected" id="tumblr-pic-{{ loop.index }}">
+				<a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr" data-content=''>
+					<img src="{{entity[0].image}}" alt="{{ entity[0].text }}" class="preview-tumblr" />
+					<span>{{ entity[0].text }}</span>
+				</a>
+			</li>
+		{% endfor %}
+		</ul>
+		{% for entity in top7 %}
+			<div id="tumblr-{{ loop.index }}" class="ui-tabs-panel">
+				<img src="{{ entity[0].image }}" alt="{{ entity[0].text }}" class="image-tumblr" />  
+				<div class="info" >  
+					<p>{{ entity[0].text }}</p>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
     <h2>Top des 30 derniers jours</h2>
-                <div id="slider-top30">
-				{% for entity in top30 %}
-					<div>
-                        <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
-                        </p>
+		<div id="tumblr-slider-top30" class="tumblr-slider"> 
+			<ul class="ui-tabs-nav">
+			{% for entity in top30 %}
+				<li class="ui-tabs-nav-item ui-tabs-selected" id="tumblr-pic-{{ loop.index }}">
+					<a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr" data-content=''>
+						<img src="{{entity[0].image}}" alt="{{ entity[0].text }}" class="preview-tumblr" />
+						<span>{{ entity[0].text }}</span>
+					</a>
+				</li>
+			{% endfor %}
+			</ul>
+			{% for entity in top30 %}
+				<div id="tumblr-{{ loop.index }}" class="ui-tabs-panel">
+					<img src="{{ entity[0].image }}" alt="{{ entity[0].text }}" class="image-tumblr" />  
+					<div class="info" >  
+						<p>{{ entity[0].text }}</p>
 					</div>
-				{% endfor %}
-                </div>
+				</div>
+			{% endfor %}
+		</div>
     <h2>Top de tous les temps</h2>
-                <div id="slider-topTumblr">
-				{% for entity in topTumblr %}
-					<div>
-                        <img src="{{entity[0].tumblr.image}}" style="max-height : 150px;" />
-						<p>
-                            {{entity[0].tumblr.text}}
-                            <a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-up"></i></a>
-                            / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity[0].tumblr.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity[0].tumblr.id}}"><i class="icon-thumbs-down"></i></a>
-                            (<span id="nb_vote_tumblr_{{entity[0].tumblr.id}}">{{entity[0].tumblr.somme}}</span>)
-                        </p>
+		<div id="tumblr-slider-topTumblr" class="tumblr-slider"> 
+			<ul class="ui-tabs-nav">
+			{% for entity in topTumblr %}
+				<li class="ui-tabs-nav-item ui-tabs-selected" id="tumblr-pic-{{ loop.index }}">
+					<a href="#tumblr-{{ loop.index }}" class="link-popover-tumblr" data-content=''>
+						<img src="{{entity[0].image}}" alt="{{ entity[0].text }}" class="preview-tumblr" />
+						<span>{{ entity[0].text }}</span>
+					</a>
+				</li>
+			{% endfor %}
+			</ul>
+			{% for entity in topTumblr %}
+				<div id="tumblr-{{ loop.index }}" class="ui-tabs-panel">
+					<img src="{{ entity[0].image }}" alt="{{ entity[0].text }}" class="image-tumblr" />  
+					<div class="info" >  
+						<p>{{ entity[0].text }}</p>
 					</div>
-				{% endfor %}
-                </div>
+				</div>
+			{% endfor %}
+		</div>
 </div>
 
-<script>
-	$(document).ready(function()
-	{
-        $('#slider-top7').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .4,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
-        $('#slider-top30').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .4,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
-        $('#slider-topTumblr').movingBoxes(
-        {
-            startPanel   : 1,      // start with this panel
-            width        : 1000,    // overall width of movingBoxes (not including navigation arrows)
-            height       : 300,
-            panelWidth   : .4,     // current panel width adjusted to 70% of overall width
-            fixedHeight  : true,// if true, navigation links will be added
-            navFormatter : function(){ return "&#9679;"; } // function which returns the navigation text for each panel
-        });
-	});
-</script>
+	<script>
+		$(document).ready(function()
+		{
+			$("#tumblr-slider-top7").tabs({fx:{opacity: "toggle"}});
+			$("#tumblr-slider-top30").tabs({fx:{opacity: "toggle"}});
+			$("#tumblr-slider-topTumblr").tabs({fx:{opacity: "toggle"}});
+		});
+	</script>
 {% endblock body %}
