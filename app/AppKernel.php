@@ -29,7 +29,8 @@ class AppKernel extends Kernel
         	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),
 			new Mongobox\Bundle\UsersBundle\MongoboxUsersBundle(),
 			new Mongobox\Bundle\GroupBundle\MongoboxGroupBundle(),
-        );
+			new Mongobox\Bundle\GroupBundle\MongoboxStatisticsBundle(),
+	);
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
 			$bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
