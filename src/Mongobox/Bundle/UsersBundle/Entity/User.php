@@ -562,7 +562,17 @@ class User implements AdvancedUserInterface
     {
         return $this->login;
     }
-    
+ 
+         public function serialize()
+         {
+                return serialize($this->getUserName());
+         }
+
+         public function unserialize($data)
+         {
+                $this->username = unserialize($data);
+         }
+ 
 	/**
 	 * Renvoi le role de l'utilisateur
 	 */
