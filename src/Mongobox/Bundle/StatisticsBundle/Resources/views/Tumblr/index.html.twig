@@ -1,0 +1,15 @@
+{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+
+{% block title -%}- Tumblr Statistics{%- endblock title %}
+
+{% block body %}
+    <script src="{{ asset('bundles/mongoboxstatistics/js/highcharts.js') }}" type="text/javascript"></script>
+    <div class="marketing">
+        <div class="statistics-chart">
+            {% include 'MongoboxStatisticsBundle:Tumblr:timeline.html.twig' with {'timeline': statistics.timeline} %}
+        </div>
+        <div class="statistics-chart">
+            {% include 'MongoboxStatisticsBundle:Tumblr:users.html.twig' with {'usersRanking': statistics.usersRanking} %}
+        </div>
+    </div>
+{% endblock body %}
