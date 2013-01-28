@@ -22,6 +22,11 @@ MongoboxGroupBundle:
     type:     annotation
     prefix:   /
     
+MongoboxStatisticsBundle:
+    resource: "@MongoboxStatisticsBundle/Controller/"
+    type:     annotation
+    prefix:   /
+    
 _login_check:
     pattern: /login_check
     requirements: {_method : POST }
