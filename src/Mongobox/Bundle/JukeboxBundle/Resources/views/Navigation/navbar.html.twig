@@ -71,7 +71,10 @@
           		</li>
           		<li{% if app.request.attributes.get('_route') == 'admin_tumblr' %} class="active"{% endif %}>
           			<a href="{{ path('admin_tumblr') }}">Admin Mongo Pute</a>
-          		</li>
+                </li>
+                <li{% if app.request.attributes.get('_route') == 'tumblr_stats' %} class="active"{% endif %}>
+                  <a href="{{ path('tumblr_stats') }}">Mongo Stats</a>
+                </li>
           	</ul>
 		</li>
 
