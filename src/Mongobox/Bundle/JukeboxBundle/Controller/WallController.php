@@ -82,7 +82,6 @@ class WallController extends Controller
 
 			return array
 			(
-				'form' => $form->createView(),
 				'total_video' => $total_video,
 				'playlist' => $playlist,
 				'videos_historique' => $videos_historique,
@@ -286,10 +285,8 @@ class WallController extends Controller
 			$somme = 0;
 		}
 		$video = new Videos();
-		$form_video = $this->createForm(new VideoType(), $video);
 
         return array(
-			'form_video' => $form_video,
             'video_en_cours' => $video_en_cours,
             'date_actuelle' => new \Datetime(),
             'somme' => $somme
@@ -364,7 +361,7 @@ class WallController extends Controller
     }
 	
     /**
-     * @Template("")
+     * @Template("MongoboxJukeboxBundle:Wall/Blocs:postVideo.html.twig")
      * @Route( "/post_video", name="post_video")
      */
 	public function postVideoAction(Request $request)
@@ -425,8 +422,10 @@ class WallController extends Controller
 
 				$em->flush();
 
-				return $this->redirect($this->generateUrl('wall_index'));
 			}
 		}
+		return array(
+			'form_video' => $form_video->createView()
+		);
 	}
 }
