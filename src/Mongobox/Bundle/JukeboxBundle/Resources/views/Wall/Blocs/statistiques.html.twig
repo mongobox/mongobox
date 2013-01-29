@@ -1,7 +1,11 @@
 			Total vidéo : {{total_video}}<br />
 			<legend>Playlist</legend>
 			<ul class="unstyled">
-			{% set total = (video_en_cours.videoGroup.video.duration - ("now"|date("U") - video_en_cours.date|date("U"))) %}
+			{% if video_en_cours is defined and video_en_cours is not null %}
+				{% set total = (video_en_cours.videoGroup.video.duration - ("now"|date("U") - video_en_cours.date|date("U"))) %}
+			{% else %}
+				{% set total = 0 %}
+			{% endif %}
 			{% for pl in playlist %}
                 {% set heure = total + "now"|date("U") %}
 				<li>

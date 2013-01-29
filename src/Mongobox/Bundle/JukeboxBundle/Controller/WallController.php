@@ -272,10 +272,19 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-		$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-		if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-		else $somme = 0;
+		$group = null;
+		if(!is_null($session->get('id_group'))) $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		if(is_object($group))
+		{
+			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+			else $somme = 0;
+		}
+		else
+		{
+			$video_en_cours = null;
+			$somme = 0;
+		}
 		$video = new Videos();
 		$form_video = $this->createForm(new VideoType(), $video);
 
