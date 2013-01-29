@@ -72,8 +72,6 @@ class WallController extends Controller
 			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
 			$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-			$video = new Videos();
-			$form = $this->createForm(new VideoType(), $video);
 			$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
 			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);
 			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $group);
@@ -81,59 +79,6 @@ class WallController extends Controller
 			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
 			else $somme = 0;
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
-
-			if ( 'POST' === $request->getMethod() )
-			{
-				$form->bindRequest($request);
-				if ( $form->isValid() )
-				{
-					$video->setLien(Videos::parse_url_detail($video->getLien()));
-					//On vérifie qu'elle n'existe pas déjà
-					$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
-					if (!is_object($video_new))
-					{
-						$dataYt = $video->getDataFromYoutube();
-
-						$video->setDate(new \Datetime())
-								->setTitle( $dataYt->title )
-								->setDuration($dataYt->duration)
-								->setThumbnail( $dataYt->thumbnail->hqDefault )
-								->setThumbnailHq( $dataYt->thumbnail->sqDefault );
-						$em->persist($video);
-						$em->flush();
-						$video_new = $video;
-
-						$this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
-					}
-					//On vérifie qu'elle n'existe pas pour ce groupe
-					$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
-					if(!is_object($video_group))
-					{
-						$video_group = new VideoGroup();
-						$video_group->setVideo($video_new)
-									->setGroup($group)
-									->setUser($user)
-									->setDiffusion(0)
-									->setVendredi(0)
-									->setVolume(100)
-									->setVotes(0);
-						$em->persist($video_group);
-						$em->flush();
-					}
-					//On l'ajoute à la playlist
-					$playlist_add = new Playlist();
-					$playlist_add->setVideoGroup($video_group)
-									->setGroup($group)
-									->setDate(new \Datetime())
-									->setRandom(0)
-									->setCurrent(0);
-					$em->persist($playlist_add);
-
-					$em->flush();
-
-					return $this->redirect($this->generateUrl('wall_index'));
-				}
-			}
 
 			return array
 			(
@@ -326,12 +271,16 @@ class WallController extends Controller
     public function videoEnCoursAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 		$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
 		if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
 		else $somme = 0;
+		$video = new Videos();
+		$form_video = $this->createForm(new VideoType(), $video);
 
         return array(
+			'form_video' => $form_video,
             'video_en_cours' => $video_en_cours,
             'date_actuelle' => new \Datetime(),
             'somme' => $somme
@@ -354,8 +303,6 @@ class WallController extends Controller
 			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
 			$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
 
-			$video = new Videos();
-			$form = $this->createForm(new VideoType(), $video);
 			$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
 			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);
 			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $group);
@@ -406,4 +353,71 @@ class WallController extends Controller
             'flux_rss' => $flux_rss
         );
     }
+	
+    /**
+     * @Template("")
+     * @Route( "/post_video", name="post_video")
+     */
+	public function postVideoAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$video = new Videos();
+		$form_video = $this->createForm(new VideoType(), $video);
+		if ( 'POST' === $request->getMethod() )
+		{
+			$form_video->bindRequest($request);
+			if ( $form_video->isValid() )
+			{
+				$video->setLien(Videos::parse_url_detail($video->getLien()));
+				//On vérifie qu'elle n'existe pas déjà
+				$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
+				if (!is_object($video_new))
+				{
+					$dataYt = $video->getDataFromYoutube();
+
+					$video->setDate(new \Datetime())
+							->setTitle( $dataYt->title )
+							->setDuration($dataYt->duration)
+							->setThumbnail( $dataYt->thumbnail->hqDefault )
+							->setThumbnailHq( $dataYt->thumbnail->sqDefault );
+					$em->persist($video);
+					$em->flush();
+					$video_new = $video;
+
+					$this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
+				}
+				//On vérifie qu'elle n'existe pas pour ce groupe
+				$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
+				if(!is_object($video_group))
+				{
+					$video_group = new VideoGroup();
+					$video_group->setVideo($video_new)
+								->setGroup($group)
+								->setUser($user)
+								->setDiffusion(0)
+								->setVendredi(0)
+								->setVolume(100)
+								->setVotes(0);
+					$em->persist($video_group);
+					$em->flush();
+				}
+				//On l'ajoute à la playlist
+				$playlist_add = new Playlist();
+				$playlist_add->setVideoGroup($video_group)
+								->setGroup($group)
+								->setDate(new \Datetime())
+								->setRandom(0)
+								->setCurrent(0);
+				$em->persist($playlist_add);
+
+				$em->flush();
+
+				return $this->redirect($this->generateUrl('wall_index'));
+			}
+		}
+	}
 }
