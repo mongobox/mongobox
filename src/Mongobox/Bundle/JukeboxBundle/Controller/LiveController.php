@@ -24,11 +24,11 @@ class LiveController extends Controller
 	 *
 	 * @return string
 	 */
-	protected function _initJukebox()
+	protected function _initJukebox($group)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 
-		$results = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
+		/*$results = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
 		if (count($results) > 0)
 		{
 			$currentPlayed = $results[0];
@@ -41,24 +41,19 @@ class LiveController extends Controller
 			$currentVideo->setVotes($currentVideo->getVotes() + $votes);
 
 			$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($currentPlayed->getId()->getId());
-		}
+		}*/
 
-		$em->getRepository('MongoboxJukeboxBundle:Playlist')->generate();
+		$em->getRepository('MongoboxJukeboxBundle:Playlist')->generate($group);
 
-		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1);
-		$nextVideoId = $nextInPlaylist->getVideo();
+		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
+		$nextVideoId = $nextInPlaylist->getVideoGroup()->getVideo();
 
-		$em->remove($nextInPlaylist);
-		$em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->wipe();
-
-		$current = new VideoCurrent();
-		$current->setId($nextVideoId);
-		$current->setDate(new \Datetime());
-
-		$em->persist($current);
+		$nextInPlaylist->setCurrent(1);
+		$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
+		$nextInPlaylist->getVideoGroup()->setDiffusion($nextInPlaylist->getVideoGroup()->getDiffusion() + 1);
 		$em->flush();
 
-		return $current;
+		return $nextInPlaylist;
 	}
 
 	/**
@@ -108,7 +103,7 @@ class LiveController extends Controller
     	if (is_object($video_en_cours)) {
     		$currentPlayed = $video_en_cours;
     	} else {
-    		$currentPlayed = $this->_initJukebox();
+    		$currentPlayed = $this->_initJukebox($group);
     	}
 
 		// TODO: define users permissions
@@ -118,7 +113,7 @@ class LiveController extends Controller
 		$startDate		= $currentPlayed->getVideoGroup()->getLastBroadcast();
 
 		$secondsElapsed = $currentDate->getTimestamp() - $startDate->getTimestamp();
-		if ($secondsElapsed < $video_en_cours->getVideoGroup()->getVideo()->getDuration()) {
+		if ($secondsElapsed < $currentPlayed->getVideoGroup()->getVideo()->getDuration()) {
 			$playerStart = $secondsElapsed;
 		} else {
 			$playerStart = 0;
@@ -134,7 +129,7 @@ class LiveController extends Controller
 
     	return array(
     		'page_title'	=> 'Jukebox - Live stream',
-    		'current_video'	=> $video_en_cours,
+    		'current_video'	=> $currentPlayed,
     		'player_mode'	=> $playerMode,
     		'player_vars'	=> $playerVars,
     		'player_events'	=> $playerEvents,
@@ -149,7 +144,7 @@ class LiveController extends Controller
     {
     	$em = $this->getDoctrine()->getEntityManager();
 
-    	$currentPlayed	= $this->_initJukebox();
+    	$currentPlayed	= $this->_initJukebox($group);
     	$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array(
 			'id' => $currentPlayed->getId()
     	));
