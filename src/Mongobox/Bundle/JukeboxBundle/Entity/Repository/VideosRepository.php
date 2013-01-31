@@ -45,7 +45,7 @@ class VideosRepository extends EntityRepository
     public function search($group, $search, $page, $limit, $filters )
     {
 		$parameters = array('group' => $group);
-        $q = $this->getManager()
+        $q = $this->getEntityManager()
                 ->createQueryBuilder()
                 ->select('vg')
 				->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
@@ -72,7 +72,7 @@ class VideosRepository extends EntityRepository
 
 	public function findGroupAll($group)
 	{
-		$em = $this->getManager();
+		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
 
 		$qb->select('v')

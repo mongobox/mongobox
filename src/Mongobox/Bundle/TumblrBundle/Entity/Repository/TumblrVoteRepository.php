@@ -14,7 +14,7 @@ class TumblrVoteRepository extends EntityRepository
 {
     public function sommeVotes($tumblr)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $query = $em
                 ->createQuery('SELECT t, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv WHERE tv.tumblr = '.$tumblr->getIdTumblr())
                 ;
@@ -26,7 +26,7 @@ class TumblrVoteRepository extends EntityRepository
     
     public function top($group, $max = 5)
     {
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $q = $em
                 ->createQuery('SELECT t, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id = '.$group->getId().' GROUP BY t.id_tumblr ORDER BY total DESC')
                 ->setMaxResults($max)
@@ -40,7 +40,7 @@ class TumblrVoteRepository extends EntityRepository
     public function topPeriod($group, $days = 7, $max = 5)
     {
         $date = date('Y-m-d 00:00:00', strtotime('-'.$days.' day'));
-        $em = $this->getManager();
+        $em = $this->getEntityManager();
         $q = $em
                 ->createQuery("SELECT t, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id = ".$group->getId()." AND t.date > '".$date."' GROUP BY t.id_tumblr ORDER BY total DESC")
                 ->setMaxResults($max)
