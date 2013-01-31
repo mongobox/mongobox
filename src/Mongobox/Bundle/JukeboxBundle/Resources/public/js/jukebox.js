@@ -1,4 +1,4 @@
-$('.btn-vote').on('click', function(e)
+$(document).on("click", ".btn-vote", function(e)
 {
     e.preventDefault();
 	e.stopPropagation();
