@@ -231,8 +231,11 @@ class Videos
 	{
 		$infos = array('artist' => '', 'songName' => '');
 		$split = explode('-', $this->title);
-		$infos['artist'] = trim($split[0]);
-		$infos['songName'] = trim($split[1]);
+		if(count($split) > 1)
+		{
+			$infos['artist'] = trim($split[0]);
+			$infos['songName'] = trim($split[1]);
+		}
 		return $infos;
 	}
 

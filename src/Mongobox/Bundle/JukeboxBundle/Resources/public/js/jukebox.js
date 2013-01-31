@@ -25,6 +25,6 @@ function loadRSS()
 
 $(document).ready(function()
 {
-    setInterval( "loadVideoEnCours()", 5000 );
-    setInterval( "loadRSS()", 300000 );
+    //setInterval( "loadVideoEnCours()", 5000 );
+    //setInterval( "loadRSS()", 300000 );
 });

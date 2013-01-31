@@ -1,18 +1,52 @@
 	<ul class="nav">
 		<li class="dropdown">
 		  <a href="#" class="dropdown-toggle" onclick="$('#form_video').toggle();">+</a>
-		  <ul id="form_video" style="display:none;">
+		  <form id="form_video" method="post" style="display:none;">
 			  {{form_rest(form_video)}}
-		  </ul>
+		  </form>
 		</li>
 	</ul>
 <script type="text/javascript">
-	$(document).ready(function()
+function btn_submit_video()
+{
+	$.ajax({
+		type: "POST",
+		url: basepath + 'post_video',
+		data: $('#form_video').serialize()
+	}).done(function( msg )
 	{
-		$('#video_lien').change(function()
+		$('#form_video').html('Vidéo ajoutée avec succès.');
+	});
+}
+
+$(document).ready(function()
+{
+	$('#video_lien').change(function()
+	{
+		//fonction magique qui prend l'url et renvoi un tableau avec l'artist et la songname guess
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: basepath + 'get_info_video',
+			data: {'lien' : $(this).val()}
+		}).done(
+		function( infos )
 		{
-			//fonction magique qui prend l'url et renvoi un tableau avec l'artist et la songname guess
-			$.ajax();
+			if(infos.type == 'new')
+			{
+				$('#form_video').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Ok</a>')
+				$('#btnSubmitVideo').bind('click', function(e)
+				{
+					e.preventDefault();
+					btn_submit_video();
+				});
+			}
+			else
+			{
+				btn_submit_video();
+			}
 		});
 	});
+});
+
 </script>

@@ -359,7 +359,35 @@ class WallController extends Controller
             'flux_rss' => $flux_rss
         );
     }
-	
+
+    /**
+     * @Route( "/get_info_video", name="get_info_video")
+     */
+	public function getInfoVideoAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$lien = Videos::parse_url_detail($request->request->get('lien'));
+		$video = new Videos();
+		$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $lien));
+		//Si la vidéo existe déjà, on dit au JS que tu zappe tout, on la rajoute à la playlist
+		if (is_object($video_new))
+		{
+			$response = array('video' => $video_new->getId(), 'type' => 'old');
+		}
+		//Sinon, on va chercher les infos YT
+		else
+		{
+			$video = new Videos();
+			$video->setLien($lien);
+			$video->setTitle($video->getTitleFromYoutube());
+			//On fait un bête split pour chopper artist et songName pour le moment
+			$response = $video->guessVideoInfos();
+			$response['type'] = 'new';
+		}
+		return new Response(json_encode($response));
+		
+	}	
+
     /**
      * @Template("MongoboxJukeboxBundle:Wall/Blocs:postVideo.html.twig")
      * @Route( "/post_video", name="post_video")
@@ -389,7 +417,9 @@ class WallController extends Controller
 							->setTitle( $dataYt->title )
 							->setDuration($dataYt->duration)
 							->setThumbnail( $dataYt->thumbnail->hqDefault )
-							->setThumbnailHq( $dataYt->thumbnail->sqDefault );
+							->setThumbnailHq( $dataYt->thumbnail->sqDefault )
+							->setArtist($request->request->get('artist'))
+							->setSongName($request->request->get('songName'));
 					$em->persist($video);
 					$em->flush();
 					$video_new = $video;
