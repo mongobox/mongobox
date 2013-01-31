@@ -14,7 +14,7 @@ class VoteRepository extends EntityRepository
 {
     public function wipe($playlist)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $query = $em
                 ->createQuery('DELETE FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :playlist' )
 				->setParameter('playlist', $playlist)
@@ -25,7 +25,7 @@ class VoteRepository extends EntityRepository
 
     public function sommeVotes($playlist)
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $query = $em
                 ->createQuery('SELECT SUM(v.sens) FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :id_playlist')
 				->setParameter('id_playlist', $playlist  )
@@ -38,7 +38,7 @@ class VoteRepository extends EntityRepository
     }
     public function sommeAllVotes()
     {
-        $em = $this->getEntityManager();
+        $em = $this->getManager();
         $query = $em
                 ->createQuery('SELECT v, SUM(v.sens) as total FROM MongoboxJukeboxBundle:Vote v GROUP BY v.playlist')
                 ;

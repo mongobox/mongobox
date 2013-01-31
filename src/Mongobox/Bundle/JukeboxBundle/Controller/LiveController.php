@@ -26,7 +26,7 @@ class LiveController extends Controller
 	 */
 	protected function _initJukebox($group)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 
 		/*$results = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();
 		if (count($results) > 0)
@@ -64,7 +64,7 @@ class LiveController extends Controller
 	 */
 	protected function _getPlaylistScores($playlistId)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 
 		$upVotes = count($em->getRepository('MongoboxJukeboxBundle:Vote')->findBy(array(
 				'playlist'	=> $playlistId,
@@ -95,7 +95,7 @@ class LiveController extends Controller
      */
     public function indexAction(Request $request)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
     	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
@@ -142,7 +142,7 @@ class LiveController extends Controller
      */
     public function nextAction(Request $request)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
 
     	$currentPlayed	= $this->_initJukebox($group);
     	$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array(
@@ -158,7 +158,7 @@ class LiveController extends Controller
      */
     public function voteAction(Request $request)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 		$user = $this->get('security.context')->getToken()->getUser();
@@ -200,7 +200,7 @@ class LiveController extends Controller
      */
     public function scoreAction(Request $request)
     {
-    	$em = $this->getDoctrine()->getEntityManager();
+    	$em = $this->getDoctrine()->getManager();
 
     	$playlist		= $request->get('playlist');
     	$currentPlaylist	= $em->getRepository('MongoboxJukeboxBundle:Playlist')->find($playlist);

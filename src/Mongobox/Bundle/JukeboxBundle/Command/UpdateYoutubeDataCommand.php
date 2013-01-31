@@ -63,7 +63,7 @@ class UpdateYoutubeDataCommand extends ContainerAwareCommand
     {
         $output->writeln('<bg=cyan;fg=white>Start traitement </>');
 
-        $em = $this->getContainer()->get('doctrine')->getEntityManager('default');
+        $em = $this->getContainer()->get('doctrine')->getManager('default');
         $videos = $em->getRepository('MongoboxJukeboxBundle:Videos')->findBy(array('duration' => 0));
 
         $compteurVideo = 0;

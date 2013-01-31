@@ -26,7 +26,7 @@ class GroupController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
 
 		return array(
@@ -40,7 +40,7 @@ class GroupController extends Controller
      */
     public function groupCreateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 
 		//On créer le formulaire en utilisant un utilisateur vide
@@ -49,7 +49,7 @@ class GroupController extends Controller
 		
 		if('POST' === $request->getMethod())
 		{
-			$form->bindRequest($request);
+			$form->bind($request);
 			if($form->isValid())
 			{
 				$em->persist($group);
@@ -77,7 +77,7 @@ class GroupController extends Controller
      */
     public function groupEditAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
@@ -87,7 +87,7 @@ class GroupController extends Controller
 
 		if('POST' === $request->getMethod())
 		{
-			$form->bindRequest($request);
+			$form->bind($request);
 			if($form->isValid())
 			{
 				$em->flush();
@@ -112,7 +112,7 @@ class GroupController extends Controller
     {
 		if(!$group->getPrivate())
 		{
-			$em = $this->getDoctrine()->getEntityManager();
+			$em = $this->getDoctrine()->getManager();
 			$user = $this->get('security.context')->getToken()->getUser();
 
 			$group->getUsers()->add($user);
@@ -138,14 +138,14 @@ class GroupController extends Controller
     {
 		if($group->getPrivate())
 		{
-			$em = $this->getDoctrine()->getEntityManager();
+			$em = $this->getDoctrine()->getManager();
 
 			//On créer le formulaire en utilisant un utilisateur vide
 			$form = $this->createForm(new UserSearchType());
 
 			if('POST' === $request->getMethod())
 			{
-				$form->bindRequest($request);
+				$form->bind($request);
 				if($form->isValid())
 				{
 					$user = $form->get('user')->getData();
@@ -174,7 +174,7 @@ class GroupController extends Controller
 	 */
 	public function changeGroupAction(Request $request, $id_group)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 
 		$session = $request->getSession();
 		$session->set('id_group', $id_group);

@@ -15,7 +15,7 @@ class VideoGroupRepository extends EntityRepository
 {
 	public function findLast($maxResults, $group)
 	{
-		$em = $this->getEntityManager();
+		$em = $this->getManager();
 		$qb = $em->createQueryBuilder();
 
 		$qb->select('vg')
@@ -33,7 +33,7 @@ class VideoGroupRepository extends EntityRepository
 
     public function random($group)
     {
-		$em = $this->getEntityManager();
+		$em = $this->getManager();
 		$qb = $em->createQueryBuilder();
 
         $date = new \Datetime();

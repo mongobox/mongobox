@@ -14,7 +14,7 @@ class TumblrRepository extends EntityRepository
 {
 	public function findLast($groups, $maxResults = 0, $firstResult = 0)
 	{
-		$em = $this->getEntityManager();
+		$em = $this->getManager();
 		$qb = $em->createQueryBuilder();
 
 		$qb->select('t')

@@ -105,7 +105,7 @@ class ImportCommand extends ContainerAwareCommand
     	}
 
     	$this->_logger->addInfo('Start videos import.');
-    	$em = $this->getContainer()->get('doctrine')->getEntityManager('default');
+    	$em = $this->getContainer()->get('doctrine')->getManager('default');
 
     	$newVideosCount = 0;
 
