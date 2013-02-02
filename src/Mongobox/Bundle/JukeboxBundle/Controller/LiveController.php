@@ -44,8 +44,15 @@ class LiveController extends Controller
 		}*/
 
 		$em->getRepository('MongoboxJukeboxBundle:Playlist')->generate($group);
+
 		//On supprime la vidéo en cours
 		$playlist_current = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+		$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
+
+		$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
+		$playlist_current->getVideoGroup()->setLastBroadcast(new \Datetime());
+		$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
+
 		$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
 		$em->remove($playlist_current);
 
@@ -53,8 +60,6 @@ class LiveController extends Controller
 		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
 
 		$nextInPlaylist->setCurrent(1);
-		$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
-		$nextInPlaylist->getVideoGroup()->setDiffusion($nextInPlaylist->getVideoGroup()->getDiffusion() + 1);
 		$em->flush();
 
 		return $nextInPlaylist;
