@@ -46,7 +46,7 @@ class WallController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 		$user->getGroups();
 
@@ -84,7 +84,7 @@ class WallController extends Controller
 
 			if ( 'POST' === $request->getMethod() )
 			{
-				$form->bindRequest($request);
+				$form->bind($request);
 				if ( $form->isValid() )
 				{
 					$video->setLien(Videos::parse_url_detail($video->getLien()));
@@ -160,7 +160,7 @@ class WallController extends Controller
      */
     public function jukeboxAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
@@ -209,7 +209,7 @@ class WallController extends Controller
      */
     public function nextAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->getRepository('MongoboxJukeboxBundle:Playlist')->generate();
 
         return new Response();
@@ -221,7 +221,7 @@ class WallController extends Controller
      */
     public function deleteAction(Request $request, $id_video)
     {
-        /*$em = $this->getDoctrine()->getEntityManager();
+        /*$em = $this->getDoctrine()->getManager();
         $video_current = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findOneBy(array('id_video' => $id_video));
         $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id_video);
 
@@ -244,7 +244,7 @@ class WallController extends Controller
      */
     public function voteAction(Request $request, $playlist, $sens)
     {
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		
 		$user = $this->get('security.context')->getToken()->getUser();
 		
@@ -280,7 +280,7 @@ class WallController extends Controller
      */
     public function ajaxFlagVendrediVideoAction(Request $request, $id, $value)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $video = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->find($id);
         $video->setVendredi($value);
         $em->flush();
@@ -294,7 +294,7 @@ class WallController extends Controller
      */
     public function ajaxIsVoteNext(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         /*$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();*/
         $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours[0]->getId());
         if($somme <= -2) $is_next = true;
@@ -308,7 +308,7 @@ class WallController extends Controller
      */
     public function infosAction(Request $request, $id_video)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id_video);
         $feed = 'http://gdata.youtube.com/feeds/api/videos/'.$video->getLien();
         $xml = simplexml_load_file($feed);
@@ -325,7 +325,7 @@ class WallController extends Controller
      */
     public function videoEnCoursAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = null;
 		if(!is_null($session->get('id_group'))) $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
@@ -354,7 +354,7 @@ class WallController extends Controller
      */
     public function statistiquesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 		$user->getGroups();
 
