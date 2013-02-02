@@ -44,9 +44,13 @@ class LiveController extends Controller
 		}*/
 
 		$em->getRepository('MongoboxJukeboxBundle:Playlist')->generate($group);
+		//On supprime la vidéo en cours
+		$playlist_current = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+		$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
+		$em->remove($playlist_current);
 
+		//On cherche la prochaine vidéo
 		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
-		$nextVideoId = $nextInPlaylist->getVideoGroup()->getVideo();
 
 		$nextInPlaylist->setCurrent(1);
 		$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
@@ -143,13 +147,12 @@ class LiveController extends Controller
     public function nextAction(Request $request)
     {
     	$em = $this->getDoctrine()->getManager();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
     	$currentPlayed	= $this->_initJukebox($group);
-    	$currentVideo	= $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array(
-			'id' => $currentPlayed->getId()
-    	));
 
-    	$response = new Response(json_encode(array('nextVideo' => $currentVideo->getLien())));
+    	$response = new Response(json_encode(array('videoId' => $currentPlayed->getVideoGroup()->getVideo()->getLien(), 'playlistId' => $currentPlayed->getId())));
     	return $response;
     }
 
