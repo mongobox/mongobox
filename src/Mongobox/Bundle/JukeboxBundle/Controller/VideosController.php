@@ -43,7 +43,7 @@ class VideosController extends Controller
 
         $criteria = array();
          if (  'POST' === $request->getMethod() ) {
-             $formSearchVideos->bindRequest($request);
+             $formSearchVideos->bind($request);
              $criteria = array('title' => $formSearchVideos->get('search')->getData());
          }
 

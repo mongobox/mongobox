@@ -29,7 +29,7 @@ class TumblrController extends Controller
      */
     public function indexAction(Request $request, $page)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
@@ -58,13 +58,13 @@ class TumblrController extends Controller
      */
     public function addAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $tumblr = new Tumblr();
         $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
 
         if ( 'POST' === $request->getMethod() ) {
-            $form->bindRequest($request);
+            $form->bind($request);
             if ( $form->isValid() )
 			{
                 $tumblr->setDate(new \Datetime());
@@ -93,7 +93,7 @@ class TumblrController extends Controller
      */
     public function voteAction(Request $request, $id_tumblr, $note)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $tumblr_vote = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
@@ -123,7 +123,7 @@ class TumblrController extends Controller
      */
     public function tumblrAction(Request $request)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
 
@@ -143,7 +143,7 @@ class TumblrController extends Controller
 	 */
 	public function topAction(Request $request){
 		
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
