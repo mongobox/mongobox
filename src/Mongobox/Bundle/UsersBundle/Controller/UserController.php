@@ -26,7 +26,7 @@ class UserController extends Controller
 	{
 		$value = $request->get('term');
 
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		
 		$users = $em->getRepository('MongoboxUsersBundle:User')->findBy(array('login' => $value));
 
@@ -57,7 +57,7 @@ class UserController extends Controller
 	 */
 	public function editAction(Request $request, $id_user = null)
 	{		
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 
 		$request = $this->container->get('request');
 		$user = $this->container->get('security.context')->getToken()->getUser();
@@ -74,7 +74,7 @@ class UserController extends Controller
 			//Validation pour l'utilisateur
 			if($request->request->has('utilisateur_edition'))
 			{
-				$form->bindRequest($request);
+				$form->bind($request);
 				if($form->isValid())
 				{
 					$factory = $this->get('security.encoder_factory');
@@ -87,7 +87,7 @@ class UserController extends Controller
 			//Validation pour le mot de passe
 			elseif($request->request->has('utilisateur_edition_mot_de_passe'))
 			{
-				$form_password->bindRequest($request);
+				$form_password->bind($request);
 				if($form_password->isValid())
 				{
 					$factory = $this->get('security.encoder_factory');

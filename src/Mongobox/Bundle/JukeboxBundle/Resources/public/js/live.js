@@ -14,6 +14,7 @@ function onPlayerStateChange(event)
 var livePlayer;
 var connection;
 var playlistId;
+var videoID;
 
 LivePlayer = function()
 {
@@ -26,7 +27,7 @@ LivePlayer = function()
 		$('#up-vote a').click(function(event) {
 			event.preventDefault();
 			var playlistId = this.getCurrentPlaylistId();
-			
+
 			$.post(voteUrl, {
 				playlist: playlistId,
 				vote: 'up',
@@ -35,12 +36,12 @@ LivePlayer = function()
 				this.playlistScoresUpdate(response);
 			}.bind(this));
 		}.bind(this));
-		
+
 		$('#down-vote a').unbind('click');
 		$('#down-vote a').click(function(event) {
 			event.preventDefault();
 			var playlistId = this.getCurrentPlaylistId();
-			
+
 			$.post(voteUrl, {
 				playlist: playlistId,
 				vote: 'down',
@@ -50,7 +51,7 @@ LivePlayer = function()
 			}.bind(this));
 		}.bind(this));
 	},
-	
+
 	this.synchronizePlayerState = function(params)
 	{
 		if (params.action == 'update_scores') {
@@ -62,15 +63,15 @@ LivePlayer = function()
 			switch(params.status) { 
 			case 1:
 				//this.checkCurrentVideoId(params);
-				
+
 				player.seekTo(params.currentTime);
 				player.playVideo();
-				
+
 				break;
-				
+
 			case 2:
 				//this.checkCurrentVideoId(params);
-				
+
 				player.seekTo(params.currentTime);
 				player.pauseVideo();
 				
@@ -78,11 +79,11 @@ LivePlayer = function()
 				
 			case 0:
 				player.loadVideoById({
-					videoId: params.nextVideo
+					videoId: params.videoId
 				});
-				
-				this.initialize(params.nextVideo);
-				
+
+				this.initialize(params.playlistId);
+
 				break;
 			}
 		}
@@ -93,6 +94,11 @@ LivePlayer = function()
 		return playlistId;
 	},
 	
+	this.getCurrentVideoId = function()
+	{
+		return VideoId;
+	},
+			
 	this.checkCurrentVideoId = function(params)
 	{
 		var videoId = this.getCurrentVideoId();
@@ -102,29 +108,30 @@ LivePlayer = function()
 			});
 		}
 	},
-	
+
 	this.seekNextVideo = function(params)
 	{
 		$.get(nextVideoUrl, function(response) {
 			data = JSON.parse(response);
-			
+
 			player.loadVideoById({
-				videoId: data.nextVideo
+				videoId: data.videoId
 			});
-			
-			params.nextVideo = data.nextVideo;
+
+			params.playlistId = data.playlistId;
+			params.videoId = data.videoId;
 			this.sendParameters(params);
-			
-			this.initialize(data.nextVideo);
+
+			this.initialize(data.playlistId);
 		}.bind(this));
-	}, 
-	
+	},
+
 	this.sendParameters = function(params)
 	{
 		json = JSON.stringify(params);
 		connection.send(json);
 	},
-	
+
 	this.getPlaylistScores = function(playlistId)
 	{
 		$.get(scoreUrl, {
@@ -134,7 +141,7 @@ LivePlayer = function()
 			this.updatePlaylistScores(scores);
 		}.bind(this));
 	},
-	
+
 	this.updatePlaylistScores = function(scores)
 	{
 		$('#up-score').text('(' + scores.upVotes + ')');
@@ -148,7 +155,7 @@ LivePlayer = function()
 			livePlayer.seekNextVideo(params);
 		}
 	}
-	
+
 	this.playlistScoresUpdate = function(data)
 	{
 		scores = JSON.parse(data);

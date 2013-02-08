@@ -27,8 +27,8 @@ class VoteRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $query = $em
-                ->createQuery('SELECT SUM(v.sens) FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :id_playlist')
-				->setParameter('id_playlist', $playlist  )
+                ->createQuery('SELECT SUM(v.sens) FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :playlist')
+				->setParameter('playlist', $playlist  )
         ;
 
         $result = $query->getResult();
