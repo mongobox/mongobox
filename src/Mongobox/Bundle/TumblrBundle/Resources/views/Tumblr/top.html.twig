@@ -3,43 +3,8 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<script>
-	$(document).ready(function()
-	{
-		$('.star').raty({
-	        	cancel: false,
-	        	click : function(score, evt) {
-	            	star_clicked = $(this);
-	            	// récupération de l'id du tumblr
-	            	var str_tumblr = $(this).attr('id');
-	            	var search_id = 'rating-';
-	            	var id_tumblr_vote = str_tumblr.substring( str_tumblr.indexOf(search_id) + search_id.length );
-	            	// envoie ajax de la note
-	            	$.ajax({
-	                	type: 'POST',
-	                	url: basepath+"mongo-pute/tumblr_vote/"+id_tumblr_vote+"/"+score,
-	                	success:function(data)
-	                	{
-	                    	// modification de l'affichage de la note globale
-	                    	star_clicked.siblings('.vote-tumblr').html('Note globale : '+data);
-	                	}
-	            	});
-	        	},
-	        	half: true,
-	        	hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
-	        	number: 5,
-	        	path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
-	        	score: 1
-	    	});
 
-	    	$(".tumblr-slider").tabs({fx:{opacity: "toggle"}});
-	    	$('.groupes-tooltip').tooltip();
-	});
-</script>
-
-
-<div class="vote"></div>
-<div class="hero-unit" style="text-align:center;">
+{#}<div class="hero-unit" style="text-align:center;">
     	<h2>Top des 7 derniers jours</h2>
     	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_top7', 'mongo_pute': top7, 'top': true} %}
 
@@ -48,5 +13,5 @@
 
     	<h2>Top de tous les temps</h2>
     	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_topTumblr', 'mongo_pute': topTumblr, 'top': true} %}
-</div>
+</div>{#}
 {% endblock body %}
