@@ -1,8 +1,12 @@
 function onPlayerStateChange(event)
 {
+    if (playerMode != 'admin') {
+        return this;
+    }
+
 	var params = new Object();
 	params.status = event.data;
-	
+
 	if (event.data != 0) {
 		params.currentTime = player.getCurrentTime();
 		livePlayer.sendParameters(params);
@@ -58,47 +62,50 @@ LivePlayer = function()
 			var scores = JSON.parse(params.scores);
 			this.updatePlaylistScores(scores);
 		}
-		
-		if (params.mode != 'admin') {
-			switch(params.status) { 
-			case 1:
-				//this.checkCurrentVideoId(params);
 
-				player.seekTo(params.currentTime);
-				player.playVideo();
+		if (playerMode == 'admin') {
+            return this;
+        }
 
-				break;
+        console.log(params);
+        switch(params.status) {
+        case 1:
+            //this.checkCurrentVideoId(params);
 
-			case 2:
-				//this.checkCurrentVideoId(params);
+            player.seekTo(params.currentTime);
+            player.playVideo();
 
-				player.seekTo(params.currentTime);
-				player.pauseVideo();
-				
-				break;
-				
-			case 0:
-				player.loadVideoById({
-					videoId: params.videoId
-				});
+            break;
 
-				this.initialize(params.playlistId);
+        case 2:
+            //this.checkCurrentVideoId(params);
 
-				break;
-			}
-		}
+            player.seekTo(params.currentTime);
+            player.pauseVideo();
+
+            break;
+
+        case 0:
+            player.loadVideoById({
+                videoId: params.videoId
+            });
+
+            this.initialize(params.playlistId);
+
+            break;
+        }
 	},
-	
+
 	this.getCurrentPlaylistId = function()
 	{
 		return playlistId;
 	},
-	
+
 	this.getCurrentVideoId = function()
 	{
-		return VideoId;
+		return videoID;
 	},
-			
+
 	this.checkCurrentVideoId = function(params)
 	{
 		var videoId = this.getCurrentVideoId();
@@ -135,8 +142,8 @@ LivePlayer = function()
 	this.getPlaylistScores = function(playlistId)
 	{
 		$.get(scoreUrl, {
-			playlist: playlistId,
-		}, function(response) {
+			playlist: playlistId
+        }, function(response) {
 			scores = JSON.parse(response);
 			this.updatePlaylistScores(scores);
 		}.bind(this));
@@ -147,14 +154,14 @@ LivePlayer = function()
 		$('#up-score').text('(' + scores.upVotes + ')');
 		$('#down-score').text('(' + scores.downVotes + ')');
 		$('#video-score').text('Score : ' + scores.votesRatio);
-		
+
 		if (scores.votesRatio <= -2 && playerMode == 'admin') {
 			var params = new Object();
 			params.status = 0;
-			
+
 			livePlayer.seekNextVideo(params);
 		}
-	}
+	},
 
 	this.playlistScoresUpdate = function(data)
 	{
@@ -164,7 +171,7 @@ LivePlayer = function()
 		var params = new Object();
 		params.action	= 'update_scores';
 		params.scores	= data;
-		
+
 		this.sendParameters(params);
 	}
 };
