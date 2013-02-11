@@ -6,7 +6,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="{{ path('wall_index') }}" style="padding : 0;"><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" /></a>
+      <a class="brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
+		<img src="{{ asset('bundles/Mongoboxjukebox/img/logo/mongo-logo-header.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" />
+	  </a>
       <div class="nav-collapse">
 		{% if app.user %}
 		<ul class="nav pull-right">

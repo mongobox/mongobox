@@ -61,6 +61,39 @@ Video en cours
 #video_en_cours .progress
 {
 	height : 16px;
-    width : 50%;
-    margin-left : 5px;
+    width : 85%;
+    margin-left : 0.1em;
+}
+
+#video_infos{
+	 width : 60%;
+}
+
+#video_infos .title{
+	margin-left:0.2em;
+}
+
+.navbar .nav > li > a {
+	padding: 1.2em 10px 11px;
+}
+
+#container_progress-bar span{
+ margin-left : 0.2em;
+}
+
+#video_en_cours{
+	width: 92%;
+}
+
+#video_en_cours .user-box{
+	display: inline;
+    margin-left: 0.5em;
+	float: none;
+}
+#video_en_cours .vote{
+	padding : 1.2em 10px 11px;
+}
+.navbar .navbar-text {
+    padding : 1.2em 10px 11px;
+	line-height: normal !important;
 }
