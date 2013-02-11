@@ -19,7 +19,7 @@
 		</div>
 		
 		<div id="container_progress-bar">		
-			<span class="pull-left">{{(date_actuelle | date('U') - video_en_cours.date| date('U'))|niceTime}}</span>
+			<span class="pull-left">{{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U'))|niceTime}}</span>
 			<div class="progress pull-left">
 				<div class="bar bar-success" style="width: {{(date_actuelle | date('U') - video_en_cours.date| date('U')) / video_en_cours.videoGroup.video.duration * 100}}%;"></div>
 			</div>
@@ -30,7 +30,7 @@
 	
 	<div class="vote pull-right">
 		<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-up icon-white"></i></a>
-		 / <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
+		 <a href="{{path('vote', {'sens' : 0, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote">/</a> <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
 		 - Vote : <span id="nb_vote_video_en_cours">{{somme}}</span>
 	</div>
 	

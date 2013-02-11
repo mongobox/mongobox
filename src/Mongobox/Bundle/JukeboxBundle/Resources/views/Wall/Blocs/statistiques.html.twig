@@ -2,7 +2,7 @@
 			<legend>Playlist</legend>
 			<ul class="unstyled">
 			{% if video_en_cours is defined and video_en_cours is not null %}
-				{% set total = (video_en_cours.videoGroup.video.duration - ("now"|date("U") - video_en_cours.date|date("U"))) %}
+				{% set total = (video_en_cours.videoGroup.video.duration - ("now"|date("U") - video_en_cours.videoGroup.lastBroadcast|date("U"))) %}
 			{% else %}
 				{% set total = 0 %}
 			{% endif %}
