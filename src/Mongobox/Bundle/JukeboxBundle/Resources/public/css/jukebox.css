@@ -97,3 +97,15 @@ Video en cours
     padding : 1.2em 10px 11px;
 	line-height: normal !important;
 }
+
+/* ---------------------------------
+
+WALL
+
+------------------------------------ */
+
+
+#statistiques ul li
+{
+	line-height : 23px;
+}
