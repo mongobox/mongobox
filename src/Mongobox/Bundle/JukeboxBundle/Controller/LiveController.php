@@ -50,7 +50,6 @@ class LiveController extends Controller
 		$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
 
 		$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
-		$playlist_current->getVideoGroup()->setLastBroadcast(new \Datetime());
 		$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
 
 		$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
@@ -60,6 +59,7 @@ class LiveController extends Controller
 		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
 
 		$nextInPlaylist->setCurrent(1);
+		$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
 		$em->flush();
 
 		return $nextInPlaylist;
