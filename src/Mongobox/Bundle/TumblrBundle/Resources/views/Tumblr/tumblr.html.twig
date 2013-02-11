@@ -5,8 +5,25 @@
 
 <ul style="list-style:none;">
     {% for mongo in mongo_pute %}
-        <li style="display:inline;">
-            <img src="{{ mongo.image }}" id="{{ tumblr_id_model }}-{{ mongo.id }}" alt="{{ mongo.text }}" title="{{ mongo.text }}" class="{{ tumblr_class }}" style="width:110px;height: 90px">
+        <li style="display: inline;">
+            {% if mongo.localPath is null %}
+                <img src="{{ mongo.image }}"
+                     id="{{ tumblr_id_model }}-{{ mongo.id }}"
+                     alt="{{ mongo.text }}"
+                     title="{{ mongo.text }}"
+                     class="{{ tumblr_class }}"
+                     style="width: 110px; height: 90px"
+                />
+            {% else %}
+                <img src="{{ mongo.localPath }}"
+                     id="{{ tumblr_id_model }}-{{ mongo.id }}"
+                     alt="{{ mongo.text }}"
+                     title="{{ mongo.text }}"
+                     class="{{ tumblr_class }}"
+                     style="width: 110px; height: 90px"
+                />
+            {% endif %}
+
 		    <input type="hidden" id="{{ tumblr_note_model }}-{{ mongo.id }}" value="{{ mongo.somme }}" />
 		    <input type="hidden" id="{{ tumblr_user_model }}-{{ mongo.id }}" value="{{ app.user.getNoteForTumblr(mongo.id) }}" />
         </li>
