@@ -30,6 +30,6 @@ class UserEditType extends AbstractType
 
     public function getName()
     {
-        return 'user_edition';
+        return 'utilisateur_edition';
     }
 }
