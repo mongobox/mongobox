@@ -22,7 +22,7 @@ class TumblrRepository extends EntityRepository
 		->leftJoin('t.groups', 'g')
 		->where("g.id IN (:groups)")
 		->orderBy('t.date', 'DESC')
-		->groupBy('t.id')
+		->groupBy('t.id_tumblr')
 		->setParameters( array(
 				'groups' => $groups
 		));
