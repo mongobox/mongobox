@@ -4,7 +4,8 @@
 
 {% block body %}
 <div class="marketing">
-	<h1><img src="{{ asset('bundles/Mongoboxjukebox/img/mongobox.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
+
+	<h1><img src="{{ asset('bundles/Mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
 	<h2>Mongo pute</h2>
 </div>
 <div class="vote"></div>
@@ -21,9 +22,12 @@
                 / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
                 (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)
             </h2>
-			<img src="{{entity.image}}" />
 
-
+            {% if entity.localPath is null %}
+                <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+            {% else %}
+                <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+            {% endif %}
 		</div>
 	{% endfor %}
 </div>

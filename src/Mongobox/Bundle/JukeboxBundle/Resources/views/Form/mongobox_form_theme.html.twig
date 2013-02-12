@@ -1,0 +1,118 @@
+{% use 'form_div_layout.html.twig' with field_label as base_field_label %}
+
+{% block email_widget %}
+{% spaceless %}
+    {% set type = type|default('email') %}
+    {{ block('field_widget') }}
+{% endspaceless %}
+{% endblock email_widget %}
+
+{% block field_row %}
+{% spaceless %}
+        {{ form_label(form, label|default(null)) }}
+        {% if radio is defined and radio is sameas(true) %}
+            {{ form_errors(form) }}
+        {% else %}
+            <div class="control-group clearfix{{ errors|length > 0 ? ' error' : '' }}">
+                <div class="controls">
+                {{ form_widget(form) }}
+                
+                {% if form.vars['attr'] is defined %}
+        			{% if form.vars['attr']['data-help'] is defined %}
+        				<span class="help-block">{{ form.vars['attr']['data-help'] }}</span>
+        			{% endif %}
+                {% endif %}
+    				
+        		{{ form_errors(form) }}
+        				
+                </div>
+            </div>
+        {% endif %}
+{% endspaceless %}
+{% endblock field_row %} 
+
+{% block form_label %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    {% if radio is defined and radio is sameas(true) %}
+        <label class="radio">
+            {{ form_widget(bouton) }}
+            {{ label|trans({}, translation_domain) }}
+        </label>
+    {% else %}
+        <label class="control-label" id="label-{{id}}" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+    		{{ label|trans({}, translation_domain) }}
+    		{% if required %}
+    			<span class="required" title="Ce champ est requis"> *</span>
+    		{% endif %}
+    	</label>
+    {% endif %}
+{% endblock %}
+
+{% block choice_widget %}
+{% spaceless %}
+    {% if expanded %}
+        {{ block('choice_widget_expanded') }}
+    {% else %}
+        {{ block('choice_widget_collapsed') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock choice_widget %}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        {{ form_row(child, {'radio': true, 'bouton': child}) }}
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+	<div class="alert alert-error">
+        {% for error in errors %}
+            {{
+                error.messagePluralization is null
+                    ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                    : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+            }}<br />
+        {% endfor %}
+	</div>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+
+
+{% block date_widget %}
+{% spaceless %} 
+	<div id="date_evenement" class="input-append date" data-date="{{ "now"|date("d/m/Y") }}">	   
+    	{{ block('field_widget') }}<span class="add-on"><i class="icon-th"></i></span>
+	</div>
+{% endspaceless %}
+{% endblock date_widget %}
+
+
+{% block time_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+   		<div class="input-append bootstrap-timepicker-component">
+			{{ block('form_widget_simple') }}<span class="add-on"><i class="icon-time"></i></span>
+		</div>
+    {% else %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_widget(form.hour, { 'attr': { 'size': '1' } }) }}:{{ form_widget(form.minute, { 'attr': { 'size': '1' } }) }}{% if with_seconds %}:{{ form_widget(form.second, { 'attr': { 'size': '1' } }) }}{% endif %}
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock time_widget %}

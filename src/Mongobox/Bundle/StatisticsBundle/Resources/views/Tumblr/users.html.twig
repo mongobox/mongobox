@@ -1,0 +1,60 @@
+<div id="users-container"></div>
+<script type="text/javascript">
+    $(function () {
+        var usersChart;
+        $(document).ready(function() {
+            usersChart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'users-container',
+                    type: 'column',
+                    margin: [ 50, 50, 100, 80]
+                },
+                title: {
+                    text: 'Classement des personnes les plus citées dans le tumblr'
+                },
+                xAxis: {
+                    categories: {{ usersRanking.xAxis|json_encode|raw }},
+                    labels: {
+                        rotation: -45,
+                        align: 'right',
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Images postées / personne'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    formatter: function() {
+                        return '<b>' + this.x + '</b><br/>' +
+                                Highcharts.numberFormat(this.y, 0) + ' images'
+                    }
+                },
+                series: [{
+                    name: 'Population',
+                    data: {{ usersRanking.data|json_encode|raw }},
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        x: 4,
+                        y: 10,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+        });
+    });
+</script>

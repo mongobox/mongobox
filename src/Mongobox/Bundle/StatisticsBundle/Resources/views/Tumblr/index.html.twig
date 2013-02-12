@@ -5,11 +5,25 @@
 {% block body %}
     <script src="{{ asset('bundles/mongoboxstatistics/js/highcharts.js') }}" type="text/javascript"></script>
     <div class="marketing">
-        <div class="statistics-chart">
-            {% include 'MongoboxStatisticsBundle:Tumblr:timeline.html.twig' with {'timeline': statistics.timeline} %}
-        </div>
-        <div class="statistics-chart">
-            {% include 'MongoboxStatisticsBundle:Tumblr:users.html.twig' with {'usersRanking': statistics.usersRanking} %}
-        </div>
+        <h1>
+            <img src="{{ asset('bundles/Mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" />
+        </h1>
+        <h2>Statistiques du Tumblr</h2>
+    </div>
+
+    <div class="hero-unit">
+        {% if statistics.timeline != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Tumblr:timeline.html.twig' with {'timeline': statistics.timeline} %}
+            </div>
+        {% endif %}
+
+        <hr />
+
+        {% if statistics.usersRanking != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Tumblr:users.html.twig' with {'usersRanking': statistics.usersRanking} %}
+            </div>
+        {% endif %}
     </div>
 {% endblock body %}

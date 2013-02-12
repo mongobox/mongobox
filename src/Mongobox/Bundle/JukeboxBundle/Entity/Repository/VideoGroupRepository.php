@@ -46,9 +46,12 @@ class VideoGroupRepository extends EntityRepository
 		->leftJoin('vg.playlist', 'p')
 		->where("vg.vendredi = :vendredi")
 		->andWhere("vg.group = :group")
+		->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")
+		->groupBy('vg.id')
 		->setParameters( array(
 				'group' => $group,
-				'vendredi' => $vendredi
+				'vendredi' => $vendredi,
+				'today' => new \Datetime('today')
 		));
 
 		/* TODO */

@@ -1,37 +1,45 @@
-{# Le scrpt est avant l'initialisation des étoiles #}
+{% set tumblr_class = 'tumblr-wall-popover' %}
+{% set tumblr_id_model = 'tumblr-img-id' %}
+{% set tumblr_note_model = 'note-tumblr' %}
+{% set tumblr_user_model = 'note-user-tumblr' %}
+
+<ul style="list-style:none;">
+    {% for mongo in mongo_pute %}
+        <li style="display: inline;">
+            {% if mongo.localPath is null %}
+                <img src="{{ mongo.image }}"
+                     id="{{ tumblr_id_model }}-{{ mongo.id }}"
+                     alt="{{ mongo.text }}"
+                     title="{{ mongo.text }}"
+                     class="{{ tumblr_class }}"
+                     style="width: 110px; height: 90px"
+                />
+            {% else %}
+                <img src="{{ mongo.localPath }}"
+                     id="{{ tumblr_id_model }}-{{ mongo.id }}"
+                     alt="{{ mongo.text }}"
+                     title="{{ mongo.text }}"
+                     class="{{ tumblr_class }}"
+                     style="width: 110px; height: 90px"
+                />
+            {% endif %}
+
+		    <input type="hidden" id="{{ tumblr_note_model }}-{{ mongo.id }}" value="{{ mongo.somme }}" />
+		    <input type="hidden" id="{{ tumblr_user_model }}-{{ mongo.id }}" value="{{ app.user.getNoteForTumblr(mongo.id) }}" />
+        </li>
+    {% endfor %}
+</ul>
+
+{% block javascripts %}
 <script>
-$(document).ready(function()
-{
-    $('.star').raty({
-        cancel: false,
-        click : function(score, evt) {
-            star_clicked = $(this);
-            // récupération de l'id du tumblr
-            //var id_tumblr_vote = $(this).attr('id').match(/^rating-(\d+)/)[1];
-            var str_tumblr = $(this).attr('id');
-            var search_id = 'rating-';
-            var id_tumblr_vote = str_tumblr.substring( str_tumblr.indexOf(search_id) + search_id.length );
-            // envoie ajax de la note
-            $.ajax({
-                type: 'POST',
-                url: basepath+"mongo-pute/tumblr_vote/"+id_tumblr_vote+"/"+score,
-                success:function(data)
-                {
-                    // modification de l'affichage de la note globale
-                    star_clicked.siblings('.vote-tumblr').html('Note globale : '+data);
-                }
-            });
-        },
-        half: true,
-        hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
-        number: 5,
-        path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
-        score: 1
+    $(function()
+    {
+        // Giving class to parameter to initialize popover
+        tumblr.init( "{{ tumblr_class }}" );
+        tumblr.regexId = '{{ tumblr_id_model }}';
+        tumblr.noteModel = '{{ tumblr_note_model }}';
+        tumblr.userModel = '{{ tumblr_user_model }}';
+        tumblr.pathToImg = "{{ asset('bundles/Mongoboxjukebox/img/') }}";
     });
-
-    $(".tumblr-slider").tabs({fx:{opacity: "toggle"}});
-    $('.groupes-tooltip').tooltip();
-});
 </script>
-
-{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider', 'mongo_pute': mongo_pute } %}
+{% endblock %}

@@ -39,9 +39,9 @@ class SecureController extends Controller
 		
 		if('POST' === $request->getMethod())
 		{
-			$em = $this->getDoctrine()->getEntityManager();
-			$form->bindRequest($request);
-			$formHandler = new UserHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
+			$em = $this->getDoctrine()->getManager();
+			$form->bind($request);
+			$formHandler = new UserHandler($form, $this->get('request'), $this->getDoctrine()->getManager());
 			if($formHandler->process()) return true;
 			if($form->isValid())
 			{
@@ -78,7 +78,7 @@ class SecureController extends Controller
 			return $this->redirect($this->generateUrl('index'));
 		}
 
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 
 		$session = $request->getSession();
 

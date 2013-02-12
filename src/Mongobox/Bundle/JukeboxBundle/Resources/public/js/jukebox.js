@@ -1,6 +1,7 @@
-$('.btn-vote').live('click', function(e)
+$(document).on("click", ".btn-vote", function(e)
 {
     e.preventDefault();
+	e.stopPropagation();
     var element = $(this);
     $.ajax({
         type: "POST",
