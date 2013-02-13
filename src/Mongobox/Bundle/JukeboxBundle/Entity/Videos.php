@@ -35,6 +35,16 @@ class Videos
     protected $title;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $artist;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $songName;
+
+    /**
      * @ORM\Column(type="integer")
      */
     protected $duration;
@@ -133,7 +143,31 @@ class Videos
         return $this;
     }
 
-    public function getThumbnail()
+    public function getArtist()
+    {
+        return $this->artist;
+    }
+
+    public function setArtist($artist)
+    {
+        $this->artist = $artist;
+
+        return $this;
+    }
+
+    public function getSongName()
+    {
+        return $this->songName;
+    }
+
+    public function setSongName($songName)
+    {
+        $this->songName = $songName;
+
+        return $this;
+    }
+
+	public function getThumbnail()
     {
         return $this->thumbnail;
     }
@@ -192,6 +226,18 @@ class Videos
     {
         return 'http://www.youtube.com/watch?v='.$this->getLien();
     }
+	
+	public function guessVideoInfos()
+	{
+		$infos = array('artist' => '', 'songName' => '');
+		$split = explode('-', $this->title);
+		if(count($split) > 1)
+		{
+			$infos['artist'] = trim($split[0]);
+			$infos['songName'] = trim($split[1]);
+		}
+		return $infos;
+	}
 
     /**
      * Split a given URL into its components.
