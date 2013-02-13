@@ -10,13 +10,10 @@
 #tumblr { text-align: center; }
 .img-tumblr-big, .note-globale { text-align: center; }
 
-.groupes-tooltip
+.groups-diffusion
 {
-    position: absolute;
-    text-decoration: none;
-    width: 60px;
-    padding-right: 10px;
-    color: black;
-    background-color: lightgrey;
-    cursor: pointer;
+	text-align: center;
+	margin-top: 5px;
+	border-top: 1px black solid;
+	padding-top: 5px;
 }

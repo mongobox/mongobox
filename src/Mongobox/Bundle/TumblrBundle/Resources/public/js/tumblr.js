@@ -47,12 +47,15 @@ var tumblr = tumblr || {};
 	    	var user_score = $("."+tumblr.userModel+"-"+tumblr_id).val();
 	    	// Cloning image
 		    var new_image = $(this).clone();
+		    // Groups
+		    var groups_hidden = $(this).siblings('.tumblr-groups-'+tumblr_id).val();
+		    var groups = groups_hidden.split(',');
 		    // Remove style attribute of img balise
 			// Remove img id to avoid duplicate ids
 			// Remove img class to avoid js hover bind
 		    new_image.removeAttr('style').removeAttr('id').removeClass(''+tumblr.classImg);
 			// Load content into popover content
-			$(this).attr('data-content', tumblr.getHTMLContent(tumblr_id, tumblr_score, new_image[0].outerHTML) );
+			$(this).attr('data-content', tumblr.getHTMLContent(tumblr_id, tumblr_score, new_image[0].outerHTML, groups) );
 		    // Popover
 		    $(this).popover('show');
 		    $('.popover-title').append('<button type="button" title="Fermer" class="close close-tumblr-popover" aria-hidden="true">&times;</button>');
@@ -85,7 +88,7 @@ var tumblr = tumblr || {};
 	},
 
 	// Function to create HTML content displayed in popover
-	tumblr.getHTMLContent = function(tumblr_id, score, img_html)
+	tumblr.getHTMLContent = function(tumblr_id, score, img_html, groups)
 	{
 		// Create HTML content
     	var html_content = '';
@@ -94,6 +97,12 @@ var tumblr = tumblr || {};
 		html_content += '   <div class="star" id="rating-'+tumblr.classImg+'-'+tumblr_id+'"></div>';
 		html_content += '</div>';
 		html_content += '<div class="img-tumblr-big">'+img_html+'</div>';
+		html_content += '<div class="groups-diffusion">';
+		for( var index_group in groups)
+		{
+			html_content += '<span class="badge badge-info">'+groups[index_group]+'</span>';
+		}
+		html_content += '</div>';
 		return html_content;
 	},
 
