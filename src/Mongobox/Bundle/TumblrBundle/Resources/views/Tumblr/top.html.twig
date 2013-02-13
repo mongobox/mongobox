@@ -3,15 +3,35 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-
-{#}<div class="hero-unit" style="text-align:center;">
-    	<h2>Top des 7 derniers jours</h2>
-    	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_top7', 'mongo_pute': top7, 'top': true} %}
-
-    	<h2>Top des 30 derniers jours</h2>
-    	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_top30', 'mongo_pute': top30, 'top': true} %}
-
-    	<h2>Top de tous les temps</h2>
-    	{% include 'MongoboxTumblrBundle:Tumblr:unTumblr.html.twig' with { 'nom_affichage_tumblr': 'tumblr_slider_topTumblr', 'mongo_pute': topTumblr, 'top': true} %}
-</div>{#}
+<div class="hero-unit" style="text-align:center;">
+		<h2>Top des 7 derniers jours</h2>
+		{% include 'MongoboxTumblrBundle:Tumblr:tumblr.html.twig' with {
+			'mongo_pute': top7,
+			'top': true,
+			'tumblr_class': 'tumblr-popover',
+        	'tumblr_id_model': 'tumblr-img-id',
+        	'tumblr_note_model': 'note-tumblr',
+        	'tumblr_user_model': 'note-user-tumblr'
+		} %}
+		
+		<h2>Top des 30 derniers jours</h2>
+		{% include 'MongoboxTumblrBundle:Tumblr:tumblr.html.twig' with {
+			'mongo_pute': top30,
+			'top': true,
+			'tumblr_class': 'tumblr-popover',
+        	'tumblr_id_model': 'tumblr-img-id',
+        	'tumblr_note_model': 'note-tumblr',
+        	'tumblr_user_model': 'note-user-tumblr'
+		} %}
+		
+		<h2>Top de tous les temps</h2>
+		{% include 'MongoboxTumblrBundle:Tumblr:tumblr.html.twig' with {
+			'mongo_pute': topTumblr,
+			'top': true,
+			'tumblr_class': 'tumblr-popover',
+        	'tumblr_id_model': 'tumblr-img-id',
+        	'tumblr_note_model': 'note-tumblr',
+        	'tumblr_user_model': 'note-user-tumblr'
+		} %}
+</div>
 {% endblock body %}

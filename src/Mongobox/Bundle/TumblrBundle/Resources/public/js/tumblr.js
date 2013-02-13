@@ -1,14 +1,15 @@
 var tumblr = tumblr || {};
 (function($)
 {
-	tumblr.init = function( class_img )
+	tumblr.init = function(class_img, model_class, model_note, model_user )
 	{
 		this.pathToImg = ''; // Path to get img folder for stars png
 		this.pathToRating = basepath+"mongo-pute/tumblr_vote/"; // Path to submit rating
-		this.regexId; // String to match in regexp for tumblr id
+		this.regexClass = model_class; // String to match in regexp for tumblr class
 		this.classImg = class_img; // Img html class
-		this.noteModel; // Note's id model
-		this.userModel; // User note's id model
+		this.noteModel = model_note; // Note's id model
+		this.userModel = model_user; // User note's class model
+		this.tumblr_id_displayed = 0; // Tumblr's id displayed 
 		tumblr.loadPopover();
 		tumblr.listenHoverImg();
 	},
@@ -27,22 +28,23 @@ var tumblr = tumblr || {};
 	// Function to observe the hover event on tumblr img
 	tumblr.listenHoverImg = function()
 	{
-		$('body').on('mouseenter', "."+tumblr.classImg , function(e)
+		$('body').on('click', "."+tumblr.classImg , function(e)
         {
-			// For each tumblr img, if the popover is displayed, we hide it
-	        $("."+tumblr.classImg).each( function(index, element)
-	        {
-		        if( $(element).data('popover').tip().hasClass('in') )
-		        	$(element).popover('hide');
-	        });
-	        
             // Regex matching to get tumblr's id
-	        var pattern_regex_id = new RegExp(tumblr.regexId+'-(\\d+)');
-	    	var tumblr_id = $(this).attr('id').match(pattern_regex_id)[1];
+	        var pattern_regex_id = new RegExp(tumblr.regexClass+'-(\\d+)');
+	    	var tumblr_id = $(this).attr('class').match(pattern_regex_id)[1];
+	    	
+	    	// Doesn't execute the code below if it's the same tumblr clicked
+	    	if( tumblr.tumblr_id_displayed == tumblr_id ) return false;
+	    	// Save the current id displayed
+	    	tumblr.tumblr_id_displayed = tumblr_id;
+	    	// Close all popover oppened
+	    	tumblr.closeAll(false);
+	        
 	    	// Get tumblr's score
-	    	var tumblr_score = $("#"+tumblr.noteModel+"-"+tumblr_id).val();
+	    	var tumblr_score = $("."+tumblr.noteModel+"-"+tumblr_id).val();
 	    	// Get user's vote
-	    	var user_score = $("#"+tumblr.userModel+"-"+tumblr_id).val();
+	    	var user_score = $("."+tumblr.userModel+"-"+tumblr_id).val();
 	    	// Cloning image
 		    var new_image = $(this).clone();
 		    // Remove style attribute of img balise
@@ -53,21 +55,32 @@ var tumblr = tumblr || {};
 			$(this).attr('data-content', tumblr.getHTMLContent(tumblr_id, tumblr_score, new_image[0].outerHTML) );
 		    // Popover
 		    $(this).popover('show');
+		    $('.popover-title').append('<button type="button" title="Fermer" class="close close-tumblr-popover" aria-hidden="true">&times;</button>');
 		    // Star rating init
 		    tumblr.starRating(tumblr_id);
 		    // Load actual vote from user
 		    tumblr.loadRatingFromUser(tumblr_id, user_score);
-		    tumblr.listenLeaveImg();
+		    tumblr.listenClickHide();
         });
 	},
-
-	// Function to hide popover
-	tumblr.listenLeaveImg = function()
+	
+	tumblr.listenClickHide = function()
 	{
-		// Listen mouseleave event from popover
-        $('.popover-inner').bind('mouseleave', function(e)
+		$('body').on('click', '.close-tumblr-popover', function(e)
+		{
+				tumblr.closeAll(true);
+		});
+	},
+	
+	tumblr.closeAll = function(suppr_id)
+	{
+		// For each tumblr img, if the popover is displayed, we hide it
+        $("."+tumblr.classImg).each( function(index, element)
         {
-        	$('.'+tumblr.classImg).popover('hide');
+	        if( $(element).data('popover').tip().hasClass('in') )
+	        	$(element).popover('hide');
+	        
+	        if( suppr_id ) tumblr.tumblr_id_displayed = 0;
         });
 	},
 
@@ -103,8 +116,8 @@ var tumblr = tumblr || {};
 				    {
 						// Changing the displayed note
 						$('#note-globale-'+tumblr_id).html('Note globale : '+data);
-						$("#"+tumblr.noteModel+"-"+tumblr_id).val(data);
-						$("#"+tumblr.userModel+"-"+tumblr_id).val(score);
+						$("."+tumblr.noteModel+"-"+tumblr_id).val(data);
+						$("."+tumblr.userModel+"-"+tumblr_id).val(score);
 				    }
 				});
 		    },

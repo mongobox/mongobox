@@ -16,7 +16,7 @@ class TumblrVoteRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $query = $em
-                ->createQuery('SELECT t, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv WHERE tv.tumblr = '.$tumblr->getIdTumblr())
+                ->createQuery('SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv WHERE tv.tumblr = '.$tumblr->getIdTumblr())
                 ;
         $result = $query->getResult();
         if(is_null($result[0][1])) $somme = 0;
@@ -28,9 +28,14 @@ class TumblrVoteRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $q = $em
-                ->createQuery('SELECT t, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id = '.$group->getId().' GROUP BY t.id_tumblr ORDER BY total DESC')
+                ->createQuery('SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id = :groupe GROUP BY t.id_tumblr ORDER BY total DESC')
+                ->setParameters(array(
+                		'groupe' => $group
+                ))
                 ->setMaxResults($max)
                 ;
+        
+        //echo $q->getSQL();exit;
         
         if($max == 1) $result = $q->getOneOrNullResult ();
         else $result = $q->getResult();
@@ -42,7 +47,7 @@ class TumblrVoteRepository extends EntityRepository
         $date = date('Y-m-d 00:00:00', strtotime('-'.$days.' day'));
         $em = $this->getEntityManager();
         $q = $em
-                ->createQuery("SELECT t, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id = ".$group->getId()." AND t.date > '".$date."' GROUP BY t.id_tumblr ORDER BY total DESC")
+                ->createQuery("SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id = ".$group->getId()." AND t.date > '".$date."' GROUP BY t.id_tumblr ORDER BY total DESC")
                 ->setMaxResults($max)
                 ;
         
