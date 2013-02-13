@@ -84,12 +84,23 @@
         </ul>
 		<div id="video_en_cours">
 			{% render "MongoboxJukeboxBundle:Wall:videoEnCours" %}
-			  <a href="#post-video-modal" class="btn btn-success" role="button" data-toggle="modal"><i class="icon-plus icon-white"></i></a>
+			  <a href="#post-video-modal" class="btn btn-success" id="add-video-button" role="button" data-toggle="modal" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
 		</div>
       </div><!--/.nav-collapse -->
     </div>
   </div>
 </div>
 
-{% render "MongoboxJukeboxBundle:Wall:postVideo" %}
+<div class="modal hide fade" id="post-video-modal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3>Ajout d'une vidéo</h3>
+	</div>
+	<div class="modal-body">
+		<div class="loader"></div>
+		<div class="modal-content"></div>
+    </div>
+</div>
+<script type="text/javascript">
 
+</script>

@@ -97,6 +97,11 @@ class WallController extends Controller
 			return $this->redirect($this->generateUrl('group_index'));
 		}
     }
+	
+	public function postVideoFormAction()
+	{
+		
+	}
 
     /**
      * @Template()
