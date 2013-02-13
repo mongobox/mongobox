@@ -25,6 +25,11 @@ class Tumblr
     protected $image;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $local_path;
+
+    /**
      * @ORM\Column(type="text")
      */
     protected $text;
@@ -75,6 +80,18 @@ class Tumblr
     public function getImage()
     {
         return $this->image;
+    }
+
+    public function setLocalPath($local_path)
+    {
+        $this->local_path = $local_path;
+
+        return $this;
+    }
+
+    public function getLocalPath()
+    {
+        return $this->local_path;
     }
 
     public function setText($text)

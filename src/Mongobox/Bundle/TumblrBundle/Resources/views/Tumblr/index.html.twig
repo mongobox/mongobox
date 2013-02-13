@@ -25,7 +25,12 @@
             <div class="star" id="rating-{{ entity.id }}"></div>
             <input type="hidden" id="note-tumblr-{{ entity.id }}" class="tumblr_id" value="{{ entity.id }}"/>
             <input type="hidden" id="note-user-{{ entity.id }}" class="score_user" value="{{ app.user.getNoteForTumblr(entity.id) }}" />
-			<img src="{{entity.image}}" />
+            
+            {% if entity.localPath is null %}
+                <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+            {% else %}
+                <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+            {% endif %}
 		</div>
 	{% endfor %}
 </div>

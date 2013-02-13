@@ -4,15 +4,15 @@
 - Administration
 {%- endblock title %}
 
-{% block body %} 
+{% block body %}
 	{{ parent() }}
-	
+
 	<a class="btn" href="{{ path('admin_tumblr') }}">
     	<i class="icon-arrow-left"></i> Retour
     </a>
-    
+
 	<h1>Tumblr</h1>
-	
+
 	<table class="record_properties">
 	    <tbody>
 	        <tr>
@@ -21,7 +21,13 @@
 	        </tr>
 	        <tr>
 	            <th>Image</th>
-	            <td><img src="{{ entity.image }}" title="{{ entity.text }}" width="200"/></td>
+	            <td>
+                    {% if entity.localPath is null %}
+                        <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" width="200"/>
+                    {% else %}
+                        <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" width="200"/>
+                    {% endif %}
+                </td>
 	        </tr>
 	        <tr>
 	            <th>Text</th>
@@ -33,7 +39,7 @@
 	        </tr>
 	    </tbody>
 	</table>
-	
+
 	<ul class="record_actions">
 	    <li>
 	        <a class="btn" href="{{ path('admin_tumblr_edit', { 'id': entity.id }) }}">
