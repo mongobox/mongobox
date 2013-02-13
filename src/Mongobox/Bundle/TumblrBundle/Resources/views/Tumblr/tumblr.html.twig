@@ -7,10 +7,7 @@
     {% for mongo in mongo_pute %}
     	{% if top is defined and top is sameas(true) %}{% set mongo = mongo.tumblr %}{% endif %}
         <li style="display:inline;">
-            <img src="{% if mongo.localPath is null %}{{ mongo.image }}{% else %}{{ mongo.localPath }}{% endif %}" alt="{{ mongo.text }}" title="{{ mongo.text }}" class="{{ tumblr_class }} {{ tumblr_id_model }}-{{ mongo.id }}" style="width:110px;height: 90px">
-		    <input type="hidden" class="{{ tumblr_note_model }}-{{ mongo.id }}" value="{{ mongo.somme }}" />
-		    <input type="hidden" class="{{ tumblr_user_model }}-{{ mongo.id }}" value="{{ app.user.getNoteForTumblr(mongo.id) }}" />
-		    <input type="hidden" class="tumblr-groups-{{ mongo.id }}" value="{% for gp in mongo.groups %}{{ gp.title }}{%if loop.length > 1 and not loop.last%},{%endif%}{% endfor %}" /> 
+            <img src="{% if mongo.localPath is null %}{{ mongo.image }}{% else %}{{ mongo.localPath }}{% endif %}" alt="{{ mongo.text }}" title="{{ mongo.text }}" class="{{ tumblr_class }} {{ tumblr_id_model }}-{{ mongo.id }}" style="width:110px;height: 90px"> 
         </li>
     {% endfor %}
 </ul>

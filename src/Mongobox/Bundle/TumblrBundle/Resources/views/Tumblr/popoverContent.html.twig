@@ -1,0 +1,12 @@
+<div id="vote-mongo">
+	<div id="note-globale-{{ tumblr.id }}" class="note-globale">Note globale : {{ tumblr.somme }}</div>
+	<div class="star" id="rating-{{ tumblr_class }}-{{ tumblr.id }}" data-score="{{ app.user.getNoteForTumblr(tumblr.id) }}"></div>
+</div>
+<div class="img-tumblr-big">
+	<img src="{% if tumblr.localPath is null %}{{ tumblr.image }}{% else %}{{ tumblr.localPath }}{% endif %}" alt="{{ tumblr.text }}" title="{{ tumblr.text }}" />
+</div>
+<div class="groups-diffusion">
+	{% for group in tumblr.groups %}
+		<span class="badge badge-info">{{ group.title }}</span>
+	{% endfor %}
+</div>

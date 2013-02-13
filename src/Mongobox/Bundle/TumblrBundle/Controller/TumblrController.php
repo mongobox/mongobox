@@ -157,4 +157,20 @@ class TumblrController extends Controller
 			'topTumblr' => $topTumblr
 		);
 	}
+	
+	/**
+	 * @Route("/load/popover/content/{id_tumblr}", name="tumblr_load_popover_content")
+	 * @param Request $request
+	 */
+	public function loadPopoverContentAction(Request $request, $id_tumblr)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
+		$class_tumblr = $request->request->get('class_tumblr');
+		
+		return $this->render('MongoboxTumblrBundle:Tumblr:popoverContent.html.twig', array(
+				'tumblr' => $tumblr,
+				'tumblr_class' => $class_tumblr
+		));
+	}
 }
