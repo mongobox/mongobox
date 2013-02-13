@@ -91,11 +91,24 @@ Video en cours
 	float: none;
 }
 #video_en_cours .vote{
-	padding : 1.2em 10px 11px;
+	display : inline;
 }
 .navbar .navbar-text {
     padding : 1.2em 10px 11px;
 	line-height: normal !important;
+}
+
+#add-video-button
+{
+	margin-top : 13px;
+}
+
+.loader
+{
+	background-image: url('../img/ajax-loader.gif');
+	width : 16px;
+	height : 16px;
+	display : none;
 }
 
 /* ---------------------------------

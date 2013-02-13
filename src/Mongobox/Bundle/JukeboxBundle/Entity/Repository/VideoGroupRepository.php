@@ -55,7 +55,7 @@ class VideoGroupRepository extends EntityRepository
 		));
 
 		/* TODO */
-		/* AND (DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL) */
+		//$qb->andWhere('(DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL')
 		
 		$query = $qb->getQuery();
 		$results = $query->getResult();
