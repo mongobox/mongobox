@@ -1,0 +1,97 @@
+{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+
+{% block title -%}
+- Administration
+{%- endblock title %}
+
+{% block body %}
+<div class="marketing">
+
+    <h1><img src="{{ asset('bundles/Mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
+    <h2>Mongo pute</h2>
+</div>
+<div class="vote"></div>
+<div class="hero-unit" style="text-align:center;">
+    <div class="row tumblr-row-page">
+
+        <h2>{{entity.text}}</h2>
+        {#<a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
+        / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
+        (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)#}
+        <br/>
+        <div id="note-globale-{{ entity.id }}">Note globale: {{ entity.somme }}</div>
+        <div class="star" id="rating-{{ entity.id }}"></div>
+        <input type="hidden" id="note-tumblr-{{ entity.id }}" class="tumblr_id" value="{{ entity.id }}"/>
+        <input type="hidden" id="note-user-{{ entity.id }}" class="score_user" value="{{ app.user.getNoteForTumblr(entity.id) }}" />
+
+        {% if entity.localPath is null %}
+            <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+        {% else %}
+            <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+        {% endif %}
+
+        {# Tags list #}
+        {% if entity.tags is not empty %}
+            <div class="tags">
+                Tags:
+                {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="#{{ tag.systemName }}">{{ tag.name }}</a>{% endfor %}
+            </div>
+        {% endif %}
+
+        {% if entityPrev %}
+            <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="{{ entityPrev.text }}" data-slide="prev">‹</a>
+        {% else %}
+            <a class="left carousel-control" href="#first" data-slide="prev">‹</a>
+        {% endif %}
+
+        {% if entityNext %}
+            <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="{{ entityNext.text }}" data-slide="next">›</a>
+        {% else %}
+            <a class="right carousel-control" href="#last" data-slide="next">›</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock body %}
+
+{% block javascripts %}
+    <script>
+        $('.star').raty({
+            cancel: false,
+            click : function(score, evt)
+            {
+                var tumblr_id = $(this).siblings('.tumblr_id').val();
+                // Ajax request to submit vote and refresh the displayed one
+                $.ajax({
+                    type: 'POST',
+                    url: basepath+"mongo-pute/tumblr_vote/"+tumblr_id+"/"+score,
+                    success:function(data)
+                    {
+                        // Changing the displayed note
+                        $('#note-globale-'+tumblr_id).html('Note globale : '+data);
+                        $("#note-tumblr-"+tumblr_id).val(data);
+                        $("#note-user-"+tumblr_id).val(score);
+                    }
+                });
+            },
+            half: true,
+            hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
+            number: 5,
+            path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
+            score: 1,
+            size: 24,
+            starHalf: 'star-half-big.png',
+            starOff: 'star-off-big.png',
+            starOn: 'star-on-big.png',
+            width: 160
+        });
+
+        $(function()
+        {
+            $('.star').each( function(index, element)
+            {
+                $(element).raty('score', $(element).siblings('.score_user').val());
+            });
+        });
+    </script>
+{% endblock javascripts %}

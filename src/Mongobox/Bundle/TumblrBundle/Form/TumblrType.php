@@ -29,14 +29,31 @@ class TumblrType extends AbstractType
             ->add('text', 'text', array(
             	'label' => 'Texte'
             ))
+            ->add('addtags', 'genemu_jqueryautocompleter_entity', array(
+                'route_name' => 'tumblr_tags_ajax_autocomplete',
+                'class' => 'Mongobox\Bundle\TumblrBundle\Entity\TumblrTag',
+                'property' => 'name',
+                'label' => 'Tags',
+                'attr' => array(
+                    'placeholder' => 'Ajouter des tags',
+                ),
+                'required' => false,
+                'property_path' => false
+            ))
+            ->add('tags', 'hidden', array(
+                'data' => array('toto',"titi"),
+                'property_path' => false
+
+            ))
+            ->add('groups', 'choice', array(
+                'label' => 'Partager dans ces groupes',
+                'choices' => $this->groups,
+                'multiple' => true,
+                'expanded' => true,
+                'property_path' => false
+            ))
         ;
-			$builder->add('groups', 'choice', array(
-            	'label' => 'Partager dans ces groupes',
-				'choices' => $this->groups,
-				'multiple' => true,
-				'expanded' => true,
-				'property_path' => false
-            ));
+
 	}
 
     public function getName()
