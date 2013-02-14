@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mongobox\Bundle\TumblrBundle\Form\TumblrType;
 use Mongobox\Bundle\TumblrBundle\Entity\Tumblr;
 use Mongobox\Bundle\TumblrBundle\Entity\TumblrVote;
+use Mongobox\Bundle\TumblrBundle\Entity\TumblrTag;
 
 /**
  * Page pute controller.
@@ -68,23 +69,86 @@ class TumblrController extends Controller
             if ( $form->isValid() )
 			{
                 $tumblr->setDate(new \Datetime());
-                $em->persist($tumblr);
-                $em->flush();
+
+                // Set Tags
+                foreach($form->get('tags')->getData() as $tag_id)
+                {
+                    $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
+                    $entityTag->getTumblrs()->add($tumblr);
+                }
+
 				foreach($form->get('groups')->getData() as $group_id)
 				{
 					$group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
 					$group->getTumblrs()->add($tumblr);
 				}
+
+                $em->persist($tumblr);
                 $em->flush();
                 $this->get('session')->setFlash('success', 'Tumblr posté avec succès');
 
-                return $this->redirect($this->generateUrl('wall_index'));
+                return $this->redirect($this->generateUrl('mongo_pute'));
             }
         }
 
         return array(
             'form' => $form->createView()
         );
+    }
+
+    /**
+     * Action to search tags for autocomplete field
+     *
+     * @Route("/tags-ajax-autocomplete", name="tumblr_tags_ajax_autocomplete")
+     * @Template()
+     */
+    public function ajaxAutocompleteTagsAction(Request $request)
+    {
+        // récupération du mots clés en ajax selon la présélection du mot
+        $value = $request->get('tags');
+        $em = $this->getDoctrine()->getManager();
+        $tumblrTagsRepository = $em->getRepository('MongoboxTumblrBundle:TumblrTag');
+        $motscles = $tumblrTagsRepository->getTags($value);
+
+        return new Response(json_encode($motscles));
+    }
+
+    /**
+     * Action to load tag or create it if not exist
+     *
+     * @Route("/tags-load-item", name="tumblr_tags_load_item")
+     * @Template()
+     */
+    public function ajaxLoadTagAction(Request $request)
+    {
+        // récupération du mots clés en ajax selon la présélection du mot
+        $value = $request->get('tag');
+
+
+        $em = $this->getDoctrine()->getManager();
+        $tumblrTagsRepository = $em->getRepository('MongoboxTumblrBundle:TumblrTag');
+
+        // Check if tag Already exist
+        $resultTag = $tumblrTagsRepository->loadOneTagByName($value);
+        if( false === $resultTag ){
+
+            // Create a new tag
+            $newEntityTag = new TumblrTag();
+            $newEntityTag
+                ->setName($value)
+                ->setSystemName($value)
+            ;
+            $em->persist($newEntityTag);
+            $em->flush();
+
+            // Parsing result
+            $resultTag = array(
+                'id' => $newEntityTag->getId(),
+                'name' => $newEntityTag->getName()
+            );
+        }
+
+        return new Response(json_encode($resultTag));
     }
 
     /**
@@ -177,4 +241,33 @@ class TumblrController extends Controller
 				'tumblr_class' => $class_tumblr
 		));
 	}
+
+    /**
+     * Finds and displays a Tumblr entity.
+     *
+     * @Route("/show/{id}", name="tumblr_show")
+     * @Template()
+     */
+    public function showAction($id)
+    {
+       // var_dump(__METHOD__,$id);exit;
+        $em = $this->getDoctrine()->getManager();
+
+        $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
+        $entityTumblr = $tumblrRepository->find($id);
+
+        if (!$entityTumblr) {
+            throw $this->createNotFoundException('Unable to find Tumblr entity.');
+        }
+
+        $entityNext = $tumblrRepository->getNextEntity($entityTumblr->getId());
+        $entityPrev = $tumblrRepository->getPrevEntity($entityTumblr->getId());
+
+
+        return array(
+            'entity'    => $entityTumblr,
+            'entityPrev' => $entityPrev,
+            'entityNext' => $entityNext
+        );
+    }
 }
