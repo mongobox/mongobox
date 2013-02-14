@@ -113,8 +113,13 @@ class TumblrController extends Controller
 
         $em->persist($vote);
         $em->flush();
+        
+        $retour = array(
+        		'somme' => $tumblr_vote->getSomme(),
+        		'moyenne' => $tumblr_vote->getMoyenne()
+        );
 
-        return new Response($tumblr_vote->getSomme());
+        return new Response(json_encode($retour));
     }
 
     /**

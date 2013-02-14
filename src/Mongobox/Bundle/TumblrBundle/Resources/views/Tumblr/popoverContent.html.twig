@@ -1,5 +1,6 @@
 <div id="vote-mongo">
 	<div id="note-globale-{{ tumblr.id }}" class="note-globale">Note globale : {{ tumblr.somme }}</div>
+	<div id="moyenne-{{ tumblr.id }}" class="moyenne-globale">Moyenne : {{ tumblr.moyenne }}</div>
 	<div class="star" id="rating-{{ tumblr_class }}-{{ tumblr.id }}" data-score="{{ app.user.getNoteForTumblr(tumblr.id) }}"></div>
 </div>
 <div class="img-tumblr-big">

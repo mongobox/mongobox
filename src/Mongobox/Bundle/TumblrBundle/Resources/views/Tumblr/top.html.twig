@@ -7,31 +7,30 @@
 		<h2>Top des 7 derniers jours</h2>
 		{% include 'MongoboxTumblrBundle:Tumblr:tumblr.html.twig' with {
 			'mongo_pute': top7,
-			'top': true,
-			'tumblr_class': 'tumblr-popover',
-        	'tumblr_id_model': 'tumblr-img-id',
-        	'tumblr_note_model': 'note-tumblr',
-        	'tumblr_user_model': 'note-user-tumblr'
+			'top': true
 		} %}
 		
 		<h2>Top des 30 derniers jours</h2>
 		{% include 'MongoboxTumblrBundle:Tumblr:tumblr.html.twig' with {
 			'mongo_pute': top30,
-			'top': true,
-			'tumblr_class': 'tumblr-popover',
-        	'tumblr_id_model': 'tumblr-img-id',
-        	'tumblr_note_model': 'note-tumblr',
-        	'tumblr_user_model': 'note-user-tumblr'
+			'top': true
 		} %}
 		
 		<h2>Top de tous les temps</h2>
 		{% include 'MongoboxTumblrBundle:Tumblr:tumblr.html.twig' with {
 			'mongo_pute': topTumblr,
-			'top': true,
-			'tumblr_class': 'tumblr-popover',
-        	'tumblr_id_model': 'tumblr-img-id',
-        	'tumblr_note_model': 'note-tumblr',
-        	'tumblr_user_model': 'note-user-tumblr'
+			'top': true
 		} %}
 </div>
 {% endblock body %}
+
+{% block javascripts %}
+<script>
+    $(function()
+    {
+        // Giving class to parameter to initialize popover
+        tumblr.init("tumblr-popover", "tumblr-img-id", "note-tumblr", "note-user-tumblr");
+        tumblr.pathToImg = "{{ asset('bundles/Mongoboxjukebox/img/') }}";
+    });
+</script>
+{% endblock %}

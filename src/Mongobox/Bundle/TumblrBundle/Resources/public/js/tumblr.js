@@ -35,8 +35,15 @@ var tumblr = tumblr || {};
 	        var pattern_regex_id = new RegExp(tumblr.regexClass+'-(\\d+)');
 	    	var tumblr_id = $(this).attr('class').match(pattern_regex_id)[1];
 	    	
+	    	console.log(tumblr.tumblr_id_displayed);
+	    	console.log(tumblr_id);
 	    	// Doesn't execute the code below if it's the same tumblr clicked
-	    	if( tumblr.tumblr_id_displayed == tumblr_id ) return false;
+	    	if( tumblr.tumblr_id_displayed == tumblr_id )
+	    	{ 
+	    		$(this).popover('hide');
+	    		tumblr.tumblr_id_displayed = 0;
+	    		return false;
+	    	}
 	    	// Save the current id displayed
 	    	tumblr.tumblr_id_displayed = tumblr_id;
 	    	// Close all popover oppened
@@ -94,11 +101,13 @@ var tumblr = tumblr || {};
 				$.ajax({
 				    type: 'POST',
 				    url: tumblr.pathToRating+tumblr_id+"/"+score,
+				    dataType: 'json',
 				    success:function(data)
 				    {
 						// Changing the displayed note
-						$('#note-globale-'+tumblr_id).html('Note globale : '+data);
-						$("."+tumblr.noteModel+"-"+tumblr_id).val(data);
+						$('#note-globale-'+tumblr_id).html('Note globale : '+data.somme);
+						$('#moyenne-'+tumblr_id).html('Moyenne : '+data.moyenne);
+						$("."+tumblr.noteModel+"-"+tumblr_id).val(data.somme);
 						$("."+tumblr.userModel+"-"+tumblr_id).val(score);
 				    }
 				});

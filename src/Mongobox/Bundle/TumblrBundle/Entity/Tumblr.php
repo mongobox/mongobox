@@ -130,6 +130,11 @@ class Tumblr
         foreach($liste_vote as $vote) $somme += $vote->getNote();
         return $somme;
     }
+    
+    public function getMoyenne()
+    {
+    	return $this->getSomme()/count($this->tumblr_vote);
+    }
 
     /**
      * Get id_tumblr

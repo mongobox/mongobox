@@ -13,6 +13,7 @@
 </ul>
 
 {% block javascripts %}
+{% if top is not defined %}
 <script>
     $(function()
     {
@@ -21,4 +22,5 @@
         tumblr.pathToImg = "{{ asset('bundles/Mongoboxjukebox/img/') }}";
     });
 </script>
+{% endif %}
 {% endblock %}
