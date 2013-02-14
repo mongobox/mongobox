@@ -15,7 +15,7 @@ use Mongobox\Bundle\TumblrBundle\Entity\TumblrVote;
 /**
  * Page pute controller.
  *
- * @Route("/mongo-pute")
+ * @Route("/tumblr")
  */
 class TumblrController extends Controller
 {
@@ -89,7 +89,7 @@ class TumblrController extends Controller
 
     /**
      * @Template()
-     * @Route( "/tumblr_vote/{id_tumblr}/{note}", name="tumblr_vote")
+     * @Route( "/vote/{id_tumblr}/{note}", name="tumblr_vote")
      */
     public function voteAction(Request $request, $id_tumblr, $note)
     {

@@ -4,8 +4,8 @@ var tumblr = tumblr || {};
 	tumblr.init = function(class_img, model_class, model_note, model_user )
 	{
 		this.pathToImg = ''; // Path to get img folder for stars png
-		this.pathToRating = basepath+"mongo-pute/tumblr_vote/"; // Path to submit rating
-		this.pathToContent = basepath+"mongo-pute/load/popover/content/"; // Path to load content
+		this.pathToRating = basepath+"tumblr/vote/"; // Path to submit rating
+		this.pathToContent = basepath+"tumblr/load/popover/content/"; // Path to load content
 		this.regexClass = model_class; // String to match in regexp for tumblr class
 		this.classImg = class_img; // Img html class
 		this.noteModel = model_note; // Note's id model
@@ -35,8 +35,6 @@ var tumblr = tumblr || {};
 	        var pattern_regex_id = new RegExp(tumblr.regexClass+'-(\\d+)');
 	    	var tumblr_id = $(this).attr('class').match(pattern_regex_id)[1];
 	    	
-	    	console.log(tumblr.tumblr_id_displayed);
-	    	console.log(tumblr_id);
 	    	// Doesn't execute the code below if it's the same tumblr clicked
 	    	if( tumblr.tumblr_id_displayed == tumblr_id )
 	    	{ 
