@@ -149,12 +149,11 @@ class TumblrController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$user = $this->get('security.context')->getToken()->getUser();
 
-		$top7 = $tumblrRepository->topPeriod($group);
-		$top30 = $tumblrRepository->topPeriod($group, 30);
-		$topTumblr = $tumblrRepository->top($group);
+		$top7 = $tumblrRepository->topPeriod($user->getGroupsIds(), 7);
+		$top30 = $tumblrRepository->topPeriod($user->getGroupsIds(), 30);
+		$topTumblr = $tumblrRepository->top($user->getGroupsIds());
 		
 		return array(
 			'top7' => $top7,
