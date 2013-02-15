@@ -35,4 +35,54 @@ class TumblrRepository extends EntityRepository
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
+
+    /**
+     * Function to get next tumblr
+     *
+     * @param string|int $entityId
+     * @return boolean|array
+     */
+    public function getNextEntity( $entityId )
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT t.id_tumblr,t.text FROM MongoboxTumblrBundle:Tumblr t WHERE t.id_tumblr > :entityId ORDER BY t.id_tumblr')
+            ->setParameter('entityId', $entityId)
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+        ;
+
+        try{
+            $result = $query->getSingleResult();
+            return $result;
+        }
+        catch (\Doctrine\ORM\NoResultException $e){
+            return false;
+        }
+
+    }
+
+    /**
+     * Function to get prev tumblr
+     *
+     * @param string|int $entityId
+     * @return boolean|array
+     */
+    public function getPrevEntity( $entityId )
+    {
+        $query = $this->getEntityManager()
+            ->createQuery('SELECT t.id_tumblr,t.text FROM MongoboxTumblrBundle:Tumblr t WHERE t.id_tumblr < :entityId ORDER BY t.id_tumblr DESC')
+            ->setParameter('entityId', $entityId)
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+        ;
+
+        try {
+            $result = $query->getSingleResult();
+            return $result;
+        }
+        catch (\Doctrine\ORM\NoResultException $e) {
+            return false;
+        }
+
+    }
 }
