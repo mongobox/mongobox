@@ -113,50 +113,6 @@ class VideosController extends Controller
     }
 
     /**
-     * Displays a form to create a new Videos entity.
-     *
-     * @Route("/new", name="videos_new")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new Videos();
-        $form   = $this->createForm(new VideosType(), $entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Creates a new Videos entity.
-     *
-     * @Route("/create", name="videos_create")
-     * @Method("POST")
-     * @Template("MongoboxJukeboxBundle:Videos:new.html.twig")
-     */
-    public function createAction(Request $request)
-    {
-        $entity  = new Videos();
-        $form = $this->createForm(new VideosType(), $entity);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('videos_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
      * Displays a form to edit an existing Videos entity.
      *
      * @Route("/{id}/edit", name="videos_edit")

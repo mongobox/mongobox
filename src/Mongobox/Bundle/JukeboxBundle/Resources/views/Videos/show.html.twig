@@ -17,12 +17,6 @@
             <th>Date</th>
             <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
         </tr>
-		{% if entity.user is not empty %}
-        <tr>
-            <th>User</th>
-            <td>{{ entity.user.name }}</td>
-        </tr>
-		{% endif %}
     </tbody>
 </table>
 

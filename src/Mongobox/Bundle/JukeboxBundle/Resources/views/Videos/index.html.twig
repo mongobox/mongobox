@@ -1,7 +1,6 @@
 {% extends "MongoboxJukeboxBundle:Videos:layout.html.twig" %}
 
 {% block body %}
-<a href="{{ path('videos_new') }}" class="btn btn-large btn-primary pull-right">Ajouter une vidéo</a>
 <h1>Liste des vidéos</h1>
 
 <form class="form-search form-inline" id="{{ searchVideosForm.name }}" action="{{ path('videos') }}" method="POST" {{ form_enctype(searchVideosForm) }}>

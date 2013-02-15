@@ -12,8 +12,6 @@ class VideosType extends AbstractType
     {
         $builder
             ->add('lien')
-            ->add('date')
-            ->add('vendredi')
         ;
     }
 
