@@ -17,3 +17,42 @@
 	border-top: 1px black solid;
 	padding-top: 5px;
 }
+
+
+/* Tumblr Tags */
+.ui-helper-hidden-accessible{
+    display: none;
+}
+
+#tumblr_tags .tag-item{
+    display: inline-block;
+    margin: 0 3px;
+}
+
+.manage-tags-container .manage-tags{
+
+    display: inline-block;
+}
+
+/* UI Autocomplete */
+.ui-menu {
+    list-style: none;
+    padding: 2px;
+    margin: 0;
+    display: block;
+    outline: none;
+}
+
+.ui-widget-content {
+    border: 1px solid #aaaaaa;
+    border-radius: 0 0 6px 6px;
+    background-color: #F4F4F4;
+    color: #222222;
+}
+.ui-autocomplete{
+    width: 213px;
+}
+
+.tumblr-row-page{
+    position: relative;
+}

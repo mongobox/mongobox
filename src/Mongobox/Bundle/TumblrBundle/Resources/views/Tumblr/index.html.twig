@@ -16,7 +16,10 @@
 				<hr />
 			{% endif %}
 
-			<h2>{{entity.text}}</h2>
+			<h2><a href="{{ path('tumblr_show', { 'id': entity.id }) }}" title="Voir : {{entity.text}}">{{entity.text}}</a></h2>
+                {#<a href="{{path('tumblr_vote', {'note' : 1, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-up"></i></a>
+                / <a href="{{path('tumblr_vote', {'note' : 0, 'id_tumblr' : entity.id})}}" class="btn-vote" rel="nb_vote_tumblr_{{entity.id}}"><i class="icon-thumbs-down"></i></a>
+                (<span id="nb_vote_tumblr_{{entity.id}}">{{entity.somme}}</span>)#}
             <br/>
             <div id="note-globale-{{ entity.id }}">Note globale: {{ entity.somme }}</div>
             <div class="star" id="rating-{{ entity.id }}"></div>
@@ -27,6 +30,14 @@
                 <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
             {% else %}
                 <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+            {% endif %}
+
+            {# Tags list #}
+            {% if entity.tags is not empty %}
+                <div class="tags">
+                    Tags:
+                    {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="#{{ tag.systemName }}">{{ tag.name }}</a>{% endfor %}
+                </div>
             {% endif %}
 		</div>
 	{% endfor %}

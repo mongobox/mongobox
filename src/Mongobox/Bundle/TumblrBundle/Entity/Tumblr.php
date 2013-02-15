@@ -51,11 +51,17 @@ class Tumblr
     protected $groups;
 
     /**
+     * @ORM\ManyToMany(targetEntity="TumblrTag", mappedBy="tumblrs", cascade={"persist"})
+     */
+    protected $tags;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
 		$this->groups = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
 	public function setId($id_tumblr)
@@ -161,5 +167,41 @@ class Tumblr
     {
     	$this->groups = $groups;
     	return $this;
+    }
+
+
+    /**
+     *
+     * @param TumblrTag $tag
+     */
+    public function addTag($tag) {
+        // var_dump( $tag);exit;
+        $tag->addTumblr($this);
+        $this->tags[] = $tag;
+        return $this;
+    }
+
+    /**
+     * Fonction to delete tag
+     * @param Discussion $discussion
+     */
+    public function removeTag($tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function getTags() {
+        return $this->tags;
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function setTags(ArrayCollection $tags) {
+        $this->tags = $tags;
+        return $this;
     }
 }
