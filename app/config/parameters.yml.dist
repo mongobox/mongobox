@@ -13,9 +13,3 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
-
-twig:
-    globals:
-      project_name:      MongoBox
-      team_name:         Mongo Application
-      version:           "1.5"

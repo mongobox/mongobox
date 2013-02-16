@@ -29,7 +29,7 @@ twig:
     globals:
       project_name: MongoBox
       team_name:    Mongo Application
-      version:      "1.0"
+      version:      "1.5"
 
 # Service Configuration
 services:
