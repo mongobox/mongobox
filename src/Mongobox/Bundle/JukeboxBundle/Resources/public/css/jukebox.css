@@ -33,6 +33,7 @@ body {
 .hero-unit
 {
 	padding : 40px;
+	font-size : 14px;
 }
 
 .photo-small
@@ -94,8 +95,8 @@ Video en cours
 	display : inline;
 }
 .navbar .navbar-text {
-    padding : 1.2em 10px 11px;
-	line-height: normal !important;
+	color : #999;
+	line-height : 20px;
 }
 
 #add-video-button
