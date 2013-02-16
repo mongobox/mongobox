@@ -4,6 +4,7 @@ namespace Mongobox\Bundle\GroupBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -180,10 +181,9 @@ class GroupController extends Controller
 		$session->set('id_group', $id_group);
 
 		//On met l'id du groupe en cookie
-		$response = new Response(); 
+		$response = new RedirectResponse($this->generateUrl('wall_index')); 
 		$response->headers->setCookie(new Cookie('id_group', $id_group));
-		$response->send();
 
-		return $this->redirect($this->generateUrl('wall_index'));
+		return $response;
 	}
 }
