@@ -1,6 +1,6 @@
 			Total vidéo : {{total_video}}<br />
 			<legend>Playlist</legend>
-			<ul class="unstyled">
+			<ul class="unstyled clearfix" id="playlist">
 			{% if video_en_cours is defined and video_en_cours is not null %}
 				{% set total = (video_en_cours.videoGroup.video.duration - ("now"|date("U") - video_en_cours.videoGroup.lastBroadcast|date("U"))) %}
 			{% else %}
@@ -13,21 +13,22 @@
 					{% set userLogin = pl.videoGroup.user.login %}
 				{% endif %}
 				
-				<li>
+				<li class="clearfix">
 					<small>
-                        {% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}
-                        <img src="{{ pl.videoGroup.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.videoGroup.video.thumbnailHq }}' />" data-html="true" />						
-						<a href="{{pl.videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}} - Dans {{total|niceTime}} à {{heure|date("H:i")}} - Points : {{pl.videoGroup.votes - pl.videoGroup.diffusion}}"{% if somme_pl[pl.id] is defined and somme_pl[pl.id] <= -2 %} style="color : red;"{% endif %}>{{pl.videoGroup.video.title}} ({{pl.videoGroup.video.duration|niceTime}} mins)</a>
-                        <a href="{{path('vote', {'sens' : 1, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}"><i class="icon-thumbs-up"></i></a>
+                        <span class="playlist-icon">{% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}</span>
+                        <span class="playlist-thumbnail"><img src="{{ pl.videoGroup.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.videoGroup.video.thumbnailHq }}' />" data-html="true" /></span>
+						<span class="playlist-title"><a href="{{pl.videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}} - Dans {{total|niceTime}} à {{heure|date("H:i")}} - Points : {{pl.videoGroup.votes - pl.videoGroup.diffusion}}"{% if somme_pl[pl.id] is defined and somme_pl[pl.id] <= -2 %} style="color : red;"{% endif %}>{{pl.videoGroup.video.title}}</a></span>
+						<span class="playlist-time label label-info">{{pl.videoGroup.video.duration|niceTime}} mins</span>
+                        <span class="playlist-vote"><a href="{{path('vote', {'sens' : 1, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}"><i class="icon-thumbs-up"></i></a>
                         <a href="{{path('vote', {'sens' : 0, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}">/</a> <a href="{{path('vote', {'sens' : -1, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}"><i class="icon-thumbs-down"></i></a>
-                        (<span id="nb_vote_video_{{pl.id}}">{% if somme_pl[pl.id] is defined %}{{somme_pl[pl.id]}}{% else %}0{% endif %}</span>)
+                        (<span id="nb_vote_video_{{pl.id}}">{% if somme_pl[pl.id] is defined %}{{somme_pl[pl.id]}}{% else %}0{% endif %}</span>)</span>
+						<span class="playlist-user">
+						{% if pl.videoGroup.user is not empty %}
+							<img src="{{ pl.videoGroup.user.gravatar }}" alt="{{ pl.videoGroup.user.login }}" class="photo-small"/>
+							{{ pl.videoGroup.user.login }}
+						{% endif %}
+						</span>
                     </small>
-					{% if pl.videoGroup.user is not empty %}
-					<div class="user-box">
-						<img src="{{ pl.videoGroup.user.gravatar }}" alt="{{ pl.videoGroup.user.login }}" class="photo-small"/>
-						{{ pl.videoGroup.user.login }}
-					</div>
-					{% endif %}
 				</li>
 				{% if somme_pl[pl.videoGroup.id] is not defined or somme_pl[pl.videoGroup.id] > -2 %}{% set total = total + pl.videoGroup.video.duration %}{% endif %}
 			{% endfor %}
@@ -38,18 +39,12 @@
 				<li>
 					<a href="{{video_hist.video.youtubeUrl}}">{{video_hist.video.title}} ({{video_hist.lastBroadCast|date('d-m-Y H:i:s')}})</a>
 					{% if video_hist.user is not empty %}
-					<div class="user-box">
+					<span class="playlist-user">
 						<img src="{{ video_hist.user.gravatar }}" alt="{{ video_hist.user.login }}" class="photo-small"/>
 						{{ video_hist.user.login }}
-					</div>
+					</span>
 					{% endif %}
 				</li>
 			{% endfor %}
 			</ul>
-<script>
-	$(document).ready(function()
-	{
-		$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'})
-	});
-</script>
 

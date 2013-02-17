@@ -53,11 +53,6 @@ legend
 	max-height : 52px;
 }
 
-.user-box
-{
-	float : right;
-}
-
 /* --------------------------------------------------------
 
 Video en cours
@@ -138,4 +133,48 @@ Flux Rss
 #flux_rss ul li
 {
 	line-height: 20px;
+}
+
+/* ----------------------------------
+
+Playlist
+
+------------------------------------ */
+.playlist-icon, .playlist-thumbnail, .playlist-title, .playlist-time, .playlist-vote, .playlist-user
+{
+	display : block;
+	float : left;
+}
+
+.playlist-icon, .playlist-thumbnail, .playlist-time, .playlist-vote, .playlist-user
+{
+	text-align : center;
+}
+
+.playlist-icon
+{
+	width : 20px;
+}
+
+.playlist-thumbnail
+{
+	width : 25px;
+}
+
+.playlist-title
+{
+	width : 290px;
+}
+
+.playlist-time
+{
+	width : 61px;
+}
+
+.playlist-vote
+{
+	width : 65px;
+}
+.playlist-user
+{
 }
