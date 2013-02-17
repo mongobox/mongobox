@@ -9,6 +9,11 @@ body {
     position: relative;
 }
 
+legend
+{
+	margin-bottom : 5px;
+}
+
 
 .footer {
     background-color: #F5F5F5;
@@ -122,4 +127,15 @@ WALL
 #statistiques ul li
 {
 	line-height : 23px;
+}
+
+/* ---------------------------------
+
+Flux Rss
+
+------------------------------------ */
+
+#flux_rss ul li
+{
+	line-height: 20px;
 }

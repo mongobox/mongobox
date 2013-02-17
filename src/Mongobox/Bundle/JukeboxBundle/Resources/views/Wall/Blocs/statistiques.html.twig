@@ -33,15 +33,19 @@
 			{% endfor %}
 			</ul>
 			<legend>Historique</legend>
+			<ul class="unstyled">
 			{% for video_hist in videos_historique %}
-				<li><a href="{{video_hist.video.youtubeUrl}}">{{video_hist.video.title}} ({{video_hist.lastBroadCast|date('d-m-Y H:i:s')}})</a></li>
-				{% if video_hist.user is not empty %}
-				<div class="user-box">
-					<img src="{{ video_hist.user.gravatar }}" alt="{{ video_hist.user.login }}" class="photo-small"/>
-					{{ video_hist.user.login }}
-				</div>
-				{% endif %}
+				<li>
+					<a href="{{video_hist.video.youtubeUrl}}">{{video_hist.video.title}} ({{video_hist.lastBroadCast|date('d-m-Y H:i:s')}})</a>
+					{% if video_hist.user is not empty %}
+					<div class="user-box">
+						<img src="{{ video_hist.user.gravatar }}" alt="{{ video_hist.user.login }}" class="photo-small"/>
+						{{ video_hist.user.login }}
+					</div>
+					{% endif %}
+				</li>
 			{% endfor %}
+			</ul>
 <script>
 	$(document).ready(function()
 	{
