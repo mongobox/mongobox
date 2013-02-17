@@ -44,7 +44,7 @@
     {% if radio is defined and radio is sameas(true) %}
         <label class="radio">
             {{ form_widget(bouton) }}
-            {{ label|trans({}, translation_domain) }}
+            {{ label|trans({}, translation_domain)|raw }}
         </label>
     {% else %}
         <label class="control-label" id="label-{{id}}" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>

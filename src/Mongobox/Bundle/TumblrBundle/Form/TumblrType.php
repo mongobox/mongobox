@@ -17,6 +17,8 @@ class TumblrType extends AbstractType
 		foreach($groups as $group)
 		{
 			$this->groups[$group->getId()] = $group->getTitle();
+			if($group->getPrivate()) $this->groups[$group->getId()] .= ' <i class="icon-lock" title="Groupe Privé"></i>';
+			else $this->groups[$group->getId()] .= ' <i class="icon-globe" title="Groupe Publique"></i>';
 		}
 	}
 
