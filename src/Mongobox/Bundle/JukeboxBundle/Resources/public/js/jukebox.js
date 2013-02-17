@@ -14,8 +14,19 @@ $(document).on("click", ".btn-vote", function(e)
 
 function loadVideoEnCours()
 {
-	$('.video-thumbnail').tooltip('hide');
-    $('#video_en_cours').load(basepath + 'video_en_cours');
+	$('.video-thumbnail').tooltip('destroy');
+
+	$.ajax({
+			type: "GET",
+			dataType: "html",
+			url: basepath + 'video_en_cours'
+		}).done(
+		function( html )
+		{
+			$('#video_en_cours').html(html);
+			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'})
+		});
+
     $('#statistiques').load(basepath + 'statistiques');
 }
 function loadRSS()
@@ -85,4 +96,6 @@ $(document).ready(function()
 			}
 		});
 	});
+
+	$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
 });
