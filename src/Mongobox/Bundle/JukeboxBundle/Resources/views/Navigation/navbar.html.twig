@@ -20,9 +20,8 @@
 					</li>
 					<li class="divider"></li>
 					{% for group in app.user.groups %}
-						<li {% if group.id == app.session.get('id_group') %}class="dropdown-submenu pull-left"{% endif %}>
+						<li class="dropdown-submenu pull-left">
 							<a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="icon-ok"></span>{% endif %}</a>
-						{% if group.id == app.session.get('id_group') %}
 							<ul class="dropdown-menu">
 								<li>
 									<a href="{{path('group_edit', {'id' : group.id})}}" title="Groupes">Modifier le groupe</a>
@@ -33,7 +32,6 @@
 								</li>
 								{% endif %}
 							</ul>
-						{% endif %}
 						</li>
 						
 					{% endfor %}
