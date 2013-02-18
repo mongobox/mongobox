@@ -187,10 +187,10 @@ class TumblrController extends Controller
     }
 
     /**
-     * @Template()
+     * @Template("MongoboxTumblrBundle:Slider:index.html.twig")
      * @Route( "/tumblr", name="tumblr")
      */
-    public function tumblrAction(Request $request)
+    public function sliderAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();

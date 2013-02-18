@@ -13,6 +13,7 @@ var tumblr = tumblr || {};
 		this.tumblr_id_displayed = 0; // Tumblr's id displayed 
 		tumblr.loadPopover();
 		tumblr.listenHoverImg();
+		tumblr.listenClickHide();
 	},
 
 	// Function initializing popover
@@ -29,23 +30,29 @@ var tumblr = tumblr || {};
 	// Function to observe the hover event on tumblr img
 	tumblr.listenHoverImg = function()
 	{
-		$('body').on('click', "."+tumblr.classImg , function(e)
+		$('body').on('click', "img."+tumblr.classImg , function(e)
         {
+			e.preventDefault();
+			//e.stopPropagation();
+			
             // Regex matching to get tumblr's id
 	        var pattern_regex_id = new RegExp(tumblr.regexClass+'-(\\d+)');
 	    	var tumblr_id = $(this).attr('class').match(pattern_regex_id)[1];
 	    	
+	    	console.log(tumblr.tumblr_id_displayed);
+	    	console.log(tumblr.classImg);
+	    	
 	    	// Doesn't execute the code below if it's the same tumblr clicked
 	    	if( tumblr.tumblr_id_displayed == tumblr_id )
 	    	{ 
-	    		$(this).popover('hide');
+	    		$('.'+tumblr.classImg).popover('hide');
 	    		tumblr.tumblr_id_displayed = 0;
 	    		return false;
 	    	}
+	    	// Close all popover oppened
+	    	tumblr.closeAll();
 	    	// Save the current id displayed
 	    	tumblr.tumblr_id_displayed = tumblr_id;
-	    	// Close all popover oppened
-	    	tumblr.closeAll(false);
 	    	
 	    	tumblr_image = $(this);
 	    	// Loading content from twig template
@@ -59,7 +66,6 @@ var tumblr = tumblr || {};
 					tumblr_image.popover('show');
 					$('.popover-title').append('<button type="button" title="Fermer" class="close close-tumblr-popover" aria-hidden="true">&times;</button>');
 					tumblr.starRating(tumblr_id);
-					tumblr.listenClickHide();
 				}
 			});
         });
@@ -69,19 +75,18 @@ var tumblr = tumblr || {};
 	{
 		$('body').on('click', '.close-tumblr-popover', function(e)
 		{
-				tumblr.closeAll(true);
+				tumblr.closeAll();
+				tumblr.tumblr_id_displayed = 0;
 		});
 	},
 	
-	tumblr.closeAll = function(suppr_id)
+	tumblr.closeAll = function()
 	{
 		// For each tumblr img, if the popover is displayed, we hide it
         $("."+tumblr.classImg).each( function(index, element)
         {
 	        if( $(element).data('popover').tip().hasClass('in') )
 	        	$(element).popover('hide');
-	        
-	        if( suppr_id ) tumblr.tumblr_id_displayed = 0;
         });
 	},
 

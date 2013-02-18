@@ -1,0 +1,26 @@
+{% if top is defined and top is sameas(true) %}
+	{% set array_list_tumblr = [top7, top30, topTumblr]  %}
+{% else %}
+	{% set array_list_tumblr = [mongo_pute] %}
+{% endif %}
+
+{% for list_tumblr in array_list_tumblr %}
+	{% if top is defined and top is sameas(true) %}<h2>{{ slider_title[loop.index0] }}</h2>{% endif %}
+	<ul style="list-style:none;">
+	    {% for mongo in list_tumblr %}
+	    	{% if top is defined and top is sameas(true) %}{% set mongo = mongo.tumblr %}{% endif %}
+	    	{% include 'MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig' %}
+	    {% endfor %}
+	</ul>
+{% endfor %}
+
+{% block javascripts %}
+<script>
+    $(function()
+    {
+        // Giving class to parameter to initialize popover
+        tumblr.init("tumblr-popover", "tumblr-img-id", "note-tumblr", "note-user-tumblr");
+        tumblr.pathToImg = "{{ asset('bundles/Mongoboxjukebox/img/') }}";
+    });
+</script>
+{% endblock javascripts %}
