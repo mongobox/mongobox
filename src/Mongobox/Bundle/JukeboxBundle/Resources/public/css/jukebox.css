@@ -9,6 +9,11 @@ body {
     position: relative;
 }
 
+legend
+{
+	margin-bottom : 5px;
+}
+
 
 .footer {
     background-color: #F5F5F5;
@@ -46,11 +51,6 @@ body {
 {
 	float : left;
 	max-height : 52px;
-}
-
-.user-box
-{
-	float : right;
 }
 
 /* --------------------------------------------------------
@@ -122,4 +122,59 @@ WALL
 #statistiques ul li
 {
 	line-height : 23px;
+}
+
+/* ---------------------------------
+
+Flux Rss
+
+------------------------------------ */
+
+#flux_rss ul li
+{
+	line-height: 20px;
+}
+
+/* ----------------------------------
+
+Playlist
+
+------------------------------------ */
+.playlist-icon, .playlist-thumbnail, .playlist-title, .playlist-time, .playlist-vote, .playlist-user
+{
+	display : block;
+	float : left;
+}
+
+.playlist-icon, .playlist-thumbnail, .playlist-time, .playlist-vote, .playlist-user
+{
+	text-align : center;
+}
+
+.playlist-icon
+{
+	width : 20px;
+}
+
+.playlist-thumbnail
+{
+	width : 25px;
+}
+
+.playlist-title
+{
+	width : 336px;
+}
+
+.playlist-time
+{
+	width : 33px;
+}
+
+.playlist-vote
+{
+	width : 65px;
+}
+.playlist-user
+{
 }
