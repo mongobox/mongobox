@@ -27,7 +27,7 @@
 		<div id="container_progress-bar">		
 			<span class="pull-left navbar-text">{{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U'))|niceTime}}</span>
 			<div class="progress pull-left">
-				<div class="bar bar-success" style="width: {{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U')) / video_en_cours.videoGroup.video.duration * 100}}%;"></div>
+				<div class="bar" style="width: {{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U')) / video_en_cours.videoGroup.video.duration * 100}}%;"></div>
 			</div>
 			<span class="pull-left navbar-text">{{video_en_cours.videoGroup.video.duration|niceTime}}</span>
 		</div>        	

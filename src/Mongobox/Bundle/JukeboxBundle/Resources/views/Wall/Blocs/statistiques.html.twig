@@ -12,13 +12,13 @@
 				{% if pl.videoGroup.user is not null %}
 					{% set userLogin = pl.videoGroup.user.login %}
 				{% endif %}
-				
+
 				<li class="clearfix">
 					<small>
                         <span class="playlist-icon">{% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}</span>
                         <span class="playlist-thumbnail"><img src="{{ pl.videoGroup.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.videoGroup.video.thumbnailHq }}' />" data-html="true" /></span>
 						<span class="playlist-title"><a href="{{pl.videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}} - Dans {{total|niceTime}} à {{heure|date("H:i")}} - Points : {{pl.videoGroup.votes - pl.videoGroup.diffusion}}"{% if somme_pl[pl.id] is defined and somme_pl[pl.id] <= -2 %} style="color : red;"{% endif %}>{{pl.videoGroup.video.title}}</a></span>
-						<span class="playlist-time label label-info">{{pl.videoGroup.video.duration|niceTime}} mins</span>
+						<span class="playlist-time label label-info">{{pl.videoGroup.video.duration|niceTime}}</span>
                         <span class="playlist-vote"><a href="{{path('vote', {'sens' : 1, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}"><i class="icon-thumbs-up"></i></a>
                         <a href="{{path('vote', {'sens' : 0, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}">/</a> <a href="{{path('vote', {'sens' : -1, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}"><i class="icon-thumbs-down"></i></a>
                         (<span id="nb_vote_video_{{pl.id}}">{% if somme_pl[pl.id] is defined %}{{somme_pl[pl.id]}}{% else %}0{% endif %}</span>)</span>
