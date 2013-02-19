@@ -105,7 +105,7 @@ class TumblrController extends Controller
     public function ajaxAutocompleteTagsAction(Request $request)
     {
         // récupération du mots clés en ajax selon la présélection du mot
-        $value = $request->get('tags');
+        $value = $request->get('term');
         $em = $this->getDoctrine()->getManager();
         $tumblrTagsRepository = $em->getRepository('MongoboxTumblrBundle:TumblrTag');
         $motscles = $tumblrTagsRepository->getTags($value);
