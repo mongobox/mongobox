@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Cookie;
 
 use Mongobox\Bundle\GroupBundle\Entity\Group;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 use Mongobox\Bundle\GroupBundle\Form\GroupType;
 use Mongobox\Bundle\UsersBundle\Form\UserSearchType;
 
@@ -165,6 +166,26 @@ class GroupController extends Controller
 					'group' => $group
 			);
 		}
+	}
+
+    /**
+     * @Template()
+     * @Route( "/accept_invite/{id}/{id_user}", name="group_accept_invite")
+     * @ParamConverter("group", class="MongoboxGroupBundle:Group")
+     * @ParamConverter("user", class="MongoboxUsersBundle:User")
+     */
+    public function groupAcceptInviteAction(Request $request, Group $group, User $user)
+    {
+		$em = $this->getDoctrine()->getManager();
+
+		//Suppression de l'invitation
+		$group->getUsersInvitations()->removeElement($user);
+		//Ajout au groupe
+		$group->getUsers()->add($user);
+		$em->flush();
+
+		$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+		return $this->redirect($this->generateUrl('homepage'));
 	}
 
 	/**

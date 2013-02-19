@@ -28,22 +28,15 @@ class UserController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 		
-		$users = $em->getRepository('MongoboxUsersBundle:User')->findBy(array('login' => $value));
+		$users = $em->getRepository('MongoboxUsersBundle:User')->findUser($value);
 
 		$json = array();
 		foreach ($users as $user)
 		{
 			$json[] = array(
-					'label' => $user->getLogin(),
+					'label' => $user->getLogin().' '.$user->getFirstName().' '.$user->getLastName(),
 					'value' => $user->getId()
 			);
-		}
-
-		//On renvoi la chaîne si l'organisme n'existe pas
-		if(count($json) == 0)
-		{
-			$donnees = array('label' => $value, 'value' => 0);
-			return new Response(json_encode($donnees));
 		}
 
 		return new Response(json_encode($json));

@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+	public function findUser($value)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+
+		$qb->select('u')
+		->from('MongoboxUsersBundle:User', 'u')
+		->where("u.login LIKE :value")
+		->orWhere("u.firstname LIKE :value")
+		->orWhere("u.lastname LIKE :value")
+		->orderBy('u.login', 'ASC')
+		->setMaxResults(10)
+		->setParameters( array(
+				'value' => '%'.$value.'%'
+		));
+
+		$query = $qb->getQuery();
+		return $query->getResult();
+	}
 }
