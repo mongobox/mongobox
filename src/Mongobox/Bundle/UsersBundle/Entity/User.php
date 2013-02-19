@@ -97,12 +97,12 @@ class User implements AdvancedUserInterface
     /**
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
      */
-	private $tumblr_vote;
+	protected $tumblr_vote;
 	
 	/**
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
 	 **/
-	private $videos;
+	protected $videos;
 
     /**
      * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
