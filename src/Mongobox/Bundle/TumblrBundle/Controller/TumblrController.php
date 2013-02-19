@@ -197,9 +197,12 @@ class TumblrController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 
         $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
+        
+        $ajax_request = $request->isXmlHttpRequest();
         return array
         (
-            'mongo_pute' => $mongo_pute
+            'mongo_pute' => $mongo_pute,
+        	'ajax_request' => $ajax_request
         );
     }
 

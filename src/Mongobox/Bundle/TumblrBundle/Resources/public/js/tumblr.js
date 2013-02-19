@@ -33,14 +33,10 @@ var tumblr = tumblr || {};
 		$('body').on('click', "img."+tumblr.classImg , function(e)
         {
 			e.preventDefault();
-			//e.stopPropagation();
 			
             // Regex matching to get tumblr's id
 	        var pattern_regex_id = new RegExp(tumblr.regexClass+'-(\\d+)');
 	    	var tumblr_id = $(this).attr('class').match(pattern_regex_id)[1];
-	    	
-	    	console.log(tumblr.tumblr_id_displayed);
-	    	console.log(tumblr.classImg);
 	    	
 	    	// Doesn't execute the code below if it's the same tumblr clicked
 	    	if( tumblr.tumblr_id_displayed == tumblr_id )

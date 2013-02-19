@@ -24,7 +24,7 @@ function loadVideoEnCours()
 		function( html )
 		{
 			$('#video_en_cours').html(html);
-			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'})
+			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
 		});
 
     $('#statistiques').load(basepath + 'statistiques');
@@ -32,7 +32,7 @@ function loadVideoEnCours()
 function loadRSS()
 {
     $('#flux_rss').load(basepath + 'flux_rss');
-    $('#tumblr').load(basepath + 'mongo-pute/tumblr');
+    $('#tumblr').load(basepath + 'tumblr/tumblr');
 }
 function btn_submit_video()
 {
@@ -82,7 +82,7 @@ $(document).ready(function()
 			if(infos.type == 'new')
 			{
 				$('.loader').hide();
-				$('#form_video').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>')
+				$('#form_video').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
 				$('#btnSubmitVideo').bind('click', function(e)
 				{
 					$('.loader').show();
