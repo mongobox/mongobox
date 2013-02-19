@@ -505,6 +505,15 @@ class User implements AdvancedUserInterface
 		}
 		return $groups_ids;
 	}
+	
+	public function isMemberFrom($group)
+	{
+		foreach($this->getGroups() as $group_user)
+		{
+			if($group_user->getId() == $group->getId()) return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Encode le mot de passe
