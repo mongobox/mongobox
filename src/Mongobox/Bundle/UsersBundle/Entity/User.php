@@ -506,11 +506,11 @@ class User implements AdvancedUserInterface
 		return $groups_ids;
 	}
 	
-	public function isMemberFrom($group)
+	public function isMemberFrom($id_group)
 	{
 		foreach($this->getGroups() as $group_user)
 		{
-			if($group_user->getId() == $group->getId()) return true;
+			if($group_user->getId() == $id_group) return true;
 		}
 		return false;
 	}

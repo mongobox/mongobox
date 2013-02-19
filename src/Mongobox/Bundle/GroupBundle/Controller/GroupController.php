@@ -83,7 +83,7 @@ class GroupController extends Controller
         $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 		$session = $request->getSession();
-		if($user->isMemberFrom($group))
+		if($user->isMemberFrom($group->getId()))
 		{
 			//On créer le formulaire en utilisant un utilisateur vide
 			$form = $this->createForm(new GroupType(), $group);
@@ -149,7 +149,7 @@ class GroupController extends Controller
 		if($group->getPrivate())
 		{
 			$user = $this->get('security.context')->getToken()->getUser();
-			if($user->isMemberFrom($group))
+			if($user->isMemberFrom($group->getId()))
 			{
 				$em = $this->getDoctrine()->getManager();
 
@@ -209,7 +209,7 @@ class GroupController extends Controller
 	public function changeGroupAction(Request $request, $id_group)
 	{
 		$user = $this->get('security.context')->getToken()->getUser();
-		if($user->isMemberFrom($group))
+		if($user->isMemberFrom($id_group))
 		{
 			$session = $request->getSession();
 			$session->set('id_group', $id_group);
