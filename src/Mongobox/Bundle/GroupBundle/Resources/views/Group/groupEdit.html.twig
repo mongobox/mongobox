@@ -13,4 +13,10 @@
 			<input type="submit" class="btn btn-primary pull-right" value="Créer">
 		</div>
 	</form>
+	<h2>Utilisateurs du groupe</h2>
+	<div class="content-block">
+		{% for user in group.users %}
+			{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" %}
+		{% endfor %}
+	</div>
 {% endblock body %}
