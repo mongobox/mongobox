@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Cookie;
 
 use Mongobox\Bundle\GroupBundle\Entity\Group;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 use Mongobox\Bundle\GroupBundle\Form\GroupType;
 use Mongobox\Bundle\UsersBundle\Form\UserSearchType;
 
@@ -74,34 +75,42 @@ class GroupController extends Controller
 
     /**
      * @Template()
-     * @Route( "/edit", name="group_edit")
+     * @Route( "/edit/{id}", name="group_edit")
+     * @ParamConverter("group", class="MongoboxGroupBundle:Group")
      */
-    public function groupEditAction(Request $request)
+    public function groupEditAction(Request $request, Group $group)
     {
         $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-
-		//On créer le formulaire en utilisant un utilisateur vide
-		$form = $this->createForm(new GroupType(), $group);
-
-		if('POST' === $request->getMethod())
+		if($user->isMemberFrom($group->getId()))
 		{
-			$form->bind($request);
-			if($form->isValid())
+			//On créer le formulaire en utilisant un utilisateur vide
+			$form = $this->createForm(new GroupType(), $group);
+
+			if('POST' === $request->getMethod())
 			{
-				$em->flush();
+				$form->bind($request);
+				if($form->isValid())
+				{
+					$em->flush();
 
-				$this->get('session')->setFlash('success', 'Groupe édité avec succès');
+					$this->get('session')->setFlash('success', 'Groupe édité avec succès');
 
-				return $this->redirect($this->generateUrl('homepage'));
+					return $this->redirect($this->generateUrl('homepage'));
+				}
 			}
-		}
 
-		return array(
-				'form' => $form->createView()
-		);
+			return array(
+				'form' => $form->createView(),
+				'group' => $group
+			);
+		}
+		else
+		{
+			$this->get('session')->setFlash('notice', 'Vous n\'avez pas le droit de modifier ce groupe');
+			return $this->redirect($this->generateUrl('homepage'));
+		}
 	}
 
 	/**
@@ -139,32 +148,56 @@ class GroupController extends Controller
     {
 		if($group->getPrivate())
 		{
-			$em = $this->getDoctrine()->getManager();
-
-			//On créer le formulaire en utilisant un utilisateur vide
-			$form = $this->createForm(new UserSearchType());
-
-			if('POST' === $request->getMethod())
+			$user = $this->get('security.context')->getToken()->getUser();
+			if($user->isMemberFrom($group->getId()))
 			{
-				$form->bind($request);
-				if($form->isValid())
-				{
-					$user = $form->get('user')->getData();
-					if(is_object($user))
-					{
-						$group->getUsersInvitations()->add($user);
-						$em->flush();
+				$em = $this->getDoctrine()->getManager();
 
-						$this->get('session')->setFlash('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
-						return $this->redirect($this->generateUrl('homepage'));
+				//On créer le formulaire en utilisant un utilisateur vide
+				$form = $this->createForm(new UserSearchType());
+
+				if('POST' === $request->getMethod())
+				{
+					$form->bind($request);
+					if($form->isValid())
+					{
+						$user = $form->get('user')->getData();
+						if(is_object($user))
+						{
+							$group->getUsersInvitations()->add($user);
+							$em->flush();
+
+							$this->get('session')->setFlash('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
+							return $this->redirect($this->generateUrl('homepage'));
+						}
 					}
 				}
+				return array(
+						'form' => $form->createView(),
+						'group' => $group
+				);
 			}
-			return array(
-					'form' => $form->createView(),
-					'group' => $group
-			);
 		}
+	}
+
+    /**
+     * @Template()
+     * @Route( "/accept_invite/{id}/{id_user}", name="group_accept_invite")
+     * @ParamConverter("group", class="MongoboxGroupBundle:Group")
+     * @ParamConverter("user", class="MongoboxUsersBundle:User")
+     */
+    public function groupAcceptInviteAction(Request $request, Group $group, User $user)
+    {
+		$em = $this->getDoctrine()->getManager();
+
+		//Suppression de l'invitation
+		$group->getUsersInvitations()->removeElement($user);
+		//Ajout au groupe
+		$group->getUsers()->add($user);
+		$em->flush();
+
+		$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+		return $this->redirect($this->generateUrl('homepage'));
 	}
 
 	/**
@@ -175,15 +208,17 @@ class GroupController extends Controller
 	 */
 	public function changeGroupAction(Request $request, $id_group)
 	{
-		$em = $this->getDoctrine()->getManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		if($user->isMemberFrom($id_group))
+		{
+			$session = $request->getSession();
+			$session->set('id_group', $id_group);
 
-		$session = $request->getSession();
-		$session->set('id_group', $id_group);
+			//On met l'id du groupe en cookie
+			$response = new RedirectResponse($this->generateUrl('wall_index')); 
+			$response->headers->setCookie(new Cookie('id_group', $id_group));
 
-		//On met l'id du groupe en cookie
-		$response = new RedirectResponse($this->generateUrl('wall_index')); 
-		$response->headers->setCookie(new Cookie('id_group', $id_group));
-
-		return $response;
+			return $response;
+		}
 	}
 }

@@ -18,6 +18,18 @@
 					<li>
 						<a href="{{path('group_index')}}" title="Groupes">Liste des Groupes</a>
 					</li>
+					{% if app.user.groupsInvitations|length > 0 %}
+					<li class="dropdown-submenu pull-left">
+						<a href="" title="Invitations">{{app.user.groupsInvitations|length}} invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}</a>
+						<ul class="dropdown-menu">
+							{% for invitation in app.user.groupsInvitations %}
+								<li>
+									<a href="{{path('group_accept_invite', {'id' : invitation.id, 'id_user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</li>
+					{% endif %}
 					<li class="divider"></li>
 					{% for group in app.user.groups %}
 						<li class="dropdown-submenu pull-left">
