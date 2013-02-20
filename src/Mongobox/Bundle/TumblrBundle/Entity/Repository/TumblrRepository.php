@@ -36,20 +36,60 @@ class TumblrRepository extends EntityRepository
 		return $query->getResult();
 	}
 
+	public function findOneByGroup($tumblrId, $groups )
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+
+		$qb->select('t')
+		->from('MongoboxTumblrBundle:Tumblr', 't')
+		->leftJoin('t.groups', 'g')
+		->where("g.id IN (:groups)")
+        ->andWhere('t.id_tumblr=:tumblrId')
+		->groupBy('t.id_tumblr')
+        ->setMaxResults(1)
+		->setParameters( array(
+				'groups' => $groups ,
+				'tumblrId' => $tumblrId
+		));
+
+		$query = $qb->getQuery();
+
+        try{
+            $result = $query->getSingleResult();
+            return $result;
+        }
+        catch (\Doctrine\ORM\NoResultException $e){
+            return false;
+        }
+	}
+
     /**
      * Function to get next tumblr
      *
-     * @param string|int $entityId
+     * @param string|int $tumblrId
      * @return boolean|array
      */
-    public function getNextEntity( $entityId )
+    public function getNextEntity( $tumblrId, $groups )
     {
-        $query = $this->getEntityManager()
-            ->createQuery('SELECT t.id_tumblr,t.text FROM MongoboxTumblrBundle:Tumblr t WHERE t.id_tumblr > :entityId ORDER BY t.id_tumblr')
-            ->setParameter('entityId', $entityId)
-            ->setFirstResult(0)
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('t.id_tumblr,t.text')
+            ->from('MongoboxTumblrBundle:Tumblr', 't')
+            ->leftJoin('t.groups', 'g')
+            ->where("g.id IN (:groups)")
+            ->andWhere('t.id_tumblr > :tumblrId')
+            ->orderBy('t.id_tumblr', 'DESC')
+            ->groupBy('t.id_tumblr')
+            ->setParameters( array(
+                'groups' => $groups ,
+                'tumblrId' => $tumblrId
+            ))
             ->setMaxResults(1)
         ;
+
+        $query = $qb->getQuery();
 
         try{
             $result = $query->getSingleResult();
@@ -64,17 +104,29 @@ class TumblrRepository extends EntityRepository
     /**
      * Function to get prev tumblr
      *
-     * @param string|int $entityId
+     * @param string|int $tumblrId
      * @return boolean|array
      */
-    public function getPrevEntity( $entityId )
+    public function getPrevEntity( $tumblrId, $groups )
     {
-        $query = $this->getEntityManager()
-            ->createQuery('SELECT t.id_tumblr,t.text FROM MongoboxTumblrBundle:Tumblr t WHERE t.id_tumblr < :entityId ORDER BY t.id_tumblr DESC')
-            ->setParameter('entityId', $entityId)
-            ->setFirstResult(0)
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('t.id_tumblr,t.text')
+            ->from('MongoboxTumblrBundle:Tumblr', 't')
+            ->leftJoin('t.groups', 'g')
+            ->where("g.id IN (:groups)")
+            ->andWhere('t.id_tumblr < :tumblrId')
+            ->orderBy('t.id_tumblr', 'DESC')
+            ->groupBy('t.id_tumblr')
+            ->setParameters( array(
+                'groups' => $groups ,
+                'tumblrId' => $tumblrId
+            ))
             ->setMaxResults(1)
         ;
+
+        $query = $qb->getQuery();
 
         try {
             $result = $query->getSingleResult();

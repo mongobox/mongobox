@@ -27,6 +27,7 @@ class TumblrTagRepository extends EntityRepository
 			->where("t.name LIKE :tag")
 			->orderBy('t.name', 'ASC')
 			->setParameter('tag', $value.'%')
+            ->setMaxResults(10)
 		;
 			
 		$query = $qb->getQuery();
