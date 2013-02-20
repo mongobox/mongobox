@@ -105,7 +105,7 @@ class TumblrController extends Controller
     public function ajaxAutocompleteTagsAction(Request $request)
     {
         // récupération du mots clés en ajax selon la présélection du mot
-        $value = $request->get('tags');
+        $value = $request->get('term');
         $em = $this->getDoctrine()->getManager();
         $tumblrTagsRepository = $em->getRepository('MongoboxTumblrBundle:TumblrTag');
         $motscles = $tumblrTagsRepository->getTags($value);
@@ -251,20 +251,23 @@ class TumblrController extends Controller
      * @Route("/show/{id}", name="tumblr_show")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction(Request $request, $id)
     {
        // var_dump(__METHOD__,$id);exit;
         $em = $this->getDoctrine()->getManager();
 
+        $session = $request->getSession();
+        $user = $this->get('security.context')->getToken()->getUser();
+
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
-        $entityTumblr = $tumblrRepository->find($id);
+        $entityTumblr = $tumblrRepository->findOneByGroup($id, $user->getGroupsIds());
 
         if (!$entityTumblr) {
             throw $this->createNotFoundException('Unable to find Tumblr entity.');
         }
 
-        $entityNext = $tumblrRepository->getNextEntity($entityTumblr->getId());
-        $entityPrev = $tumblrRepository->getPrevEntity($entityTumblr->getId());
+        $entityNext = $tumblrRepository->getNextEntity($entityTumblr->getId(), $user->getGroupsIds());
+        $entityPrev = $tumblrRepository->getPrevEntity($entityTumblr->getId(), $user->getGroupsIds());
 
 
         return array(

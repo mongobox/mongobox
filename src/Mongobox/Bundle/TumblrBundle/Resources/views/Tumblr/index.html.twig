@@ -34,7 +34,7 @@
             {% if entity.tags is not empty %}
                 <div class="tags">
                     Tags:
-                    {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="#{{ tag.systemName }}">{{ tag.name }}</a>{% endfor %}
+                    {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('mongo_pute',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
                 </div>
             {% endif %}
 		</div>
