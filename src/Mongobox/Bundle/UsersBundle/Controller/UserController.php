@@ -72,6 +72,17 @@ class UserController extends Controller
 				{
 					$factory = $this->get('security.encoder_factory');
 
+					//Gestion de l'avatar
+					if($form->get('avatar')->getData() !== null)
+					{
+						$user->upload();
+					}
+					//Sinon, on remet l'ancien avatar
+					else
+					{
+						$user->setAvatar($old_user->getAvatar());
+					}
+
 					$user->setDateUpdate(new \DateTime());
 					$em->flush();
 					$this->get('session')->setFlash('success', 'Profil modifié avec succès');

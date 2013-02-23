@@ -595,6 +595,63 @@ class User implements AdvancedUserInterface
 		return 'http://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->getEmail() ) ) ).'?s='.$s;
 	}
 
+	/**
+	 * Retourne le chemin absolut vers l'avatar
+	 */
+    public function getAbsolutePath()
+    {
+        return null === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
+    }
+
+	/**
+	 * Retourne le chemin web vers l'avatar
+	 */
+    public function getAvatarWebPath()
+    {
+        return $this->getUploadDir().'/'.$this->avatar;
+    }
+
+	/**
+	 * Retourne le répertoire permetant l'upload
+	 */
+    public function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded documents should be saved
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+	/**
+	 * Retourne le répertoire permettant l'upload des avatars
+	 */
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
+        return 'avatars';
+    }
+    
+	/**
+	 * Permet l'upload de l'avatar, et la suppression des caches de thumbnail
+	 */
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->avatar)
+        {
+            return;
+        }
+
+        //Nom du fichier
+        $file = $this->id.'.'.$this->avatar->guessExtension();
+        // move takes the target directory and then the target filename to move to
+        $this->avatar->move($this->getUploadRootDir(), $file);
+        //Suppression des thumbnail déjà  en cache
+        @unlink(__DIR__.'/../../../../../web/imagine/avatar_thumbnail/avatars/'.$file);
+        @unlink(__DIR__.'/../../../../../web/imagine/avatar_mini/avatars/'.$file);
+
+        // set the path property to the filename where you'ved saved the file
+        $this->avatar = $file;
+    }    
+
 	//Génère un lastname utilisable via l'url
 	public function getLastnameUrl()
 	{

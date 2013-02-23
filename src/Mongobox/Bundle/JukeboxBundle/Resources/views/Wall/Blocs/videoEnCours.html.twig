@@ -12,8 +12,7 @@
 			
 			{% if video_en_cours.videoGroup.user is not empty %}
 			<div class="user-box">
-				<img src="{{ video_en_cours.videoGroup.user.gravatar }}" alt="{{ video_en_cours.videoGroup.user.login }}" class="photo-small" />
-				<span class="navbar-text">{{ video_en_cours.videoGroup.user.login }}</span>
+				{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {user : video_en_cours.videoGroup.user, avatarMini : true, loginClass : 'navbar-text'} %}
 			</div>
 			{% endif %}
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

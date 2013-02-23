@@ -12,7 +12,12 @@
                 <h2>Modification du compte</h2>
                 <form action="{{path('user_edit')}}" class="form-inline" method="POST" {{ form_enctype(form) }} novalidate>
                     {{ form_widget(form) }}
-                    <div class="container-btn clearfix">
+					<label>Avatar Actuel :</label>
+
+					<div class="controls">
+						{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : app.user, 'notext' : true} %}
+					</div>
+					<div class="container-btn clearfix">
                         <input type="submit" class="btn btn-large btn-primary pull-right" value="Enregistrer">
                     </div>
                 </form>
