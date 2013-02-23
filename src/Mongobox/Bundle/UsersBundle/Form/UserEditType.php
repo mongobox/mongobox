@@ -25,7 +25,12 @@ class UserEditType extends AbstractType
             ->add('email', 'text', array(
             	'label' => 'Email',
             	'attr' => array('size' => 40, 'placeholder' => 'Email'),
-            ));
+            ))
+            ->add('avatar', 'file', array(
+				'label' => 'Avatar',
+				'data_class' => null,
+				'required' => false
+			));
     }
 
     public function getName()
