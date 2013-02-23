@@ -22,8 +22,7 @@
 		<input type="hidden" id="id_video" value="{{video_group.id}}" /><br />
 		{% if video_group.user is not empty %}
 		<div class="user-box">
-			<img src="{{ video_group.user.avatar }}" alt="{{ video_group.user.login }}" />
-			{{ video_group.user.login }}
+			{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {user : video_group.user, avatarMini : true} %}
 		</div>
 		{% endif %}
 	</div>

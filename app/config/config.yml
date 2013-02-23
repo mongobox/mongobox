@@ -71,3 +71,17 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
+
+avalanche_imagine:
+    source_root:    %kernel.root_dir%/../web/
+    web_root:       %kernel.root_dir%/../web/
+    cache_prefix:   imagine
+    driver:         gd
+    filters:
+        #Si renommage ou ajout de filters, penser Ã  modifier les lignes de suppression de cache dans User->upload()
+        avatar_thumbnail:
+            type:    thumbnail
+            options: { size: [80, 80], mode: inbox }
+        avatar_mini:
+            type:    thumbnail
+            options: { size: [20, 20], mode: inbox }
