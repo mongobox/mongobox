@@ -42,7 +42,7 @@
 </div>
 
 {# Pagination #}
-{% set parameter = {} %}
+{% set parameter = current_filters  %}
 {% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'mongo_pute', 'parameter' : parameter, 'pagination' : pagination } %}
 
 {% endblock body %}

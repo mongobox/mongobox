@@ -12,27 +12,64 @@ use Doctrine\ORM\EntityRepository;
  */
 class TumblrRepository extends EntityRepository
 {
-	public function findLast($groups, $maxResults = 0, $firstResult = 0)
+    /**
+     * Function to build request in order to filter tumblrs
+     *
+     * @param $query
+     * @param array $params
+     * @param array $filters
+     * @return mixed
+     */
+    private function _buildRequestByFilters( $query, $params = array(), $filters = array() ){
+
+        if( isset($filters['tag']) && !empty($filters['tag']) ){
+            $query
+                ->innerJoin('t.tags', 'tt')
+                ->andWhere("tt.system_name LIKE :tag")
+            ;
+            $params['tag'] = $filters['tag'];
+        }
+
+        $query->setParameters( $params );
+
+        return $query;
+    }
+
+	public function findLast($groups, $maxResults = 0, $firstResult = 0, $filters = array() )
 	{
+        $params =  array(
+            'groups' => $groups
+        );
+
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
 
 		$qb->select('t')
-		->from('MongoboxTumblrBundle:Tumblr', 't')
-		->leftJoin('t.groups', 'g')
-		->where("g.id IN (:groups)")
-		->orderBy('t.date', 'DESC')
-		->groupBy('t.id_tumblr')
-		->setParameters( array(
-				'groups' => $groups
-		));
+            ->from('MongoboxTumblrBundle:Tumblr', 't')
+            ->leftJoin('t.groups', 'g')
+            ->where("g.id IN (:groups)")
+            ->orderBy('t.date', 'DESC')
+            ->groupBy('t.id_tumblr')
+        ;
+
 		if($maxResults != 0)
 		{
-			$qb->setMaxResults($maxResults)
-			->setFirstResult($firstResult);
+			$qb
+                ->setMaxResults($maxResults)
+			    ->setFirstResult($firstResult)
+            ;
 		}
 
+        if( !empty($filters) ){
+            $qb = $this->_buildRequestByFilters( $qb, $params, $filters );
+        }
+        else{
+            $qb->setParameters( $params );
+        }
+
+
 		$query = $qb->getQuery();
+
 		return $query->getResult();
 	}
 
