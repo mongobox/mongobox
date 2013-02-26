@@ -30,17 +30,25 @@ class TumblrController extends Controller
      */
     public function indexAction(Request $request, $page)
     {
+        $filters = array();
+        $tag = $request->get('tag');
+        if( $tag ){
+            $filters['tag'] = $tag;
+        }
+
         $em = $this->getDoctrine()->getManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
 
-        $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1));
+        $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1),$filters);
 
-        $nbPages = (int) (count($tumblrRepository->findLast($user->getGroupsIds()))  / $this->_limitPagination);
+        $nbTumblrEntities = count($tumblrRepository->findLast($user->getGroupsIds(),0,0,$filters));
+        $nbPages = (int) ceil($nbTumblrEntities / $this->_limitPagination);
 
         return array(
             'mongo_pute' => $entitiesMongoPute,
+            'current_filters' => $filters,
             'pagination' => array(
                     'page' => $page,
                     'page_total' => $nbPages,
