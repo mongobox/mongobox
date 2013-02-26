@@ -38,14 +38,14 @@ class TumblrTag
 	 *
 	 * @ORM\Column(name="system_name", type="string", length=255)
 	 */
-	private $system_name;
+	protected $system_name;
 
 	/**
 	 * @var string $title
 	 *
 	 * @ORM\Column(name="name", type="string", length=255)
 	 */
-	private $name;
+	protected $name;
 
 
 

@@ -1,0 +1,2 @@
+{% set nb_votes = tumblr.tumblrvote|length %}
+(<a class="tumblr-info-votes" id="note-globale-{{ tumblr.id }}" title="Score total : {{ tumblr.somme }}">{{ nb_votes }} vote{% if nb_votes > 1 %}s{% endif %}</a>)

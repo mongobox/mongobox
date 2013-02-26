@@ -139,6 +139,7 @@ class Tumblr
     
     public function getMoyenne()
     {
+    	if( count($this->tumblr_vote) == 0 ) return 0;
     	return round( $this->getSomme()/count($this->tumblr_vote), 2);
     }
 

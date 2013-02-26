@@ -180,7 +180,8 @@ class TumblrController extends Controller
         
         $retour = array(
         		'somme' => $tumblr_vote->getSomme(),
-        		'moyenne' => $tumblr_vote->getMoyenne()
+        		'moyenne' => $tumblr_vote->getMoyenne(),
+        		'info_vote' => $this->render('MongoboxTumblrBundle:Slider:infoVote.html.twig', array('tumblr' => $tumblr_vote))->getContent()
         );
 
         return new Response(json_encode($retour));
@@ -239,10 +240,12 @@ class TumblrController extends Controller
 		$tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
 		$class_tumblr = $request->request->get('class_tumblr');
 		
-		return $this->render('MongoboxTumblrBundle:Tumblr:popoverContent.html.twig', array(
-				'tumblr' => $tumblr,
-				'tumblr_class' => $class_tumblr
-		));
+		$retour = array(
+				'content' => $this->render('MongoboxTumblrBundle:Slider:popoverContent.html.twig', array('tumblr' => $tumblr,'tumblr_class' => $class_tumblr))->getContent(),
+				'title' => $this->render('MongoboxTumblrBundle:Slider:titlePopover.html.twig', array('tumblr' => $tumblr))->getContent()
+		);
+		
+		return new Response(json_encode($retour));
 	}
 
     /**

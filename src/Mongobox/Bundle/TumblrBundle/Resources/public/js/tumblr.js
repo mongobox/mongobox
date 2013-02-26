@@ -55,13 +55,18 @@ var tumblr = tumblr || {};
 	    	$.ajax({
 				type: 'POST',
 				data: { 'class_tumblr': tumblr.classImg },
+				dataType: 'json',
 				url: tumblr.pathToContent+tumblr_id,
 				success: function(data)
 				{
-					tumblr_image.attr('data-content', data);
+					tumblr_image.attr('data-content', data.content);
+					tumblr_image.attr('data-original-title', data.title);
 					tumblr_image.popover('show');
 					$('.popover-title').append('<button type="button" title="Fermer" class="close close-tumblr-popover" aria-hidden="true">&times;</button>');
-					tumblr.starRating(tumblr_id);
+					var selector = '#rating-'+tumblr.classImg+'-'+tumblr_id;
+					var score = $('#rating-'+tumblr.classImg+'-'+tumblr_id).attr('data-score');
+					tumblr.starRating(selector, score);
+					tumblr.initInfoVote();
 				}
 			});
         });
@@ -87,9 +92,9 @@ var tumblr = tumblr || {};
 	},
 
 	// Function to initialize rating
-	tumblr.starRating = function(tumblr_id)
+	tumblr.starRating = function(selector, score)
 	{
-		$('#rating-'+tumblr.classImg+'-'+tumblr_id).raty({
+		$(''+selector).raty({
 		    cancel: false,
 		    click : function(score, evt) 
 		    {
@@ -104,10 +109,11 @@ var tumblr = tumblr || {};
 				    success:function(data)
 				    {
 						// Changing the displayed note
-						$('#note-globale-'+tumblr_id).html('Note globale : '+data.somme);
-						$('#moyenne-'+tumblr_id).html('Moyenne : '+data.moyenne);
+						$('#moyenne-'+tumblr_id).html('Moyenne : '+data.moyenne+' ');
+						$('#moyenne-'+tumblr_id).append(data.info_vote);
 						$("."+tumblr.noteModel+"-"+tumblr_id).val(data.somme);
 						$("."+tumblr.userModel+"-"+tumblr_id).val(score);
+						tumblr.initInfoVote();
 				    }
 				});
 		    },
@@ -115,11 +121,24 @@ var tumblr = tumblr || {};
 		    hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
 		    number: 5,
 		    path: tumblr.pathToImg,
-		    score: $('#rating-'+tumblr.classImg+'-'+tumblr_id).attr('data-score'),
+		    score: score,
 		    size: 24,
 		    starHalf: 'star-half-big.png',
 		    starOff: 'star-off-big.png',
 		    starOn: 'star-on-big.png'
 		});
+	},
+	
+	tumblr.initScoreRating = function()
+	{
+		$('.star').each(function(index,element)
+		{
+			$(this).raty('score', $(element).siblings('.score_user').val() );
+		});
+	},
+	
+	tumblr.initInfoVote = function()
+	{
+		$('.tumblr-info-votes').tooltip();
 	};
 })(jQuery);
