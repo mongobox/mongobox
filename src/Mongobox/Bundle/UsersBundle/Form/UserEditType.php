@@ -26,6 +26,10 @@ class UserEditType extends AbstractType
             	'label' => 'Email',
             	'attr' => array('size' => 40, 'placeholder' => 'Email'),
             ))
+            ->add('nsfw_mode', 'checkbox', array(
+                'label' => 'Mode NSFW',
+                'required' => false,
+            ))
             ->add('avatar', 'file', array(
 				'label' => 'Avatar',
 				'data_class' => null,

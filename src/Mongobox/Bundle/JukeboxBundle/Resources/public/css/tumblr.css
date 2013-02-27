@@ -56,3 +56,20 @@
 .tumblr-row-page{
     position: relative;
 }
+
+.nsfw-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.nsfw-mask.active {
+    background: #333333 url('../img/nsfw.png') top left no-repeat;
+    cursor: pointer;
+}
+
+.tumblr-img-bloc {
+    display: inline-block;
+    position: relative;
+}

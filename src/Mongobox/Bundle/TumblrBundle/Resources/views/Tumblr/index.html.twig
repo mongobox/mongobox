@@ -3,6 +3,7 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
+
 <div class="marketing">
 
 	<h1><img src="{{ asset('bundles/Mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
@@ -11,7 +12,7 @@
 <div class="vote"></div>
 <div class="hero-unit" style="text-align:center;">
 	{% for entity in mongo_pute %}
-		<div class="row">
+		<div class="row {% if entity.hasTag('nsfw') and app.user.nsfwmode %}nswf-elt{% endif %}">
 			{% if loop.index > 1 %}
 				<hr />
 			{% endif %}
@@ -23,12 +24,17 @@
             <div class="star" id="rating-{{ entity.id }}"></div>
             <input type="hidden" id="note-tumblr-{{ entity.id }}" class="tumblr_id" value="{{ entity.id }}"/>
             <input type="hidden" id="note-user-{{ entity.id }}" class="score_user" value="{{ app.user.getNoteForTumblr(entity.id) }}" />
-            
-            {% if entity.localPath is null %}
-                <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
-            {% else %}
-                <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
-            {% endif %}
+
+            <span class="tumblr-img-bloc">
+                {% if entity.hasTag('nsfw') and app.user.nsfwmode %}
+                <span class="nsfw-mask active" title="Cliquer pour afficher l'image"></span>
+                {% endif %}
+                {% if entity.localPath is null %}
+                    <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+                {% else %}
+                    <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+                {% endif %}
+            </span>
 
             {# Tags list #}
             {% if entity.tags is not empty %}
@@ -90,6 +96,10 @@
 		{
 			$(element).raty('score', $(element).siblings('.score_user').val());
 		});
+
+        $('.nsfw-mask').click(function(){
+           $(this).toggleClass('active');
+        });
 	});
 </script>
 {% endblock javascripts %}

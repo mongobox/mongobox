@@ -95,6 +95,11 @@ class User implements AdvancedUserInterface
     protected $last_connect;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $nsfw_mode;
+
+    /**
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
      */
 	protected $tumblr_vote;
@@ -118,7 +123,8 @@ class User implements AdvancedUserInterface
     {
 		//valeurs par défaut
     	$this->date_create = new \DateTime();
-		$this->actif = 1;
+        $this->actif = 1;
+        $this->nsfw_mode = 0;
 		$this->groups = new ArrayCollection();
 		$this->groups_invitations = new ArrayCollection();
     }
@@ -397,6 +403,29 @@ class User implements AdvancedUserInterface
     public function getLastConnect()
     {
         return $this->last_connect;
+    }
+
+    /**
+     * Set the value of nsfw_mode
+     *
+     * @param integer $last_connect
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User
+     *
+     */
+    public function setNsfwMode($nsfw)
+    {
+        $this->nsfw_mode = $nsfw;
+        return $this;
+    }
+
+    /**
+     * Get the value of nsfw_mode
+     *
+     * @return boolean
+     */
+    public function getNsfwMode()
+    {
+        return $this->nsfw_mode;
     }
 
     /**
