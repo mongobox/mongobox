@@ -30,7 +30,7 @@
                     <label class="control-label" for="tumblr_addtags">{{ form_label(form.addtags)  }}</label>
                     <div class="controls manage-tags-container">
                         <div class="input-append manage-tags">
-                            {{ form_widget(form.addtags)  }}<button id="tumblr-button-add-tag" class="btn" type="button"><i class="icon-chevron-right"></i></button>
+                            {{ form_widget(form.addtags)  }}<button id="tumblr-button-add-tag" class="btn" type="button" title="Cliquez ici pour ajouter le tag"><i class="icon-plus"></i></button>
                         </div>
                         {% set tagDataPrototype = '<span>__name__</span><button class="close" >&times;</button><input type="hidden" name="tumblr[tags][]" value="__id__" />' %}
                         <div id="tumblr_tags" class="tags pull-right manage-tags" data-prototype="{{ tagDataPrototype }}">
