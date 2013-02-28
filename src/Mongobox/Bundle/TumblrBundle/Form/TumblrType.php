@@ -26,7 +26,7 @@ class TumblrType extends AbstractType
     {
         $builder
             ->add('image', 'text', array(
-            	'label' => 'Lien vers l\'image'
+            	'label' => 'URL image'
             ))
             ->add('text', 'text', array(
             	'label' => 'Texte'
@@ -43,9 +43,7 @@ class TumblrType extends AbstractType
                 'property_path' => false
             ))
             ->add('tags', 'hidden', array(
-                'data' => array('toto',"titi"),
                 'property_path' => false
-
             ))
             ->add('groups', 'choice', array(
                 'label' => 'Partager dans ces groupes',

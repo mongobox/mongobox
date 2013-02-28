@@ -63,7 +63,8 @@ class TumblrController extends Controller
             throw $this->createNotFoundException('Unable to find Tumblr entity.');
         }
 
-        $editForm = $this->createForm(new TumblrType(), $entity);
+        $groups =$this->get('security.context')->getToken()->getUser()->getGroups();
+        $editForm = $this->createForm(new TumblrType($groups), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -91,10 +92,30 @@ class TumblrController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new TumblrType(), $entity);
+
+        $groups =$this->get('security.context')->getToken()->getUser()->getGroups();
+        $editForm = $this->createForm(new TumblrType($groups), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
+            // Set Tags
+           /* $tagsCollection = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach($editForm->get('tags')->getData() as $tag_id)
+            {
+                $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
+                //$entityTag->getTumblrs()->add($tumblr);
+                $tagsCollection[] = $entityTag;
+            }
+
+            $entity->setTags($tagsCollection );       */
+           // var_dump('<pre>',$editForm->get('tags')->getData());exit;
+
+           /* foreach($editForm->get('groups')->getData() as $group_id)
+            {
+                $group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+                $group->getTumblrs()->add($entity);
+            }                               */
+
             $em->persist($entity);
             $em->flush();
 
