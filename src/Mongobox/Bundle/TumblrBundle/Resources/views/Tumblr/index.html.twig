@@ -55,41 +55,41 @@
 
 {% block javascripts %}
 <script>
-    $('.star').raty({
-        cancel: false,
-        click : function(score, evt)
-        {
-            //var tumblr_id = $(this).siblings('.tumblr_id').val();
-            var pattern_regex_id = new RegExp('rating-(\\d+)');
-            var tumblr_id = $(this).attr('id').match(pattern_regex_id)[1];
+	$('.star').raty({
+	    cancel: false,
+	    click : function(score, evt)
+	    {
+		    //var tumblr_id = $(this).siblings('.tumblr_id').val();
+		    var pattern_regex_id = new RegExp('rating-(\\d+)');
+			var tumblr_id = $(this).attr('id').match(pattern_regex_id)[1];
 
-            // Ajax request to submit vote and refresh the displayed one
-            $.ajax({
-                type: 'POST',
-                url: basepath+"tumblr/vote/"+tumblr_id+"/"+score,
-                dataType: 'json',
-                success:function(data)
-                {
-                    // Changing the displayed note
-                    $('#note-globale-'+tumblr_id).html('Note globale : '+data.somme);
-                    $('#moyenne-'+tumblr_id).html('Moyenne : '+data.moyenne);
-                    $("#note-tumblr-"+tumblr_id).val(data);
-                    $("#note-user-"+tumblr_id).val(score);
-                }
-            });
-        },
-        half: true,
-        hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
-        number: 5,
-        path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
-        score: 1,
-        size: 24,
-        starHalf: 'star-half-big.png',
-        starOff: 'star-off-big.png',
-        starOn: 'star-on-big.png',
-        width: 160
-    });
-    
+			// Ajax request to submit vote and refresh the displayed one
+			$.ajax({
+			    type: 'POST',
+			    url: basepath+"tumblr/vote/"+tumblr_id+"/"+score,
+			    dataType: 'json',
+			    success:function(data)
+			    {
+					// Changing the displayed note
+					$('#note-globale-'+tumblr_id).html('Note globale : '+data.somme);
+					$('#moyenne-'+tumblr_id).html('Moyenne : '+data.moyenne);
+					$("#note-tumblr-"+tumblr_id).val(data);
+					$("#note-user-"+tumblr_id).val(score);
+			    }
+			});
+	    },
+	    half: true,
+	    hints: ['Bouhhhh !', 'Peut faire mieux', 'Bof', 'Pas mal !', 'MONGOOOOOO !'],
+	    number: 5,
+	    path: "{{ asset('bundles/Mongoboxjukebox/img/') }}",
+	    score: 1,
+	    size: 24,
+	    starHalf: 'star-half-big.png',
+	    starOff: 'star-off-big.png',
+	    starOn: 'star-on-big.png',
+	    width: 160
+	});
+
 	$(function()
 	{
 		$('.star').each( function(index, element)
