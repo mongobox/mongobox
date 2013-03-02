@@ -139,7 +139,7 @@ class Tumblr
     
     public function getMoyenne()
     {
-    	if( count($this->tumblr_vote) == 0 ) return 0;
+        if( count($this->tumblr_vote) == 0 ) return 0;
     	return round( $this->getSomme()/count($this->tumblr_vote), 2);
     }
 
@@ -204,5 +204,22 @@ class Tumblr
     public function setTags(ArrayCollection $tags) {
         $this->tags = $tags;
         return $this;
+    }
+
+    /**
+     * Check if entity has a certain tag
+     *
+     * @param string $tag the tag system name
+     * @return boolean
+     */
+    public function hasTag($tag)
+    {
+        foreach($this->tags as $tagElt) {
+            if($tagElt->getSystemName() == $tag) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

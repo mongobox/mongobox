@@ -30,7 +30,7 @@ var tumblr = tumblr || {};
 	// Function to observe the hover event on tumblr img
 	tumblr.listenHoverImg = function()
 	{
-		$('body').on('click', "img."+tumblr.classImg , function(e)
+		$('body').on('click', "."+tumblr.classImg , function(e)
         {
 			e.preventDefault();
 			
