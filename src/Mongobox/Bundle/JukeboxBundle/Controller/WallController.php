@@ -270,7 +270,6 @@ class WallController extends Controller
     }
 
     /**
-     * @Template("MongoboxJukeboxBundle:Wall/Blocs:videoEnCours.html.twig")
      * @Route( "/video_en_cours", name="video_en_cours")
      */
     public function videoEnCoursAction(Request $request)
@@ -289,15 +288,18 @@ class WallController extends Controller
 			$somme = 0;
 		}
 
-        return array(
+		$render = $this->render(
+            'MongoboxJukeboxBundle:Wall/Blocs:videoEnCours.html.twig',
+            array(
             'video_en_cours' => $video_en_cours,
             'date_actuelle' => new \Datetime(),
             'somme' => $somme
-        );
+        ));
+		$json = array('html' => $render->getContent());
+        return new Response(json_encode($json));
     }
 
     /**
-     * @Template("MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig")
      * @Route( "/statistiques", name="statistiques")
      */
     public function statistiquesAction(Request $request)
@@ -319,14 +321,20 @@ class WallController extends Controller
 			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
-			return array(
-				'video_en_cours' => $video_en_cours,
-				//'total_video' => $total_video,
-				'playlist' => $playlist,
-				'videos_historique' => $videos_historique,
-				'somme_pl' => $somme_pl
+			$render = $this->render(
+				'MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig',
+				array(
+					'video_en_cours' => $video_en_cours,
+					//'total_video' => $total_video,
+					'playlist' => $playlist,
+					'videos_historique' => $videos_historique,
+					'somme_pl' => $somme_pl
+				)
 			);
+			$json = array('html' => $render->getContent());
 		}
+		else $json = array('html' => '');
+        return new Response(json_encode($json));
     }
 
     /**

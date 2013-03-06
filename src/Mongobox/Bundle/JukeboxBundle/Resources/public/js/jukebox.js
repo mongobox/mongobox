@@ -18,22 +18,39 @@ function loadVideoEnCours()
 
 	$.ajax({
 			type: "GET",
-			dataType: "html",
+			dataType: "json",
 			url: basepath + 'video_en_cours'
 		}).done(
-		function( html )
+		function( json )
 		{
-			$('#video_en_cours').html(html);
+			$('#video_en_cours').html(json.html);
 			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
+		}).fail(
+		function()
+		{
+			clearInterval(refreshLoadVideoEnCours);
 		});
 
-    $('#statistiques').load(basepath + 'statistiques');
+	$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: basepath + 'statistiques'
+		}).done(
+		function( json )
+		{
+			$('#statistiques').html(json.html);
+		}).fail(
+		function()
+		{
+			clearInterval(refreshLoadVideoEnCours);
+		});
 }
-function loadRSS()
+var loadRSS = function()
 {
     $('#flux_rss').load(basepath + 'flux_rss');
     $('#tumblr').load(basepath + 'tumblr/tumblr');
 }
+
 function btn_submit_video()
 {
 	$.ajax({
@@ -96,8 +113,9 @@ $(document).ready(function()
 
 	$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
 
-    setInterval( "loadVideoEnCours()", 5000 );
-    setInterval( "loadRSS()", 300000 );
-	
+    setInterval( loadRSS, 300000 );
+
 	loadRSS();
 });
+
+var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
