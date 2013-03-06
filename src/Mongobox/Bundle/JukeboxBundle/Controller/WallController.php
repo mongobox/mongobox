@@ -55,7 +55,7 @@ class WallController extends Controller
 		{
 			$session = $request->getSession();
 
-			//Si on a pas déjà de communauté définie, on va en trouver une
+			//Si on a pas déjà de groupe défini, on va en trouver une
 			if(is_null($session->get('id_group')))
 			{
 				//On regarde si ya un cookie
@@ -70,19 +70,19 @@ class WallController extends Controller
 				$session->set('id_group', $id_group);
 			}
 			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
-			$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+			//$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-			$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
-			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);
-			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $group);
-			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+			//$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($id_group));
+			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $id_group);
+			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $id_group);
+			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $id_group, 'current' => 1));
 			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
 			else $somme = 0;
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
 			return array
 			(
-				'total_video' => $total_video,
+				//'total_video' => $total_video,
 				'playlist' => $playlist,
 				'videos_historique' => $videos_historique,
 				'video_en_cours' => $video_en_cours,
@@ -276,11 +276,9 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
-		$group = null;
-		if(!is_null($session->get('id_group'))) $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-		if(is_object($group))
+		if(!is_null($session->get('id_group')))
 		{
-			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
 			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
 			else $somme = 0;
 		}
@@ -289,7 +287,6 @@ class WallController extends Controller
 			$video_en_cours = null;
 			$somme = 0;
 		}
-		$video = new Videos();
 
         return array(
             'video_en_cours' => $video_en_cours,
@@ -306,25 +303,24 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
 		$user->getGroups();
 
 		//Si l'utilisateur a au moins un groupe
 		if(count($user->getGroups()) > 0)
 		{
 			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
-			$group = $em->getRepository('MongoboxGroupBundle:Group')->find(1);
+			//$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-			$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
-			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);
-			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $group);
-			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-			else $somme = 0;
+			//$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
+			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $session->get('id_group'));
+			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $session->get('id_group'));
+			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
 			return array(
 				'video_en_cours' => $video_en_cours,
-				'total_video' => $total_video,
+				//'total_video' => $total_video,
 				'playlist' => $playlist,
 				'videos_historique' => $videos_historique,
 				'somme_pl' => $somme_pl
