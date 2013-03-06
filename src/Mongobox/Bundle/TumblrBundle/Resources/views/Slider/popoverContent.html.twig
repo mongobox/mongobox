@@ -1,6 +1,5 @@
 <div id="vote-mongo">
-	<div id="moyenne-{{ tumblr.id }}" class="moyenne-globale">Moyenne : {{ tumblr.moyenne }} {% include 'MongoboxTumblrBundle:Slider:infoVote.html.twig' %}</div>
-	<div class="star" id="rating-{{ tumblr_class }}-{{ tumblr.id }}" data-score="{{ app.user.getNoteForTumblr(tumblr.id) }}"></div>
+	{% include 'MongoboxTumblrBundle:Slider:vote.html.twig' %}
 </div>
 <div class="tags-diffusion">
 	{% for tag in tumblr.tags %}

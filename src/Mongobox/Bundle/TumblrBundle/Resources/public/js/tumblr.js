@@ -39,7 +39,7 @@ var tumblr = tumblr || {};
 	    	var tumblr_id = $(this).attr('class').match(pattern_regex_id)[1];
 	    	
 	    	// Doesn't execute the code below if it's the same tumblr clicked
-	    	if( tumblr.tumblr_id_displayed == tumblr_id )
+	    	if( tumblr.tumblr_id_displayed === tumblr_id )
 	    	{ 
 	    		$('.'+tumblr.classImg).popover('hide');
 	    		tumblr.tumblr_id_displayed = 0;
@@ -131,9 +131,9 @@ var tumblr = tumblr || {};
 	
 	tumblr.initScoreRating = function()
 	{
-		$('.star').each(function(index,element)
+		$('.star').each(function()
 		{
-			$(this).raty('score', $(element).siblings('.score_user').val() );
+			$(this).raty('score', $(this).attr('data-score'));
 		});
 	},
 	
