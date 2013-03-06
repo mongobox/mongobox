@@ -69,6 +69,7 @@ class WallController extends Controller
 				}
 				$session->set('id_group', $id_group);
 			}
+			else $id_group = $session->get('id_group');
 			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
 			//$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
