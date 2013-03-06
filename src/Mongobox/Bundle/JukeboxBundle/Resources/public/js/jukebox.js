@@ -49,9 +49,6 @@ function btn_submit_video()
 
 $(document).ready(function()
 {
-    setInterval( "loadVideoEnCours()", 5000 );
-    setInterval( "loadRSS()", 300000 );
-
 	$('#post-video-modal').on('show', function () {
 		$('.loader').show();
 		$('#post-video-modal .modal-content').html('');
@@ -98,4 +95,9 @@ $(document).ready(function()
 	});
 
 	$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
+
+    setInterval( "loadVideoEnCours()", 5000 );
+    setInterval( "loadRSS()", 300000 );
+	
+	loadRSS();
 });
