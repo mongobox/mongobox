@@ -21,9 +21,9 @@ function loadVideoEnCours()
 			dataType: "json",
 			url: basepath + 'video_en_cours'
 		}).done(
-		function( json )
+		function( html )
 		{
-			$('#video_en_cours').html(json.html);
+			$('#video_en_cours').html(html);
 			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
 		});
 
@@ -32,10 +32,10 @@ function loadVideoEnCours()
 			dataType: "json",
 			url: basepath + 'statistiques'
 		}).done(
-		function( json )
+		function( html )
 		{
 			refreshFail = 0;
-			$('#statistiques').html(json.html);
+			$('#statistiques').html(html);
 		}).fail(
 		function()
 		{
