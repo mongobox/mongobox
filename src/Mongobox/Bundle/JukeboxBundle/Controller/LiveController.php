@@ -128,10 +128,24 @@ class LiveController extends Controller
 			$playerStart = 0;
 		}
 
-		if ($playerMode != 'admin') {
+		if($playerMode == 'mobile')  {
+			$playerWidth 	= '390';
+			$playerHeight	= '220';
+			
+			$playerVars		= '{ start: '. $playerStart.', autoplay: 1,mode:"opaque" }';
+			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
+		}
+		elseif ($playerMode != 'admin' && $playerMode !='mobile') {
+			$playerWidth 	= '800px';
+			$playerHeight	= '500px';
+			
 			$playerVars		= "{ controls: 0, disablekb: 1, start: $playerStart, autoplay: 1 }";
 			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
-		} else {
+		} 
+		else {
+			$playerWidth 	= '800px';
+			$playerHeight	= '500px';
+			
 			$playerVars		= "{ start: $playerStart, autoplay: 1 }";
 			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
 		}
@@ -142,6 +156,8 @@ class LiveController extends Controller
     		'player_mode'	=> $playerMode,
     		'player_vars'	=> $playerVars,
     		'player_events'	=> $playerEvents,
+			'player_width'	=> $playerWidth,
+			'player_height'	=> $playerHeight,
     		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001"
     	);
     }

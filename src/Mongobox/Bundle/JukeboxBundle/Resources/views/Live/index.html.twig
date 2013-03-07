@@ -43,10 +43,10 @@
 	          	{
 					$(document).ready(function() {
 		          		player = new YT.Player('player', {
-		          			height: '500px',
-		          			width: '800px',
+		          			height: '{{ player_height }}',
+		          			width: '{{ player_width }}',
 		          			videoId: '{{ current_video.videoGroup.video.lien }}',
-		          			playerVars: {{ player_vars }},
+		          			playerVars: {{ player_vars|raw }},
 		          			events: {{ player_events }}
 		          		});
 					});

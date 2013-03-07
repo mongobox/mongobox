@@ -17,6 +17,14 @@
             <th>Date</th>
             <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
         </tr>
+		<tr>
+            <th>Video</th>
+            <td>
+				<iframe class="youtube-player" type="text/html" width="432" height="270" style="max-width:100%;" src="http://www.youtube.com/embed/{{ entity.lien }}?wmode=opaque" frameborder="0"></iframe>
+			</td>
+        </tr>
+		
+		
     </tbody>
 </table>
 
