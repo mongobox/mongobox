@@ -25,10 +25,6 @@ function loadVideoEnCours()
 		{
 			$('#video_en_cours').html(json.html);
 			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
-		}).fail(
-		function()
-		{
-			clearInterval(refreshLoadVideoEnCours);
 		});
 
 	$.ajax({
@@ -38,11 +34,13 @@ function loadVideoEnCours()
 		}).done(
 		function( json )
 		{
+			refreshFail = 0;
 			$('#statistiques').html(json.html);
 		}).fail(
 		function()
 		{
-			clearInterval(refreshLoadVideoEnCours);
+			refreshFail++;
+			if(refreshFail >= 3) clearInterval(refreshLoadVideoEnCours);
 		});
 }
 var loadRSS = function()
@@ -119,3 +117,4 @@ $(document).ready(function()
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
+var refreshFail = 0;
