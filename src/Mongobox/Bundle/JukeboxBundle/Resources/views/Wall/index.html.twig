@@ -5,7 +5,7 @@
 {% block body %}
 
 <div id="tumblr">
-    {% render "MongoboxTumblrBundle:Tumblr:slider" %}
+    {% render controller("MongoboxTumblrBundle:Tumblr:slider") %}
 </div>
 
 <div class="hero-unit" style="clear: both;">
@@ -17,7 +17,7 @@
 		</div>
 		<div class="span6">
 			<div id="flux_rss">
-				{#% render "MongoboxJukeboxBundle:Wall:fluxRss" %#}
+				{#% render controller("MongoboxJukeboxBundle:Wall:fluxRss") %#}
 			</div>
 		</div>
 	</div>

@@ -87,7 +87,7 @@
           <li><a href="{{ path('live') }}" title="Voir le live">Live</a></li>
         </ul>
 		<div id="video_en_cours">
-			{% render "MongoboxJukeboxBundle:Wall:videoEnCours" %}
+			{% render controller("MongoboxJukeboxBundle:Wall:videoEnCours") %}
 		</div>
   	    <a href="#post-video-modal" class="btn btn-success" id="add-video-button" role="button" data-toggle="modal" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
       </div><!--/.nav-collapse -->
