@@ -6,7 +6,10 @@
     margin-bottom: 20px;
 }
 
-.popover-inner { width: auto;}
+.popover { max-width: none; }
+.popover-inner { width: auto; }
+.img-tumblr-big img { max-width: none; }
+.tumblr-img-bloc img { cursor: pointer; }
 #tumblr { text-align: center; }
 .img-tumblr-big, .note-globale, .moyenne-globale { text-align: center; }
 
