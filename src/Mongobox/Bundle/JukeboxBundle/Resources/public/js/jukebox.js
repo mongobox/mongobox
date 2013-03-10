@@ -19,35 +19,21 @@ function loadVideoEnCours()
 	$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: basepath + 'video_en_cours'
+			url: basepath + 'video_en_cours?json'
 		}).done(
-		function( html )
+		function( json )
 		{
-			$('#video_en_cours').html(html);
+			refreshLoadVideoEnCoursFail = 0;
+			$('#video_en_cours').html(json.render);
 			$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
-		});
-
-	$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: basepath + 'statistiques'
-		}).done(
-		function( html )
-		{
-			refreshFail = 0;
-			$('#statistiques').html(html);
 		}).fail(
 		function()
 		{
-			refreshFail++;
-			if(refreshFail >= 3) clearInterval(refreshLoadVideoEnCours);
+			refreshLoadVideoEnCoursFail++;
+			if(refreshLoadVideoEnCoursFail >= 3) clearInterval(refreshLoadVideoEnCours);
 		});
 }
-var loadRSS = function()
-{
-    $('#flux_rss').load(basepath + 'flux_rss');
-    $('#tumblr').load(basepath + 'tumblr/tumblr');
-}
+
 
 function btn_submit_video()
 {
@@ -78,6 +64,7 @@ $(document).ready(function()
 			$('.loader').hide();
 		});
     });
+
 	$(document).on('change', '#video_lien', function()
 	{
 		$('.loader').show();
@@ -110,11 +97,7 @@ $(document).ready(function()
 	});
 
 	$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
-
-    setInterval( loadRSS, 300000 );
-
-	loadRSS();
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
-var refreshFail = 0;
+var refreshLoadVideoEnCoursFail = 0;

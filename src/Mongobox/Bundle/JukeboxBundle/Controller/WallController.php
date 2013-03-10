@@ -289,7 +289,19 @@ class WallController extends Controller
 			$somme = 0;
 		}
 
-		return array(
+		if(!is_null($request->query->get('json')))
+		{
+			$render = $this->render(
+            'MongoboxJukeboxBundle:Wall/Blocs:videoEnCours.html.twig',
+            array(
+				'video_en_cours' => $video_en_cours,
+				'date_actuelle' => new \Datetime(),
+				'somme' => $somme
+	        ));
+			$json = array('render' => $render->getContent());
+	        return new Response(json_encode($json));
+		}
+		else return array(
 			'video_en_cours' => $video_en_cours,
 			'date_actuelle' => new \Datetime(),
 			'somme' => $somme
@@ -319,7 +331,21 @@ class WallController extends Controller
 			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 			
-			return array(
+			if(!is_null($request->query->get('json')))
+			{
+				$render = $this->render(
+				'MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig',
+				array(
+					'video_en_cours' => $video_en_cours,
+					//'total_video' => $total_video,
+					'playlist' => $playlist,
+					'videos_historique' => $videos_historique,
+					'somme_pl' => $somme_pl
+				));
+				$json = array('render' => $render->getContent());
+				return new Response(json_encode($json));
+			}
+			else return array(
 					'video_en_cours' => $video_en_cours,
 					//'total_video' => $total_video,
 					'playlist' => $playlist,
