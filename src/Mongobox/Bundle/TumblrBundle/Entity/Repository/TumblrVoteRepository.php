@@ -58,4 +58,43 @@ class TumblrVoteRepository extends EntityRepository
         else $result = $q->getResult();
         return $result;
     }
+
+    public function getUserVotes($user)
+    {
+        $em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+		$qb->select('t.id_tumblr')
+			->from('MongoboxTumblrBundle:Tumblr', 't')
+			->join('t.tumblr_vote', 'tv')
+			->where("tv.user = :user")
+			->setParameters(array('user' => $user))
+		;
+			
+		$query = $qb->getQuery();
+        $result = $query->getResult();
+		return $result;
+    }
+
+    public function getProposeTumblrVotes($user, $max = 3)
+    {
+        $em = $this->getEntityManager();
+        $query = $em
+                ->createQuery('
+					SELECT t as tumblr, COUNT(tv.user) as total
+					FROM MongoboxTumblrBundle:Tumblr t
+					LEFT JOIN t.tumblr_vote tv
+					WHERE t.id_tumblr NOT IN (
+						SELECT tt.id_tumblr FROM MongoboxTumblrBundle:Tumblr tt
+						LEFT JOIN tt.tumblr_vote ttv
+						WHERE ttv.user = :user)
+					GROUP BY t.id_tumblr
+					ORDER BY total ASC, t.date ASC')
+                ;
+		$query->setMaxResults($max);
+		$query->setParameters(array('user' => $user));
+		//echo $query->getSQL().'<br />';
+		//exit;
+        $result = $query->getResult();
+		return $result;
+    }
 }

@@ -287,4 +287,19 @@ class TumblrController extends Controller
             'entityNext' => $entityNext
         );
     }
+
+    /**
+     * @Route("/propose_votes", name="tumblr_propose_votes")
+     * @Template()
+     */
+	public function proposeVotesAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		$tumblrs = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->getProposeTumblrVotes($user);
+		return array(
+			'tumblrs' => $tumblrs
+		);
+	}
+
 }

@@ -2,7 +2,12 @@ var loadRSS = function()
 {
     $('#flux_rss').load(basepath + 'flux_rss');
     $('#tumblr').load(basepath + 'tumblr/tumblr');
-}
+};
+
+var loadProposeVotes = function()
+{
+    $('#propose-votes').load(basepath + 'tumblr/propose_votes');
+};
 
 function loadStatistiques()
 {
@@ -24,9 +29,10 @@ function loadStatistiques()
 }
 
 $(document).ready(function()
-{    setInterval( loadRSS, 300000 );
-
+{
+	setInterval( loadRSS, 300000 );
 	loadRSS();
+	loadProposeVotes();
 });
 
 var refreshStatistiques = setInterval('loadStatistiques()', 5000);
