@@ -37,13 +37,13 @@
         {% endif %}
 
         {% if entityPrev %}
-            <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="{{ entityPrev.text }}" data-slide="prev">‹</a>
+            <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="Précédent : '{{ entityPrev.text }}'" data-slide="prev">‹</a>
         {% else %}
             <a class="left carousel-control" href="#first" data-slide="prev">‹</a>
         {% endif %}
 
         {% if entityNext %}
-            <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="{{ entityNext.text }}" data-slide="next">›</a>
+            <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="Suivant : '{{ entityNext.text }}'" data-slide="next">›</a>
         {% else %}
             <a class="right carousel-control" href="#last" data-slide="next">›</a>
         {% endif %}
