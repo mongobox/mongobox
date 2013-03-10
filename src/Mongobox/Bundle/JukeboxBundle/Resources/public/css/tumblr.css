@@ -3,7 +3,7 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .popover { max-width: none; }
@@ -36,6 +36,12 @@
 .manage-tags-container .manage-tags{
 
     display: inline-block;
+}
+
+.tags-diffusion
+{
+	margin-bottom : 5px;
+	text-align : center;
 }
 
 /* UI Autocomplete */
