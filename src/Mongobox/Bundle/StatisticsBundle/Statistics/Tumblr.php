@@ -40,7 +40,8 @@ class Tumblr
             'Jean',
             'Marion',
             'Pierre',
-            'Roxane'
+            'Roxane',
+			'Jérôme'
         );
     }
 
