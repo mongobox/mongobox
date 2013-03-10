@@ -1,0 +1,10 @@
+<legend>Vous devriez noter</legend>
+{% if tumblrs|length == 0 %}
+	Nothing to do here
+{% else %}
+	<ul style="list-style:none;">
+		{% for tumblr in tumblrs %}
+			{% include 'MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig' with {'mongo' : tumblr.tumblr} %}
+		{% endfor %}
+	</ul>
+{% endif %}

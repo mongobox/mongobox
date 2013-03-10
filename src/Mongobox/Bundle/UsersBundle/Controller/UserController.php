@@ -60,7 +60,7 @@ class UserController extends Controller
 		//Formulaire de modification de l'utilisateur
 		$form = $this->createForm(new UserEditType(), $user);
 		//Formulaire de modification du mot de passe si email non collectif
-		$form_password = $this->createForm(new UserEditPasswordType(), $user);
+		$form_password = $this->createForm(new UserEditPasswordType(), $user, array('validation_groups' => array('modify_password')));
 		
 		if('POST' === $request->getMethod())
 		{
@@ -96,7 +96,7 @@ class UserController extends Controller
 				{
 					$factory = $this->get('security.encoder_factory');
 					$encoder = $factory->getEncoder($user);
-					//On vÃ©rifie que l'ancien mot de passe et bien conforme
+					//On vérifie que l'ancien mot de passe et bien conforme
 					if($encoder->encodePassword($form_password->get('old_password')->getData(), $user->getSalt()) == $user->getPassword())
 					{
 						$user->setPassword($form_password->get('new_password')->getData());

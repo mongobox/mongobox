@@ -117,7 +117,7 @@ class TumblrRepository extends EntityRepository
             ->leftJoin('t.groups', 'g')
             ->where("g.id IN (:groups)")
             ->andWhere('t.id_tumblr > :tumblrId')
-            ->orderBy('t.id_tumblr', 'DESC')
+            ->orderBy('t.id_tumblr', 'ASC')
             ->groupBy('t.id_tumblr')
             ->setParameters( array(
                 'groups' => $groups ,
