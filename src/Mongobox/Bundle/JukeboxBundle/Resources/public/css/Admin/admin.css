@@ -49,3 +49,18 @@ ol.sortable {
 }
 
 #creation_evenement textarea {width : 30%;}
+
+/* Tumblr Tags */
+.ui-helper-hidden-accessible{
+    display: none !important;
+}
+
+#tumblr_tags .tag-item{
+    display: inline-block !important;
+    margin: 0 3px !important;
+    padding: 5px 25px 5px 5px !important;
+}
+
+.manage-tags-container .manage-tags{
+    margin: 0 0 15px !important;
+}
