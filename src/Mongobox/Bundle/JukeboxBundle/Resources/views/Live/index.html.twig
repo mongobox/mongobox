@@ -10,21 +10,64 @@
 			<div id="player"></div>
 
 			<div class="video-rating">
-				<span id="up-vote" class="vote-up-button">
-					<a href="#">
-						<img src="{{ asset('bundles/Mongoboxjukebox/img/thumb-up.png') }}" alt="thumb-up" title="Yeah !" />
-					</a>
-					<span id="up-score"></span>
-				</span>
-				<span id="down-vote" class="vote-down-button">
-					<a href="#">
-						<img src="{{ asset('bundles/Mongoboxjukebox/img/thumb-down.png') }}" alt="thumb-down" title="Bof..." />
-					</a>
-					<span id="down-score"></span>
-				</span>
+                <span id="up-vote" class="vote-up-button">
+                    <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
+                        <i class=" icon-thumbs-up icon-white"></i>
+                    </a>
+                    <span id="up-score"></span>
+                </span>
+
+                 <span id="down-vote" class="vote-down-button">
+                    <a href="#" class="btn btn-danger" id="up-vote" role="button" data-toggle="modal" title="Bof...">
+                        <i class=" icon-thumbs-down icon-white"></i>
+                    </a>
+                    <span id="down-score"></span>
+                </span>
+
+                <br />
+
+                <span id="video-score"></span>
 			</div>
 
-			<span id="video-score"></span>
+            {% if player_mode == "admin" %}
+                <div class="live-administration">
+                    <h3>Administration</h3>
+
+                    <a href="#" class="btn btn-success" id="play-video-button" role="button" data-toggle="modal" title="Lancer la lecture">
+                        <i class="icon-play icon-white"></i>
+                    </a>
+                    <script type="text/javascript">
+                        $("#play-video-button").click(function() {
+                            player.playVideo();
+                        });
+                    </script>
+
+                    <a href="#" class="btn btn-success" id="pause-video-button" role="button" data-toggle="modal" title="Mettre en pause la lecture">
+                        <i class="icon-pause icon-white"></i>
+                    </a>
+                    <script type="text/javascript">
+                        $("#pause-video-button").click(function() {
+                            player.pauseVideo();
+                        });
+                    </script>
+
+                    <a href="#" class="btn btn-warning" id="skip-video-button" role="button" data-toggle="modal" title="Passer à la vidéo suivante">
+                        <i class="icon-fast-forward icon-white"></i>
+                    </a>
+                    <script type="text/javascript">
+                        $("#skip-video-button").click(function() {
+                            params = new Object();
+                            params.status = 0;
+
+                            livePlayer.seekNextVideo(params);
+                        });
+                    </script>
+
+                    <a href="#" class="btn btn-danger" id="remove-video-button" role="button" data-toggle="modal" title="Remplacer la vidéo courante">
+                        <i class="icon-remove icon-white"></i>
+                    </a>
+                </div>
+            {% endif %}
 
 			<script type="text/javascript">
 	          	var tag = document.createElement('script');
@@ -52,6 +95,7 @@
 					});
 	          	}
 			</script>
+
 			<script type="text/javascript">
 				$(document).ready(function() {
 					livePlayer = new LivePlayer();
