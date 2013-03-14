@@ -6,7 +6,14 @@ var loadRSS = function()
 
 var loadProposeVotes = function()
 {
-    $('#propose-votes').load(basepath + 'tumblr/propose_votes');
+	$.ajax({
+		url: basepath + 'tumblr/propose_votes',
+		type: 'POST',
+		success: function(data)
+		{
+			$('#propose-votes').html(data);
+		}
+	});
 };
 
 function loadStatistiques()
