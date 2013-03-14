@@ -43,7 +43,7 @@ class Group
     protected $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\TUmblrBundle\Entity\Tumblr", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\TumblrBundle\Entity\Tumblr", inversedBy="groups")
      * @ORM\JoinTable(name="tumblrs_groups",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
      * 		inverseJoinColumns={@ORM\JoinColumn(name="id_tumblr", referencedColumnName="id_tumblr")}

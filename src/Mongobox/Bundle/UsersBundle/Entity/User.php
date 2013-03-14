@@ -105,9 +105,9 @@ class User implements AdvancedUserInterface
 	protected $tumblr_vote;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="user")
 	 **/
-	protected $videos;
+	protected $videos_group;
 
     /**
      * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
@@ -431,12 +431,12 @@ class User implements AdvancedUserInterface
     /**
      * Add videos
      *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group
      * @return User
      */
-    public function addVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos)
+    public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
     {
-        $this->videos[] = $videos;
+        $this->videos_group[] = $videos_group;
     
         return $this;
     }
@@ -444,21 +444,21 @@ class User implements AdvancedUserInterface
     /**
      * Remove videos
      *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group
      */
-    public function removeVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos)
+    public function removeVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
     {
-        $this->videos->removeElement($videos);
+        $this->videos_group->removeElement($videos_group);
     }
 
     /**
-     * Get videos
+     * Get videos_group
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getVideos()
+    public function getVideosGroup()
     {
-        return $this->videos;
+        return $this->videos_group;
     }
 
     public function addGroup($group)
