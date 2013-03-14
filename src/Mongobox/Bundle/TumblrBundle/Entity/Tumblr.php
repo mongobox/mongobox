@@ -148,19 +148,18 @@ class Tumblr
      *
      * @return integer 
      */
-    public function getIdTumblr()
-    {
+    public function getIdTumblr() {
         return $this->id_tumblr;
     }
 
-    public function addGroup($group)
-    {
-    	$this->groups[] = $group;
+    public function addGroup($group) {
+		if (!$this->groups->contains($tag)) {
+			$this->groups[] = $group;
+		}
     	return $this;
     }
     
-    public function getGroups()
-    {
+    public function getGroups() {
     	return $this->groups;
     }
     
@@ -169,6 +168,16 @@ class Tumblr
     	$this->groups = $groups;
     	return $this;
     }
+	
+	/**
+     * Function to delete groups
+     * @param Discussion $discussion
+     */
+    public function removeGroup($groups)
+    {
+        $this->groups->removeElement($groups);
+		//$tag->deleteArticle($this);
+    }
 
 
     /**
@@ -176,19 +185,21 @@ class Tumblr
      * @param TumblrTag $tag
      */
     public function addTag($tag) {
-        // var_dump( $tag);exit;
-        $tag->addTumblr($this);
-        $this->tags[] = $tag;
+        if (!$this->tags->contains($tag)) {
+			$tag->addTumblr($this);
+			$this->tags[] = $tag;
+		}
         return $this;
     }
 
     /**
-     * Fonction to delete tag
+     * Function to delete tag
      * @param Discussion $discussion
      */
     public function removeTag($tag)
     {
         $this->tags->removeElement($tag);
+		$tag->deleteTumblr($this);
     }
 
     /**

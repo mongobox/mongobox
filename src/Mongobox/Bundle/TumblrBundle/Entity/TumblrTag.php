@@ -122,6 +122,11 @@ class TumblrTag
 		$this->tumblrs[] = $tumblr;
 	}
 
+    public function deleteTumblr($tumblr)
+    {
+        $this->tumblrs->removeElement($tumblr);
+    }
+	
 	/**
 	 * http://www.ficgs.com/How-to-remove-accents-in-PHP-f3057.html
 	 */

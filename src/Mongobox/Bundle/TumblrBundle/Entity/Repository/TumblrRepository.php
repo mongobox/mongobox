@@ -172,6 +172,35 @@ class TumblrRepository extends EntityRepository
         catch (\Doctrine\ORM\NoResultException $e) {
             return false;
         }
-
+    }
+	
+	/**
+     * Function to delete tumblr/tags relation
+	 *	 
+     * @param MongoboxTumblrBundle:Tumblr $tumblr
+     */
+    public function cleanTags($tumblr)
+    {
+        $em = $this->getEntityManager();
+        foreach ($tumblr->getTags() as $tag)
+        {
+            $tumblr->removeTag($tag);
+        }
+        $em->flush();
+    }
+	
+	/**
+     * Function to delete tumblr/groups relation
+	 *	 
+     * @param MongoboxTumblrBundle:Tumblr $tumblr
+     */
+    public function cleanGroups($tumblr)
+    {
+        $em = $this->getEntityManager();
+        foreach ($tumblr->getGroups() as $group)
+        {
+            $tumblr->removeTag($group);
+        }
+        $em->flush();
     }
 }
