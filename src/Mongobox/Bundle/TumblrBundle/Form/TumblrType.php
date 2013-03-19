@@ -13,17 +13,27 @@ class TumblrType extends AbstractType
 {
 	public function __construct($groups = array())
 	{
-		$this->groups = array();
+		$this->listGroups = array();
 		foreach($groups as $group)
 		{
-			$this->groups[$group->getId()] = $group->getTitle();
-			if($group->getPrivate()) $this->groups[$group->getId()] .= ' <i class="icon-lock" title="Groupe Privé"></i>';
-			else $this->groups[$group->getId()] .= ' <i class="icon-globe" title="Groupe Publique"></i>';
+			$this->listGroups[$group->getId()] = $group->getTitle();
+			if($group->getPrivate()) $this->listGroups[$group->getId()] .= ' <i class="icon-lock" title="Groupe Privé"></i>';
+			else $this->listGroups[$group->getId()] .= ' <i class="icon-globe" title="Groupe Publique"></i>';
 		}
+
 	}
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $dataGroups = array();
+
+        $entityGroups = $options['data']->getGroups();
+        if( !empty($entityGroups) ){
+            foreach( $entityGroups as $group ){
+                $dataGroups[] =  $group->getId();
+            }
+        }
+
         $builder
             ->add('image', 'text', array(
             	'label' => 'URL image'
@@ -34,7 +44,6 @@ class TumblrType extends AbstractType
             ->add('addtags', 'genemu_jqueryautocompleter_entity', array(
                 'route_name' => 'tumblr_tags_ajax_autocomplete',
                 'class' => 'Mongobox\Bundle\TumblrBundle\Entity\TumblrTag',
-                'property' => 'name',
                 'label' => 'Tags',
                 'attr' => array(
                     'placeholder' => 'Ajouter des tags',
@@ -47,7 +56,8 @@ class TumblrType extends AbstractType
             ))
             ->add('groups', 'choice', array(
                 'label' => 'Partager dans ces groupes',
-                'choices' => $this->groups,
+                'choices' => $this->listGroups,
+                'data' => $dataGroups,
                 'multiple' => true,
                 'expanded' => true,
                 'property_path' => false

@@ -99,24 +99,29 @@ class TumblrController extends Controller
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
+
 			// Clean tags
             $tumblrRepository->cleanTags($entity);
 			   
 			// Save tags
-            foreach($editForm->get('tags')->getData() as $tag_id)
-            {
-                $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
-                $entityTag->getTumblrs()->add($entity);
+            if( $editForm->get('tags')->getData() ){
+                foreach($editForm->get('tags')->getData() as $tag_id)
+                {
+                    $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
+                    $entityTag->getTumblrs()->add($entity);
+                }
             }
 			
 			// Clean cleanGroups			
-            //$tumblrRepository->cleanGroups($entity);
+            $tumblrRepository->cleanGroups($entity);
 			
 			// Save Groups
-            foreach($editForm->get('groups')->getData() as $group_id)
-            {
-                $group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
-                $group->getTumblrs()->add($entity);
+            if( $editForm->get('groups')->getData() ){
+                foreach($editForm->get('groups')->getData() as $group_id)
+                {
+                    $group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+                    $group->getTumblrs()->add($entity);
+                }
             }
 
             $em->persist($entity);

@@ -170,13 +170,13 @@ class Tumblr
     }
 	
 	/**
-     * Function to delete groups
-     * @param Discussion $discussion
+     * Function to delete group
+     * @param Group $group
      */
-    public function removeGroup($groups)
+    public function removeGroup($group)
     {
-        $this->groups->removeElement($groups);
-		//$tag->deleteArticle($this);
+        $this->groups->removeElement($group);
+		$group->deleteTumblr($this);
     }
 
 
@@ -194,7 +194,7 @@ class Tumblr
 
     /**
      * Function to delete tag
-     * @param Discussion $discussion
+     * @param TumblrTag $tag
      */
     public function removeTag($tag)
     {

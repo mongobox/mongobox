@@ -178,6 +178,11 @@ class Group
     	return $this;
     }
 
+    public function deleteTumblr($tumblr)
+    {
+        $this->tumblrs->removeElement($tumblr);
+    }
+
     public function getUsersInvitations()
     {
     	return $this->users_invitations;

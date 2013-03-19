@@ -47,14 +47,13 @@
                         {% set tagDataPrototype = '<span>__name__</span><button class="close" >&times;</button><input type="hidden" name="tumblr[tags][]" value="__id__" />' %}
                         <div id="tumblr_tags" class="tags pull-right manage-tags" data-prototype="{{ tagDataPrototype }}">
 
-
                             {% for tag in entity.tags %}
                                 <div class="tag-item alert alert-info">
                                     <span>{{ tag.name }}</span>
                                     <button class="close" >&times;</button><input type="hidden" name="tumblr[tags][]" value="{{ tag.id }}" />
-
                                 </div>
                             {% endfor %}
+
                         </div>
 
                     </div>
