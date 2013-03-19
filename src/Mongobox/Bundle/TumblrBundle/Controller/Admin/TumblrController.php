@@ -31,9 +31,24 @@ class TumblrController extends Controller
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
         $user = $this->get('security.context')->getToken()->getUser();
 
-        $entities = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1));
+        // filtre par defaut
+        $filters = array('sortBy' => 't.id_tumblr', 'orderBy' => 'desc');
+
+        // $_GET parameters
+        $sortBy = $request->query->get('sortBy');
+        $orderBy = $request->query->get('orderBy');
+
+        if( !empty($sortBy) && !empty($orderBy) ){
+            $filters = array(
+                'sortBy' => $sortBy,
+                'orderBy' => $orderBy
+            );
+        }
+
+        $entities = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1),$filters);
 
         $nbPages = (int) (count($tumblrRepository->findLast($user->getGroupsIds()))  / $this->_limitPagination);
+
         
         return array(
             'entities' => $entities,
@@ -44,6 +59,7 @@ class TumblrController extends Controller
         			'page_droite' => ( $page+1 < $nbPages ) ? $page+1 : $nbPages,
         			'limite' =>  $this->_limitPagination
         	),
+            'filters' => $filters
         );
     }
 

@@ -48,9 +48,16 @@ class TumblrRepository extends EntityRepository
             ->from('MongoboxTumblrBundle:Tumblr', 't')
             ->leftJoin('t.groups', 'g')
             ->where("g.id IN (:groups)")
-            ->orderBy('t.date', 'DESC')
             ->groupBy('t.id_tumblr')
         ;
+
+        // Dynamic filter
+        if( isset($filters) && !empty($filters) ){
+            $qb->orderBy($filters['sortBy'], strtoupper($filters['orderBy']) );
+        }
+        else{
+            $qb->orderBy('t.date', 'DESC' );
+        }
 
 		if($maxResults != 0)
 		{
@@ -69,6 +76,8 @@ class TumblrRepository extends EntityRepository
 
 
 		$query = $qb->getQuery();
+
+       //echo $query->getSQL();exit;
 
 		return $query->getResult();
 	}

@@ -17,10 +17,25 @@
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
-	            <th>Id</th>
+	            <th>
+	                {# Filter on Id #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'admin_tumblr',
+                        'property':'t.id_tumblr',
+                        'label':'ID'
+                    } %}
+                </th>
+
 	            <th>Image</th>
 	            <th>Text</th>
-	            <th>Date</th>
+	            <th>
+                    {# Filter on Text #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'admin_tumblr',
+                        'property':'t.date',
+                        'label':'Date'
+                    } %}
+                </th>
 	            <th>Actions</th>
 	        </tr>
 	    </thead>
