@@ -66,11 +66,14 @@
                 } %}
             </th>
             <th>
-                Vendredi
+                {# Filter on Vendredi #}
+                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                    'route':'videos',
+                    'property':'vg.vendredi',
+                    'label':'Vendredi'
+                } %}
             </th>
-            <th>
-                User
-            </th>
+            <th>User</th>
             <th>Actions</th>
         </tr>
     </thead>
