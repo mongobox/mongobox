@@ -44,6 +44,7 @@ class TumblrType extends AbstractType
             ->add('addtags', 'genemu_jqueryautocompleter_entity', array(
                 'route_name' => 'tumblr_tags_ajax_autocomplete',
                 'class' => 'Mongobox\Bundle\TumblrBundle\Entity\TumblrTag',
+                'property' => 'name',
                 'label' => 'Tags',
                 'attr' => array(
                     'placeholder' => 'Ajouter des tags',
