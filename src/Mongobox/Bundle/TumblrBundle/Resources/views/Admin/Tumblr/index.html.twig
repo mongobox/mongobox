@@ -12,14 +12,14 @@
 
 	{# Pagination #}
 	{% set parameter = {} %}
-	{% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+	{% include ('MongoboxCoreBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
 
 	<table class="table table-bordered table-striped">
 	    <thead>
 	        <tr>
 	            <th>
 	                {# Filter on Id #}
-                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                    {% include ('MongoboxCoreBundle:Partial:tableFilter.html.twig') with {
                         'route':'admin_tumblr',
                         'property':'t.id_tumblr',
                         'label':'ID'
@@ -30,7 +30,7 @@
 	            <th>Text</th>
 	            <th>
                     {# Filter on Text #}
-                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                    {% include ('MongoboxCoreBundle:Partial:tableFilter.html.twig') with {
                         'route':'admin_tumblr',
                         'property':'t.date',
                         'label':'Date'
@@ -62,5 +62,5 @@
 	</table>
 
 	{# Pagination #}
-{% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+{% include ('MongoboxCoreBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
 {% endblock body %}

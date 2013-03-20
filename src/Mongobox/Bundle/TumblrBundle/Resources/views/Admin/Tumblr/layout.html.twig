@@ -1,6 +1,6 @@
 {# MongoboxTumblrBundle:Videos:layout.html.twig #}
 
-{% extends "MongoboxJukeboxBundle::layout.html.twig" %}
+{% extends "MongoboxCoreBundle::layout.html.twig" %}
 
 {% set aside_blocks = true %}
 {% set sidebar = true %}
@@ -10,5 +10,5 @@
 
 {% block javascripts %}{% endblock %}
 {% block stylesheets %}
-	<link href="{{ asset('bundles/Mongoboxjukebox/css/Admin/admin.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/mongoboxcore/css/Admin/admin.css') }}" rel="stylesheet">
 {% endblock %} 
