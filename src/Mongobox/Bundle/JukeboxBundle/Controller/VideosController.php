@@ -12,10 +12,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
+use Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces;
 
 // Forms
 use Mongobox\Bundle\JukeboxBundle\Form\VideosType;
 use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\MultiDedicacesType;
 
 /**
  * Videos controller.
@@ -208,14 +210,14 @@ class VideosController extends Controller
     public function addToPlaylistAction(Request $request, VideoGroup $video)
     {
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $session = $request->getSession();
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $playlist_add = new Playlist();
         $playlist_add->setVideoGroup($video);
-		$playlist_add->setGroup($group);
+        $playlist_add->setGroup($group);
         $playlist_add->setRandom(0);
-		$playlist_add->setCurrent(0);
+        $playlist_add->setCurrent(0);
         $playlist_add->setDate(new \Datetime());
         $em->persist($playlist_add);
         $em->flush();
@@ -228,6 +230,74 @@ class VideosController extends Controller
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()
-        ;
+            ;
+    }
+
+    /**
+     * Add the video to the playlist entity.
+     *
+     * @Route("/{id}/add_to_playlist_width_dedicace", name="videos_add_to_playlist_width_dedicace")
+     * @ParamConverter("video", class="MongoboxJukeboxBundle:VideoGroup")
+     * @Template("MongoboxJukeboxBundle:Videos/Blocs:addDedicace.html.twig")
+     */
+    public function addToPlaylistWidthDedicaceAction(Request $request, VideoGroup $video)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        $permanantDedicaces = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->testVideoGroups($video->getVideo()->getId(), $user->getGroupsIds());
+
+        if (count($permanantDedicaces) == 0) {
+            $permanant = "add";
+        } else {
+            $permanant = "";
+        }
+        $permanente = new Dedicaces();
+        $permanente->setVideo($video->getVideo());
+
+        $playList = new Dedicaces();
+        $playList->setVideo($video->getVideo());
+
+        $dedicaces = array(
+                            "permanente"        => $permanente->setPermanant(true),
+                            "playList"          => $playList->setPermanant(false),
+                            "buffPermanente"    => $permanant
+                          );
+
+        $formDedicace = $this->createForm(new MultiDedicacesType($this->get('security.context')->getToken()->getUser()->getGroups()), $dedicaces);
+
+        if ( 'POST' === $request->getMethod() ) {
+            $formDedicace->bind($request);
+
+            $formDatas = $formDedicace->getData();
+
+            $postDatas = $request->request->get($formDedicace->getName());
+
+            /* sauvegarde de la dédicace parmanante */
+            if ($permanente->getText()) {
+                $permanente = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->setGroupById($permanente, $postDatas['permanente']['groups'], true);
+                if ($permanente) {
+                    $em->persist($permanente);
+                }
+            }
+
+            /* sauvegarde de la dédicace pour la playliste */
+            if ($playList->getText()) {
+                $playList = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->setGroupById($playList, $postDatas['playList']['groups']);
+                $em->persist($playList);
+            }
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('videos_add_to_playlist', array("id" => $video->getId())));
+
+        }
+
+        return array(
+            'formDedicace'  => $formDedicace->createView(),
+            'permanent'     => $permanant,
+            'videoId'       => $video->getId()
+        );
     }
 }

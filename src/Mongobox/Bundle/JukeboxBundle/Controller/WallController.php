@@ -13,6 +13,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
+use Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
 
 class WallController extends Controller
@@ -280,12 +281,13 @@ class WallController extends Controller
 		if(!is_null($session->get('id_group')))
 		{
 			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
-			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-			else $somme = 0;
-		}
-		else
-		{
-			$video_en_cours = null;
+			if (is_object($video_en_cours)) {
+                $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+            } else {
+                $somme = 0;
+            }
+
+		} else {
 			$somme = 0;
 		}
 
@@ -294,6 +296,7 @@ class WallController extends Controller
 			$render = $this->render(
             'MongoboxJukeboxBundle:Wall/Blocs:videoEnCours.html.twig',
             array(
+                'videoId' => $video_en_cours->getVideoGroup()->getVideo()->getId(),
 				'video_en_cours' => $video_en_cours,
 				'date_actuelle' => new \Datetime(),
 				'somme' => $somme
@@ -302,10 +305,62 @@ class WallController extends Controller
 	        return new Response(json_encode($json));
 		}
 		else return array(
+            'videoId' => $video_en_cours->getVideoGroup()->getVideo()->getId(),
 			'video_en_cours' => $video_en_cours,
 			'date_actuelle' => new \Datetime(),
 			'somme' => $somme
 		);
+    }
+
+    /**
+     * @Template("MongoboxJukeboxBundle:Wall/Blocs:dedicacesEnCours.html.twig")
+     * @Route( "/dedicaces_en_cours", name="dedicaces_en_cours")
+     */
+    public function dedicacesEnCoursAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $session = $request->getSession();
+        if(!is_null($session->get('id_group')))
+        {
+            $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
+            if (is_object($video_en_cours)) {
+                // liste des dédicaces de la vidéo et du/des groupes
+                $videoId = $video_en_cours->getVideoGroup()->getVideo()->getId();
+                $user = $this->get('security.context')->getToken()->getUser();
+                $dedicacesTmp = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->findByVideoAndGroups($videoId, $user->getGroupsIds());
+                $dedicaces = array();
+                foreach ($dedicacesTmp as $dedicace) {
+                    if (isset($dedicaces[$dedicace['id']])) {
+                        $dedicaces[$dedicace['id']]['groupes'][] = $dedicace['title'];
+                    } else {
+                        $dedicaces[$dedicace['id']] = array(
+                            "text" => $dedicace['text'],
+                            "groupes" => array($dedicace['title'])
+                        );
+                    }
+                }
+            } else {
+                $dedicaces = array();
+            }
+        } else {
+            $dedicaces = array();
+        }
+
+        if(!is_null($request->query->get('json')))
+        {
+            $render = $this->render(
+                'MongoboxJukeboxBundle:Wall/Blocs:dedicacesEnCours.html.twig',
+                array(
+                    'videoId' => $videoId,
+                    'dedicaces' => $dedicaces
+                ));
+            $json = array('render' => $render->getContent());
+            return new Response(json_encode($json));
+        }
+        else return array(
+            'videoId' => $videoId,
+            'dedicaces' => $dedicaces
+        );
     }
 
     /**
@@ -428,60 +483,96 @@ class WallController extends Controller
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
+
+
 		$video = new Videos();
-		$form_video = $this->createForm(new VideoType(), $video);
+		$form_video = $this->createForm(new VideoType($this->get('security.context')->getToken()->getUser()->getGroups()), $video);
 		if ( 'POST' === $request->getMethod() )
 		{
-			$form_video->bindRequest($request);
+			$form_video->bind($request);
+
+            //On met la dédicace en permanente
+            $dedicaces = $video->getDedicaces();
+            $dedicaces[0]->setPermanant(true);
 			if ( $form_video->isValid() )
 			{
-				$video->setLien(Videos::parse_url_detail($video->getLien()));
-				//On vérifie qu'elle n'existe pas déjà
-				$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
-				if (!is_object($video_new))
-				{
-					$dataYt = $video->getDataFromYoutube();
+                //On met la dédicace en permanente
+                $dedicaces = $video->getDedicaces();
+                $dedicaces[0]->setPermanant(true);
 
-					$video->setDate(new \Datetime())
-							->setTitle( $dataYt->title )
-							->setDuration($dataYt->duration)
-							->setThumbnail( $dataYt->thumbnail->hqDefault )
-							->setThumbnailHq( $dataYt->thumbnail->sqDefault )
-							->setArtist($request->request->get('artist'))
-							->setSongName($request->request->get('songName'));
-					$em->persist($video);
-					$em->flush();
-					$video_new = $video;
+                $video->setLien(Videos::parse_url_detail($video->getLien()));
 
-					$this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
-				}
-				//On vérifie qu'elle n'existe pas pour ce groupe
-				$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
-				if(!is_object($video_group))
-				{
-					$video_group = new VideoGroup();
-					$video_group->setVideo($video_new)
-								->setGroup($group)
-								->setUser($user)
-								->setDiffusion(0)
-								->setVendredi(0)
-								->setVolume(100)
-								->setVotes(0);
-					$em->persist($video_group);
-					$em->flush();
-				}
-				//On l'ajoute à la playlist
-				$playlist_add = new Playlist();
-				$playlist_add->setVideoGroup($video_group)
-								->setGroup($group)
-								->setDate(new \Datetime())
-								->setRandom(0)
-								->setCurrent(0);
-				$em->persist($playlist_add);
+			    //On vérifie qu'elle n'existe pas déjà
+                $video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
+                if (!is_object($video_new))
+                {
+                    $dataYt = $video->getDataFromYoutube();
 
-				$em->flush();
+                    $video->setDate(new \Datetime())
+                        ->setTitle( $dataYt->title )
+                        ->setDuration($dataYt->duration)
+                        ->setThumbnail( $dataYt->thumbnail->hqDefault )
+                        ->setThumbnailHq( $dataYt->thumbnail->sqDefault )
+                        ->setArtist($request->request->get('artist'))
+                        ->setSongName($request->request->get('songName'));
 
-			}
+                    $dedicaces[0]->setVideo($video);
+
+                    if (!$dedicaces[0]->getText()) {
+                        $video->purgeDedicaces();
+                    }
+
+                    $em->persist($video);
+
+                    $em->flush();
+                    $video_new = $video;
+
+                    $this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
+                }
+                //On vérifie qu'elle n'existe pas pour ce groupe
+                $video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
+                if(!is_object($video_group))
+                {
+                    $video_group = new VideoGroup();
+                    $video_group->setVideo($video_new)
+                        ->setGroup($group)
+                        ->setUser($user)
+                        ->setDiffusion(0)
+                        ->setVendredi(0)
+                        ->setVolume(100)
+                        ->setVotes(0);
+                    $em->persist($video_group);
+                    $em->flush();
+                }
+
+                // on ajoute la dédicace dans les groupes si elle existe pas
+                foreach ($form_video->get('dedicaces')->get('groups')->getData() as $group_id) {
+
+                    $groupDedicace = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->testVideoGroups($video_new, array($group_id));
+                    if (count($groupDedicace) == 0 && $dedicaces[0]->getText()) {
+                        $dedicaces[0]->setVideo($video_new);
+
+                        $groupAddDedicace = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+                        $groupAddDedicace->getDedicaces()->add($dedicaces[0]);
+                    }
+                }
+
+                if (is_object($dedicaces[0]->getVideo()) && $dedicaces[0]->getText()) {
+                    $em->persist($dedicaces[0]);
+                    $em->flush();
+                }
+
+                //On l'ajoute à la playlist
+                $playlist_add = new Playlist();
+                $playlist_add->setVideoGroup($video_group)
+                    ->setGroup($group)
+                    ->setDate(new \Datetime())
+                    ->setRandom(0)
+                    ->setCurrent(0);
+                $em->persist($playlist_add);
+
+                $em->flush();
+            }
 		}
 		return array(
 			'form_video' => $form_video->createView()

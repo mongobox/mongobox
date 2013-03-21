@@ -65,6 +65,11 @@ class Videos
      */
 	protected $video_groups;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Dedicaces", mappedBy="video", cascade={"persist"})
+     */
+    protected $dedicaces;
+
 	/**
      * Constructor
      */
@@ -289,5 +294,95 @@ class Videos
     public function getPlaylist()
     {
         return $this->playlist;
+    }
+
+    /**
+     * Add video_groups
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videoGroups
+     * @return Videos
+     */
+    public function addVideoGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videoGroups)
+    {
+        $this->video_groups[] = $videoGroups;
+    
+        return $this;
+    }
+
+    /**
+     * Remove video_groups
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videoGroups
+     */
+    public function removeVideoGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videoGroups)
+    {
+        $this->video_groups->removeElement($videoGroups);
+    }
+
+    /**
+     * Get video_groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVideoGroups()
+    {
+        return $this->video_groups;
+    }
+
+    /**
+     * Add dedicaces
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces
+     * @return Videos
+     */
+    public function addDedicace(\Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces)
+    {
+        $this->dedicaces[] = $dedicaces;
+
+        return $this;
+    }
+
+    /**
+     * Add dedicaces
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces
+     * @return Videos
+     */
+    public function setDedicaces(\Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces)
+    {
+        $this->dedicaces[] = $dedicaces;
+
+        return $this;
+    }
+
+    /**
+     * Remove dedicaces
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces
+     */
+    public function removeDedicace(\Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces)
+    {
+        $this->dedicaces->removeElement($dedicaces);
+    }
+
+    /**
+     * Get dedicaces
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDedicaces()
+    {
+        return $this->dedicaces;
+    }
+
+    /**
+     * Purge dedicaces
+     *
+     * @return Videos
+     */
+    public function purgeDedicaces()
+    {
+        $this->dedicaces = array();
+
     }
 }

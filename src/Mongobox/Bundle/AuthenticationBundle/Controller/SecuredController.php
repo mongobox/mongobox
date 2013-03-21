@@ -1,4 +1,4 @@
-<?php
+@<?php
 
 namespace Mongobox\Bundle\AuthenticationBundle\Controller;
 

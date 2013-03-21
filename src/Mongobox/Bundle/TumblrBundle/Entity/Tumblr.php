@@ -148,18 +148,19 @@ class Tumblr
      *
      * @return integer 
      */
-    public function getIdTumblr() {
+    public function getIdTumblr()
+    {
         return $this->id_tumblr;
     }
 
-    public function addGroup($group) {
-		if (!$this->groups->contains($tag)) {
-			$this->groups[] = $group;
-		}
+    public function addGroup($group)
+    {
+    	$this->groups[] = $group;
     	return $this;
     }
     
-    public function getGroups() {
+    public function getGroups()
+    {
     	return $this->groups;
     }
     
@@ -168,16 +169,6 @@ class Tumblr
     	$this->groups = $groups;
     	return $this;
     }
-	
-	/**
-     * Function to delete group
-     * @param Group $group
-     */
-    public function removeGroup($group)
-    {
-        $this->groups->removeElement($group);
-		$group->deleteTumblr($this);
-    }
 
 
     /**
@@ -185,21 +176,19 @@ class Tumblr
      * @param TumblrTag $tag
      */
     public function addTag($tag) {
-        if (!$this->tags->contains($tag)) {
-			$tag->addTumblr($this);
-			$this->tags[] = $tag;
-		}
+        // var_dump( $tag);exit;
+        $tag->addTumblr($this);
+        $this->tags[] = $tag;
         return $this;
     }
 
     /**
-     * Function to delete tag
-     * @param TumblrTag $tag
+     * Fonction to delete tag
+     * @param Discussion $discussion
      */
     public function removeTag($tag)
     {
         $this->tags->removeElement($tag);
-		$tag->deleteTumblr($this);
     }
 
     /**
@@ -232,5 +221,38 @@ class Tumblr
         }
 
         return false;
+    }
+
+    /**
+     * Add tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     * @return Tumblr
+     */
+    public function addTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote[] = $tumblrVote;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     */
+    public function removeTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote->removeElement($tumblrVote);
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groups
+     */
+    public function removeGroup(\Mongobox\Bundle\GroupBundle\Entity\Group $groups)
+    {
+        $this->groups->removeElement($groups);
     }
 }

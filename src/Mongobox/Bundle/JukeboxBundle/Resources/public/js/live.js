@@ -67,29 +67,30 @@ LivePlayer = function()
             return this;
         }
 
+        console.log(params);
         switch(params.status) {
-            case 1:
-                //this.checkCurrentVideoId(params);
+        case 1:
+            //this.checkCurrentVideoId(params);
 
-                player.seekTo(params.currentTime);
-                player.playVideo();
-
-            break;
-
-            case 2:
-                //this.checkCurrentVideoId(params);
-
-                player.seekTo(params.currentTime);
-                player.pauseVideo();
+            player.seekTo(params.currentTime);
+            player.playVideo();
 
             break;
 
-            case 0:
-                player.loadVideoById({
-                    videoId: params.videoId
-                });
+        case 2:
+            //this.checkCurrentVideoId(params);
 
-                this.initialize(params.playlistId);
+            player.seekTo(params.currentTime);
+            player.pauseVideo();
+
+            break;
+
+        case 0:
+            player.loadVideoById({
+                videoId: params.videoId
+            });
+
+            this.initialize(params.playlistId);
 
             break;
         }
@@ -126,7 +127,6 @@ LivePlayer = function()
 
 			params.playlistId = data.playlistId;
 			params.videoId = data.videoId;
-
 			this.sendParameters(params);
 
 			this.initialize(data.playlistId);

@@ -242,4 +242,37 @@ class VideoGroup
     {
         return $this->user;
     }
+
+    /**
+     * Add playlist
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist
+     * @return VideoGroup
+     */
+    public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist)
+    {
+        $this->playlist[] = $playlist;
+    
+        return $this;
+    }
+
+    /**
+     * Remove playlist
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist
+     */
+    public function removePlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist)
+    {
+        $this->playlist->removeElement($playlist);
+    }
+
+    /**
+     * Get playlist
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaylist()
+    {
+        return $this->playlist;
+    }
 }

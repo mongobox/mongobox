@@ -178,3 +178,23 @@ Playlist
 .playlist-user
 {
 }
+
+/* -----------------------------------
+
+Dédicace en cours
+
+------------------------------------- */
+#dedicaces {
+    width: 1000px;
+    margin: 5px auto 5px auto;
+}
+
+#dedicaces marquee {
+    width: 100%;
+}
+
+#dedicaces marquee li {
+    float: left;
+    margin-left: 50px;
+    list-style-type:none;
+}

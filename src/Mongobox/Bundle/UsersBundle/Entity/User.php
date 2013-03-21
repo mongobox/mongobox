@@ -105,9 +105,9 @@ class User implements AdvancedUserInterface
 	protected $tumblr_vote;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\Videos", mappedBy="user")
 	 **/
-	protected $videos_group;
+	protected $videos;
 
     /**
      * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
@@ -431,12 +431,12 @@ class User implements AdvancedUserInterface
     /**
      * Add videos
      *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos
      * @return User
      */
-    public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
+    public function addVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos)
     {
-        $this->videos_group[] = $videos_group;
+        $this->videos[] = $videos;
     
         return $this;
     }
@@ -444,21 +444,21 @@ class User implements AdvancedUserInterface
     /**
      * Remove videos
      *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos
      */
-    public function removeVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
+    public function removeVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $videos)
     {
-        $this->videos_group->removeElement($videos_group);
+        $this->videos->removeElement($videos);
     }
 
     /**
-     * Get videos_group
+     * Get videos
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getVideosGroup()
+    public function getVideos()
     {
-        return $this->videos_group;
+        return $this->videos;
     }
 
     public function addGroup($group)
@@ -699,5 +699,71 @@ class User implements AdvancedUserInterface
             if($tumblrVote->getTumblr()->getId() === $id_tumblr) return floatval($tumblrVote->getNote());
         }
         return 0;
+    }
+
+    /**
+     * Add tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     * @return User
+     */
+    public function addTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote[] = $tumblrVote;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     */
+    public function removeTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote->removeElement($tumblrVote);
+    }
+
+    /**
+     * Get tumblr_vote
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTumblrVote()
+    {
+        return $this->tumblr_vote;
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groups
+     */
+    public function removeGroup(\Mongobox\Bundle\GroupBundle\Entity\Group $groups)
+    {
+        $this->groups->removeElement($groups);
+    }
+
+    /**
+     * Add groups_invitations
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations
+     * @return User
+     */
+    public function addGroupsInvitation(\Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations)
+    {
+        $this->groups_invitations[] = $groupsInvitations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove groups_invitations
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations
+     */
+    public function removeGroupsInvitation(\Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations)
+    {
+        $this->groups_invitations->removeElement($groupsInvitations);
     }
 }

@@ -17,63 +17,68 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>Id</th>
+			<th>
+            	{% if filters.sortBy == 'v.title' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'v.title', 'orderBy': 'asc'}) }}">Titre <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'v.title', 'orderBy': 'desc'}) }}">Titre <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'v.title', 'orderBy': 'desc'}) }}">Titre</a>
+				{% endif %}
+			</th>
+			<th>
+            	{% if filters.sortBy == 'v.lien' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'v.lien', 'orderBy': 'asc'}) }}">Lien <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'v.lien', 'orderBy': 'desc'}) }}">Lien <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'v.lien', 'orderBy': 'desc'}) }}">Lien</a>
+				{% endif %}
+			</th>
             <th>
-                {# Filter on ID #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'v.id',
-                    'label':'ID'
-                } %}
+            	{% if filters.sortBy == 'vg.lastBroadcast' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vg.lastBroadcast', 'orderBy': 'asc'}) }}">Dernière diffusion <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vg.lastBroadcast', 'orderBy': 'desc'}) }}">Dernière diffusion <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'vg.lastBroadcast', 'orderBy': 'desc'}) }}">Dernière diffusion</a>
+				{% endif %}
             </th>
             <th>
-                {# Filter on Titre #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'v.title',
-                    'label':'Titre'
-                } %}
+            	{% if filters.sortBy == 'vg.diffusion' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vg.diffusion', 'orderBy': 'asc'}) }}">Nb Diffusions <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vg.diffusion', 'orderBy': 'desc'}) }}">Nb Diffusions <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'vg.diffusion', 'orderBy': 'desc'}) }}">Nb Diffusions</a>
+				{% endif %}
             </th>
             <th>
-                {# Filter on Lien #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'v.lien',
-                    'label':'Lien'
-                } %}
+            	{% if filters.sortBy == 'vg.votes' %}
+					{% if filters.orderBy == 'desc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vg.votes', 'orderBy': 'asc'}) }}">Nb Votes <i class="icon-chevron-down"></i></a>
+					{% elseif filters.orderBy == 'asc' %}
+						<a class="filter" href="{{ path('videos', {'sortBy':'vg.votes', 'orderBy': 'desc'}) }}">Nb Votes <i class="icon-chevron-up"></i></a>
+					{% endif %}
+				{% else %}
+					<a class="filter" href="{{ path('videos', {'sortBy':'vg.votes', 'orderBy': 'desc'}) }}">Nb Votes</a>
+				{% endif %}				
             </th>
             <th>
-                {# Filter on Dernière diffusion #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.lastBroadcast',
-                    'label':'Dernière diffusion'
-                } %}
+				Vendredi
             </th>
-            <th>
-                {# Filter on Nb Diffusions #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.diffusion',
-                    'label':'Nb Diffusions'
-                } %}
-            </th>
-            <th>
-                {# Filter on Nb Votes #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.votes',
-                    'label':'Nb Votes'
-                } %}
-            </th>
-            <th>
-                {# Filter on Vendredi #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.vendredi',
-                    'label':'Vendredi'
-                } %}
-            </th>
-            <th>User</th>
+			<th>
+					User
+			</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -93,6 +98,7 @@
             <td>
             	<a href="{{ path('ajax_flag_vendredi_video', { 'id': entity.id, 'value' : 1 }) }}" class="btn">Définir comme vendredi</a>
             	<a href="{{ path('videos_add_to_playlist', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
+                <a href="#post-dedicace-modal" class="btn btn-dedicace" data-id="{{ entity.id }}" role="button" data-toggle="modal">Add to Playlist with dedicace</a>
             </td>
         </tr>
     {% endfor %}

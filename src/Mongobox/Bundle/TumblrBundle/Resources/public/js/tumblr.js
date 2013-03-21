@@ -86,7 +86,7 @@ var tumblr = tumblr || {};
 		// For each tumblr img, if the popover is displayed, we hide it
         $("."+tumblr.classImg).each( function(index, element)
         {
-			if( $(element).next('div.popover:visible').length )
+	        if( $(element).data('popover').tip().hasClass('in') )
 	        	$(element).popover('hide');
         });
 	},

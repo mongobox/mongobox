@@ -49,6 +49,13 @@ class LiveController extends Controller
 		$playlist_current = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
 		$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
 
+        $dedicaces = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->findByVideoAndGroups($playlist_current->getVideoGroup()->getVideo(), array($group->getId()), "false");
+
+        foreach ($dedicaces as $dedicace) {
+            $dedicaceObject = $em->getRepository('MongoboxJukeboxBundle:Dedicaces')->find($dedicace['id']);
+            $em->remove($dedicaceObject);
+        }
+
 		$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
 		$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
 

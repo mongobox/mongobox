@@ -1,0 +1,15 @@
+<input type="hidden" id="videodedicaces" value="{{ videoId }}" />
+<marquee direction="left">
+    <ul>
+        {% for dedicace in dedicaces %}
+            <li>
+                <div class="groupes">
+                    {% for group in dedicace.groupes %}
+                        <span class="badge badge-info">{{ group }}</span>
+                    {% endfor %}
+                </div>
+                {{ dedicace.text }}
+            </li>
+        {% endfor %}
+    </ul>
+</marquee>

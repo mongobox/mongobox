@@ -47,11 +47,6 @@ class Playlist
      */
     protected $current = 0;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Vote", mappedBy="playlist")
-     */
-	protected $votes;
-
 	public function setId($id)
     {
         $this->id = $id;
@@ -122,17 +117,5 @@ class Playlist
     public function getCurrent()
     {
         return $this->current;
-    }
-
-    public function setVotes($votes)
-    {
-        $this->votes = $votes;
-
-        return $this;
-    }
-
-    public function getVotes()
-    {
-        return $this->votes;
     }
 }

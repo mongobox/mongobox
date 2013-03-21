@@ -122,11 +122,6 @@ class TumblrTag
 		$this->tumblrs[] = $tumblr;
 	}
 
-    public function deleteTumblr($tumblr)
-    {
-        $this->tumblrs->removeElement($tumblr);
-    }
-	
 	/**
 	 * http://www.ficgs.com/How-to-remove-accents-in-PHP-f3057.html
 	 */
@@ -143,4 +138,14 @@ class TumblrTag
 
 
 
+
+    /**
+     * Remove tumblrs
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\Tumblr $tumblrs
+     */
+    public function removeTumblr(\Mongobox\Bundle\TumblrBundle\Entity\Tumblr $tumblrs)
+    {
+        $this->tumblrs->removeElement($tumblrs);
+    }
 }

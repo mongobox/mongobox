@@ -7,6 +7,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class VideoType extends AbstractType
 {
+    public function __construct($groups = array())
+    {
+        $this->groups = $groups;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -14,6 +19,7 @@ class VideoType extends AbstractType
                 'label' => 'Lien Youtube ou Id de la vidéo',
                 'attr' => array('size' => 15)
             ))
+            ->add('dedicaces', new DedicacesType($this->groups))
         ;
     }
 

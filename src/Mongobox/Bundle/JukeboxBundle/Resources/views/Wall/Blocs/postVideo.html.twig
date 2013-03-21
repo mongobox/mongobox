@@ -1,5 +1,13 @@
+{% form_theme form_video 'MongoboxJukeboxBundle:Form:mongobox_form_theme.html.twig' %}
+
 <form id="form_video" method="post">
-	{{ form_widget(form_video) }}
-	 <span class="btn" id="search-btn-video">Rechercher</span>
-	 {{form_rest(form_video)}}
+    <div id="videolien">
+        {{ form_row(form_video.lien) }}
+    </div>
+    <div id="videodedicaces">
+        {{ form_row(form_video.dedicaces) }}
+    </div>
+    {{ form_row(form_video._token) }}
+    <span class="btn" id="search-btn-video">Rechercher</span>
 </form>
+{{ form_rest(form_video) }}

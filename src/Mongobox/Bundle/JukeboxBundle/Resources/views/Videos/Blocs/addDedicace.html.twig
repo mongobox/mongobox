@@ -1,0 +1,17 @@
+{% form_theme formDedicace 'MongoboxJukeboxBundle:Form:mongobox_form_theme.html.twig' %}
+
+<form action="{{ path('videos_add_to_playlist_width_dedicace', {'id': videoId}) }}" id="formDedicace" method="post">
+    {% if (permanent) %}
+        <h3>Dédicace permanente</h3>
+        <div id="permanente">
+            {{ form_row(formDedicace.permanente) }}
+        </div>
+
+        <h3>Dédicace pour la playliste</h3>
+    {% endif %}
+    <div id="playList">
+        {{ form_row(formDedicace.playList) }}
+    </div>
+    {{form_rest(formDedicace)}}
+    <input type="submit" id="valider" name="Valider" value="Valider">
+</form>

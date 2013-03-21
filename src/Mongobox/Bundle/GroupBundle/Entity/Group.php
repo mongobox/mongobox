@@ -43,7 +43,7 @@ class Group
     protected $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\TumblrBundle\Entity\Tumblr", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\TUmblrBundle\Entity\Tumblr", inversedBy="groups")
      * @ORM\JoinTable(name="tumblrs_groups",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
      * 		inverseJoinColumns={@ORM\JoinColumn(name="id_tumblr", referencedColumnName="id_tumblr")}
@@ -71,6 +71,15 @@ class Group
      * )
      */
     protected $users_invitations;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces", inversedBy="groups")
+     * @ORM\JoinTable(name="dedicaces_groups",
+     * 		joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")},
+     * 		inverseJoinColumns={@ORM\JoinColumn(name="dedicaces_id", referencedColumnName="id")}
+     * )
+     */
+    protected $dedicaces;
 
 	public function __construct()
     {
@@ -178,11 +187,6 @@ class Group
     	return $this;
     }
 
-    public function deleteTumblr($tumblr)
-    {
-        $this->tumblrs->removeElement($tumblr);
-    }
-
     public function getUsersInvitations()
     {
     	return $this->users_invitations;
@@ -192,5 +196,160 @@ class Group
     {
     	$this->users_invitations = $users_invitations;
     	return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $users
+     */
+    public function removeUser(\Mongobox\Bundle\UsersBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Add tumblrs
+     *
+     * @param \Mongobox\Bundle\TUmblrBundle\Entity\Tumblr $tumblrs
+     * @return Group
+     */
+    public function addTumblr(\Mongobox\Bundle\TUmblrBundle\Entity\Tumblr $tumblrs)
+    {
+        $this->tumblrs[] = $tumblrs;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tumblrs
+     *
+     * @param \Mongobox\Bundle\TUmblrBundle\Entity\Tumblr $tumblrs
+     */
+    public function removeTumblr(\Mongobox\Bundle\TUmblrBundle\Entity\Tumblr $tumblrs)
+    {
+        $this->tumblrs->removeElement($tumblrs);
+    }
+
+    /**
+     * Add playlists
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlists
+     * @return Group
+     */
+    public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlists)
+    {
+        $this->playlists[] = $playlists;
+    
+        return $this;
+    }
+
+    /**
+     * Remove playlists
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlists
+     */
+    public function removePlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlists)
+    {
+        $this->playlists->removeElement($playlists);
+    }
+
+    /**
+     * Get playlists
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaylists()
+    {
+        return $this->playlists;
+    }
+
+    /**
+     * Add videos_group
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videosGroup
+     * @return Group
+     */
+    public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videosGroup)
+    {
+        $this->videos_group[] = $videosGroup;
+    
+        return $this;
+    }
+
+    /**
+     * Remove videos_group
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videosGroup
+     */
+    public function removeVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videosGroup)
+    {
+        $this->videos_group->removeElement($videosGroup);
+    }
+
+    /**
+     * Get videos_group
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVideosGroup()
+    {
+        return $this->videos_group;
+    }
+
+    /**
+     * Add users_invitations
+     *
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations
+     * @return Group
+     */
+    public function addUsersInvitation(\Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations)
+    {
+        $this->users_invitations[] = $usersInvitations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove users_invitations
+     *
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations
+     */
+    public function removeUsersInvitation(\Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations)
+    {
+        $this->users_invitations->removeElement($usersInvitations);
+    }
+
+    /**
+     * Add dedicaces
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces
+     * @return Group
+     */
+    public function addDedicace(\Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces)
+    {
+        $this->dedicaces[] = $dedicaces;
+    
+        return $this;
+    }
+
+    /**
+     * Remove dedicaces
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces
+     */
+    public function removeDedicace(\Mongobox\Bundle\JukeboxBundle\Entity\Dedicaces $dedicaces)
+    {
+        $this->dedicaces->removeElement($dedicaces);
+    }
+
+    /**
+     * Get dedicaces
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDedicaces()
+    {
+        return $this->dedicaces;
     }
 }
