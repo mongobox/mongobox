@@ -235,7 +235,12 @@ class WallController extends Controller
         $video->setVendredi($value);
         $em->flush();
 
-        return new Response();
+        if( false === $request->isXmlHttpRequest() ){
+            return $this->redirect($this->generateUrl('videos'));
+        }
+        else{
+            return new Response();
+        }
     }
 
     /**
