@@ -18,7 +18,7 @@ function onPlayerStateChange(event)
 var livePlayer;
 var connection;
 var playlistId;
-var videoID;
+var videoId;
 
 LivePlayer = function()
 {
@@ -102,7 +102,7 @@ LivePlayer = function()
 
 	this.getCurrentVideoId = function()
 	{
-		return videoID;
+		return videoId;
 	},
 
 	this.checkCurrentVideoId = function(params)
@@ -173,5 +173,22 @@ LivePlayer = function()
 		params.scores	= data;
 
 		this.sendParameters(params);
-	}
+	},
+
+    this.getReplaceForm = function()
+    {
+        $('#replace-video-modal').on('show', function () {
+            $('.loader').show();
+            $('#replace-video-modal .modal-content').html('');
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'html',
+                url: replaceUrl
+            }).done(function(html) {
+                $('#replace-video-modal .modal-content').html(html);
+                $('.loader').hide();
+            });
+        });
+    }
 };

@@ -1,11 +1,15 @@
 <?php
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
+use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
+use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -131,21 +135,21 @@ class LiveController extends Controller
 		if($playerMode == 'mobile')  {
 			$playerWidth 	= '390';
 			$playerHeight	= '220';
-			
+
 			$playerVars		= '{ start: '. $playerStart.', autoplay: 1,mode:"opaque" }';
 			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
 		}
 		elseif ($playerMode != 'admin' && $playerMode !='mobile') {
 			$playerWidth 	= '800px';
 			$playerHeight	= '500px';
-			
+
 			$playerVars		= "{ controls: 0, disablekb: 1, start: $playerStart, autoplay: 1 }";
 			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
-		} 
+		}
 		else {
 			$playerWidth 	= '800px';
 			$playerHeight	= '500px';
-			
+
 			$playerVars		= "{ start: $playerStart, autoplay: 1 }";
 			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
 		}
@@ -237,5 +241,61 @@ class LiveController extends Controller
 
     	$response = new Response(json_encode($data));
     	return $response;
+    }
+
+    /**
+     * @Route("/replace", name="live_replace")
+     * @Template()
+     */
+    public function replaceAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if ($request->getMethod() === 'POST') {
+            $newVideo = new Videos();
+
+            $editForm = $this->createForm(new ReplaceVideo(), $newVideo);
+            $editForm->bind($request);
+
+            $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($newVideo->getId());
+            if ($editForm->isValid() === true && $video !== null) {
+                try {
+                    $video->setTitle($newVideo->getTitle());
+                    $video->setLien($newVideo->getLien());
+                    $video->setArtist($newVideo->getArtist());
+                    $video->setSongName($newVideo->getSongName());
+
+                    $em->persist($video);
+                    $em->flush();
+
+                    $message = 'Mise à jour de la vidéo effectuée avec succès.';
+
+                } catch (Exception $e) {
+                    $editForm->addError(new FormError('Une erreur s\'est produite durant la sauvegarde.'));
+                }
+            } else {
+                $editForm->addError(new FormError('Les données du formulaire ne sont pas valides.'));
+            }
+        } else {
+            $session = $request->getSession();
+
+            $currentGroup       = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+            $currentPlaylist    = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array(
+                'group'     => $currentGroup->getId(),
+                'current'   => 1
+            ));
+
+            if ($currentVideo = $currentPlaylist->getVideoGroup()->getVideo()) {
+                $editForm = $this->createForm(new ReplaceVideo(), $currentVideo);
+            } else {
+                $editForm = $this->createForm(new ReplaceVideo());
+                $editForm->addError(new FormError('Impossible de récupérer la vidéo courante dans la playlist.'));
+            }
+        }
+
+        return array(
+            'message'  => isset($message) ? $message : null,
+            'edit_form' => $editForm->createView()
+        );
     }
 }
