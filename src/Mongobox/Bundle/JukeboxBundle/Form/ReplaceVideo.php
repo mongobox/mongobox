@@ -29,7 +29,7 @@ class ReplaceVideo extends AbstractType
                 'attr'  => array('size' => 15)
             ))
             ->add('lien', 'text', array(
-                'label' => 'Lien Youtube ou Id de la vidéo',
+                'label' => 'Id de la vidéo',
                 'attr'  => array('size' => 15)
             ))
         ;
