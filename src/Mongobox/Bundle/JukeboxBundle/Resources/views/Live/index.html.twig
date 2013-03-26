@@ -30,43 +30,7 @@
 			</div>
 
             {% if player_mode == "admin" %}
-                <div class="live-administration">
-                    <h3>Administration</h3>
-
-                    <a href="#" class="btn btn-success" id="play-video-button" role="button" data-toggle="modal" title="Lancer la lecture">
-                        <i class="icon-play icon-white"></i>
-                    </a>
-                    <script type="text/javascript">
-                        $("#play-video-button").click(function() {
-                            player.playVideo();
-                        });
-                    </script>
-
-                    <a href="#" class="btn btn-success" id="pause-video-button" role="button" data-toggle="modal" title="Mettre en pause la lecture">
-                        <i class="icon-pause icon-white"></i>
-                    </a>
-                    <script type="text/javascript">
-                        $("#pause-video-button").click(function() {
-                            player.pauseVideo();
-                        });
-                    </script>
-
-                    <a href="#" class="btn btn-warning" id="skip-video-button" role="button" data-toggle="modal" title="Passer à la vidéo suivante">
-                        <i class="icon-fast-forward icon-white"></i>
-                    </a>
-                    <script type="text/javascript">
-                        $("#skip-video-button").click(function() {
-                            params = new Object();
-                            params.status = 0;
-
-                            livePlayer.seekNextVideo(params);
-                        });
-                    </script>
-
-                    <a href="#" class="btn btn-danger" id="remove-video-button" role="button" data-toggle="modal" title="Remplacer la vidéo courante">
-                        <i class="icon-remove icon-white"></i>
-                    </a>
-                </div>
+                {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
             {% endif %}
 
 			<script type="text/javascript">

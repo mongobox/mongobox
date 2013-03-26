@@ -18,7 +18,7 @@ function onPlayerStateChange(event)
 var livePlayer;
 var connection;
 var playlistId;
-var videoID;
+var videoId;
 
 LivePlayer = function()
 {
@@ -102,7 +102,7 @@ LivePlayer = function()
 
 	this.getCurrentVideoId = function()
 	{
-		return videoID;
+		return videoId;
 	},
 
 	this.checkCurrentVideoId = function(params)
