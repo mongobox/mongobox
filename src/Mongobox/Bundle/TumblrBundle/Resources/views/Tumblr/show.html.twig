@@ -7,7 +7,7 @@
 {% block body %}
 <div class="marketing">
 
-    <h1><img src="{{ asset('bundles/Mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
+    <h1><img src="{{ asset('bundles/mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
     <h2>Mongo pute</h2>
 </div>
 <div class="vote"></div>
@@ -57,7 +57,7 @@
 	$(function()
 	{
 		tumblr.init("tumblr-popover", "tumblr-img-id", "note-tumblr", "note-user-tumblr");
-		tumblr.pathToImg = "{{ asset('bundles/Mongoboxjukebox/img/') }}";
+		tumblr.pathToImg = "{{ asset('bundles/mongoboxjukebox/img/') }}";
 		tumblr.initInfoVote();
 		tumblr.starRating('.star', 1);
 		tumblr.initScoreRating();

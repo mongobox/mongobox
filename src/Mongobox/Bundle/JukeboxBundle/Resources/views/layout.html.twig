@@ -8,16 +8,16 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="{{ asset('bundles/Mongoboxjukebox/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/Mongoboxjukebox/css/jukebox.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/Mongoboxjukebox/css/fancymoves.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/Mongoboxjukebox/css/tumblr.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/mongoboxjukebox/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/mongoboxjukebox/css/jukebox.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/mongoboxjukebox/css/fancymoves.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/mongoboxjukebox/css/tumblr.css') }}" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
-    <link href="{{ asset('bundles/Mongoboxjukebox/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/mongoboxjukebox/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
     {% block css %}{% endblock %} 
 	{% block stylesheets %}{% endblock %} 
 
@@ -27,15 +27,15 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="{{ asset('bundles/Mongoboxjukebox/ico/favicon.ico') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ asset('bundles/Mongoboxjukebox/ico/apple-touch-icon-144-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/Mongoboxjukebox/ico/apple-touch-icon-114-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/Mongoboxjukebox/ico/apple-touch-icon-72-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/Mongoboxjukebox/ico/apple-touch-icon-57-precomposed.png') }}">
+    <link rel="shortcut icon" href="{{ asset('bundles/mongoboxjukebox/ico/favicon.ico') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ asset('bundles/mongoboxjukebox/ico/apple-touch-icon-144-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/mongoboxjukebox/ico/apple-touch-icon-114-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/mongoboxjukebox/ico/apple-touch-icon-72-precomposed.png') }}">
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/mongoboxjukebox/ico/apple-touch-icon-57-precomposed.png') }}">
 
-    <script src="{{ asset('bundles/Mongoboxjukebox/js/vendor/jquery/jquery.1.9.1.min.js') }}"></script>
-    <script src="{{ asset('bundles/Mongoboxjukebox/js/vendor/jquery/jquery-ui-1.10.0.min.js') }}"></script>
-    <script src="{{ asset('bundles/Mongoboxjukebox/js/vendor/jquery/jquery.easing.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery.1.9.1.min.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery-ui-1.10.0.min.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery.easing.js') }}"></script>
 		<script>
 			var basepath = "{{ path('wall_index') }}";
 		</script>
@@ -83,11 +83,11 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ asset('bundles/Mongoboxjukebox/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
 	{% if app.user %}
-    <script src="{{ asset('bundles/Mongoboxjukebox/js/vendor/jquery/jquery.raty.js') }}"></script>
-    <script src="{{ asset('bundles/Mongoboxjukebox/js/jukebox.js') }}"></script>
-	<script src="{{ asset('bundles/Mongoboxtumblr/js/tumblr.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery.raty.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxjukebox/js/jukebox.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxtumblr/js/tumblr.js') }}"></script>
 	{% endif %}
     {% block javascripts %}{% endblock %}
 
