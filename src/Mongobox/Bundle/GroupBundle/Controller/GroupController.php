@@ -182,7 +182,7 @@ class GroupController extends Controller
 
     /**
      * @Template()
-     * @Route( "/accept_invite/{id}/{id_user}", name="group_accept_invite")
+     * @Route( "/accept_invite/{group}/{user}", name="group_accept_invite")
      * @ParamConverter("group", class="MongoboxGroupBundle:Group")
      * @ParamConverter("user", class="MongoboxUsersBundle:User")
      */

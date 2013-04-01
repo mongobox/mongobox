@@ -24,7 +24,7 @@
 						<ul class="dropdown-menu">
 							{% for invitation in app.user.groupsInvitations %}
 								<li>
-									<a href="{{path('group_accept_invite', {'id' : invitation.id, 'id_user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
+									<a href="{{path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
 								</li>
 							{% endfor %}
 						</ul>
