@@ -69,16 +69,12 @@ LivePlayer = function()
 
         switch(params.status) {
             case 1:
-                //this.checkCurrentVideoId(params);
-
                 player.seekTo(params.currentTime);
                 player.playVideo();
 
             break;
 
             case 2:
-                //this.checkCurrentVideoId(params);
-
                 player.seekTo(params.currentTime);
                 player.pauseVideo();
 
@@ -86,7 +82,8 @@ LivePlayer = function()
 
             case 0:
                 player.loadVideoById({
-                    videoId: params.videoId
+                    videoId: params.videoId,
+                    volume: params.videoVolume
                 });
 
                 this.initialize(params.playlistId);
@@ -127,10 +124,11 @@ LivePlayer = function()
                 videoId: data.videoId
             });
 
-            player.setVolume(data.videoVolume);
-
             params.playlistId = data.playlistId;
             params.videoId = data.videoId;
+
+            player.setVolume(data.videoVolume);
+            params.videoVolume = data.videoVolume;
 
             this.sendParameters(params);
 
