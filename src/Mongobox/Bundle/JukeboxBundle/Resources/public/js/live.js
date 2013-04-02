@@ -27,8 +27,8 @@ LivePlayer = function()
 		playlistId = currentPlaylistId;
 		this.getPlaylistScores(currentPlaylistId);
 
-		$('#up-vote a').unbind('click');
-		$('#up-vote a').click(function(event) {
+		$('#up-vote').unbind('click');
+		$('#up-vote').click(function(event) {
 			event.preventDefault();
 			var playlistId = this.getCurrentPlaylistId();
 
@@ -41,8 +41,8 @@ LivePlayer = function()
 			}.bind(this));
 		}.bind(this));
 
-		$('#down-vote a').unbind('click');
-		$('#down-vote a').click(function(event) {
+		$('#down-vote').unbind('click');
+		$('#down-vote').click(function(event) {
 			event.preventDefault();
 			var playlistId = this.getCurrentPlaylistId();
 

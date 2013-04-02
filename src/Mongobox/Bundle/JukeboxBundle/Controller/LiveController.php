@@ -146,12 +146,12 @@ class LiveController extends Controller
             $playerWidth 	= '390px';
             $playerHeight	= '220px';
 
-            $playersVars['mode'] = 'opaque';
+            $playerVars['mode'] = 'opaque';
         }
 
 		if ($playerMode !== 'admin' && $playerMode !== 'mobile') {
-            $playersVars['controls']    = 0;
-            $playersVars['disablekb']   = 1;
+            $playerVars['controls']    = 0;
+            $playerVars['disablekb']   = 1;
 		}
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
