@@ -54,7 +54,7 @@
 		          			width: '{{ player_width }}',
 		          			videoId: '{{ current_video.videoGroup.video.lien }}',
 		          			playerVars: {{ player_vars|raw }},
-		          			events: {{ player_events }}
+		          			events: {{ player_events|raw }}
 		          		});
 					});
 	          	}

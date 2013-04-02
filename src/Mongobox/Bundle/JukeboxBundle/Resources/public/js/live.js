@@ -117,20 +117,25 @@ LivePlayer = function()
 
 	this.seekNextVideo = function(params)
 	{
-		$.get(nextVideoUrl, function(response) {
-			data = JSON.parse(response);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: nextVideoUrl,
+            data: { 'volume' : player.getVolume() }
+        }).done(function(data) {
+            player.loadVideoById({
+                videoId: data.videoId
+            });
 
-			player.loadVideoById({
-				videoId: data.videoId
-			});
+            player.setVolume(data.videoVolume);
 
-			params.playlistId = data.playlistId;
-			params.videoId = data.videoId;
+            params.playlistId = data.playlistId;
+            params.videoId = data.videoId;
 
-			this.sendParameters(params);
+            this.sendParameters(params);
 
-			this.initialize(data.playlistId);
-		}.bind(this));
+            this.initialize(data.playlistId);
+        }.bind(this));
 	},
 
 	this.sendParameters = function(params)

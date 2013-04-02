@@ -50,6 +50,11 @@ class Videos
     protected $duration;
 
     /**
+     * @ORM\Column(type="integer", options={"default":50})
+     */
+    protected $volume;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     protected $thumbnail;
@@ -203,6 +208,17 @@ class Videos
         return $this;
     }
 
+    public function getVolume()
+    {
+        return $this->volume;
+    }
+
+    public function setVolume($volume)
+    {
+        $this->volume = $volume;
+
+        return $this;
+    }
 
     public function getTitleFromYoutube()
     {

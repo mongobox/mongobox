@@ -5,6 +5,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -132,34 +133,35 @@ class LiveController extends Controller
 			$playerStart = 0;
 		}
 
-		if($playerMode == 'mobile')  {
-			$playerWidth 	= '390';
-			$playerHeight	= '220';
+        $playerVars = array(
+            'start'     => $playerStart,
+            'autoplay'  => 1,
+            'volume'    => $currentPlayed->getVideoGroup()->getVideo()->getVolume()
+        );
 
-			$playerVars		= '{ start: '. $playerStart.', autoplay: 1,mode:"opaque" }';
-			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
-		}
-		elseif ($playerMode != 'admin' && $playerMode !='mobile') {
-			$playerWidth 	= '800px';
-			$playerHeight	= '500px';
+        if ($playerMode !== 'mobile')  {
+            $playerWidth 	= '800px';
+            $playerHeight	= '500px';
+        } else {
+            $playerWidth 	= '390px';
+            $playerHeight	= '220px';
 
-			$playerVars		= "{ controls: 0, disablekb: 1, start: $playerStart, autoplay: 1 }";
-			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
-		}
-		else {
-			$playerWidth 	= '800px';
-			$playerHeight	= '500px';
+            $playersVars['mode'] = 'opaque';
+        }
 
-			$playerVars		= "{ start: $playerStart, autoplay: 1 }";
-			$playerEvents	= '{ onStateChange: onPlayerStateChange }';
+		if ($playerMode !== 'admin' && $playerMode !== 'mobile') {
+            $playersVars['controls']    = 0;
+            $playersVars['disablekb']   = 1;
 		}
+
+        $playerEvents = array('onStateChange' => 'onPlayerStateChange');
 
     	return array(
     		'page_title'	=> 'Jukebox - Live stream',
     		'current_video'	=> $currentPlayed,
     		'player_mode'	=> $playerMode,
-    		'player_vars'	=> $playerVars,
-    		'player_events'	=> $playerEvents,
+    		'player_vars'	=> json_encode($playerVars),
+    		'player_events'	=> json_encode($playerEvents),
 			'player_width'	=> $playerWidth,
 			'player_height'	=> $playerHeight,
     		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001"
@@ -168,16 +170,38 @@ class LiveController extends Controller
 
     /**
      * @Route("/next", name="live_next")
+     * @Method("POST")
      */
     public function nextAction(Request $request)
     {
     	$em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$session    = $request->getSession();
+        $group      = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+        $currentPlaylist = $em
+            ->getRepository('MongoboxJukeboxBundle:Playlist')
+            ->findOneBy(array(
+                'group'     => $group->getId(),
+                'current'   => 1
+            ))
+        ;
+
+        $currentVideo   = $currentPlaylist->getVideoGroup()->getVideo();
+        $videoVolume    = (int) $request->get('volume', 50);
+
+        $currentVideo->setVolume($videoVolume);
+        $em->persist($currentVideo);
+        $em->flush();
 
     	$currentPlayed	= $this->_initJukebox($group);
 
-    	$response = new Response(json_encode(array('videoId' => $currentPlayed->getVideoGroup()->getVideo()->getLien(), 'playlistId' => $currentPlayed->getId())));
+    	$response = new Response(json_encode(array(
+            'videoId'       => $currentPlayed->getVideoGroup()->getVideo()->getLien(),
+            'playlistId'    => $currentPlayed->getId(),
+            'videoVolume'   => $currentPlayed->getVideoGroup()->getVideo()->getVolume()
+        )));
+
     	return $response;
     }
 
