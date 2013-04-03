@@ -11,12 +11,12 @@
 
 			<div class="video-rating">
                 <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
-                    <i class=" icon-thumbs-up icon-white"></i>
+                    <i class="icon-thumbs-up icon-white"></i>
                 </a>
                 <span id="up-score"></span>
 
                 <a href="#" class="btn btn-danger" id="down-vote" role="button" data-toggle="modal" title="Bof...">
-                    <i class=" icon-thumbs-down icon-white"></i>
+                    <i class="icon-thumbs-down icon-white"></i>
                 </a>
                 <span id="down-score"></span>
 
@@ -24,6 +24,22 @@
 
                 <span id="video-score"></span>
 			</div>
+
+            <br />
+
+            <div class="volume-control">
+                <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
+                    <i class="icon-volume-up icon-white"></i>
+                </a>
+
+                <a href="#" class="btn btn-danger" id="down-volume" role="button" data-toggle="modal" title="Bof...">
+                    <i class="icon-volume-down icon-white"></i>
+                </a>
+
+                <br />
+
+                <span id="video-volume"></span>
+            </div>
 
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
