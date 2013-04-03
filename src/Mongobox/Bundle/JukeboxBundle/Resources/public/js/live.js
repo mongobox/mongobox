@@ -70,7 +70,13 @@ LivePlayer = function()
 
         $('#up-volume').unbind('click');
         $('#up-volume').click(function(event) {
-            var newVolume = Math.round(player.getVolume() + 5);
+            if (this.controlUsed === 'down') {
+                var increase = 10;
+            } else {
+                var increase = 5;
+            }
+
+            var newVolume = Math.round(player.getVolume() + increase);
 
             if (this.controlUsed != 'up' && newVolume <= 100) {
                 player.setVolume(newVolume);
@@ -82,7 +88,13 @@ LivePlayer = function()
 
         $('#down-volume').unbind('click');
         $('#down-volume').click(function(event) {
-            var newVolume = Math.round(player.getVolume() - 5);
+            if (this.controlUsed === 'up') {
+                var decrease = 10;
+            } else {
+                var decrease = 5;
+            }
+
+            var newVolume = Math.round(player.getVolume() - decrease);
 
             if (this.controlUsed != 'down' && newVolume >= 5) {
                 player.setVolume(newVolume);
