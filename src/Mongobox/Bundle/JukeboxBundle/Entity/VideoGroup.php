@@ -47,9 +47,9 @@ class VideoGroup
     protected $vendredi;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default":50}))
      */
-    protected $volume = 100;
+    protected $volume;
 
     /**
      * @ORM\Column(type="integer")
@@ -71,9 +71,7 @@ class VideoGroup
 	/**
      * Constructor
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
 	public function setId($id)
     {

@@ -203,7 +203,6 @@ class Videos
         return $this;
     }
 
-
     public function getTitleFromYoutube()
     {
         $feed = 'http://gdata.youtube.com/feeds/api/videos/'.$this->getLien();
