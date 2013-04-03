@@ -1,6 +1,8 @@
 function onPlayerStateChange(event)
 {
-    livePlayer.updateVolumeControl(Math.round(player.getVolume()));
+    if (event.data === -1) {
+        livePlayer.synchronizePlayerVolume();
+    }
 
     if (playerMode != 'admin') {
         return this;
@@ -66,42 +68,16 @@ LivePlayer = function()
 
     this.initializeVolumeControl = function()
     {
-        this.controlUsed = '';
-
         $('#up-volume').unbind('click');
         $('#up-volume').click(function(event) {
-            if (this.controlUsed === 'down') {
-                var increase = 10;
-            } else {
-                var increase = 5;
-            }
-
-            var newVolume = Math.round(player.getVolume() + increase);
-
-            if (this.controlUsed != 'up' && newVolume <= 100) {
-                player.setVolume(newVolume);
-                this.controlUsed = 'up';
-
-                this.synchronizePlayerVolume(newVolume);
-            }
+            event.preventDefault();
+            this.updatePlayerVolume('up');
         }.bind(this));
 
         $('#down-volume').unbind('click');
         $('#down-volume').click(function(event) {
-            if (this.controlUsed === 'up') {
-                var decrease = 10;
-            } else {
-                var decrease = 5;
-            }
-
-            var newVolume = Math.round(player.getVolume() - decrease);
-
-            if (this.controlUsed != 'down' && newVolume >= 5) {
-                player.setVolume(newVolume);
-                this.controlUsed = 'down';
-
-                this.synchronizePlayerVolume(newVolume);
-            }
+            event.preventDefault();
+            this.updatePlayerVolume('down');
         }.bind(this));
     }
 
@@ -113,7 +89,6 @@ LivePlayer = function()
 		}
 
         if (params.action === 'update_volume') {
-            player.setVolume(params.volume);
             this.updateVolumeControl(params.volume);
         }
 
@@ -172,11 +147,6 @@ LivePlayer = function()
 
             params.playlistId = data.playlistId;
             params.videoId = data.videoId;
-
-            player.setVolume(data.videoVolume);
-            params.videoVolume = data.videoVolume;
-
-            this.updateVolumeControl(data.videoVolume);
 
             this.sendParameters(params);
 
@@ -243,19 +213,45 @@ LivePlayer = function()
         });
     }
 
-    this.synchronizePlayerVolume = function(volume)
+    this.updatePlayerVolume = function(direction)
     {
-        this.updateVolumeControl(volume);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: volumeUrl,
+            data: {
+                'playlist' : playlistId,
+                'vote': direction
+            }
+        }).done(function(data) {
+            this.updateVolumeControl(data);
 
-        var params = new Object();
-        params.action	= 'update_volume';
-        params.volume   = volume;
+            var params = new Object();
+            params.action	= 'update_volume';
+            params.volume   = data;
 
-        this.sendParameters(params);
+            this.sendParameters(params);
+        }.bind(this));
     },
 
-    this.updateVolumeControl = function(volume)
+    this.synchronizePlayerVolume = function()
     {
-        $('#video-volume').text('Volume : ' + volume + '%');
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: volumeUrl,
+            data: { 'playlist' : playlistId }
+        }).done(function(data) {
+            this.updateVolumeControl(data);
+        }.bind(this));
+    },
+
+    this.updateVolumeControl = function(data)
+    {
+        player.setVolume(data.currentVolume);
+
+        $('#volume-up-votes').text('(' + data.upVotes + ')');
+        $('#volume-down-votes').text('(' + data.downVotes + ')');
+        $('#video-volume').text('Volume : ' + data.currentVolume + '%');
     }
 };

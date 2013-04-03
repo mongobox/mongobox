@@ -50,11 +50,6 @@ class Videos
     protected $duration;
 
     /**
-     * @ORM\Column(type="integer", options={"default":50})
-     */
-    protected $volume;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     protected $thumbnail;
@@ -204,18 +199,6 @@ class Videos
     public function setDuration($duration)
     {
         $this->duration = $duration;
-
-        return $this;
-    }
-
-    public function getVolume()
-    {
-        return $this->volume;
-    }
-
-    public function setVolume($volume)
-    {
-        $this->volume = $volume;
 
         return $this;
     }

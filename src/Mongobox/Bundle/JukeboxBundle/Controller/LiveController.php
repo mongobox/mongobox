@@ -2,6 +2,7 @@
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
+use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
 
@@ -23,6 +24,7 @@ class LiveController extends Controller
 {
 	const UP_VOTE_VALUE		= 1;
 	const DOWN_VOTE_VALUE	= -1;
+    const VOLUME_STEP       = 5;
 
 	/**
 	 * Initialize Jukebox and return the current video
@@ -58,6 +60,7 @@ class LiveController extends Controller
 		$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
 
 		$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
+        $em->getRepository('MongoboxJukeboxBundle:Volume')->wipe($playlist_current);
 		$em->remove($playlist_current);
 
 		//On cherche la prochaine vidéo
@@ -71,7 +74,7 @@ class LiveController extends Controller
 	}
 
 	/**
-	 * Retrieves scores of the playlist
+	 * Retrieve scores of the playlist
 	 *
 	 * @param int $playlistId
 	 * @return array
@@ -136,7 +139,7 @@ class LiveController extends Controller
         $playerVars = array(
             'start'     => $playerStart,
             'autoplay'  => 1,
-            'volume'    => $currentPlayed->getVideoGroup()->getVideo()->getVolume()
+            'volume'    => $currentPlayed->getVideoGroup()->getVolume()
         );
 
         if ($playerMode !== 'mobile')  {
@@ -187,7 +190,7 @@ class LiveController extends Controller
             ))
         ;
 
-        $currentVideo   = $currentPlaylist->getVideoGroup()->getVideo();
+        $currentVideo   = $currentPlaylist->getVideoGroup();
         $videoVolume    = (int) $request->get('volume', 50);
 
         $currentVideo->setVolume($videoVolume);
@@ -199,7 +202,7 @@ class LiveController extends Controller
     	$response = new Response(json_encode(array(
             'videoId'       => $currentPlayed->getVideoGroup()->getVideo()->getLien(),
             'playlistId'    => $currentPlayed->getId(),
-            'videoVolume'   => $currentPlayed->getVideoGroup()->getVideo()->getVolume()
+            'videoVolume'   => $currentPlayed->getVideoGroup()->getVolume()
         )));
 
     	return $response;
@@ -321,5 +324,92 @@ class LiveController extends Controller
             'message'  => isset($message) ? $message : null,
             'edit_form' => $editForm->createView()
         );
+    }
+
+    /**
+     * Retrieve current volume of the given playlist
+     *
+     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist
+     * @return array
+     */
+    protected function _getPlaylistVolume($playlist)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $upVotes = count($em->getRepository('MongoboxJukeboxBundle:Volume')->findBy(array(
+            'playlist'	=> $playlist->getId(),
+            'direction' => self::UP_VOTE_VALUE,
+        )));
+
+        $downVotes = count($em->getRepository('MongoboxJukeboxBundle:Volume')->findBy(array(
+            'playlist'	=> $playlist->getId(),
+            'direction' => self::DOWN_VOTE_VALUE,
+        )));
+
+        $defaultVolume = $playlist->getVideoGroup()->getVolume();
+
+        $currentVolume  = $defaultVolume +  ($upVotes * self::VOLUME_STEP) - ($downVotes * self::VOLUME_STEP);
+        $totalVotes     = $upVotes + $downVotes;
+
+        $data = array(
+            'upVotes'		=> $upVotes,
+            'downVotes'		=> $downVotes,
+            'currentVolume'	=> $currentVolume,
+            'totalVotes'	=> $totalVotes
+        );
+
+        return $data;
+    }
+
+    /**
+     * @Route("/volume", name="live_volume")
+     */
+    public function volumeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $session    = $request->getSession();
+        $group      = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $user       = $this->get('security.context')->getToken()->getUser();
+
+        $playlistId		= $request->get('playlist');
+        $voteType		= $request->get('vote');
+
+        $currentPlaylist = $em
+            ->getRepository('MongoboxJukeboxBundle:Playlist')
+            ->findOneBy(array(
+                'group'     => $group->getId(),
+                'current'   => 1
+            ))
+        ;
+
+        if (is_null($currentPlaylist)) {
+            return new Response();
+        }
+
+        if ($request->getMethod() === 'POST' && in_array($voteType, array('up', 'down'))) {
+            $oldVote = $em->getRepository('MongoboxJukeboxBundle:Volume')->findOneBy(array(
+                'user'      => $user->getId(),
+                'playlist'  => $playlistId
+            ));
+
+            if (!is_null($oldVote)) {
+                $em->remove($oldVote);
+                $em->flush();
+            }
+
+            $vote = new Volume();
+            $vote->setUser($user);
+            $vote->setDirection(($request->get('vote') === 'up') ? self::UP_VOTE_VALUE : self::DOWN_VOTE_VALUE);
+            $vote->setPlaylist($currentPlaylist);
+
+            $em->persist($vote);
+            $em->flush();
+        }
+
+        $data       = $this->_getPlaylistVolume($currentPlaylist);
+        $response   = new Response(json_encode($data));
+
+        return $response;
     }
 }
