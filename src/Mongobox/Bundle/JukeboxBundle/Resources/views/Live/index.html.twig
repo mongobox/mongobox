@@ -10,24 +10,38 @@
 			<div id="player"></div>
 
 			<div class="video-rating">
-                <span id="up-vote" class="vote-up-button">
-                    <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
-                        <i class=" icon-thumbs-up icon-white"></i>
-                    </a>
-                    <span id="up-score"></span>
-                </span>
+                <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
+                    <i class="icon-thumbs-up icon-white"></i>
+                </a>
+                <span id="up-score"></span>
 
-                 <span id="down-vote" class="vote-down-button">
-                    <a href="#" class="btn btn-danger" id="up-vote" role="button" data-toggle="modal" title="Bof...">
-                        <i class=" icon-thumbs-down icon-white"></i>
-                    </a>
-                    <span id="down-score"></span>
-                </span>
+                <a href="#" class="btn btn-danger" id="down-vote" role="button" data-toggle="modal" title="Bof...">
+                    <i class="icon-thumbs-down icon-white"></i>
+                </a>
+                <span id="down-score"></span>
 
                 <br />
 
                 <span id="video-score"></span>
 			</div>
+
+            <br />
+
+            <div class="volume-control">
+                <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
+                    <i class="icon-volume-up icon-white"></i>
+                </a>
+                <span id="volume-up-votes"></span>
+
+                <a href="#" class="btn btn-danger" id="down-volume" role="button" data-toggle="modal" title="Bof...">
+                    <i class="icon-volume-down icon-white"></i>
+                </a>
+                <span id="volume-down-votes"></span>
+
+                <br />
+
+                <span id="video-volume"></span>
+            </div>
 
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
@@ -44,6 +58,10 @@
 	          	var nextVideoUrl	= '{{ path('live_next') }}';
 	          	var voteUrl			= '{{ path('live_vote') }}';
 	          	var scoreUrl		= '{{ path('live_score') }}';
+                var volumeUrl       = '{{ path('live_volume') }}';
+
+                var playerVars      = {{ player_vars|raw }}
+                var defaultVolume   = playerVars.volume;
 
 	          	var player;
 	          	function onYouTubeIframeAPIReady()
@@ -53,8 +71,8 @@
 		          			height: '{{ player_height }}',
 		          			width: '{{ player_width }}',
 		          			videoId: '{{ current_video.videoGroup.video.lien }}',
-		          			playerVars: {{ player_vars|raw }},
-		          			events: {{ player_events }}
+		          			playerVars: playerVars,
+		          			events: {{ player_events|raw }}
 		          		});
 					});
 	          	}
