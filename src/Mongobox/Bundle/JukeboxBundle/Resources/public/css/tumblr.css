@@ -83,3 +83,45 @@
     display: inline-block;
     position: relative;
 }
+
+#tumblr-add-container {
+	clear: both;
+	position: fixed;
+	width: 100%;
+	z-index: 1;
+}
+
+#btn-add-tumblr-show {
+	width: 250px;
+	margin: 0 auto;
+	margin-top: -5px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#btn-add-tumblr-show .navbar-inner {
+	color: white;
+	min-height: 20px;
+}
+
+#tumblr-add-wall {
+	width: 80%;
+	margin: 0 auto;
+	margin-top: -3px;
+	text-align: center;
+	height: 300px;
+	
+	border-color: #252525;
+	border-width: 0 0 1px;
+	border: 1px solid #d4d4d4;
+	background-color: white;
+}
+
+#tumblr {
+	margin-top: 20px;
+}
+
+#tumblr-add-wall .span4 {
+	padding-top: 20px;
+	min-height: 250px;
+}

@@ -37,10 +37,10 @@ function loadStatistiques()
 
 $(document).ready(function()
 {
-	setInterval( loadRSS, 300000 );
+	/*setInterval( loadRSS, 300000 );
 	loadRSS();
-	loadProposeVotes();
+	loadProposeVotes();*/
 });
 
-var refreshStatistiques = setInterval('loadStatistiques()', 5000);
+//var refreshStatistiques = setInterval('loadStatistiques()', 5000);
 var refreshStatistiquesFail = 0;

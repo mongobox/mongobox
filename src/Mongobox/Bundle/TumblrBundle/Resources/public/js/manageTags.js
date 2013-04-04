@@ -3,7 +3,7 @@ var listTags = new Array();
 var tags = tags || {};
 
 (function($){
-	
+
 	tags.init = function(){
 		this.form = $('#tumblr-add-content');
 		this.containerSelectedTags = $('#container-selected-tags');
@@ -15,19 +15,24 @@ var tags = tags || {};
         // index when inserting a new item (e.g. 2)
         this.collectionHolder.data('index', this.collectionHolder.find(':input').length);
         this.tags = new Array();
-		
+
 		this.addTagButton = $('#tumblr-button-add-tag');
         this.autocompleteField = $('#autocompleter_tumblr_addtags');
 		this.removeTagButton = this.collectionHolder.find('button.close');
-		
+
 		this.observeAddTag();
 		this.observeRemoveTag();
 	};
-	
+
 	tags.observeAddTag = function(){
-		
+
 		this.addTagButton.bind('click', function(event){
 			event.preventDefault();
+			if( tags.autocompleteField.val() === '' || tags.autocompleteField.val() === tags.autocompleteField.attr('placeholder') )
+			{
+				tags.autocompleteField.focus();
+				return false;
+			}
             tags.loadTag( tags.autocompleteField.val() );
 
         });
@@ -108,8 +113,8 @@ var tags = tags || {};
         });
     };
 
-	
-    
+
+
     // clic sur la fleche pour ajouter un mot clé
 //	$('#bouton_ajouter_mot_cle').bind('click', function(e)
 //	{
@@ -132,7 +137,7 @@ var tags = tags || {};
 //			}
 //		}
 //	});
-//	
+//
 //	// lorsqu'un clic arrive pour supprimer un mot clé libre
 //	$("#mots_cles_choisis").on("click", ".motcle button.close", function()
 //	{
@@ -140,9 +145,9 @@ var tags = tags || {};
 //		mots_cles.splice( $.inArray(motcle, mots_cles), 1 );
 //		$(this).parent().remove();
 //	});
-//	
+//
 
-//	
-	
+//
+
 
 })(jQuery);

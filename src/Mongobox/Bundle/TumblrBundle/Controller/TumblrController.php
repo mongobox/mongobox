@@ -68,11 +68,82 @@ class TumblrController extends Controller
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
 
         $tumblr = new Tumblr();
         $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
 
-        if ( 'POST' === $request->getMethod() ) {
+        if ( $request->isMethod('POST') || $request->isXmlHttpRequest() )
+		{
+            $form->bind($request);
+            if ( $form->isValid() )
+			{
+                $tumblr->setDate(new \Datetime());
+
+				// Get data tags switch request method
+				if( $request->isXmlHttpRequest() )
+				{
+					$datas = $request->request->get('tumblr');
+					$tags = $datas['tags'];
+					$access_tumblr = false;
+				} else
+				{
+					$tags = $form->get('tags')->getData();
+				}
+
+                // Set Tags
+                foreach( $tags as $tag_id)
+                {
+                    $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
+                    $entityTag->getTumblrs()->add($tumblr);
+                }
+
+				foreach($form->get('groups')->getData() as $group_id)
+				{
+					if(in_array($group_id, $user->getGroupsIds()) ) $access_tumblr = true;
+					$group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+					$group->getTumblrs()->add($tumblr);
+				}
+
+                $em->persist($tumblr);
+                $em->flush();
+
+				if( $request->isXmlHttpRequest() )
+				{
+					$datas = array();
+					$datas['success'] = $access_tumblr;
+					$datas['tumblrView'] = $this->render('MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig', array(
+						'mongo' => $tumblr
+					))->getContent();
+
+					return new Response(json_encode($datas));
+				} else
+				{
+					$this->get('session')->setFlash('success', 'Tumblr posté avec succès');
+					return $this->redirect($this->generateUrl('mongo_pute'));
+				}
+            }
+        }
+
+        return array(
+            'form' => $form->createView()
+        );
+    }
+
+	/**
+	 * @Template()
+	 * @Route("/ajax/add", name="mongo_pute_add_ajax")
+	 * @param \Symfony\Component\HttpFoundation\Request $request
+	 * @return type
+	 */
+	public function addAjaxAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+        $tumblr = new Tumblr();
+        $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
+
+        /*if ( 'POST' === $request->getMethod() ) {
             $form->bind($request);
             if ( $form->isValid() )
 			{
@@ -97,12 +168,12 @@ class TumblrController extends Controller
 
                 return $this->redirect($this->generateUrl('mongo_pute'));
             }
-        }
+        }*/
 
         return array(
             'form' => $form->createView()
         );
-    }
+	}
 
     /**
      * Action to search tags for autocomplete field
@@ -185,7 +256,7 @@ class TumblrController extends Controller
 
         $em->persist($vote);
         $em->flush();
-        
+
         $retour = array(
         		'somme' => $tumblr_vote->getSomme(),
         		'moyenne' => $tumblr_vote->getMoyenne(),
@@ -206,7 +277,7 @@ class TumblrController extends Controller
 		$user = $this->get('security.context')->getToken()->getUser();
 
         $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
-        
+
         $ajax_request = $request->isXmlHttpRequest();
         return array
         (
@@ -222,7 +293,7 @@ class TumblrController extends Controller
 	 * @Template()
 	 */
 	public function topAction(Request $request){
-		
+
 		$em = $this->getDoctrine()->getManager();
 		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
 		$user = $this->get('security.context')->getToken()->getUser();
@@ -230,14 +301,14 @@ class TumblrController extends Controller
 		$top7 = $tumblrRepository->topPeriod($user->getGroupsIds(), 7);
 		$top30 = $tumblrRepository->topPeriod($user->getGroupsIds(), 30);
 		$topTumblr = $tumblrRepository->top($user->getGroupsIds());
-		
+
 		return array(
 			'top7' => $top7,
 			'top30' => $top30,
 			'topTumblr' => $topTumblr
 		);
 	}
-	
+
 	/**
 	 * @Route("/load/popover/content/{id_tumblr}", name="tumblr_load_popover_content")
 	 * @param Request $request
@@ -247,12 +318,12 @@ class TumblrController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
 		$class_tumblr = $request->request->get('class_tumblr');
-		
+
 		$retour = array(
 				'content' => $this->render('MongoboxTumblrBundle:Slider:popoverContent.html.twig', array('tumblr' => $tumblr,'tumblr_class' => $class_tumblr))->getContent(),
 				'title' => $this->render('MongoboxTumblrBundle:Slider:titlePopover.html.twig', array('tumblr' => $tumblr))->getContent()
 		);
-		
+
 		return new Response(json_encode($retour));
 	}
 

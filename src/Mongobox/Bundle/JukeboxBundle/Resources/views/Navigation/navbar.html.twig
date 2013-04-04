@@ -95,6 +95,20 @@
   </div>
 </div>
 
+{% if app.request.get('_route') == "homepage" %}
+<div id="tumblr-add-container">
+	<div id="tumblr-add-wall" class="hide">
+		{{ render(controller("MongoboxTumblrBundle:Tumblr:addAjax")) }}
+		<div class="hide" id="ajax_loader_tumblr_add"><img alt="ajax loader" src="{{ asset('bundles/mongoboxjukebox/img/ajax-loader-tumblr-add.gif') }}" /></div>
+	</div>
+	<div id="btn-add-tumblr-show" class="ajout-tumblr navbar navbar-inverse">
+		<div class="navbar-inner">
+			<i class="icon-chevron-down icon-white pull-left"></i>poster une mongo pute<i class="icon-chevron-down icon-white pull-right"></i>
+		</div>
+	</div>
+</div>
+{% endif %}
+
 <div class="modal hide fade" id="post-video-modal">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
