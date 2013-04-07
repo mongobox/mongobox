@@ -69,7 +69,6 @@ var tags = tags || {};
 
             this.autocompleteField.val('');
             this.observeRemoveTag();
-            console.log( prototype, index );
         }
         else{
             alert('Tag already selected');
