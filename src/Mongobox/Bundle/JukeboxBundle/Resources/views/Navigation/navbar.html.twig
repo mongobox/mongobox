@@ -45,7 +45,7 @@
 								{% endif %}
 							</ul>
 						</li>
-						
+
 					{% endfor %}
 					<li class="divider"></li>
 					<li>
@@ -66,9 +66,9 @@
           <li class="dropdown">
 			<a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Poster une mongo pute">Mongo pute <b class="caret"></b></a>
           	<ul class="dropdown-menu">
-          		<li{% if app.request.attributes.get('_route') == 'mongo_pute_add' %} class="active"{% endif %}>
+          		{#<li{% if app.request.attributes.get('_route') == 'mongo_pute_add' %} class="active"{% endif %}>
           			<a href="{{ path('mongo_pute_add') }}">Poster une Mongo Pute</a>
-          		</li>
+          		</li>#}
           		<li{% if app.request.attributes.get('_route') == 'top_tumblr' %} class="active"{% endif %}>
           			<a href="{{ path('tumblr_top') }}">Top Mongo Pute</a>
           		</li>
