@@ -95,7 +95,7 @@
   </div>
 </div>
 
-{% if app.request.get('_route') == "homepage" %}
+{#% if app.request.get('_route') == "homepage" %#}
 <div id="tumblr-add-container">
 	<div id="tumblr-add-wall" class="hide">
 		{{ render(controller("MongoboxTumblrBundle:Tumblr:addAjax")) }}
@@ -107,7 +107,7 @@
 		</div>
 	</div>
 </div>
-{% endif %}
+{#% endif %#}
 
 <div class="modal hide fade" id="post-video-modal">
 	<div class="modal-header">

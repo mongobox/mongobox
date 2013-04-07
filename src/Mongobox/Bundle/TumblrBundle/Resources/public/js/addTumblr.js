@@ -92,6 +92,8 @@ var addTumblr = addTumblr || {};
 			success: function(data)
 			{
 				addTumblr.hideForm();
+				if( !data.showTumblr )
+					return false;
 				if( data.success )
 				{
 					if( addTumblr.slider.find('li').length === 5 )

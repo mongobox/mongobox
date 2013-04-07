@@ -115,6 +115,7 @@ class TumblrController extends Controller
 					$datas['tumblrView'] = $this->render('MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig', array(
 						'mongo' => $tumblr
 					))->getContent();
+					$datas['showTumblr'] = ($this->getReferrerRouteName() === 'homepage')? true: false;
 
 					return new Response(json_encode($datas));
 				} else
@@ -133,42 +134,12 @@ class TumblrController extends Controller
 	/**
 	 * @Template()
 	 * @Route("/ajax/add", name="mongo_pute_add_ajax")
-	 * @param \Symfony\Component\HttpFoundation\Request $request
 	 * @return type
 	 */
-	public function addAjaxAction(Request $request)
+	public function addAjaxAction()
 	{
-		$em = $this->getDoctrine()->getManager();
-
         $tumblr = new Tumblr();
         $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
-
-        /*if ( 'POST' === $request->getMethod() ) {
-            $form->bind($request);
-            if ( $form->isValid() )
-			{
-                $tumblr->setDate(new \Datetime());
-
-                // Set Tags
-                foreach($form->get('tags')->getData() as $tag_id)
-                {
-                    $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
-                    $entityTag->getTumblrs()->add($tumblr);
-                }
-
-				foreach($form->get('groups')->getData() as $group_id)
-				{
-					$group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
-					$group->getTumblrs()->add($tumblr);
-				}
-
-                $em->persist($tumblr);
-                $em->flush();
-                $this->get('session')->setFlash('success', 'Tumblr posté avec succès');
-
-                return $this->redirect($this->generateUrl('mongo_pute'));
-            }
-        }*/
 
         return array(
             'form' => $form->createView()
@@ -373,4 +344,19 @@ class TumblrController extends Controller
 		);
 	}
 
+	/**
+	 * Fonction pour récupérer la route referrer
+	 */
+	public function getReferrerRouteName()
+	{
+		$referer = $this->getRequest()->headers->get('referer');
+		$lastPath = substr($referer, strpos($referer, $this->getRequest()->getBaseUrl()));
+		$lastPath = str_replace($this->getRequest()->getBaseUrl(), '', $lastPath);
+
+		$matcher = $this->get('router')->getMatcher();
+		$parameters = $matcher->match($lastPath);
+		$route = $parameters['_route'];
+
+		return $route;
+	}
 }
