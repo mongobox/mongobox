@@ -33,9 +33,9 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ asset('bundles/mongoboxjukebox/ico/apple-touch-icon-72-precomposed.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/mongoboxjukebox/ico/apple-touch-icon-57-precomposed.png') }}">
 
-    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery.1.9.1.min.js') }}"></script>
-    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery-ui-1.10.0.min.js') }}"></script>
-    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery.easing.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.1.9.1.min.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery-ui-1.10.0.min.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.easing.js') }}"></script>
 		<script>
 			var basepath = "{{ path('wall_index') }}";
 		</script>
@@ -83,9 +83,9 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxcore/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
 	{% if app.user %}
-    <script src="{{ asset('bundles/mongoboxjukebox/js/vendor/jquery/jquery.raty.js') }}"></script>
+    <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
     <script src="{{ asset('bundles/mongoboxjukebox/js/jukebox.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxtumblr/js/tumblr.js') }}"></script>
 	{% endif %}
