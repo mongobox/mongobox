@@ -36,10 +36,18 @@ class TumblrType extends AbstractType
 
         $builder
             ->add('image', 'text', array(
-            	'label' => 'URL image'
+            	'label' => 'URL image',
+				'attr' => array(
+                    'placeholder' => 'URL de l\'image',
+                ),
+				'required' => true
             ))
             ->add('text', 'text', array(
-            	'label' => 'Texte'
+            	'label' => 'Texte',
+				'attr' => array(
+                    'placeholder' => 'Texte de la mongo pute',
+                ),
+				'required' => true
             ))
             ->add('addtags', 'genemu_jqueryautocompleter_entity', array(
                 'route_name' => 'tumblr_tags_ajax_autocomplete',

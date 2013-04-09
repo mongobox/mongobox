@@ -45,7 +45,7 @@
 								{% endif %}
 							</ul>
 						</li>
-						
+
 					{% endfor %}
 					<li class="divider"></li>
 					<li>
@@ -66,9 +66,9 @@
           <li class="dropdown">
 			<a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Poster une mongo pute">Mongo pute <b class="caret"></b></a>
           	<ul class="dropdown-menu">
-          		<li{% if app.request.attributes.get('_route') == 'mongo_pute_add' %} class="active"{% endif %}>
+          		{#<li{% if app.request.attributes.get('_route') == 'mongo_pute_add' %} class="active"{% endif %}>
           			<a href="{{ path('mongo_pute_add') }}">Poster une Mongo Pute</a>
-          		</li>
+          		</li>#}
           		<li{% if app.request.attributes.get('_route') == 'top_tumblr' %} class="active"{% endif %}>
           			<a href="{{ path('tumblr_top') }}">Top Mongo Pute</a>
           		</li>
@@ -94,6 +94,20 @@
     </div>
   </div>
 </div>
+
+{#% if app.request.get('_route') == "homepage" %#}
+<div id="tumblr-add-container">
+	<div id="tumblr-add-wall" class="hide">
+		{{ render(controller("MongoboxTumblrBundle:Tumblr:addAjax")) }}
+		<div class="hide" id="ajax_loader_tumblr_add"><img alt="ajax loader" src="{{ asset('bundles/mongoboxjukebox/img/ajax-loader-tumblr-add.gif') }}" /></div>
+	</div>
+	<div id="btn-add-tumblr-show" class="ajout-tumblr navbar navbar-inverse">
+		<div class="navbar-inner">
+			<i class="icon-chevron-down icon-white pull-left"></i>poster une mongo pute<i class="icon-chevron-down icon-white pull-right"></i>
+		</div>
+	</div>
+</div>
+{#% endif %#}
 
 <div class="modal hide fade" id="post-video-modal">
 	<div class="modal-header">
