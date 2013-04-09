@@ -1,11 +1,11 @@
-{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+{% extends "MongoboxCoreBundle:Wall:layout.html.twig" %}
 
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
 
 <div class="marketing">
-	<h1><img src="{{ asset('bundles/mongoboxjukebox/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
+	<h1><img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
 	<h2>Mongo pute</h2>
 </div>
 <div class="vote"></div>
@@ -18,9 +18,9 @@
 
 			<h2><a href="{{ path('tumblr_show', { 'id': entity.id }) }}" title="Voir : {{entity.text}}">{{entity.text}}</a></h2>
             <br/>
-			
+
 			{% include 'MongoboxTumblrBundle:Slider:vote.html.twig' with { 'tumblr': entity } %}
-			
+
             <span class="tumblr-img-bloc">
                 {% if entity.hasTag('nsfw') and app.user.nsfwmode %}
                 <span class="nsfw-mask active" title="Cliquer pour afficher l'image"></span>
@@ -54,11 +54,11 @@
 	$(function()
 	{
 		tumblr.init("tumblr-popover", "tumblr-img-id", "note-tumblr", "note-user-tumblr");
-		tumblr.pathToImg = "{{ asset('bundles/mongoboxjukebox/img/') }}";
+		tumblr.pathToImg = "{{ asset('bundles/mongoboxtumblr/img/') }}";
 		tumblr.initInfoVote();
 		tumblr.starRating('.star', 1);
 		tumblr.initScoreRating();
-		
+
 		$('.nsfw-mask').click(function(){
 			$(this).toggleClass('active');
         });

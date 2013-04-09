@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongobox\Bundle\JukeboxBundle\Controller;
+namespace Mongobox\Bundle\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,10 +98,10 @@ class WallController extends Controller
 			return $this->redirect($this->generateUrl('group_index'));
 		}
     }
-	
+
 	public function postVideoFormAction()
 	{
-		
+
 	}
 
     /**
@@ -190,14 +190,14 @@ class WallController extends Controller
      * @Template()
      * @Route( "/vote/{id}/{sens}", name="vote")
      * @ParamConverter("playlist", class="MongoboxJukeboxBundle:Playlist")
-     * 
+     *
      */
     public function voteAction(Request $request, $playlist, $sens)
     {
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$user = $this->get('security.context')->getToken()->getUser();
-		
+
         //Wipe de son ancien vote
         $old_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')
 						->findOneBy(array(
@@ -275,7 +275,7 @@ class WallController extends Controller
     }
 
     /**
-	 * @Template("MongoboxJukeboxBundle:Wall/Blocs:videoEnCours.html.twig")
+	 * @Template("MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig")
      * @Route( "/video_en_cours", name="video_en_cours")
      */
     public function videoEnCoursAction(Request $request)
@@ -297,7 +297,7 @@ class WallController extends Controller
 		if(!is_null($request->query->get('json')))
 		{
 			$render = $this->render(
-            'MongoboxJukeboxBundle:Wall/Blocs:videoEnCours.html.twig',
+            'MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig',
             array(
 				'video_en_cours' => $video_en_cours,
 				'date_actuelle' => new \Datetime(),
@@ -314,7 +314,7 @@ class WallController extends Controller
     }
 
     /**
-	 * @Template("MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig")
+	 * @Template("MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig")
      * @Route( "/statistiques", name="statistiques")
      */
     public function statistiquesAction(Request $request)
@@ -335,11 +335,11 @@ class WallController extends Controller
 			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $session->get('id_group'));
 			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
 			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
-			
+
 			if(!is_null($request->query->get('json')))
 			{
 				$render = $this->render(
-				'MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig',
+				'MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig',
 				array(
 					'video_en_cours' => $video_en_cours,
 					//'total_video' => $total_video,
@@ -362,7 +362,7 @@ class WallController extends Controller
     }
 
     /**
-     * @Template("MongoboxJukeboxBundle:Wall/Blocs:fluxRss.html.twig")
+     * @Template("MongoboxCoreBundle:Wall/Blocs:fluxRss.html.twig")
      * @Route( "/flux_rss", name="flux_rss")
      */
     public function fluxRssAction(Request $request)
@@ -419,11 +419,11 @@ class WallController extends Controller
 			$response['type'] = 'new';
 		}
 		return new Response(json_encode($response));
-		
-	}	
+
+	}
 
     /**
-     * @Template("MongoboxJukeboxBundle:Wall/Blocs:postVideo.html.twig")
+     * @Template("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig")
      * @Route( "/post_video", name="post_video")
      */
 	public function postVideoAction(Request $request)

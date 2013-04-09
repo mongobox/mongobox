@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
       </a>
       <a class="brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
-		<img src="{{ asset('bundles/mongoboxjukebox/img/logo/mongo-logo-header.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" />
+		<img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" />
 	  </a>
       <div class="nav-collapse">
 		{% if app.user %}
@@ -24,7 +24,7 @@
 						<ul class="dropdown-menu">
 							{% for invitation in app.user.groupsInvitations %}
 								<li>
-									<a href="{{path('group_accept_invite', {'id' : invitation.id, 'id_user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
+									<a href="{{path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
 								</li>
 							{% endfor %}
 						</ul>
@@ -45,7 +45,7 @@
 								{% endif %}
 							</ul>
 						</li>
-						
+
 					{% endfor %}
 					<li class="divider"></li>
 					<li>
@@ -66,9 +66,6 @@
           <li class="dropdown">
 			<a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Poster une mongo pute">Mongo pute <b class="caret"></b></a>
           	<ul class="dropdown-menu">
-          		<li{% if app.request.attributes.get('_route') == 'mongo_pute_add' %} class="active"{% endif %}>
-          			<a href="{{ path('mongo_pute_add') }}">Poster une Mongo Pute</a>
-          		</li>
           		<li{% if app.request.attributes.get('_route') == 'top_tumblr' %} class="active"{% endif %}>
           			<a href="{{ path('tumblr_top') }}">Top Mongo Pute</a>
           		</li>
@@ -87,12 +84,24 @@
           <li><a href="{{ path('live') }}" title="Voir le live">Live</a></li>
         </ul>
 		<div id="video_en_cours">
-			{% render controller("MongoboxJukeboxBundle:Wall:videoEnCours") %}
+			{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}
 		</div>
   	    <a href="#post-video-modal" class="btn btn-success" id="add-video-button" role="button" data-toggle="modal" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
       </div><!--/.nav-collapse -->
     </div>
   </div>
+</div>
+
+<div id="tumblr-add-container">
+	<div id="tumblr-add-wall" class="hide">
+		{{ render(controller("MongoboxTumblrBundle:Tumblr:addAjax")) }}
+		<div class="hide" id="ajax_loader_tumblr_add"><img alt="ajax loader" src="{{ asset('bundles/mongoboxjukebox/img/ajax-loader-tumblr-add.gif') }}" /></div>
+	</div>
+	<div id="btn-add-tumblr-show" class="ajout-tumblr navbar navbar-inverse">
+		<div class="navbar-inner">
+			<i class="icon-chevron-down icon-white pull-left"></i>poster une mongo pute<i class="icon-chevron-down icon-white pull-right"></i>
+		</div>
+	</div>
 </div>
 
 <div class="modal hide fade" id="post-video-modal">

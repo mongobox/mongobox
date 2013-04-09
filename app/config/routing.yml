@@ -1,8 +1,3 @@
-mongobox_core:
-    resource: "@MongoboxCoreBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 MongoboxTumblrBundle:
     resource: "@MongoboxTumblrBundle/Controller/"
     type:     annotation
@@ -10,10 +5,15 @@ MongoboxTumblrBundle:
 
 homepage:
     pattern:  /
-    defaults: { _controller: MongoboxJukeboxBundle:Wall:index }
-    
+    defaults: { _controller: MongoboxCoreBundle:Wall:index }
+
 MongoboxJukeboxBundle:
     resource: "@MongoboxJukeboxBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+MongoboxCoreBundle:
+    resource: "@MongoboxCoreBundle/Controller/"
     type:     annotation
     prefix:   /
 
@@ -21,24 +21,24 @@ MongoboxUsersBundle:
     resource: "@MongoboxUsersBundle/Controller/"
     type:     annotation
     prefix:   /
-    
+
 MongoboxGroupBundle:
     resource: "@MongoboxGroupBundle/Controller/"
     type:     annotation
     prefix:   /
-    
+
 MongoboxStatisticsBundle:
     resource: "@MongoboxStatisticsBundle/Controller/"
     type:     annotation
     prefix:   /
-    
+
 _login_check:
     pattern: /login_check
     requirements: {_method : POST }
 
 _logout:
     pattern: /logout
-        
+
 # Internal routing configuration to handle ESI
 #_internal:
 #   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
