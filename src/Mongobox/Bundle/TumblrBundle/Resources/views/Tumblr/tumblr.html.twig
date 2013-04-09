@@ -7,7 +7,7 @@
     {% for mongo in mongo_pute %}
     	{% if top is defined and top is sameas(true) %}{% set mongo = mongo.tumblr %}{% endif %}
         <li style="display:inline;">
-            <img src="{% if mongo.localPath is null %}{{ mongo.image }}{% else %}{{ mongo.localPath }}{% endif %}" alt="{{ mongo.text }}" title="{{ mongo.text }}" class="{{ tumblr_class }} {{ tumblr_id_model }}-{{ mongo.id }}" style="width:110px;height: 90px"> 
+            <img src="{% if mongo.localPath is null %}{{ mongo.image }}{% else %}{{ mongo.localPath }}{% endif %}" alt="{{ mongo.text }}" title="{{ mongo.text }}" class="{{ tumblr_class }} {{ tumblr_id_model }}-{{ mongo.id }}" style="width:110px;height: 90px">
         </li>
     {% endfor %}
 </ul>
@@ -19,7 +19,7 @@
     {
         // Giving class to parameter to initialize popover
         tumblr.init("{{ tumblr_class }}", "{{ tumblr_id_model }}", "{{ tumblr_note_model }}", "{{ tumblr_user_model }}");
-        tumblr.pathToImg = "{{ asset('bundles/mongoboxjukebox/img/') }}";
+        tumblr.pathToImg = "{{ asset('bundles/mongoboxtumblr/img/') }}";
     });
 </script>
 {% endif %}

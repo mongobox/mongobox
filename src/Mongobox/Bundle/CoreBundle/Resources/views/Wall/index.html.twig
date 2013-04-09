@@ -1,4 +1,4 @@
-{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+{% extends "MongoboxCoreBundle:Wall:layout.html.twig" %}
 
 {% block title -%}- Accueil{%- endblock title %}
 
@@ -12,14 +12,14 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div id="statistiques">
-				{% include "MongoboxJukeboxBundle:Wall/Blocs:statistiques.html.twig" %}
+				{% include "MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig" %}
 			</div>
 			<div id="propose-votes">
 			</div>
 		</div>
 		<div class="span6">
 			<div id="flux_rss">
-				{#% render controller("MongoboxJukeboxBundle:Wall:fluxRss") %#}
+				{#% render controller("MongoboxCoreBundle:Wall:fluxRss") %#}
 			</div>
 		</div>
 	</div>
@@ -27,5 +27,5 @@
 {% endblock body %}
 
 {% block javascripts %}
-<script src="{{ asset('bundles/mongoboxjukebox/js/wall.js') }}"></script>
+<script src="{{ asset('bundles/mongoboxcore/js/wall.js') }}"></script>
 {% endblock javascripts %}

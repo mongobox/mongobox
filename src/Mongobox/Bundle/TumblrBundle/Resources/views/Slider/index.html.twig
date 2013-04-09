@@ -21,7 +21,7 @@
     	{% if ajax_request is not defined or ajax_request is sameas(false) %}
 	        // Giving class to parameter to initialize popover
 	        tumblr.init("tumblr-popover", "tumblr-img-id", "note-tumblr", "note-user-tumblr");
-	        tumblr.pathToImg = "{{ asset('bundles/mongoboxjukebox/img/') }}";
+	        tumblr.pathToImg = "{{ asset('bundles/mongoboxtumblr/img/') }}";
         {% else %}
         tumblr.loadPopover();
         {% endif %}

@@ -1,4 +1,4 @@
-{% extends "MongoboxJukeboxBundle:Wall:layout.html.twig" %}
+{% extends "MongoboxCoreBundle:Wall:layout.html.twig" %}
 
 {% block title %}{{video_group.video.title}}{% endblock title %}
 
@@ -6,7 +6,7 @@
 
 <!DOCTYPE html>
 	<div class="marketing">
-		<h1><img src="{{ asset('bundles/mongoboxjukebox/img/mongobox.png') }}" title="{{project_name}}" /></h1>
+		<h1><img src="{{ asset('bundles/mongoboxcore/img/mongobox.png') }}" title="{{project_name}}" /></h1>
 		<h2>{{video_group.video.title}}</h2>
 	</div>
 	<div class="hero-unit">
