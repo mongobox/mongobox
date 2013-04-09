@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
             </a>
             <a class="brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
-                <img src="{{ asset('bundles/mongoboxjukebox/img/logo/mongo-logo-header.png') }}" style="height : 40px;"
+                <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}" style="height : 40px;"
                      alt="{{ project_name }}" title="{{ project_name }} - Voir le front"/>
                 ADMIN
             </a>
@@ -125,3 +125,5 @@
         </div>
     </div>
 </div>
+
+{% include 'MongoboxCoreBundle:Navigation:tumblrForm.html.twig' %}

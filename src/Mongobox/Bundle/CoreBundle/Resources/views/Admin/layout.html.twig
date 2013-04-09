@@ -19,9 +19,10 @@
     <link href="{{ asset('bundles/mongoboxcore/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('bundles/mongoboxcore/css/Admin/admin.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/mongoboxtumblr/css/tumblr.css') }}" rel="stylesheet">
 
     {% block css %}{% endblock %}
-	{% block stylesheets %}{% endblock %} 
+	{% block stylesheets %}{% endblock %}
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -87,6 +88,13 @@
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
 	{% if app.user %}
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxtumblr/js/addTumblr.js') }}"></script>
+	<script type="text/javascript">
+		$(function()
+		{
+			addTumblr.init();
+		});
+	</script>
 	{% endif %}
     {% block javascripts %}{% endblock %}
 
