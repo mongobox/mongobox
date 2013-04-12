@@ -1,5 +1,28 @@
-<form id="form_video" method="post">
-	{{ form_widget(form_video) }}
-	 <span class="btn" id="search-btn-video">Rechercher</span>
-	 {{form_rest(form_video)}}
-</form>
+{% if form_video is defined %}
+	<form id="form_video" method="post">
+		{{ form_widget(form_video.lien) }}
+		<span class="btn" id="search-btn-video">Rechercher</span>
+		 {{form_rest(form_video)}}
+	</form>
+{% else %}
+	<form id="form_tags" method="post">
+		{{ form_widget(form_tags.tag) }}
+		<span class="btn" id="valide-tags-btn-video">Ajouter</span>
+		<div id="tag-list"></div>
+		<input type="hidden" name="id_video" value="{{id_video}}" />
+		{{form_rest(form_tags)}}
+	</form>
+{% endif %}
+
+{% block javascripts %}
+	{% if form_video is defined %}
+		{{ form_javascript(form_video) }}
+	{% else %}
+		{{ form_javascript(form_tags) }}
+		<script src="{{ asset('bundles/mongoboxjukebox/js/manageTags.js') }}" type="text/javascript"></script>
+		<script type="text/javascript">
+			tags.urlLoadTag = '{{ url('video_tags_load_item') }}';
+			tags.init();
+		</script>
+	{% endif %}
+{% endblock javascripts %}

@@ -44,7 +44,7 @@ function btn_submit_video()
 	}).done(function( msg )
 	{
 		$('.loader').hide();
-		$('#form_video').html('Vidéo ajoutée avec succès.');
+		$('#post-video-modal .modal-content').html(msg);
 	});
 }
 
@@ -93,6 +93,36 @@ $(document).ready(function()
 			{
 				btn_submit_video();
 			}
+		});
+	});
+
+	$(document).on('click', '#valide-tags-btn-video', function()
+	{
+		$.ajax({
+			type: "POST",
+			dataType: "html",
+			url: basepath + 'post_tag_video',
+			data: $('#form_tags').serialize()
+		}).done(
+		function( tag )
+		{
+			$('#tag-list').append(tag);
+		});
+	});
+
+	$(document).on('click', '.delete-tag-video', function(e)
+	{
+		e.preventDefault();
+		e.stopPropagation();
+		tag = $(this).parent();
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: $(this).attr('href')
+		}).done(
+		function()
+		{
+			tag.remove();
 		});
 	});
 

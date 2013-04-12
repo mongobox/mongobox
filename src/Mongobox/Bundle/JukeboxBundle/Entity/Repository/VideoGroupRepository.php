@@ -44,6 +44,8 @@ class VideoGroupRepository extends EntityRepository
 		$qb->select('vg')
 		->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
 		->leftJoin('vg.playlist', 'p')
+		->leftJoin('vg.video', 'v')
+		->leftJoin('v.tags', 'vt')
 		->where("vg.vendredi = :vendredi")
 		->andWhere("vg.group = :group")
 		->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")

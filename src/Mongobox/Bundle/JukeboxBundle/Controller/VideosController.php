@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoTag;
 use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 
@@ -229,5 +231,60 @@ class VideosController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+    /**
+     * Action to search tags for autocomplete field
+     *
+     * @Route("/video-tags-ajax-autocomplete", name="video_tags_ajax_autocomplete")
+     * @Template()
+     */
+    public function videoAjaxAutocompleteTagsAction(Request $request)
+    {
+        // récupération du mots clés en ajax selon la présélection du mot
+        $value = $request->get('term');
+        $em = $this->getDoctrine()->getManager();
+        $videoTagsRepository = $em->getRepository('MongoboxJukeboxBundle:VideoTag');
+        $motscles = $videoTagsRepository->getTags($value);
+
+        return new Response(json_encode($motscles));
+    }
+
+    /**
+     * Action to load tag or create it if not exist
+     *
+     * @Route("/video-tags-load-item", name="video_tags_load_item")
+     * @Template()
+     */
+    public function ajaxLoadTagAction(Request $request)
+    {
+        // récupération du mots clés en ajax selon la présélection du mot
+        $value = $request->get('tag');
+
+
+        $em = $this->getDoctrine()->getManager();
+        $videoTagsRepository = $em->getRepository('MongoboxJukeboxBundle:VideoTag');
+
+        // Check if tag Already exist
+        $resultTag = $videoTagsRepository->loadOneTagByName($value);
+        if( false === $resultTag ){
+
+            // Create a new tag
+            $newEntityTag = new VideoTag();
+            $newEntityTag
+                ->setName($value)
+                ->setSystemName($value)
+            ;
+            $em->persist($newEntityTag);
+            $em->flush();
+
+            // Parsing result
+            $resultTag = array(
+                'id' => $newEntityTag->getId(),
+                'name' => $newEntityTag->getName()
+            );
+        }
+
+        return new Response(json_encode($resultTag));
     }
 }

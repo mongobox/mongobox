@@ -5,6 +5,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -116,6 +117,7 @@ class LiveController extends Controller
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
     	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+		$form_tags = null;
 
     	if (is_object($video_en_cours)) {
     		$currentPlayed = $video_en_cours;
@@ -156,6 +158,11 @@ class LiveController extends Controller
             $playerVars['controls']    = 0;
             $playerVars['disablekb']   = 1;
 		}
+		if($playerMode === 'admin')
+		{
+			$video = new Videos();
+			$form_tags = $this->createForm(new VideoTagsType(), $video);
+		}
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
 
@@ -167,7 +174,8 @@ class LiveController extends Controller
     		'player_events'	=> json_encode($playerEvents),
 			'player_width'	=> $playerWidth,
 			'player_height'	=> $playerHeight,
-    		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001"
+    		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001",
+			'form_tags'    => $form_tags->createView()
     	);
     }
 

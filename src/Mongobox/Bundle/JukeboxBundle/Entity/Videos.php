@@ -65,6 +65,11 @@ class Videos
      */
 	protected $video_groups;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="VideoTag", mappedBy="videos", cascade={"persist"})
+     */
+    protected $tags;
+
 	/**
      * Constructor
      */
@@ -288,5 +293,40 @@ class Videos
     public function getPlaylist()
     {
         return $this->playlist;
+    }
+
+    /**
+     *
+     * @param TumblrTag $tag
+     */
+    public function addTag($tag) {
+        // var_dump( $tag);exit;
+        $tag->addVideo($this);
+        $this->tags[] = $tag;
+        return $this;
+    }
+
+    /**
+     * Fonction to delete tag
+     * @param Discussion $discussion
+     */
+    public function removeTag($tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function getTags() {
+        return $this->tags;
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function setTags(ArrayCollection $tags) {
+        $this->tags = $tags;
+        return $this;
     }
 }
