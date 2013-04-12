@@ -82,16 +82,21 @@ class TumblrVoteRepository extends EntityRepository
                 ->createQuery('
 					SELECT t as tumblr, COUNT(tv.user) as total
 					FROM MongoboxTumblrBundle:Tumblr t
+					LEFT JOIN t.groups g
 					LEFT JOIN t.tumblr_vote tv
 					WHERE t.id_tumblr NOT IN (
 						SELECT tt.id_tumblr FROM MongoboxTumblrBundle:Tumblr tt
 						LEFT JOIN tt.tumblr_vote ttv
 						WHERE ttv.user = :user)
+					AND g.id IN(:user_group)
 					GROUP BY t.id_tumblr
 					ORDER BY total ASC, t.date ASC')
                 ;
 		$query->setMaxResults($max);
-		$query->setParameters(array('user' => $user));
+		$query->setParameters(array(
+			'user' => $user,
+			'user_group' => $user->getGroupsIds()
+			));
 		//echo $query->getSQL().'<br />';
 		//exit;
         $result = $query->getResult();
