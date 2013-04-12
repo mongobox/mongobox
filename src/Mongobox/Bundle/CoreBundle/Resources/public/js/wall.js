@@ -12,6 +12,7 @@ var loadProposeVotes = function()
 		success: function(data)
 		{
 			$('#propose-votes').html(data);
+			tumblr.loadPopover();
 		}
 	});
 };
