@@ -14,6 +14,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
 class WallController extends Controller
 {
@@ -486,6 +487,12 @@ class WallController extends Controller
 
 				$em->flush();
 
+				$form_tags = $this->createForm(new VideoTagsType(), $video);
+
+				return array(
+					'form_tags' => $form_tags->createView(),
+					'id_video' => $video_new->getId()
+				);
 			}
 		}
 		return array(
