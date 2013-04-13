@@ -1,11 +1,10 @@
-
 var listTags = new Array();
 var tags = tags || {};
 
 (function($){
 	
 	tags.init = function(){
-		this.form = $('#video-add-content');
+		this.form = $('#form_tags');
 		this.containerSelectedTags = $('#container-selected-tags');
 
         // Get the div that holds the collection of tags
@@ -15,13 +14,15 @@ var tags = tags || {};
         // index when inserting a new item (e.g. 2)
         this.collectionHolder.data('index', this.collectionHolder.find(':input').length);
         this.tags = new Array();
-		
+
 		this.addTagButton = $('#video-button-add-tag');
-        this.autocompleteField = $('#autocompleter_video_addtags');
+        this.autocompleteField = $('#video_tags_tag');
 		this.removeTagButton = this.collectionHolder.find('button.close');
-		
+		this.buttonSubmit = $('#submit-form-video-tag-add');
+
 		this.observeAddTag();
 		this.observeRemoveTag();
+		this.observeSubmitForm();
 	};
 	
 	tags.observeAddTag = function(){
@@ -33,8 +34,40 @@ var tags = tags || {};
         });
 	};
 
+	tags.observeSubmitForm = function()
+	{
+		this.form.on('click', '#submit-form-video-tags-add', function(e)
+		{
+			e.preventDefault();
 
-    tags.addTag = function(tag){
+			// Check tag choices
+			if( $('#video_tags div.tag-item'). length === 0 )
+			{
+				$('#video_tags').parents('.span4:first').append('<div class="alert alert-error error-add-video">A tag must be added.</div>')
+				return false;
+			}
+
+			tags.loadAjax();
+		});
+	};
+
+
+	tags.loadAjax = function()
+	{
+		this.submitting = true;
+		$.ajax({
+			type: 'POST',
+			url: this.form.attr('action'),
+			data: this.form.serialize(),
+			dataType: 'json',
+			success: function(data)
+			{
+				$('#post-video-modal').modal('hide')
+			}
+		});
+	};
+	
+	tags.addTag = function(tag){
 
         // si le mot clé n'appartient pas aux mots clés ajoutés précédemment, on génère "l'ajout"
 		if(jQuery.inArray(tag.id, this.tags) == -1){

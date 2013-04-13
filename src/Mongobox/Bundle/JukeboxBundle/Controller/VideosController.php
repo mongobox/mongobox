@@ -17,7 +17,9 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 
 // Forms
 use Mongobox\Bundle\JukeboxBundle\Form\VideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
 use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
 /**
  * Videos controller.
@@ -287,4 +289,114 @@ class VideosController extends Controller
 
         return new Response(json_encode($resultTag));
     }
+
+    /**
+     * @Template("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig")
+     * @Route( "/post_video", name="post_video")
+     */
+	public function postVideoAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$video = new Videos();
+		$form_video = $this->createForm(new VideoType(), $video);
+		if ( 'POST' === $request->getMethod() )
+		{
+			$form_video->bindRequest($request);
+			if ( $form_video->isValid() )
+			{
+				$video->setLien(Videos::parse_url_detail($video->getLien()));
+				//On vérifie qu'elle n'existe pas déjà
+				$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
+				if (!is_object($video_new))
+				{
+					$dataYt = $video->getDataFromYoutube();
+
+					$video->setDate(new \Datetime())
+							->setTitle( $dataYt->title )
+							->setDuration($dataYt->duration)
+							->setThumbnail( $dataYt->thumbnail->hqDefault )
+							->setThumbnailHq( $dataYt->thumbnail->sqDefault )
+							->setArtist($request->request->get('artist'))
+							->setSongName($request->request->get('songName'));
+					$em->persist($video);
+					$em->flush();
+					$video_new = $video;
+
+					$this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
+				}
+				//On vérifie qu'elle n'existe pas pour ce groupe
+				$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
+				if(!is_object($video_group))
+				{
+					$video_group = new VideoGroup();
+					$video_group->setVideo($video_new)
+								->setGroup($group)
+								->setUser($user)
+								->setDiffusion(0)
+								->setVendredi(0)
+								->setVolume(50)
+								->setVotes(0);
+					$em->persist($video_group);
+					$em->flush();
+				}
+				//On l'ajoute à la playlist
+				$playlist_add = new Playlist();
+				$playlist_add->setVideoGroup($video_group)
+								->setGroup($group)
+								->setDate(new \Datetime())
+								->setRandom(0)
+								->setCurrent(0);
+				$em->persist($playlist_add);
+
+				$em->flush();
+				$form_tags = $this->createForm(new VideoTagsType(), $video_new);
+
+				return array(
+					'form_tags' => $form_tags->createView(),
+					'id_video' => $video_new->getId()
+				);
+			}
+		}
+		return array(
+			'form_video' => $form_video->createView()
+		);
+	}
+
+    /**
+     * @Template("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig")
+     * @Route( "/post_tags", name="post_video_tags")
+     */
+	public function postTagsAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getEntityManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+		$video = new Videos();
+        $form = $this->createForm(new VideoTagsType(), $video);
+
+        // process the form on POST
+        if ($request->isMethod('POST'))
+		{
+            $form->bind($request);
+            if ( $form->isValid() )
+			{
+				$video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($request->request->get('id_video'));
+				$tags = $form->get('tags')->getData();
+				foreach($tags as $tag_id)
+				{
+					$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
+                    $entityTag->getVideos()->add($video);
+				}
+				$em->flush();
+			}
+        }
+
+        return new Response(json_encode(array('success' => true)));
+	}
 }

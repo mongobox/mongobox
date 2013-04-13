@@ -39,7 +39,7 @@ function btn_submit_video()
 {
 	$.ajax({
 		type: "POST",
-		url: basepath + 'post_video',
+		url: basepath + 'videos/post_video',
 		data: $('#form_video').serialize()
 	}).done(function( msg )
 	{
@@ -56,7 +56,7 @@ $(document).ready(function()
 		$.ajax({
 			type: "GET",
 			dataType: "html",
-			url: basepath + 'post_video'
+			url: basepath + 'videos/post_video'
 		}).done(
 		function( html )
 		{

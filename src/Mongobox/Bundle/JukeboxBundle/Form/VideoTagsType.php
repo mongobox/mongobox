@@ -13,9 +13,13 @@ class VideoTagsType extends AbstractType
             ->add('tag', 'text', array(
                 'label' => 'Tag à ajouter',
                 'attr' => array('size' => 15),
-				'property_path' => false
+				'property_path' => false,
+				'required' => false,
+            ))
+            ->add('tags', 'hidden', array(
+                'property_path' => false
             ));
-    }
+	}
 
     public function getName()
     {
