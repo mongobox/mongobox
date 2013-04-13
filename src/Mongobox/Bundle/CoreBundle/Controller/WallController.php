@@ -471,7 +471,7 @@ class WallController extends Controller
 								->setUser($user)
 								->setDiffusion(0)
 								->setVendredi(0)
-								->setVolume(100)
+								->setVolume(50)
 								->setVotes(0);
 					$em->persist($video_group);
 					$em->flush();
