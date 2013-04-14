@@ -47,6 +47,11 @@ class VideoTag
 	 */
 	private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag", mappedBy="video_tag", cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="id")
+     */
+	protected $group_live_tag;
 
 
 	public function __construct()

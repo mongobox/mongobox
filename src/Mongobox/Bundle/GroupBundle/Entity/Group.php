@@ -64,6 +64,12 @@ class Group
 	protected $videos_group;
 
     /**
+     * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag", mappedBy="group", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
+     */
+	protected $group_live_tag;
+
+	/**
      * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups_invitations")
      * @ORM\JoinTable(name="users_invitations",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},

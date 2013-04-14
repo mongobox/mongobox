@@ -67,4 +67,22 @@ class VideoTagRepository extends EntityRepository
         }
 
     }
+	
+    /**
+     * Funtion to load all tags used on videos for a group
+     *
+     * @param string $group
+     * @return tag
+     */
+	public function getTagsForGroup($group)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+		$qb->select('vt')
+			->from('MongoboxJukeboxBundle:VideoTag', 'vt')
+		;
+			
+		$query = $qb->getQuery();
+		return $query->getResult();
+	}
 }

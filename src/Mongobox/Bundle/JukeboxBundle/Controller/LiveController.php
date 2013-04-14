@@ -117,7 +117,7 @@ class LiveController extends Controller
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
     	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-		$form_tags = null;
+		$list_tags = null;
 
     	if (is_object($video_en_cours)) {
     		$currentPlayed = $video_en_cours;
@@ -161,12 +161,13 @@ class LiveController extends Controller
 		if($playerMode === 'admin')
 		{
 			$video = new Videos();
-			$form_tags = $this->createForm(new VideoTagsType(), $video);
+			$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getTagsForGroup($group);
 		}
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
 
-    	return array(
+    	return array
+		(
     		'page_title'	=> 'Jukebox - Live stream',
     		'current_video'	=> $currentPlayed,
     		'player_mode'	=> $playerMode,
@@ -175,7 +176,7 @@ class LiveController extends Controller
 			'player_width'	=> $playerWidth,
 			'player_height'	=> $playerHeight,
     		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001",
-			'form_tags'    => $form_tags->createView()
+			'list_tags' => $list_tags
     	);
     }
 

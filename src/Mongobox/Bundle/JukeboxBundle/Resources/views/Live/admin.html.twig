@@ -52,18 +52,28 @@
 </script>
 
 <div id="playlist_controll">
-	 {{ form_widget(form_tags.tag) }}
-	 <div id="playlist_tag_actif">
-		 <legend>Tag qui passe</legend>
-	 </div>
-	 <div id="playlist_tag_inactif">
-		 <legend>Tag qui ne passe pas</legend>
-	 </div>
+	<table>
+		<thead>
+			<th>Tag</th>
+			<th>Nombre de vidéo</th>
+			<th>Actions</th>
+		</thead>
+		<tbody>
+		{% for tag in list_tags %}
+			<tr>
+				<td>{{tag.name}}</td>
+				<td>{#{tag.total}#}</td>
+				<td>
+					ACTIONS
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<div id="playlist_tag_actif">
+		<legend>Tag qui passe</legend>
+	</div>
+	<div id="playlist_tag_inactif">
+		<legend>Tag qui ne passe pas</legend>
+	</div>
 </div>
-
-{{ form_javascript(form_tags) }}
-<script src="{{ asset('bundles/mongoboxjukebox/js/manageTags.js') }}" type="text/javascript"></script>
-<script type="text/javascript">
-	tags.urlLoadTag = '{{ url('video_tags_load_item') }}';
-	tags.init();
-</script>
