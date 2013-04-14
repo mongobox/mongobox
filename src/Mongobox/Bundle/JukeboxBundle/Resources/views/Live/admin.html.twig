@@ -61,10 +61,11 @@
 		<tbody>
 		{% for tag in list_tags %}
 			<tr>
-				<td>{{tag.name}}</td>
-				<td>{#{tag.total}#}</td>
+				<td>{{tag[0].name}}</td>
+				<td>{{tag.total}}</td>
 				<td>
-					ACTIONS
+					<a href="" class="btn btn-success admin-tag-video-action">Il passe</a>
+					<a href="" class="btn btn-danger admin-tag-video-action">Il ne passe pas</a>
 				</td>
 			</tr>
 		{% endfor %}

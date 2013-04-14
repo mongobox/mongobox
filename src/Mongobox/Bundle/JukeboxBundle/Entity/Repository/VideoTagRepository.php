@@ -77,12 +77,16 @@ class VideoTagRepository extends EntityRepository
 	public function getTagsForGroup($group)
 	{
 		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
-		$qb->select('vt')
-			->from('MongoboxJukeboxBundle:VideoTag', 'vt')
+		$query = $em->createQuery('SELECT vt, COUNT(vt.id) as total
+			FROM MongoboxJukeboxBundle:VideoTag vt
+			LEFT JOIN vt.videos v
+			LEFT JOIN v.video_groups vg
+			WHERE vg.group = :group
+			GROUP BY vt.id
+			ORDER BY total DESC')
+			->setParameters(array('group' => $group))
 		;
 			
-		$query = $qb->getQuery();
 		return $query->getResult();
 	}
 }
