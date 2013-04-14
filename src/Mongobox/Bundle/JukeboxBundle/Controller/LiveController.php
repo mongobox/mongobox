@@ -4,12 +4,14 @@ namespace Mongobox\Bundle\JukeboxBundle\Controller;
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
+use Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag;
 use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
@@ -176,7 +178,8 @@ class LiveController extends Controller
 			'player_width'	=> $playerWidth,
 			'player_height'	=> $playerHeight,
     		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001",
-			'list_tags' => $list_tags
+			'group'			=> $group,
+			'list_tags'		=> $list_tags
     	);
     }
 
@@ -421,4 +424,27 @@ class LiveController extends Controller
 
         return $response;
     }
+	
+    /**
+     * @Route("/live_tag_select/{id}/{id_group}/{selected}", name="live_tag_select")
+	 * @ParamConverter("tag", class="MongoboxJukeboxBundle:VideoTag")
+	 * @ParamConverter("group", class="MongoboxGroupBundle:Group")     
+     */
+	function liveTagSelectAction($tag, $group, $selected = 1)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$glt = new GroupLiveTag();
+		$glt->setGroup($group);
+		$glt->setSelected((boolean)$selected);
+		$glt->setVideoTag($tag);
+		$em->persist($glt);
+		$em->flush();
+
+		$return = array(
+			'selected' => $selected,
+			'html' => '<li>'.$tag->getName().'</li>'
+		);
+		return new Response(json_encode($return));
+	}
 }

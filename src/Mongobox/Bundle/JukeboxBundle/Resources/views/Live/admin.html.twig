@@ -52,7 +52,7 @@
 </script>
 
 <div id="playlist_controll">
-	<table>
+	<table id="list_tags">
 		<thead>
 			<th>Tag</th>
 			<th>Nombre de vidéo</th>
@@ -64,8 +64,8 @@
 				<td>{{tag[0].name}}</td>
 				<td>{{tag.total}}</td>
 				<td>
-					<a href="" class="btn btn-success admin-tag-video-action">Il passe</a>
-					<a href="" class="btn btn-danger admin-tag-video-action">Il ne passe pas</a>
+					<a href="{{url('live_tag_select', {'id' : tag[0].id, 'id_group' : group.id, 'selected' : 1})}}" class="btn btn-success admin-tag-video-action">Il passe</a>
+					<a href="{{url('live_tag_select', {'id' : tag[0].id, 'id_group' : group.id, 'selected' : 0})}}" class="btn btn-danger admin-tag-video-action">Il ne passe pas</a>
 				</td>
 			</tr>
 		{% endfor %}
@@ -73,8 +73,14 @@
 	</table>
 	<div id="playlist_tag_actif">
 		<legend>Tag qui passe</legend>
+		<ul>
+		</ul>
 	</div>
 	<div id="playlist_tag_inactif">
 		<legend>Tag qui ne passe pas</legend>
+		<ul>
+		</ul>
 	</div>
 </div>
+
+<script src="{{ asset('bundles/mongoboxjukebox/js/liveManageTags.js') }}"></script>

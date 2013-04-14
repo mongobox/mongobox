@@ -27,14 +27,14 @@ class GroupLiveTag
 
     /**
      * @ORM\ManyToOne(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\VideoTag", inversedBy="group_live_tag")
-     * @ORM\JoinColumn(name="id_tag", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id", referencedColumnName="id_tag")
      */
     protected $video_tag;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $select;
+    protected $selected;
 
 	/**
      * Constructor
@@ -100,25 +100,25 @@ class GroupLiveTag
     }
 	
 	/**
-     * Set the value of select.
+     * Set the value of selected.
      *
-     * @param  string $select
+     * @param  string $selected
      * @return \Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag
      */
-    public function setSelect($select)
+    public function setSelected($selected)
     {
-        $this->select = $select;
+        $this->selected = $selected;
 
         return $this;
     }
 
     /**
-     * Get the value of select.
+     * Get the value of selected.
      *
      * @return string
      */
-    public function getSelect()
+    public function getSelected()
     {
-        return $this->select;
+        return $this->selected;
     }
 }
