@@ -1,0 +1,13 @@
+services:
+     mongobox_core.menu_builder:
+         class: Mongobox\Bundle\CoreBundle\Menu\MenuBuilder
+         arguments: ["@knp_menu.factory"]
+
+     mongobox_core.menu.main:
+         class: Knp\Menu\MenuItem
+         factory_service: mongobox_core.menu_builder
+         factory_method: createMainMenu
+         arguments: ["@request"]
+         scope: request
+         tags:
+             - { name: knp_menu.menu, alias: main }
