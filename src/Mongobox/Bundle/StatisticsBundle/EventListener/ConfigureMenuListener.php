@@ -16,4 +16,12 @@ class ConfigureMenuListener
         $tumblrMenu = $menu->getChild('Tumblr');
         $tumblrMenu->addChild('Statistiques', array('route' => 'tumblr_stats'));
     }
+
+    /**
+     * @param \Mongobox\Bundle\CoreBundle\Event\ConfigureMenuEvent $event
+     */
+    public function onAdminMenuConfigure(ConfigureMenuEvent $event)
+    {
+        $menu = $event->getMenu();
+    }
 }

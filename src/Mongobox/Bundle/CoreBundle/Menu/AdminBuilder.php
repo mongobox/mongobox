@@ -17,6 +17,8 @@ class AdminBuilder extends ContainerAware
         $menu = $factory->createItem('root');
         $menu->setChildrenAttributes(array('class' => 'nav'));
 
+        $menu->addChild('Dashboard', array('route' => 'admin_index'))->moveToFirstPosition();
+
         $this->container
             ->get('event_dispatcher')
             ->dispatch(ConfigureMenuEvent::ADMIN_MENU, new ConfigureMenuEvent($factory, $menu))
