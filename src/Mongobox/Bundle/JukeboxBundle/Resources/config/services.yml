@@ -1,0 +1,5 @@
+services:
+    mongobox_jukebox.configure_menu_listener:
+        class: Mongobox\Bundle\JukeboxBundle\EventListener\ConfigureMenuListener
+        tags:
+            - { name: kernel.event_listener, event: mongobox_core.main_menu_configure, method: onMainMenuConfigure }

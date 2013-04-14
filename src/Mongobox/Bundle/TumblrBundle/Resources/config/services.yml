@@ -1,0 +1,5 @@
+services:
+    mongobox_tumblr.configure_menu_listener:
+        class: Mongobox\Bundle\TumblrBundle\EventListener\ConfigureMenuListener
+        tags:
+            - { name: kernel.event_listener, event: mongobox_core.main_menu_configure, method: onMainMenuConfigure }
