@@ -64,8 +64,7 @@
 				<td>{{tag[0].name}}</td>
 				<td>{{tag.total}}</td>
 				<td>
-					<a href="{{url('live_tag_select', {'id' : tag[0].id, 'id_group' : group.id, 'selected' : 1})}}" class="btn btn-success admin-tag-video-action">Il passe</a>
-					<a href="{{url('live_tag_select', {'id' : tag[0].id, 'id_group' : group.id, 'selected' : 0})}}" class="btn btn-danger admin-tag-video-action">Il ne passe pas</a>
+					{% include 'MongoboxJukeboxBundle:partial:live-button-tag-video.html.twig' with {'tag' : tag[0], 'group' : group} %}
 				</td>
 			</tr>
 		{% endfor %}

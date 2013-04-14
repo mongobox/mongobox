@@ -8,8 +8,10 @@ $('.admin-tag-video-action').on('click' ,function(e) {
 		dataType: 'json',
 		success: function(data)
 		{
-			if(data.selected === 1) $('#playlist_tag_actif ul').append(data.html);
-			else $('#playlist_tag_inactif ul').append(data.html);
+			if(data.selected === 1) $('#playlist_tag_actif ul').append(data.html_tag);
+			else $('#playlist_tag_inactif ul').append(data.html_tag);
+			
+			$(this).parent().html(data.html_button)
 		}
 	});
 });

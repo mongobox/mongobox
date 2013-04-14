@@ -2,8 +2,10 @@
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoTag;
 use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
+use Mongobox\Bundle\GroupBundle\Entity\Group;
 use Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag;
 use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
@@ -428,9 +430,9 @@ class LiveController extends Controller
     /**
      * @Route("/live_tag_select/{id}/{id_group}/{selected}", name="live_tag_select")
 	 * @ParamConverter("tag", class="MongoboxJukeboxBundle:VideoTag")
-	 * @ParamConverter("group", class="MongoboxGroupBundle:Group")     
+	 * @ParamConverter("group", class="MongoboxGroupBundle:Group", options={"id" = "id_group"})     
      */
-	function liveTagSelectAction($tag, $group, $selected = 1)
+	function liveTagSelectAction(VideoTag $tag, Group $group, $selected)
 	{
 		$em = $this->getDoctrine()->getManager();
 
@@ -443,7 +445,13 @@ class LiveController extends Controller
 
 		$return = array(
 			'selected' => $selected,
-			'html' => '<li>'.$tag->getName().'</li>'
+			'html_tag' => $this->render('MongoboxJukeboxBundle:Partial:live-tag-video.html.twig', array(
+						'tag' => $tag
+					))->getContent(),
+			'html_button' => $this->render('MongoboxJukeboxBundle:Partial:live-button-tag-video.html.twig', array(
+						'tag' => $tag,
+						'group' => $group
+					))->getContent()
 		);
 		return new Response(json_encode($return));
 	}
