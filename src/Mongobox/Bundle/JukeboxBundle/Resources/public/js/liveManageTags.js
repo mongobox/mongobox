@@ -1,6 +1,6 @@
 $('#liste_tags').dataTable();
 
-$('.admin-tag-video-action').on('click' ,function(e) {
+$('.admin-tag-video-action').on('click', function(e) {
 	e.preventDefault();
 	var button = $(this);
 	$.ajax({
@@ -13,6 +13,20 @@ $('.admin-tag-video-action').on('click' ,function(e) {
 			else $('#playlist_tag_inactif ul').append(data.html_tag);
 
 			button.parent().html(data.html_button);
+		}
+	});
+});
+
+$('.delete-live-tag-video').on('click', function(e) {
+	e.preventDefault();
+	var button = $(this);
+	$.ajax({
+		type: 'POST',
+		url: button.attr('href'),
+		dataType: 'json',
+		success: function(data)
+		{
+			button.parent().remove();
 		}
 	});
 });

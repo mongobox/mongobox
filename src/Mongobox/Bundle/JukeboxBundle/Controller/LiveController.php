@@ -125,6 +125,7 @@ class LiveController extends Controller
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
     	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
 		$list_tags = null;
+		$groupLiveTags = null;
 
     	if (is_object($video_en_cours)) {
     		$currentPlayed = $video_en_cours;
@@ -169,6 +170,7 @@ class LiveController extends Controller
 		{
 			$video = new Videos();
 			$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getTagsForGroup($group);
+			$groupLiveTags = $em->getRepository('MongoboxGroupBundle:GroupLiveTag')->findBy(array('group' => $group->getId()));
 		}
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
@@ -184,7 +186,8 @@ class LiveController extends Controller
 			'player_height'	=> $playerHeight,
     		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001",
 			'group'			=> $group,
-			'list_tags'		=> $list_tags
+			'list_tags'		=> $list_tags,
+			'groupLiveTags' => $groupLiveTags
     	);
     }
 
@@ -460,7 +463,7 @@ class LiveController extends Controller
 		(
 			'selected' => $selected,
 			'html_tag' => $this->render('MongoboxJukeboxBundle:Partial:live-tag-video.html.twig', array(
-						'tag' => $tag
+						'tag' => $glt
 					))->getContent(),
 			'html_button' => $this->render('MongoboxJukeboxBundle:Partial:live-button-tag-video.html.twig', array(
 						'tag' => $tag,
@@ -469,6 +472,22 @@ class LiveController extends Controller
 						'unselected' => $button_unselected
 					))->getContent()
 		);
+		return new Response(json_encode($return));
+	}
+	
+    /**
+     * @Route("/live_tag_delete/{id}", name="live_tag_delete")
+	 * @ParamConverter("tag", class="MongoboxGroupBundle:GroupLiveTag")
+     */
+	function liveTagDeleteAction(GroupLiveTag $tag)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$em->remove($tag);
+
+		$em->flush();
+		
+		$return = array('success' => 'ok');
 		return new Response(json_encode($return));
 	}
 }

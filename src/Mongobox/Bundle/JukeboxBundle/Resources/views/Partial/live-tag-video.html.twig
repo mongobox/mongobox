@@ -1,4 +1,4 @@
-<div class="tag-video alert alert-info">
-	<span>{{ tag.name }}</span>
-	<a href="" class="delete-live-tag-video"><i class="icon-remove"></i></a>
-</div>
+<li class="tag-video">
+	<span>{{ tag.videoTag.name }}</span>
+	<a href="{{url('live_tag_delete', {'id' : tag.id})}}" class="delete-live-tag-video"><i class="icon-remove"></i></a>
+</li>
