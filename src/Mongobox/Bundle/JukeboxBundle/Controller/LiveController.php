@@ -71,8 +71,11 @@ class LiveController extends Controller
 		//On cherche la prochaine vidéo
 		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
 
-		$nextInPlaylist->setCurrent(1);
-		$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
+		if(is_object($nextInPlaylist))
+		{
+			$nextInPlaylist->setCurrent(1);
+			$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
+		}
 		$em->flush();
 
 		return $nextInPlaylist;
@@ -441,16 +444,29 @@ class LiveController extends Controller
 		$glt->setSelected((boolean)$selected);
 		$glt->setVideoTag($tag);
 		$em->persist($glt);
-		$em->flush();
 
-		$return = array(
+		$em->flush();
+		
+		$groupLiveTags = $em->getRepository('MongoboxGroupBundle:GroupLiveTag')->findBy(array('group' => $group->getId(), 'video_tag' => $tag->getId()));
+		$button_selected = 0;
+		$button_unselected = 0;
+		foreach($groupLiveTags as $glt)
+		{
+			if($glt->getSelected() == 1) $button_selected = 1;
+			else $button_unselected = 1;
+		}
+
+		$return = array
+		(
 			'selected' => $selected,
 			'html_tag' => $this->render('MongoboxJukeboxBundle:Partial:live-tag-video.html.twig', array(
 						'tag' => $tag
 					))->getContent(),
 			'html_button' => $this->render('MongoboxJukeboxBundle:Partial:live-button-tag-video.html.twig', array(
 						'tag' => $tag,
-						'group' => $group
+						'group' => $group,
+						'selected' => $button_selected,
+						'unselected' => $button_unselected
 					))->getContent()
 		);
 		return new Response(json_encode($return));

@@ -27,7 +27,7 @@ class GroupLiveTag
 
     /**
      * @ORM\ManyToOne(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\VideoTag", inversedBy="group_live_tag")
-     * @ORM\JoinColumn(name="id", referencedColumnName="id_tag")
+     * @ORM\JoinColumn(name="id_video_tag", referencedColumnName="id_tag")
      */
     protected $video_tag;
 
