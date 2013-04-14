@@ -1,0 +1,6 @@
+services:
+    mongobox_statistics.configure_menu_listener:
+        class: Mongobox\Bundle\StatisticsBundle\EventListener\ConfigureMenuListener
+        tags:
+            - { name: kernel.event_listener, event: mongobox_core.main_menu_configure, method: onMainMenuConfigure }
+            - { name: kernel.event_listener, event: mongobox_core.admin_menu_configure, method: onAdminMenuConfigure }
