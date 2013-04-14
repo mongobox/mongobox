@@ -490,4 +490,18 @@ class LiveController extends Controller
 		$return = array('success' => 'ok');
 		return new Response(json_encode($return));
 	}
+
+    /**
+     * @Route("/live_empty_playlist/{id_group}/{force}", name="live_empty_playlist", defaults={"force" = false})
+	 * @ParamConverter("group", class="MongoboxGroupBundle:Group", options={"id" = "id_group"})
+     */
+	function liveEmptyPlaylistAction(Group $group, $force)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$em->getRepository('MongoboxGroupBundle:Group')->emptyPlaylist($group, $force);
+		
+		$return = array('success' => 'ok');
+		return new Response(json_encode($return));
+	}
 }

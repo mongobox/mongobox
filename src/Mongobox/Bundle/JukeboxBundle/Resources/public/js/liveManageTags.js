@@ -30,4 +30,17 @@ $('.delete-live-tag-video').on('click', function(e) {
 		}
 	});
 });
-//$('#playlist_tag_actif ul')
+
+$('.btn-empty-playlist').on('click', function(e) {
+	e.preventDefault();
+	var button = $(this);
+	$.ajax({
+		type: 'POST',
+		url: button.attr('href'),
+		dataType: 'json',
+		success: function(data)
+		{
+			alert('Done');
+		}
+	});
+});

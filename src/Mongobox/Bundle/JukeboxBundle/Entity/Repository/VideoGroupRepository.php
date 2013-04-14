@@ -131,7 +131,6 @@ class VideoGroupRepository extends EntityRepository
 					'results' => $results
 			));
 			$query = $qb->getQuery();
-			var_dump($query->getSql());
 			$results = $query->getResult();
 		}
 
