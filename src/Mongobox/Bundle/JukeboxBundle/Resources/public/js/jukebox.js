@@ -130,12 +130,12 @@ $(document).ready(function()
 
 	$(document).on('mouseover', '.show-edit-video', function(e)
 	{
-		$(this).children('.edit-video').show();
+		$(this).find('.edit-video').show();
 	});
 
 	$(document).on('mouseout', '.show-edit-video', function(e)
 	{
-		$(this).children('.edit-video').hide();
+		$(this).find('.edit-video').hide();
 	});
 });
 
