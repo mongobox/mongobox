@@ -1,6 +1,6 @@
 $('#liste_tags').dataTable();
 
-$(docuement).on('click', '.admin-tag-video-action', function(e) {
+$(document).on('click', '.admin-tag-video-action', function(e) {
 	e.preventDefault();
 	var button = $(this);
 	$.ajax({
@@ -30,13 +30,13 @@ $(document).on('click', '.delete-live-tag-video', function(e) {
 		dataType: 'json',
 		success: function(data)
 		{
-			if($('#playlist_tag_actif ul li').length === 0) $('#playlist_tag_actif ul').append('<li class="all">Tous</li>')
 			button.parent().remove();
+			if($('#playlist_tag_actif ul li').length === 0) $('#playlist_tag_actif ul').append('<li class="all">Tous</li>')
 		}
 	});
 });
 
-$(docuement).on('click', '.btn-empty-playlist', function(e) {
+$(document).on('click', '.btn-empty-playlist', function(e) {
 	e.preventDefault();
 	var button = $(this);
 	$.ajax({
