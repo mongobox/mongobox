@@ -9,7 +9,11 @@
 	<form id="form_tags" method="post" action="{{url('post_video_tags')}}">
 		{{ form_widget(form_tags.tag) }}
 		<span class="btn" id="video-button-add-tag">Ajouter</span>
-		<div id="container-selected-tags"></div>
+		<div id="container-selected-tags">
+			{% for tag in list_tags %}
+				<li class="tag-item alert alert-info"><span>{{tag.name}}</span><button class="close" >&times;</button><input type="hidden" name="video_tags[tags][]" value="{{tag.id}}" /></li>
+			{% endfor %}
+		</div>
 		{% set tagDataPrototype = '<span>__name__</span><button class="close" >&times;</button><input type="hidden" name="video_tags[tags][]" value="__id__" />' %}
 		<div id="video_tags" class="tags manage-tags" data-prototype="{{ tagDataPrototype }}"></div>
 		<input type="hidden" name="id_video" value="{{id_video}}" />

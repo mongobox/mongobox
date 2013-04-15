@@ -57,11 +57,11 @@ class VideosController extends Controller
         // $_GET parameters
         $sortBy = $request->query->get('sortBy');
         $orderBy = $request->query->get('orderBy');
-        
+
         if( !empty($sortBy) && !empty($orderBy) ){
         	$filters = array(
         		'sortBy' => $sortBy,
-        		'orderBy' => $orderBy		
+        		'orderBy' => $orderBy
         	);
         }
 
@@ -77,7 +77,7 @@ class VideosController extends Controller
 
         $displayFilters = $filters;
         ( 'DESC' === $displayFilters['orderBy'] ) ? $displayFilters['orderBy'] = 'ASC' : $displayFilters['orderBy'] = 'DESC';
-        
+
         return array(
             'searchVideosForm' => $formSearchVideos->createView(),
             'entities' => $entities,
@@ -355,7 +355,11 @@ class VideosController extends Controller
 				$em->flush();
 				$form_tags = $this->createForm(new VideoTagsType(), $video_new);
 
+				//On récupère tous les tags de cette chanson
+				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->findBy(array('videos' => $video_new));
+
 				return array(
+					'list_tags' => $list_tags,
 					'form_tags' => $form_tags->createView(),
 					'id_video' => $video_new->getId()
 				);
@@ -387,6 +391,15 @@ class VideosController extends Controller
             if ( $form->isValid() )
 			{
 				$video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($request->request->get('id_video'));
+
+				//On supprime les anciens tags de la vidéo
+				foreach($video->getTags() as $tag)
+				{
+					$video->getTags()->removeElement($tag);
+				}
+				$em->flush();
+
+				//On rajoute les tags
 				$tags = $form->get('tags')->getData();
 				foreach($tags as $tag_id)
 				{

@@ -35,7 +35,7 @@ class VideosRepository extends EntityRepository
 
     /**
      * Fonction de recherche des vidéos
-     * 
+     *
      * @param unknown_type $search
      * @param unknown_type $page
      * @param unknown_type $limit
@@ -61,8 +61,8 @@ class VideosRepository extends EntityRepository
                 $parameters['title'] = '%'.$search['title'].'%';
         }
 		$q->setParameters($parameters);
-        
-        
+
+
         $q = $q->getQuery();
 
         $result = $q->getResult();
