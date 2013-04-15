@@ -12,7 +12,7 @@
 					{% set userLogin = pl.videoGroup.user.login %}
 				{% endif %}
 
-				<li class="clearfix">
+				<li class="clearfix show-edit-video">
 					<small>
                         <span class="playlist-icon">{% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}</span>
                         <span class="playlist-thumbnail"><img src="{{ pl.videoGroup.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.videoGroup.video.thumbnailHq }}' />" data-html="true" /></span>
@@ -27,6 +27,7 @@
 						{% endif %}
 						</span>
                     </small>
+					<div class="edit-video"></div>
 				</li>
 				{% if somme_pl[pl.videoGroup.id] is not defined or somme_pl[pl.videoGroup.id] > -2 %}{% set total = total + pl.videoGroup.video.duration %}{% endif %}
 			{% endfor %}

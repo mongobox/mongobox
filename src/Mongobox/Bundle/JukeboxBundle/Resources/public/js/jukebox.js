@@ -127,6 +127,16 @@ $(document).ready(function()
 	});
 
 	$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
+
+	$(document).on('mouseover', '.show-edit-video', function(e)
+	{
+		$(this).children('.edit-video').show();
+	});
+
+	$(document).on('mouseout', '.show-edit-video', function(e)
+	{
+		$(this).children('.edit-video').hide();
+	});
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
