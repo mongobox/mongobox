@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new DMS\Bundle\FilterBundle\DMSFilterBundle(),
 			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
 			// Mongobox
 			//new Emakina\Bundle\LdapBundle\EmakinaLdapBundle(),
             //new Emk\Bundle\AuthenticationBundle\EmkAuthenticationBundle(),

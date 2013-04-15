@@ -58,31 +58,9 @@
 			 </li>
 		 </ul>
 		{% endif %}
-        <ul class="nav">
 
-          <li class="dropdown">
-          	<a href="{{ path('videos') }}">Gestion des vidéos</a>
-          </li>
-          <li class="dropdown">
-			<a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Poster une mongo pute">Mongo pute <b class="caret"></b></a>
-          	<ul class="dropdown-menu">
-          		<li{% if app.request.attributes.get('_route') == 'top_tumblr' %} class="active"{% endif %}>
-          			<a href="{{ path('tumblr_top') }}">Top Mongo Pute</a>
-          		</li>
-          		<li{% if app.request.attributes.get('_route') == 'mongo_pute' %} class="active"{% endif %}>
-          			<a href="{{ path('mongo_pute') }}">Listing Mongo Pute</a>
-          		</li>
-          		<li{% if app.request.attributes.get('_route') == 'admin_tumblr' %} class="active"{% endif %}>
-          			<a href="{{ path('admin_tumblr') }}">Admin Mongo Pute</a>
-                </li>
-                <li{% if app.request.attributes.get('_route') == 'tumblr_stats' %} class="active"{% endif %}>
-                  <a href="{{ path('tumblr_stats') }}">Mongo Stats</a>
-                </li>
-          	</ul>
-		</li>
+        {{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build') }}
 
-          <li><a href="{{ path('live') }}" title="Voir le live">Live</a></li>
-        </ul>
 		<div id="video_en_cours">
 			{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}
 		</div>
