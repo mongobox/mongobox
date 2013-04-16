@@ -333,6 +333,6 @@ class Videos
 	public function getName()
 	{
 		if($this->getSongName() != '') return $this->getArtist().' - '.$this->getSongName ();
-		else return $this->Title();
+		else return $this->getTitle();
 	}
 }

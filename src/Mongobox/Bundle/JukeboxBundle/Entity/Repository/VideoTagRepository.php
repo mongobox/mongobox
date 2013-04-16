@@ -44,7 +44,29 @@ class VideoTagRepository extends EntityRepository
 		return $json;
 	}
 
-    /**
+	/**
+	 * Function pour récupérer les mots clés pour une vidéo
+	 * @param string $value
+	 * @return array
+	 */
+	public function getVideoTags($video)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+		$qb->select('vt')
+			->from('MongoboxJukeboxBundle:VideoTag', 'vt')
+			->leftJoin('vt.videos', 'v')
+			->where("v = :video")
+			->setParameter('video', $video)
+		;
+			
+		$query = $qb->getQuery();
+		$result = $query->getResult();
+
+		return $result;
+	}
+
+	/**
      * Funtion to load TumblrTab by name
      *
      * @param string $tag

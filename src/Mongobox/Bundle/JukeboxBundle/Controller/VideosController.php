@@ -18,6 +18,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 // Forms
 use Mongobox\Bundle\JukeboxBundle\Form\VideosType;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoInfoType;
 use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
@@ -393,11 +394,7 @@ class VideosController extends Controller
 				$video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($request->request->get('id_video'));
 
 				//On supprime les anciens tags de la vidéo
-				foreach($video->getTags() as $tag)
-				{
-					$video->getTags()->removeElement($tag);
-				}
-				$em->flush();
+				$em->getRepository('MongoboxJukeboxBundle:Videos')->wipeTags($video);
 
 				//On rajoute les tags
 				$tags = $form->get('tags')->getData();
@@ -414,27 +411,52 @@ class VideosController extends Controller
 	}
 
     /**
-     * Action to edit a video from a popover
+     * Action to edit a video from a modal
      *
-     * @Route("/edit_popover/{id_video}", name="video_edit_popover")
-	 * @ParamConverter("video", class="MongoboxJukeboxBundle:Video", options={"id" = "id_video"})
+     * @Route("/edit_modal/{id_video}", name="video_edit_modal")
+	 * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos", options={"id" = "id_video"})
      */
-    public function editVideoPopoverAction(Request $request, Video $video)
+    public function editVideoPopoverAction(Request $request, Videos $video)
     {
         $em = $this->getDoctrine()->getManager();
 
-		$editForm = $this->createForm(new VideoInfo(), $video);
+		$editForm = $this->createForm(new VideoInfoType(), $video);
         // Process the form on POST
         if ($request->isMethod('POST'))
 		{
             $editForm->bind($request);
             if ( $editForm->isValid() )
 			{
+				//On supprime les anciens tags de la vidéo
+				$em->getRepository('MongoboxJukeboxBundle:Videos')->wipeTags($video);
 
+				//On rajoute les tags
+				$tags = $editForm->get('tags')->getData();
+				foreach($tags as $tag_id)
+				{
+					$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
+                    $entityTag->getVideos()->add($video);
+				}
+				$em->flush();
+
+				$content = 'Modification enregistrée avec succès';
+				$title = '';
+
+				$return = array(
+					'content' => $content,
+					'title' => $title
+				);
+				return new Response(json_encode($return));
 			};
 		};
+		
+		$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video);
 
-		$content = '';
+		$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(
+						'form_edit' => $editForm->createView(),
+						'video' => $video,
+						'list_tags' => $list_tags
+					))->getContent();
 		$title = 'Edition de la vidéo : '.$video->getName();
 
 		$return = array(

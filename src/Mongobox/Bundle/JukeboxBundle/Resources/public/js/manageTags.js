@@ -4,30 +4,34 @@ var tags = tags || {};
 (function($){
 
 	tags.init = function(){
-		this.form = $('#form_tags');
-		this.containerSelectedTags = $('#container-selected-tags');
-
-        // Get the div that holds the collection of tags
-        this.collectionHolder = $('#video_tags');
-
-        // count the current form inputs we have (e.g. 2), use that as the new
-        // index when inserting a new item (e.g. 2)
-        this.collectionHolder.data('index', this.collectionHolder.find(':input').length);
-        this.tags = new Array();
-
-		this.addTagButton = $('#video-button-add-tag');
-        this.autocompleteField = $('#video_tags_tag');
-		this.removeTagButton = this.collectionHolder.find('button.close');
-		this.buttonSubmit = $('#submit-form-video-tag-add');
-
+		this.clear();
 		this.observeAddTag();
 		this.observeRemoveTag();
 		this.observeSubmitForm();
 	};
+	
+	tags.clear = function(){
+		this.form = $('#form_tags');
+		this.containerSelectedTags = $('#container-selected-tags');
+
+        // Get the div that holds the collection of tags
+        this.collectionHolder = $('#video_tags_list');
+
+
+		this.addTagButton = '#video-button-add-tag';
+		this.removeTagButton = this.collectionHolder.find('button.close');
+		this.buttonSubmit = $('#submit-form-video-tag-add');
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        tags.collectionHolder.data('index', tags.collectionHolder.find(':input').length);
+        tags.tags = new Array();
+        this.autocompleteField = $('#video_tags_tag');
+	};
 
 	tags.observeAddTag = function(){
 
-		this.addTagButton.bind('click', function(event){
+		$(document).on('click', this.addTagButton, function(event){
 			event.preventDefault();
             tags.loadTag( tags.autocompleteField.val() );
 
@@ -41,9 +45,9 @@ var tags = tags || {};
 			e.preventDefault();
 
 			// Check tag choices
-			if( $('#video_tags div.tag-item'). length === 0 )
+			if( $('#video_tags_list div.tag-item'). length === 0 )
 			{
-				$('#video_tags').parents('.span4:first').append('<div class="alert alert-error error-add-video">A tag must be added.</div>')
+				$('#video_tags_list').parents('.span4:first').append('<div class="alert alert-error error-add-video">A tag must be added.</div>')
 				return false;
 			}
 
@@ -75,7 +79,7 @@ var tags = tags || {};
             // Save list tag
             this.tags.push(tag.id);
 
-            this.prototypeTagsContainer = $('#video_tags');
+            this.prototypeTagsContainer = $('#video_tags_list');
             this.prototypeTags = this.prototypeTagsContainer.attr('data-prototype');
 
             // Get the data-prototype explained earlier
@@ -107,7 +111,7 @@ var tags = tags || {};
 
     tags.observeRemoveTag = function(){
 
-        this.removeTagButton = $('#video_tags').find('button.close');
+        this.removeTagButton = $('#video_tags_list').find('button.close');
         this.removeTagButton.bind('click', function(event){
             event.preventDefault();
             tags.removeTag( this );
