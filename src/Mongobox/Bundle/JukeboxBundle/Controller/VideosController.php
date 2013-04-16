@@ -357,7 +357,7 @@ class VideosController extends Controller
 				$form_tags = $this->createForm(new VideoTagsType(), $video_new);
 
 				//On récupère tous les tags de cette chanson
-				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->findBy(array('videos' => $video_new));
+				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video_new);
 
 				return array(
 					'list_tags' => $list_tags,
