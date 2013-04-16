@@ -77,7 +77,7 @@ class Videos
     {
         $this->playlist = new ArrayCollection();
     }
-	
+
 	public function setId($id)
     {
         $this->id = $id;
@@ -230,7 +230,7 @@ class Videos
     {
         return 'http://www.youtube.com/watch?v='.$this->getLien();
     }
-	
+
 	public function guessVideoInfos()
 	{
 		$infos = array('artist' => '', 'songName' => '');
@@ -271,7 +271,7 @@ class Videos
     public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist)
     {
         $this->playlist[] = $playlist;
-    
+
         return $this;
     }
 
@@ -288,7 +288,7 @@ class Videos
     /**
      * Get playlist
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPlaylist()
     {
@@ -329,4 +329,10 @@ class Videos
         $this->tags = $tags;
         return $this;
     }
+
+	public function getName()
+	{
+		if($this->getSongName() != '') return $this->getArtist().' - '.$this->getSongName ();
+		else return $this->Title();
+	}
 }

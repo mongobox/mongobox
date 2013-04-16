@@ -412,4 +412,35 @@ class VideosController extends Controller
 
         return new Response(json_encode(array('success' => true)));
 	}
+
+    /**
+     * Action to edit a video from a popover
+     *
+     * @Route("/edit_popover/{id_video}", name="video_edit_popover")
+	 * @ParamConverter("video", class="MongoboxJukeboxBundle:Video", options={"id" = "id_video"})
+     */
+    public function editVideoPopoverAction(Request $request, Video $video)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+		$editForm = $this->createForm(new VideoInfo(), $video);
+        // Process the form on POST
+        if ($request->isMethod('POST'))
+		{
+            $editForm->bind($request);
+            if ( $editForm->isValid() )
+			{
+
+			};
+		};
+
+		$content = '';
+		$title = 'Edition de la vidéo : '.$video->getName();
+
+		$return = array(
+			'content' => $content,
+			'title' => $title
+		);
+        return new Response(json_encode($return));
+    }
 }

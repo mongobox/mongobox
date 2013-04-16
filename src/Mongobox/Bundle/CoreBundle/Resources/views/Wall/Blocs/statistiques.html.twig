@@ -6,19 +6,17 @@
 				{% set total = 0 %}
 			{% endif %}
 			{% for pl in playlist %}
-                {% set heure = total + "now"|date("U") %}
-				{% set userLogin = '' %}
-				{% if pl.videoGroup.user is not null %}
-					{% set userLogin = pl.videoGroup.user.login %}
-				{% endif %}
 
 				<li class="clearfix show-edit-video">
 					<small>
                         <span class="playlist-icon">{% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}</span>
                         <span class="playlist-thumbnail"><img src="{{ pl.videoGroup.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.videoGroup.video.thumbnailHq }}' />" data-html="true" /></span>
 						<span class="playlist-title">
-							<a href="{{pl.videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}} - Dans {{total|niceTime}} à {{heure|date("H:i")}} - Points : {{pl.videoGroup.votes - pl.videoGroup.diffusion}}"{% if somme_pl[pl.id] is defined and somme_pl[pl.id] <= -2 %} style="color : red;"{% endif %}>{{pl.videoGroup.video.title}}</a>
-							<span class="edit-video" style="display : none;">E</span>
+							{% if some_pl[pl.id] is defined %}
+								{% include 'MongoboxJukeboxBundle:Partial:videoTitle.html.twig' with {'videoGroup' : pl.videoGroup, 'total' : total, 'somme_pl' : somme_pl[pl.id]} %}
+							{% else %}
+								{% include 'MongoboxJukeboxBundle:Partial:videoTitle.html.twig' with {'videoGroup' : pl.videoGroup, 'total' : total} %}
+							{% endif %}
 						</span>
 						<span class="playlist-time label label-info">{{pl.videoGroup.video.duration|niceTime}}</span>
                         <span class="playlist-vote"><a href="{{path('vote', {'sens' : 1, 'id' : pl.id})}}" class="btn-vote" rel="nb_vote_video_{{pl.id}}"><i class="icon-thumbs-up"></i></a>

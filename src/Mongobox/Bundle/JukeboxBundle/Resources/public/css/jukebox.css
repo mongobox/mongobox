@@ -178,3 +178,8 @@ Playlist
 .playlist-user
 {
 }
+
+.edit-video
+{
+	display : none;
+}

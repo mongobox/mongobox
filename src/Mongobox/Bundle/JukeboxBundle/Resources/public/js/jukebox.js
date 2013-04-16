@@ -137,6 +137,34 @@ $(document).ready(function()
 	{
 		$(this).find('.edit-video').hide();
 	});
+
+	$(document).on('click', '.edit-video', function(e)
+	{
+		e.preventDefault();
+		button = $(this);
+		//popover
+		button.popover({
+		    placement: 'right',
+		    trigger: 'manual',
+		    template: '<div class="popover"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><div class="content-link-mongo"></div></div></div></div>',
+		    html: true
+		});
+
+
+		// Loading content from twig template
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: button.attr('href'),
+			success: function(data)
+			{
+				button.attr('data-content', data.content);
+				button.attr('data-original-title', data.title);
+				button.popover('show');
+				$('.popover-title').append('<button type="button" title="Fermer" class="close close-edit-video-popover" aria-hidden="true">&times;</button>');
+			}
+		});
+	});
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);

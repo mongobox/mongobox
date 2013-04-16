@@ -1,0 +1,11 @@
+{% if total is defined %}
+	{% set heure = total + "now"|date("U") %}
+{% endif %}
+
+{% set userLogin = '' %}
+{% if videoGroup.user is not null %}
+	{% set userLogin = videoGroup.user.login %}
+{% endif %}
+
+<a href="{{videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}}{% if total is defined %} - Dans {{total|niceTime}} à {{heure|date("H:i")}}{% endif %} - Points : {{videoGroup.votes - videoGroup.diffusion}}"{% if somme_pl is defined and somme_pl <= -2 %} style="color : red;"{% endif %}>{{videoGroup.video.title}}</a>
+<span class="edit-video"><span class="icon-edit{% if white is defined and white %} icon-white{% endif %}"></span></span>
