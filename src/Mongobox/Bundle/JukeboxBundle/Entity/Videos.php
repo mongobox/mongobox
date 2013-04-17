@@ -66,13 +66,18 @@ class Videos
 	protected $video_groups;
 
 	/**
+     * @ORM\OneToMany(targetEntity="Mongobox\Bundle\UsersBundle\Entity\UserFavoris", mappedBy="video", cascade={"persist"})
+     */
+	protected $favoris;
+
+	/**
      * Constructor
      */
     public function __construct()
     {
         $this->playlist = new ArrayCollection();
     }
-	
+
 	public function setId($id)
     {
         $this->id = $id;
@@ -225,7 +230,7 @@ class Videos
     {
         return 'http://www.youtube.com/watch?v='.$this->getLien();
     }
-	
+
 	public function guessVideoInfos()
 	{
 		$infos = array('artist' => '', 'songName' => '');
@@ -266,7 +271,7 @@ class Videos
     public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist)
     {
         $this->playlist[] = $playlist;
-    
+
         return $this;
     }
 
@@ -283,7 +288,7 @@ class Videos
     /**
      * Get playlist
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPlaylist()
     {
