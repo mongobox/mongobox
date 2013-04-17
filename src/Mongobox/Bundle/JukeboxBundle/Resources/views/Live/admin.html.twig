@@ -18,7 +18,7 @@
 		{% endfor %}
 		</tbody>
 	</table>
-	<div id="playlist_tag_actif">
+	<div id="playlist_tag_actif" class="total-clear-fix">
 		<legend>Tag qui passe</legend>
 		<ul>
 			{% for tag in groupLiveTags %}
@@ -79,6 +79,16 @@
 	    e.preventDefault();
 		$(this).tab('show');
     })
+	
+	$('#list_tags').dataTable({
+        "bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSort": false,
+        "bInfo": false,
+        "bAutoWidth": true,
+		"bStateSave": true
+    });
 </script>
 
 <link href="{{ asset('bundles/mongoboxjukebox/css/admin.css') }}" rel="stylesheet">

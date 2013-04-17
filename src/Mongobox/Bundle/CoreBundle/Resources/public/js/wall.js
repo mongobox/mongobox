@@ -43,5 +43,5 @@ $(document).ready(function()
 	loadProposeVotes();
 });
 
-var refreshStatistiques = setInterval('loadStatistiques()', 500000);
+var refreshStatistiques = setInterval('loadStatistiques()', 5000);
 var refreshStatistiquesFail = 0;

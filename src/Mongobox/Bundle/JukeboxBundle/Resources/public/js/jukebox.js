@@ -184,5 +184,5 @@ $(document).ready(function()
 	})
 });
 
-var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 500000);
+var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
 var refreshLoadVideoEnCoursFail = 0;
