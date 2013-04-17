@@ -32,6 +32,6 @@ class VideoInfoType extends AbstractType
 
     public function getName()
     {
-        return 'video_tags';
+        return 'video_info';
     }
 }

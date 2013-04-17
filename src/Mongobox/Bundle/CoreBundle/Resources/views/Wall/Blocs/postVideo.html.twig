@@ -1,10 +1,10 @@
-{% if form_video is defined %}
-	<form id="form_video" method="post">
-		{{ form_widget(form_video.lien) }}
-		<span class="btn" id="search-btn-video">Rechercher</span>
-		 {{form_rest(form_video)}}
-	</form>
-{% else %}
+<form id="form_video" method="post">
+	{{ form_widget(form_video.lien) }}
+	<span class="btn" id="search-btn-video">Rechercher</span>
+	 {{form_rest(form_video)}}
+</form>
+
+{#
 	<h2>Ajout de tags</h2>
 	<form id="form_tags" method="post" action="{{url('post_video_tags')}}">
 		{{ form_widget(form_tags.tag) }}
@@ -20,15 +20,8 @@
 		{{form_row(form_tags._token)}}
 		<input class="btn btn-primary" type="submit" id="submit-form-video-tags-add" value="Envoyer" />
 	</form>
-{% endif %}
+#}
 
 {% block javascripts %}
-	{% if form_video is defined %}
-		{{ form_javascript(form_video) }}
-	{% else %}
-		{{ form_javascript(form_tags) }}
-		<script type="text/javascript">
-			tags.clear();
-		</script>
-	{% endif %}
+	{{ form_javascript(form_video) }}
 {% endblock javascripts %}

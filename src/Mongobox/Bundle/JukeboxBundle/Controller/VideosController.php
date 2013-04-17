@@ -320,9 +320,7 @@ class VideosController extends Controller
 							->setTitle( $dataYt->title )
 							->setDuration($dataYt->duration)
 							->setThumbnail( $dataYt->thumbnail->hqDefault )
-							->setThumbnailHq( $dataYt->thumbnail->sqDefault )
-							->setArtist($request->request->get('artist'))
-							->setSongName($request->request->get('songName'));
+							->setThumbnailHq( $dataYt->thumbnail->sqDefault );
 					$em->persist($video);
 					$em->flush();
 					$video_new = $video;
@@ -354,14 +352,14 @@ class VideosController extends Controller
 				$em->persist($playlist_add);
 
 				$em->flush();
-				$form_tags = $this->createForm(new VideoTagsType(), $video_new);
+				$form_video_info = $this->createForm(new VideoInfoType(), $video_new);
 
 				//On récupère tous les tags de cette chanson
 				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video_new);
 
 				return array(
 					'list_tags' => $list_tags,
-					'form_tags' => $form_tags->createView(),
+					'form_video_info' => $form_video_info->createView(),
 					'id_video' => $video_new->getId()
 				);
 			}
@@ -372,51 +370,12 @@ class VideosController extends Controller
 	}
 
     /**
-     * @Template("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig")
-     * @Route( "/post_tags", name="post_video_tags")
-     */
-	public function postTagsAction(Request $request)
-	{
-		$em = $this->getDoctrine()->getEntityManager();
-		$user = $this->get('security.context')->getToken()->getUser();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-
-		$video = new Videos();
-        $form = $this->createForm(new VideoTagsType(), $video);
-
-        // process the form on POST
-        if ($request->isMethod('POST'))
-		{
-            $form->bind($request);
-            if ( $form->isValid() )
-			{
-				$video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($request->request->get('id_video'));
-
-				//On supprime les anciens tags de la vidéo
-				$em->getRepository('MongoboxJukeboxBundle:Videos')->wipeTags($video);
-
-				//On rajoute les tags
-				$tags = $form->get('tags')->getData();
-				foreach($tags as $tag_id)
-				{
-					$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
-                    $entityTag->getVideos()->add($video);
-				}
-				$em->flush();
-			}
-        }
-
-        return new Response(json_encode(array('success' => true)));
-	}
-
-    /**
      * Action to edit a video from a modal
      *
      * @Route("/edit_modal/{id_video}", name="video_edit_modal")
 	 * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos", options={"id" = "id_video"})
      */
-    public function editVideoPopoverAction(Request $request, Videos $video)
+    public function editVideoModalAction(Request $request, Videos $video)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -453,7 +412,7 @@ class VideosController extends Controller
 		$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video);
 
 		$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(
-						'form_edit' => $editForm->createView(),
+						'form_video_info' => $editForm->createView(),
 						'video' => $video,
 						'list_tags' => $list_tags
 					))->getContent();

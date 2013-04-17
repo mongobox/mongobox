@@ -1,7 +1,7 @@
-<form id="form_tags" method="post" action="{{url('video_edit_modal', {'id_video' : video.id})}}">
-	{{ form_widget(form_edit) }}
-	{{form_rest(form_edit)}}
-	{{ form_widget(form_edit.tag) }}
+<form id="form_video_info" method="post" action="{{url('video_edit_modal', {'id_video' : video.id})}}">
+	{{ form_widget(form_video_info) }}
+	{{form_rest(form_video_info)}}
+	{{ form_widget(form_video_info.tag) }}
 	<span class="btn" id="video-button-add-tag">Ajouter</span>
 	<div id="container-selected-tags">
 		{% for tag in list_tags %}
@@ -15,7 +15,7 @@
 </form>
 
 {% block javascripts %}
-	{{ form_javascript(form_edit) }}
+	{{ form_javascript(form_video_info) }}
 	<script type="text/javascript">
 		tags.clear();
 	</script>
