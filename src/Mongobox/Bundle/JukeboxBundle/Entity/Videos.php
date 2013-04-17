@@ -65,6 +65,11 @@ class Videos
      */
 	protected $video_groups;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="VideoTag", mappedBy="videos", cascade={"persist"})
+     */
+    protected $tags;
+
 	/**
      * Constructor
      */
@@ -72,7 +77,7 @@ class Videos
     {
         $this->playlist = new ArrayCollection();
     }
-	
+
 	public function setId($id)
     {
         $this->id = $id;
@@ -225,7 +230,7 @@ class Videos
     {
         return 'http://www.youtube.com/watch?v='.$this->getLien();
     }
-	
+
 	public function guessVideoInfos()
 	{
 		$infos = array('artist' => '', 'songName' => '');
@@ -266,7 +271,7 @@ class Videos
     public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist)
     {
         $this->playlist[] = $playlist;
-    
+
         return $this;
     }
 
@@ -283,10 +288,51 @@ class Videos
     /**
      * Get playlist
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPlaylist()
     {
         return $this->playlist;
     }
+
+    /**
+     *
+     * @param TumblrTag $tag
+     */
+    public function addTag($tag) {
+        // var_dump( $tag);exit;
+        $tag->addVideo($this);
+        $this->tags[] = $tag;
+        return $this;
+    }
+
+    /**
+     * Fonction to delete tag
+     * @param Discussion $discussion
+     */
+    public function removeTag($tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function getTags() {
+        return $this->tags;
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function setTags(ArrayCollection $tags) {
+        $this->tags = $tags;
+        return $this;
+    }
+
+	public function getName()
+	{
+		if($this->getSongName() != '') return $this->getArtist().' - '.$this->getSongName ();
+		else return $this->getTitle();
+	}
 }

@@ -8,8 +8,22 @@
 		<h1>{{ page_title }}</h1>
 		{% if current_video is not null %}
 			<div id="player"></div>
+            {% if player_mode == "admin" %}
+                {% include 'MongoboxJukeboxBundle:Live:admin-control.html.twig' %}
+			{% endif %}
 
+    <ul id="live-tab" class="nav nav-tabs">
+		<li class="active"><a href="#vote" data-toggle="tab">Votes</a></li>
+		{% if player_mode == "admin" %}
+			<li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
+			<li><a href="#playlist" data-toggle="tab">Playlist</a></li>
+		{% endif %}
+    </ul>
+
+	<div class="tab-content">
+		<div class="tab-pane active" id="vote">
 			<div class="video-rating">
+				<h3>Vote</h3>
                 <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
                     <i class="icon-thumbs-up icon-white"></i>
                 </a>
@@ -25,9 +39,8 @@
                 <span id="video-score"></span>
 			</div>
 
-            <br />
-
             <div class="volume-control">
+				<h3>Volume</h3>
                 <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
                     <i class="icon-volume-up icon-white"></i>
                 </a>
@@ -38,14 +51,13 @@
                 </a>
                 <span id="volume-down-votes"></span>
 
-                <br />
-
                 <span id="video-volume"></span>
             </div>
+		</div>
 
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-            {% endif %}
+			{% endif %}
 
 			<script type="text/javascript">
 	          	var tag = document.createElement('script');
