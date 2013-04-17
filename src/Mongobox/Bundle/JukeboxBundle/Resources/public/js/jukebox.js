@@ -164,7 +164,7 @@ $(document).ready(function()
 		$(this).find('.edit-video').hide();
 	});
 
-	$(document).on('submit', '#form_tags', function(e)
+	$(document).on('submit', '#form_video_info', function(e)
 	{
 		e.preventDefault();
 
@@ -172,8 +172,8 @@ $(document).ready(function()
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
-			url: $('#form_tags').attr('action'),
-			data : $('#form_tags').serialize(),
+			url: $('#form_video_info').attr('action'),
+			data : $('#form_video_info').serialize(),
 			success: function(data)
 			{
 				$('#action-video-modal .modal-body').html(data.content);

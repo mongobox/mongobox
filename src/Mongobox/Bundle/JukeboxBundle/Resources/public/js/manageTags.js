@@ -93,7 +93,7 @@ var tags = tags || {};
             var newTagItem = prototype.replace(/__name__/g, tag.name);
             newTagItem = newTagItem.replace(/__id__/g, tag.id);
 
-            var $newFormLi = $('<li class="tag-item alert alert-info"></li>').append(newTagItem);
+            var $newFormLi = $('<span class="tag-item alert alert-info"></span>').append(newTagItem);
             this.collectionHolder.append( $newFormLi );
 
             // increase the index with one for the next item
