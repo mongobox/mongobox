@@ -1,75 +1,45 @@
-<div class="live-administration">
-    <h3>Administration</h3>
-
-    <ul id="admin-tab" class="nav nav-tabs">
-		<li class="active"><a href="#control" data-toggle="tab">Contrôles</a></li>
-		<li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
-		<li><a href="#playlist" data-toggle="tab">Playlist</a></li>
-    </ul>
-
-	<div class="tab-content">
-		<div class="tab-pane active" id="control">
-			<a href="#" class="btn btn-success" id="play-video-button" role="button" data-toggle="modal" title="Lancer la lecture">
-				<i class="icon-play icon-white"></i>
-			</a>
-
-			<a href="#" class="btn btn-success" id="pause-video-button" role="button" data-toggle="modal" title="Mettre en pause la lecture">
-				<i class="icon-pause icon-white"></i>
-			</a>
-
-			<a href="#" class="btn btn-warning" id="skip-video-button" role="button" data-toggle="modal" title="Passer à la vidéo suivante">
-				<i class="icon-fast-forward icon-white"></i>
-			</a>
-
-			<a href="#replace-video-modal"  id="replace-video-button" class="btn btn-danger" role="button" data-toggle="modal"  title="Remplacer la vidéo courante">
-				<i class="icon-remove icon-white"></i>
-			</a>
-		</div>
-
-		<div class="tab-pane" id="playlist_controll">
-			<h3>Gestion de la playlist</h3>
-			<table id="list_tags">
-				<thead>
-					<th>Tag</th>
-					<th>Nombre de vidéo</th>
-					<th>Actions</th>
-				</thead>
-				<tbody>
-				{% for tag in list_tags %}
-					<tr>
-						<td>{{tag[0].name}}</td>
-						<td>{{tag.total}}</td>
-						<td>
-							{% include 'MongoboxJukeboxBundle:partial:live-button-tag-video.html.twig' with {'tag' : tag[0], 'group' : group} %}
-						</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-			<div id="playlist_tag_actif">
-				<legend>Tag qui passe</legend>
-				<ul>
-					{% for tag in groupLiveTags %}
-						{% if tag.selected == 1 %}
-							{% include 'MongoboxJukeboxBundle:Partial:live-tag-video.html.twig' with {'tag' : tag} %}
-						{% endif %}
-					{% endfor %}
-				</ul>
-			</div>
-			<div id="playlist_tag_inactif">
-				<legend>Tag qui ne passe pas</legend>
-				<ul>
-					{% for tag in groupLiveTags %}
-						{% if tag.selected == 0 %}
-							{% include 'MongoboxJukeboxBundle:Partial:live-tag-video.html.twig' with {'tag' : tag} %}
-						{% endif %}
-					{% endfor %}
-				</ul>
-			</div>
-			<div id="playlist_action">
-				<a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : false})}}" class="btn btn-warning btn-empty-playlist">Vider les randoms de la playlist</a> <a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : true})}}" class="btn btn-danger btn-empty-playlist">Vider la playlist entièrement</a>
-			</div>
-		</div>
+<div class="tab-pane" id="playlist_controll">
+	<h3>Gestion de la playlist</h3>
+	<table id="list_tags">
+		<thead>
+			<th>Tag</th>
+			<th>Nombre de vidéo</th>
+			<th>Actions</th>
+		</thead>
+		<tbody>
+		{% for tag in list_tags %}
+			<tr>
+				<td>{{tag[0].name}}</td>
+				<td>{{tag.total}}</td>
+				<td>
+					{% include 'MongoboxJukeboxBundle:partial:live-button-tag-video.html.twig' with {'tag' : tag[0], 'group' : group} %}
+				</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<div id="playlist_tag_actif">
+		<legend>Tag qui passe</legend>
+		<ul>
+			{% for tag in groupLiveTags %}
+				{% if tag.selected == 1 %}
+					{% include 'MongoboxJukeboxBundle:Partial:live-tag-video.html.twig' with {'tag' : tag} %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="playlist_tag_inactif">
+		<legend>Tag qui ne passe pas</legend>
+		<ul>
+			{% for tag in groupLiveTags %}
+				{% if tag.selected == 0 %}
+					{% include 'MongoboxJukeboxBundle:Partial:live-tag-video.html.twig' with {'tag' : tag} %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="playlist_action">
+		<a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : false})}}" class="btn btn-warning btn-empty-playlist">Vider les randoms de la playlist</a> <a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : true})}}" class="btn btn-danger btn-empty-playlist">Vider la playlist entièrement</a>
 	</div>
 </div>
 

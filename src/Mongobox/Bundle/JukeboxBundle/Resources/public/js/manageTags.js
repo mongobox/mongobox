@@ -9,7 +9,7 @@ var tags = tags || {};
 		this.observeRemoveTag();
 		this.observeSubmitForm();
 	};
-	
+
 	tags.clear = function(){
 		this.form = $('#form_video_info');
 		this.containerSelectedTags = $('#container-selected-tags');
@@ -66,7 +66,7 @@ var tags = tags || {};
 			dataType: 'json',
 			success: function(data)
 			{
-				$('#post-video-modal').modal('hide')
+				$('#action-video-modal').modal('hide')
 			}
 		});
 	};

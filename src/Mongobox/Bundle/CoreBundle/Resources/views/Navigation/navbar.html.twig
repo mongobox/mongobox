@@ -64,7 +64,7 @@
 		<div id="video_en_cours">
 			{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}
 		</div>
-  	    <a href="#post-video-modal" class="btn btn-success" id="add-video-button" role="button" data-toggle="modal" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
+  	    <a href="#action-video-modal" class="btn btn-success" id="add-video-button" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
       </div><!--/.nav-collapse -->
     </div>
   </div>
@@ -72,21 +72,10 @@
 
 {% include 'MongoboxCoreBundle:Navigation:tumblrForm.html.twig' %}
 
-<div class="modal hide fade" id="post-video-modal">
+<div class="modal hide fade" id="action-video-modal">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Ajout d'une vidéo</h3>
-	</div>
-	<div class="modal-body">
-		<div class="loader"></div>
-		<div class="modal-content"></div>
-    </div>
-</div>
-
-<div class="modal hide fade" id="edit-video-modal">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Edition d'une vidéo</h3>
+		<h3>Action sur une vidéo</h3>
 	</div>
 	<div class="modal-body">
 		<div class="loader"></div>

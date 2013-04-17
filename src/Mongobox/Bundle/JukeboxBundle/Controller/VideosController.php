@@ -292,7 +292,6 @@ class VideosController extends Controller
     }
 
     /**
-     * @Template("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig")
      * @Route( "/post_video", name="post_video")
      */
 	public function postVideoAction(Request $request)
@@ -336,7 +335,6 @@ class VideosController extends Controller
 								->setGroup($group)
 								->setUser($user)
 								->setDiffusion(0)
-								->setVendredi(0)
 								->setVolume(50)
 								->setVotes(0);
 					$em->persist($video_group);
@@ -357,16 +355,31 @@ class VideosController extends Controller
 				//On récupère tous les tags de cette chanson
 				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video_new);
 
-				return array(
-					'list_tags' => $list_tags,
-					'form_video_info' => $form_video_info->createView(),
-					'id_video' => $video_new->getId()
+				$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(
+								'form_video_info' => $form_video_info->createView(),
+								'video' => $video_new,
+								'list_tags' => $list_tags
+							))->getContent();
+				$title = 'Informations de la vidéo : '.$video_new->getName();
+
+				$return = array(
+					'content' => $content,
+					'title' => $title
 				);
 			}
 		}
-		return array(
-			'form_video' => $form_video->createView()
+
+		$content = $this->render("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig", array(
+						'form_video' => $form_video->createView()
+					))->getContent();
+		$title = 'Ajout d\'une vidéo';
+
+		$return = array(
+			'content' => $content,
+			'title' => $title
 		);
+
+		return new Response(json_encode($return));
 	}
 
     /**
@@ -408,7 +421,7 @@ class VideosController extends Controller
 				return new Response(json_encode($return));
 			};
 		};
-		
+
 		$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video);
 
 		$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(

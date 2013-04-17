@@ -41,50 +41,43 @@ function btn_submit_video()
 		type: "POST",
 		url: basepath + 'videos/post_video',
 		data: $('#form_video').serialize()
-	}).done(function( msg )
+	}).done(function( data )
 	{
 		$('.loader').hide();
-		$('#post-video-modal .modal-content').html(msg);
+		$('#action-video-modal .modal-header h3').html(data.title);
+		$('#action-video-modal .modal-body').html(data.content);
 	});
 }
 
 $(document).ready(function()
 {
-	$('#post-video-modal').on('show', function () {
+	$(document).on('click', '.add-video-button', function(e)
+	{
+		e.preventDefault();
+		button = $(this);
+
 		$('.loader').show();
-		$('#post-video-modal .modal-content').html('');
+		$('#action-video-modal').modal('show');
+		$('#action-video-modal .modal-content').html('');
 		$.ajax({
 			type: "GET",
 			dataType: "html",
 			url: basepath + 'videos/post_video'
 		}).done(
-		function( html )
+		function( data )
 		{
-			$('#post-video-modal .modal-content').html(html);
+			$('#action-video-modal .modal-header h3').html(data.title);
+			$('#action-video-modal .modal-content').html(data.content);
 			$('.loader').hide();
 		});
-    });
-	
-	/*$('#edit-video-modal').on('show', function (e) {
-		$('.loader').show();
-		$('#edit-video-modal .modal-content').html('');
-		$.ajax({
-			type: "POST",
-			dataType: 'json',
-			url: button.attr('href'),
-			success: function(data)
-			{
-				$('#edit-video-modal .modal-content').html(data.content);
-				$('#edit-video-modal').show();
-			}
-		});
-    });*/
+	});
 
 	$(document).on('click', '.edit-video', function(e)
 	{
 		e.preventDefault();
 		button = $(this);
 
+		$('#action-video-modal').modal('show');
 		// Loading content from twig template
 		$.ajax({
 			type: 'GET',
@@ -92,8 +85,8 @@ $(document).ready(function()
 			url: button.attr('href'),
 			success: function(data)
 			{
-				$('#edit-video-modal .modal-header h3').html(data.title);
-				$('#edit-video-modal .modal-body').html(data.content);
+				$('#action-video-modal .modal-header h3').html(data.title);
+				$('#action-video-modal .modal-body').html(data.content);
 			}
 		});
 	});
@@ -170,7 +163,7 @@ $(document).ready(function()
 	{
 		$(this).find('.edit-video').hide();
 	});
-	
+
 	$(document).on('submit', '#form_tags', function(e)
 	{
 		e.preventDefault();
@@ -183,7 +176,7 @@ $(document).ready(function()
 			data : $('#form_tags').serialize(),
 			success: function(data)
 			{
-				$('#edit-video-modal .modal-body').html(data.content);
+				$('#action-video-modal .modal-body').html(data.content);
 			}
 		});
 	})

@@ -225,25 +225,6 @@ class WallController extends Controller
     }
 
     /**
-     * @Template()
-     * @Route( "/ajax_flag_vendredi_video/{id}/{value}", name="ajax_flag_vendredi_video")
-     */
-    public function ajaxFlagVendrediVideoAction(Request $request, $id, $value)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $video = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->find($id);
-        $video->setVendredi($value);
-        $em->flush();
-
-        if( false === $request->isXmlHttpRequest() ){
-            return $this->redirect($this->generateUrl('videos'));
-        }
-        else{
-            return new Response();
-        }
-    }
-
-    /**
      *
      * @Route( "/ajax_is_vote_next", name="ajax_is_vote_next")
      */
