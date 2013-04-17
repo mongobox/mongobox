@@ -18,11 +18,16 @@ class VideoInfoType extends AbstractType
                 'label' => 'Nom de la chanson',
                 'attr' => array('size' => 40)
             ))
-            ->add('tag', 'text', array(
-                'label' => 'Tag à ajouter',
-                'attr' => array('size' => 15),
-				'mapped' => false,
-				'required' => false,
+            ->add('tag', 'genemu_jqueryautocompleter_entity', array(
+                'route_name' => 'video_tags_ajax_autocomplete',
+                'class' => 'Mongobox\Bundle\JukeboxBundle\Entity\VideoTag',
+                'property' => 'name',
+                'label' => 'Tags',
+                'attr' => array(
+                    'placeholder' => 'Ajouter des tags',
+                ),
+                'required' => false,
+                'mapped' => false
             ))
             ->add('tags', 'hidden', array(
                 'mapped' => false

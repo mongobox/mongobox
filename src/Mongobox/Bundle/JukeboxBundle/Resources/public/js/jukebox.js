@@ -39,19 +39,21 @@ function btn_submit_video()
 {
 	$.ajax({
 		type: "POST",
+		dataType: "json",
 		url: basepath + 'videos/post_video',
-		data: $('#form_video').serialize()
-	}).done(function( data )
-	{
-		$('.loader').hide();
-		$('#action-video-modal .modal-header h3').html(data.title);
-		$('#action-video-modal .modal-body').html(data.content);
+		data: $('#form_video').serialize(),
+		success: function(data)
+		{
+			$('.loader').hide();
+			$('#action-video-modal .modal-header h3').html(data.title);
+			$('#action-video-modal .modal-body').html(data.content);
+		}
 	});
 }
 
 $(document).ready(function()
 {
-	$(document).on('click', '.add-video-button', function(e)
+	$(document).on('click', '#add-video-button', function(e)
 	{
 		e.preventDefault();
 		button = $(this);
@@ -61,14 +63,14 @@ $(document).ready(function()
 		$('#action-video-modal .modal-content').html('');
 		$.ajax({
 			type: "GET",
-			dataType: "html",
-			url: basepath + 'videos/post_video'
-		}).done(
-		function( data )
-		{
-			$('#action-video-modal .modal-header h3').html(data.title);
-			$('#action-video-modal .modal-content').html(data.content);
-			$('.loader').hide();
+			dataType: "json",
+			url: basepath + 'videos/post_video',
+			success: function(data)
+			{
+				$('#action-video-modal .modal-header h3').html(data.title);
+				$('#action-video-modal .modal-body').html(data.content);
+				$('.loader').hide();
+			}
 		});
 	});
 
@@ -182,5 +184,5 @@ $(document).ready(function()
 	})
 });
 
-var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
+var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 500000);
 var refreshLoadVideoEnCoursFail = 0;

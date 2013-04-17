@@ -26,7 +26,7 @@ var tags = tags || {};
         // index when inserting a new item (e.g. 2)
         tags.collectionHolder.data('index', tags.collectionHolder.find(':input').length);
         tags.tags = new Array();
-        this.autocompleteField = $('#video_info_tag');
+        this.autocompleteField = $('#autocompleter_video_info_tag');
 	};
 
 	tags.observeAddTag = function(){

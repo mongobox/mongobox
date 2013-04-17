@@ -319,7 +319,9 @@ class VideosController extends Controller
 							->setTitle( $dataYt->title )
 							->setDuration($dataYt->duration)
 							->setThumbnail( $dataYt->thumbnail->hqDefault )
-							->setThumbnailHq( $dataYt->thumbnail->sqDefault );
+							->setThumbnailHq( $dataYt->thumbnail->sqDefault )
+							->setArtist($request->request->get('artist'))
+							->setSongName($request->request->get('songName'));
 					$em->persist($video);
 					$em->flush();
 					$video_new = $video;
@@ -336,6 +338,7 @@ class VideosController extends Controller
 								->setUser($user)
 								->setDiffusion(0)
 								->setVolume(50)
+								->setVendredi(0)
 								->setVotes(0);
 					$em->persist($video_group);
 					$em->flush();
@@ -366,6 +369,7 @@ class VideosController extends Controller
 					'content' => $content,
 					'title' => $title
 				);
+				return new Response(json_encode($return));
 			}
 		}
 
@@ -436,5 +440,21 @@ class VideosController extends Controller
 			'title' => $title
 		);
         return new Response(json_encode($return));
+    }
+
+    /**
+     * Action to search tags for autocomplete field
+     *
+     * @Route("/tags-ajax-autocomplete", name="video_tags_ajax_autocomplete")
+     */
+    public function ajaxAutocompleteTagsAction(Request $request)
+    {
+        // récupération du mots clés en ajax selon la présélection du mot
+        $value = $request->get('term');
+        $em = $this->getDoctrine()->getManager();
+        $videoTagsRepository = $em->getRepository('MongoboxJukeboxBundle:VideoTag');
+        $motscles = $videoTagsRepository->getTags($value);
+
+        return new Response(json_encode($motscles));
     }
 }
