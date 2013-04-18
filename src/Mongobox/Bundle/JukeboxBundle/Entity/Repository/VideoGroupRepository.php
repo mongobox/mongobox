@@ -38,27 +38,103 @@ class VideoGroupRepository extends EntityRepository
 
         $date = new \Datetime();
         $day = $date->format('w');
-        if($day != 5) $vendredi = 0;
-        else $vendredi = 1;
+		
+		//Tag a avoir obligatoirement
+		$qb->select('glt')
+		->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
+		->where("glt.group = :group")
+		->andWhere("glt.selected = 1")
+		->setParameters( array(
+				'group' => $group
+		));
+		$query = $qb->getQuery();
+		$glt_s = $query->getResult();
+		$glts = array();
+		foreach($glt_s as $s) $glts[] = $s->getVideoTag();
 
+		//Tag à ne pas remonter obligatoirement
+		$qb = $em->createQueryBuilder();
+		$qb->select('glt')
+		->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
+		->where("glt.group = :group")
+		->andWhere("glt.selected = 0")
+		->setParameters( array(
+				'group' => $group
+		));
+		$query = $qb->getQuery();
+		$glt_u = $query->getResult();
+		$gltu = array();
+		foreach($glt_u as $u) $gltu[] = $u->getVideoTag();
+
+		if(count($gltu) > 0)
+		{
+			$qb = $em->createQueryBuilder();
+			$qb->select('vg')
+			->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+			->leftJoin('vg.video', 'v')
+			->leftJoin('v.tags', 'vt')
+			->innerJoin('vt.group_live_tag', 'glt')
+			->where("glt.video_tag IN (:gltu)")
+			->groupBy('vg.id')
+			->setParameters( array(
+					'gltu' => $gltu,
+			));
+			$query = $qb->getQuery();
+			$results = $query->getResult();
+		}
+		else $results = array();
+
+		$parameters = array(
+			'group' => $group,
+			'today' => new \Datetime('today')
+			);
+
+		$qb = $em->createQueryBuilder();
 		$qb->select('vg')
 		->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
 		->leftJoin('vg.playlist', 'p')
-		->where("vg.vendredi = :vendredi")
-		->andWhere("vg.group = :group")
+		->leftJoin('vg.video', 'v')
+		->leftJoin('v.tags', 'vt')
+		->where("vg.group = :group")
 		->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")
-		->groupBy('vg.id')
-		->setParameters( array(
-				'group' => $group,
-				'vendredi' => $vendredi,
-				'today' => new \Datetime('today')
-		));
+		->groupBy('vg.id');
+
+		if(count($results) > 0)
+		{
+			$qb->andWhere('vg.id NOT IN (:results)');
+			$parameters['results'] = $results;
+		}
+
+		$qb->setParameters( $parameters );
+
+		
 
 		/* TODO */
 		//$qb->andWhere('(DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL')
 		
 		$query = $qb->getQuery();
 		$results = $query->getResult();
+
+		if(count($glts) > 0)
+		{
+			$qb = $em->createQueryBuilder();
+			$qb->select('vg')
+			->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+			->leftJoin('vg.video', 'v')
+			->leftJoin('v.tags', 'vt')
+			->leftJoin('vt.group_live_tag', 'glt')
+			->where("glt.video_tag IN (:glts)")
+			->andWhere('vg.id IN (:results)')
+			->groupBy('vg.id')
+			->setParameters( array(
+					'glts' => $glts,
+					'results' => $results
+			));
+			$query = $qb->getQuery();
+			$results = $query->getResult();
+		}
+
+
 		//var_dump($results);
         if (count($results) > 0)
 		{

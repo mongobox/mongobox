@@ -65,34 +65,25 @@
                     'label':'Nb Votes'
                 } %}
             </th>
-            <th>
-                {# Filter on Vendredi #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.vendredi',
-                    'label':'Vendredi'
-                } %}
-            </th>
             <th>User</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr>
+        <tr class="show-edit-video">
             <td><a href="{{ path('videos_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.video.title }}</td>
             <td>{{ entity.video.lien }}</td>
             <td>{% if entity.lastBroadcast %}{{ entity.lastBroadcast|date('d-m-Y H:i:s') }}{% endif %}</td>
 			<td>{{entity.diffusion}}</td>
 			<td>{{ entity.votes }}</td>
-            <td>{{ entity.vendredi }}</td>
 			<td>
 			{% if entity.user is not empty %}{{ entity.user.login }}{% endif %}
 			</td>
             <td>
-            	<a href="{{ path('ajax_flag_vendredi_video', { 'id': entity.id, 'value' : 1 }) }}" class="btn">Définir comme vendredi</a>
             	<a href="{{ path('videos_add_to_playlist', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
+				<a href="{{url('video_edit_modal', {'id_video' : entity.id})}}" class="edit-video" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="icon-edit"></span></a>
             </td>
         </tr>
     {% endfor %}

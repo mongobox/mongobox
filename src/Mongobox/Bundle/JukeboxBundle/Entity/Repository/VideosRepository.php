@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\JukeboxBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * VideosRepository
@@ -35,7 +36,7 @@ class VideosRepository extends EntityRepository
 
     /**
      * Fonction de recherche des vidéos
-     * 
+     *
      * @param unknown_type $search
      * @param unknown_type $page
      * @param unknown_type $limit
@@ -61,8 +62,8 @@ class VideosRepository extends EntityRepository
                 $parameters['title'] = '%'.$search['title'].'%';
         }
 		$q->setParameters($parameters);
-        
-        
+
+
         $q = $q->getQuery();
 
         $result = $q->getResult();
@@ -85,5 +86,13 @@ class VideosRepository extends EntityRepository
 
 		$query = $qb->getQuery();
 		return $query->getResult();
+	}
+	
+	public function wipeTags($video)
+	{
+		$em = $this->getEntityManager();
+		$conn = $em->getConnection();
+		$sql = "DELETE FROM video_videos_tags WHERE id_video = ".$video->getId();
+		$conn->executeUpdate($sql);
 	}
 }
