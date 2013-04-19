@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Mongobox\Bundle\UsersBundle\Entity\UserFavoris
  *
- * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\UserFavorisRepository")
  * @ORM\Table(name="users_favoris")
  */
 class UserFavoris
