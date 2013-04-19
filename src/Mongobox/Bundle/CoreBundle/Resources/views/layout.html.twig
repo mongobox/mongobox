@@ -86,12 +86,14 @@
 	{% if app.user %}
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
     <script src="{{ asset('bundles/mongoboxjukebox/js/jukebox.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxusers/js/favoris.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxtumblr/js/tumblr.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxtumblr/js/addTumblr.js') }}"></script>
 	<script type="text/javascript">
 		$(function()
 		{
 			addTumblr.init();
+			favorisManager.init();
 		});
 	</script>
 	{% endif %}
