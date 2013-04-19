@@ -12,9 +12,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Mongobox\Bundle\UsersBundle\Form\UserEditType;
 use Mongobox\Bundle\UsersBundle\Form\UserEditPasswordType;
 
+use Mongobox\Bundle\UsersBundle\Entity\UserFavoris;
+
 /**
  * @Route( "/user")
- * 
+ *
  */
 class UserController extends Controller
 {
@@ -27,7 +29,7 @@ class UserController extends Controller
 		$value = $request->get('term');
 
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$users = $em->getRepository('MongoboxUsersBundle:User')->findUser($value);
 
 		$json = array();
@@ -46,22 +48,22 @@ class UserController extends Controller
 	 * Fonction pour l'édition de l'utilisateur courant
 	 * @Template()
 	 * @Route("/profil/edit", name="user_edit")
-	 * @Method({ "GET", "POST" }) 
+	 * @Method({ "GET", "POST" })
 	 */
 	public function editAction(Request $request, $id_user = null)
-	{		
+	{
 		$em = $this->getDoctrine()->getManager();
 
 		$request = $this->container->get('request');
 		$user = $this->container->get('security.context')->getToken()->getUser();
 
 		$old_user = clone $user;
-		
+
 		//Formulaire de modification de l'utilisateur
 		$form = $this->createForm(new UserEditType(), $user);
 		//Formulaire de modification du mot de passe si email non collectif
 		$form_password = $this->createForm(new UserEditPasswordType(), $user, array('validation_groups' => array('modify_password')));
-		
+
 		if('POST' === $request->getMethod())
 		{
 			//Validation pour l'utilisateur
@@ -114,5 +116,39 @@ class UserController extends Controller
 			'form_password' => $form_password->createView(),
 			'user' => $user
 		);
+	}
+
+	/**
+	 * Fonction pour ajouter une vidéo à la liste des vidéos favorites
+	 * @Route("/ajax/favorite/new/{id_video}", name="ajax_new_video_favorite")
+	 */
+	public function ajaxVideoAddToFavorite($id_video)
+	{
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$isAlreadyFavorite = $em->getRepository('MongoboxUsersBundle:UserFavoris')->checkUserFavorite($id_video, $user);
+
+		$result = array(
+			'add' =>  false,
+			'already' => true
+		);
+
+		if(!$isAlreadyFavorite)
+		{
+			$newFavoris = new UserFavoris();
+			$newFavoris
+					->setUser($user)
+					->setVideo($em->getRepository('MongoboxJukeboxBundle:Videos')->find($id_video))
+					->setDateFavoris(new \DateTime)
+			;
+
+			$em->persist($newFavoris);
+			$em->flush();
+
+			$result['add'] = true;
+			$result['already'] = false;
+		}
+
+		return new Response(json_encode($result));
 	}
 }
