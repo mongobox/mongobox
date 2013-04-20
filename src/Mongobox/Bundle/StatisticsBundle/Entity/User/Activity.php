@@ -1,33 +1,26 @@
 <?php
 
-namespace Mongobox\Bundle\StatisticsBundle\Entity;
+namespace Mongobox\Bundle\StatisticsBundle\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
- * UserActivity
+ * Activity
  *
  * @ORM\Table(name="users_activities")
- * @ORM\Entity(repositoryClass="Mongobox\Bundle\StatisticsBundle\Entity\Repository\UserActivityRepository")
+ * @ORM\Entity(repositoryClass="Mongobox\Bundle\StatisticsBundle\Entity\Repository\User\ActivityRepository")
  */
-class UserActivity
+class Activity
 {
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="users_activities")
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="activity")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userId;
+    private $user;
 
     /**
      * @var integer
@@ -44,47 +37,37 @@ class UserActivity
     private $date;
 
     /**
-     * Get id
+     * Set user
      *
-     * @return integer
+     * @param User $user
+     * @return Activity
      */
-    public function getId()
+    public function setUser(User $user)
     {
-        return $this->id;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return UserActivity
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get user
      *
-     * @return integer
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
      * Set typeId
      *
-     * @param integer $type
-     * @return UserActivity
+     * @param integer $typeId
+     * @return Activity
      */
-    public function setTypeId($type)
+    public function setTypeId($typeId)
     {
-        $this->typeId = $type;
+        $this->typeId = $typeId;
 
         return $this;
     }
@@ -103,7 +86,7 @@ class UserActivity
      * Set date
      *
      * @param \DateTime $date
-     * @return UserActivity
+     * @return Activity
      */
     public function setDate($date)
     {
