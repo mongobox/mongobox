@@ -52,7 +52,8 @@ class TumblrRepository extends EntityRepository
         ;
 
         // Dynamic filter
-        if( isset($filters) && !empty($filters) ){
+        if( isset($filters) && !empty($filters) && array_key_exists('sortBy', $filters))
+		{
             $qb->orderBy($filters['sortBy'], strtoupper($filters['orderBy']) );
         }
         else{
