@@ -30,12 +30,18 @@ class UserActivity
     private $userId;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="type_id", type="integer")
+     */
+    private $typeId;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
-
 
     /**
      * Get id
@@ -68,6 +74,29 @@ class UserActivity
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * Set typeId
+     *
+     * @param integer $type
+     * @return UserActivity
+     */
+    public function setTypeId($type)
+    {
+        $this->typeId = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get typeId
+     *
+     * @return integer
+     */
+    public function getTypeId()
+    {
+        return $this->typeId;
     }
 
     /**
