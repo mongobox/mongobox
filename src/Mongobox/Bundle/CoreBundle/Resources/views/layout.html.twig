@@ -12,6 +12,8 @@
     <link href="{{ asset('bundles/mongoboxjukebox/css/jukebox.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/mongoboxcore/css/fancymoves.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/mongoboxtumblr/css/tumblr.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/mongoboxcore/css/alertify/alertify.core.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/mongoboxcore/css/alertify/alertify.bootstrap.css') }}" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -85,6 +87,7 @@
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
 	{% if app.user %}
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxcore/js/vendor/alertify.min.js') }}"></script>
     <script src="{{ asset('bundles/mongoboxjukebox/js/jukebox.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxusers/js/favoris.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxtumblr/js/tumblr.js') }}"></script>
