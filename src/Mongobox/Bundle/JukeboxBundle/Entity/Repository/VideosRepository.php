@@ -43,7 +43,7 @@ class VideosRepository extends EntityRepository
      * @param unknown_type $filters
      * @return unknown
      */
-    public function search($group, $search, $page, $limit, $filters )
+    public function search($group, $search, $page, $limit, $filters = array('sortBy' => 'v.title', 'orderBy' => 'ASC') )
     {
 		$parameters = array('group' => $group);
         $q = $this->getEntityManager()
