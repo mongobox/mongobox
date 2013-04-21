@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\StatisticsBundle\Entity\Repository\User;
 
 use Doctrine\ORM\EntityRepository;
+use Mongobox\Bundle\StatisticsBundle\Statistics\UserActivity;
 
 /**
  * ActivityRepository
@@ -12,4 +13,35 @@ use Doctrine\ORM\EntityRepository;
  */
 class ActivityRepository extends EntityRepository
 {
+    /**
+     * Retrieves the list of connected and active users
+     *
+     * @return array
+     */
+    public function getActiveUsers()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $fromDate   = new \DateTime();
+        $fromDate   = $fromDate->modify('-15 minutes');
+
+        $qb
+            ->select('activities')
+            ->from('MongoboxStatisticsBundle:User\Activity', 'activities')
+            ->innerJoin('MongoboxGroupBundle:Group', 'group')
+            ->where('activities.typeId = :type')
+            ->andWhere('activities.date >= :date_from')
+            ->setParameters(array(
+                'type'      => UserActivity::LAST_HEARTBEAT,
+                'date_from' => $fromDate
+            ))
+            ->addOrderBy('activities.date', 'DESC')
+            ->getQuery()
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }
