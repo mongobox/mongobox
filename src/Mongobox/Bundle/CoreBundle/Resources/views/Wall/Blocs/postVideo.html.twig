@@ -1,7 +1,20 @@
 <form id="form_video" method="post">
-	{{ form_widget(form_video.lien) }}
-	<span class="btn" id="search-btn-video">Rechercher</span>
-	 {{form_rest(form_video)}}
+	<div id="youtube_add">
+		<label>Ajouter une vidéo venant de Youtube</label>
+		{{ form_widget(form_video.lien) }}
+		<span class="btn" id="search-btn-video">Ajouter</span>
+		 {{form_rest(form_video)}}<br />
+	</div>
+	<hr />
+	<div id="video_search">
+		{{ form_rest(form_search) }}
+		<div id="search">
+			<div id="mongobox_search">
+			</div>
+			<div id="youtube_search">
+			</div>
+		</div>
+	</div>
 </form>
 
 {#

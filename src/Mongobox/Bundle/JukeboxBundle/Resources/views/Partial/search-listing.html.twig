@@ -1,0 +1,11 @@
+{% if video_listing|length  > 0 %}
+	<h3>{{title}}</h3>
+	<ul>
+	{% for video in video_listing %}
+			<li class="total-clear-fix">
+				<span class="song_title">{{video.title}}</span>
+				<a href="#" rel="{{video.url}}" class="btn video_search_send btn-small" title="Ajouter cette vidéo"><span class="icon-plus"></span></a>
+			</li>
+	{% endfor %}
+	</ul>
+{% endif %}

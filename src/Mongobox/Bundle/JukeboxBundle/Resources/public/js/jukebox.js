@@ -12,6 +12,14 @@ $(document).on("click", ".btn-vote", function(e)
     });
 });
 
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 function loadVideoEnCours()
 {
 	$('.video-thumbnail').tooltip('destroy');
@@ -109,7 +117,7 @@ $(document).ready(function()
 			if(infos.type == 'new')
 			{
 				$('.loader').hide();
-				$('#form_video').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
+				$('#youtube_add').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
 				$('#btnSubmitVideo').bind('click', function(e)
 				{
 					$('.loader').show();
@@ -182,6 +190,33 @@ $(document).ready(function()
 			}
 		});
 	})
+	
+	$(document).on('keyup', '#video_search_search', function(e)
+	{
+		//On met un delai pour éviter de chercher pour chaque lettre tappée
+		delay(function()
+		{
+			// Loading content from twig template
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: basepath + 'videos/ajax/search/keyword',
+				data : $('#video_search_search').serialize(),
+				success: function(data)
+				{
+					$('#mongobox_search').html(data.mongobox);
+					$('#youtube_search').html(data.youtube);
+				}
+			});
+	    }, 500 );
+	});
+
+	$(document).on('click', '.video_search_send', function(e)
+	{
+		e.preventDefault();
+		$('#video_lien').val($(this).attr('rel'));
+		btn_submit_video();
+	});
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);

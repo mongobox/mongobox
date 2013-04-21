@@ -35,12 +35,12 @@ class Videos
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $artist;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $songName;
 
@@ -216,9 +216,9 @@ class Videos
         return (string) $xml->title;
     }
 
-    public function getDataFromYoutube()
+    static function getDataFromYoutube($YoutubeId)
     {
-        $feed = 'http://gdata.youtube.com/feeds/api/videos/'.$this->getLien() . '?v=2&alt=jsonc';
+        $feed = 'http://gdata.youtube.com/feeds/api/videos/'. $YoutubeId . '?v=2&alt=jsonc';
 
         $json = file_get_contents($feed);
         $data = json_decode($json);

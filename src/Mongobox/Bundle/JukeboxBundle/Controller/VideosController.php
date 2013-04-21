@@ -18,6 +18,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 // Forms
 use Mongobox\Bundle\JukeboxBundle\Form\VideosType;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoSearchType;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoInfoType;
 use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
@@ -303,6 +304,7 @@ class VideosController extends Controller
 
 		$video = new Videos();
 		$form_video = $this->createForm(new VideoType(), $video);
+		$form_search = $this->createForm(new VideoSearchType(), $video);
 		if ( 'POST' === $request->getMethod() )
 		{
 			$form_video->bindRequest($request);
@@ -313,7 +315,7 @@ class VideosController extends Controller
 				$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
 				if (!is_object($video_new))
 				{
-					$dataYt = $video->getDataFromYoutube();
+					$dataYt = Videos::getDataFromYoutube($video->getLien());
 
 					$video->setDate(new \Datetime())
 							->setTitle( $dataYt->title )
@@ -374,7 +376,8 @@ class VideosController extends Controller
 		}
 
 		$content = $this->render("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig", array(
-						'form_video' => $form_video->createView()
+						'form_video' => $form_video->createView(),
+						'form_search' => $form_search->createView()
 					))->getContent();
 		$title = 'Ajout d\'une vidéo';
 
@@ -408,10 +411,13 @@ class VideosController extends Controller
 
 				//On rajoute les tags
 				$tags = $editForm->get('tags')->getData();
-				foreach($tags as $tag_id)
+				if(is_array($tags))
 				{
-					$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
-                    $entityTag->getVideos()->add($video);
+					foreach($tags as $tag_id)
+					{
+						$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
+						$entityTag->getVideos()->add($video);
+					}
 				}
 				$em->flush();
 
@@ -456,5 +462,55 @@ class VideosController extends Controller
         $motscles = $videoTagsRepository->getTags($value);
 
         return new Response(json_encode($motscles));
+    }
+
+    /**
+     * Action to search video from mongobox or youtube
+     *
+     * @Route("/ajax/search/keyword", name="ajax_search_keyword")
+     */
+    public function ajaxSearchKeywordAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$video = new Videos();
+		$form_search = $this->createForm(new VideoSearchType(), $video);
+		$youtube_video = array();
+		$mongobox_video = array();
+		if ( 'POST' === $request->getMethod() )
+		{
+			$form_search->bindRequest($request);
+			$keyword = $form_search->get('search')->getData();
+
+			//Récupération des infos de Youtube
+			$url = 'http://gdata.youtube.com/feeds/api/videos?q='.$keyword.'&max-results=10';
+			$videos = @simplexml_load_file( $url );
+			foreach($videos->entry as $video)
+			{
+				$att = 'href';
+				$url = $video->link[0]->attributes()->$att;
+				$youtube_video[] = array('title' => strip_tags($video->title->asXML()), 'url' => $url);
+			}
+
+			//Récupération des infos Mongobox
+			$search = array('title' => $keyword);
+			$mongobox_videos = $em->getRepository('MongoboxJukeboxBundle:Videos')->search($group, $search, 1, 10);
+			foreach($mongobox_videos as $mv)
+			{
+				$mongobox_video[] = array('title' => $mv->getVideo()->getName(), 'url' => $mv->getVideo()->getLien());
+			}
+		}
+
+        return new Response(json_encode(array(
+			'youtube' => $this->render('MongoboxJukeboxBundle:Partial:search-listing.html.twig', array(
+						'video_listing' => $youtube_video,
+						'title' => 'Youtube'
+					))->getContent(),
+			'mongobox' => $this->render('MongoboxJukeboxBundle:Partial:search-listing.html.twig', array(
+						'video_listing' => $mongobox_video,
+						'title' => 'Mongobox'
+					))->getContent()
+			)));
     }
 }
