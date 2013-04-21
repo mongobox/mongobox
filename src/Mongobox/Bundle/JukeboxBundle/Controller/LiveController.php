@@ -59,14 +59,18 @@ class LiveController extends Controller
 
 		//On supprime la vidéo en cours
 		$playlist_current = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-		$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
+		//Il n'y a pas de vidéo en cours, on va en chercher une
+		if(!is_null($playlist_current))
+		{
+			$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
 
-		$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
-		$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
+			$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
+			$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
 
-		$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
-        $em->getRepository('MongoboxJukeboxBundle:Volume')->wipe($playlist_current);
-		$em->remove($playlist_current);
+			$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
+			$em->getRepository('MongoboxJukeboxBundle:Volume')->wipe($playlist_current);
+			$em->remove($playlist_current);			
+		}
 
 		//On cherche la prochaine vidéo
 		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
