@@ -4,7 +4,9 @@
 	{% for video in video_listing %}
 			<li class="total-clear-fix">
 				<span class="song_title">{{video.title}}</span>
-				<a href="#" rel="{{video.url}}" class="btn video_search_send btn-small" title="Ajouter cette vidéo"><span class="icon-plus"></span></a>
+				<a href="#" rel="{{video.url}}" class="btn video_search_send btn-small" title="{% if title == 'Mongobox' %}Mettre dans la playlist cette vidéo{% else %}Ajouter cette vidéo{% endif %}">
+					<span class="{% if title == 'Mongobox' %}icon-arrow-up{% else %}icon-plus{% endif %}"></span>
+				</a>
 			</li>
 	{% endfor %}
 	</ul>
