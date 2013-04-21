@@ -12,6 +12,14 @@ $(document).on("click", ".btn-vote", function(e)
     });
 });
 
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 function loadVideoEnCours()
 {
 	$('.video-thumbnail').tooltip('destroy');
@@ -185,19 +193,22 @@ $(document).ready(function()
 	
 	$(document).on('keyup', '#video_search_search', function(e)
 	{
-		var keyword = $(this).val();
-		// Loading content from twig template
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: basepath + 'videos/ajax/search/keyword',
-			data : $('#video_search_search').serialize(),
-			success: function(data)
-			{
-				$('#mongobox_search').html(data.mongobox);
-				$('#youtube_search').html(data.youtube);
-			}
-		});		
+		//On met un delai pour éviter de chercher pour chaque lettre tappée
+		delay(function()
+		{
+			// Loading content from twig template
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: basepath + 'videos/ajax/search/keyword',
+				data : $('#video_search_search').serialize(),
+				success: function(data)
+				{
+					$('#mongobox_search').html(data.mongobox);
+					$('#youtube_search').html(data.youtube);
+				}
+			});	
+	    }, 500 );
 	});
 });
 
