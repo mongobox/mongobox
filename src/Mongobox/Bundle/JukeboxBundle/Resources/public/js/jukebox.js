@@ -182,6 +182,23 @@ $(document).ready(function()
 			}
 		});
 	})
+	
+	$(document).on('keyup', '#video_search_search', function(e)
+	{
+		var keyword = $(this).val();
+		// Loading content from twig template
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: basepath + 'videos/ajax/search/keyword',
+			data : $('#video_search_search').serialize(),
+			success: function(data)
+			{
+				$('#mongobox_search').html(data.mongobox);
+				$('#youtube_search').html(data.youtube);
+			}
+		});		
+	});
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
