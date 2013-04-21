@@ -1,0 +1,95 @@
+<h4>Utilisateurs en ligne</h4>
+<p>
+    {% if activities is empty %}
+        Il n'y a actuellement <strong>aucun</strong> utilisateur en ligne.
+    {% else %}
+        {% set nb_active_users = activities|length %}
+
+        {% if nb_active_users == 1 %}
+            Il y a actuellement <strong>{{ nb_active_users }}</strong> utilisateur connecté :
+        {% else %}
+            Il y a actuellement <strong>{{ nb_active_users }}</strong> utilisateurs connectés :
+        {% endif %}
+
+        {% for activity in activities %}
+            {% set in_group = false %}
+
+            {% for group in activity.user.groups %}
+                {% if group.id == current_group_id %}
+                    {% set in_group = true %}
+                {% endif %}
+            {% endfor %}
+
+            {%- if app.user and activity.user.username == app.user.username -%}
+                <span class="current-value">Vous</span>
+            {%- elseif in_group == true -%}
+                <span class="group-value">{{ activity.user.firstname }} {{ activity.user.lastname }}</span>
+            {%- else -%}
+                <span class="global-value">{{ activity.user.firstname }} {{ activity.user.lastname }}</span>
+            {%- endif -%}
+
+            {%- if not loop.last -%}
+                ,
+            {%- else -%}
+                .
+            {%- endif -%}
+        {% endfor %}
+    {% endif %}
+</p>
+
+<hr />
+
+<h4>Statistiques</h4>
+<p>
+    Nombre de vidéos :
+    {% if app.user %}
+        <span class="group-value">{{ videos.group_count }}</span> /
+    {% endif %}
+    <span class="global-value">{{ videos.global_count }}</span>
+
+    • Nombre d'images :
+    {% if app.user %}
+        <span class="group-value">{{ images.group_count }}</span> /
+    {% endif %}
+    <span class="global-value">{{ images.global_count }}</span>
+
+    • Nombre d'utilisateurs :
+    {% if app.user %}
+        <span class="group-value">{{ users.group_count }}</span> /
+    {% endif %}
+    <span class="global-value">{{ users.global_count }}</span>
+
+    {% if users.last_registered %}
+        • Dernier inscrit : <strong>{{ users.last_registered.firstname }} {{ users.last_registered.lastname }}</strong>
+    {% endif %}
+</p>
+
+<hr />
+
+{% if app.user %}
+    <h4>Légende</h4>
+    <p>
+        <span class="current-value">Utilisateur</span>
+        • <span class="group-value">Groupe actuel</span>
+        • <span class="global-value">Application</span>
+    </p>
+
+    <hr />
+{% endif %}
+
+<style>
+    .global-value {
+        color: darkred;
+        font-weight: bold;
+    }
+
+    .group-value {
+        color: darkgreen;
+        font-weight: bold;
+    }
+
+    .current-value {
+        color: darkblue;
+        font-weight: bold;
+    }
+</style>
