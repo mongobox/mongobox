@@ -61,4 +61,30 @@ class UserRepository extends EntityRepository
 
         return $query->getSingleScalarResult();
     }
+
+    /**
+     * Retrieves the last registered user or null if no registration was found.
+     *
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User | null
+     */
+    public function getLastRegistered()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('u')
+            ->from('MongoboxUsersBundle:User', 'u')
+            ->orderBy('u.date_create', 'DESC')
+            ->setMaxResults(1)
+        ;
+
+        $query = $qb->getQuery();
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\Orm\NoResultException $e) {
+            return null;
+        }
+    }
 }
