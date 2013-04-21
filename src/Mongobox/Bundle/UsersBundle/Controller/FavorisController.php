@@ -18,7 +18,7 @@ class FavorisController extends Controller
 	 * Fonction pour ajouter une vidéo à la liste des vidéos favorites
 	 * @Route("/ajax/favorite/new/{id_video}", name="ajax_new_video_favorite")
 	 */
-	public function ajaxVideoAddToFavorite($id_video)
+	public function ajaxVideoAddToFavoriteAction($id_video)
 	{
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
@@ -46,6 +46,44 @@ class FavorisController extends Controller
 		}
 
 		return new Response(json_encode($result));
+	}
+
+	/**
+	 * Fonction pour voir les favoris de l'utilisateur
+	 * @Route("/profil/favoris/{page}", name="user_voir_favoris", requirements={"page" = "\d+"}, defaults={"page" = 0})
+	 * @Template()
+	 */
+	public function voirFavorisAction($page)
+	{
+		$manager = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+		$videos_user = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getUniqueFavorisUser($user, $page);
+		foreach($videos_user as &$video)
+		{
+			$array_date_first_ajout = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getDateAddToFavorite($user, $video['id']);
+			$video = array_merge($video, $array_date_first_ajout);
+			$video['listes'] = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getListesUserForOneVideo($user, $video['id']);
+			foreach($video['listes'] as &$liste)
+			{
+				$array_date_ajout = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getDateAddToList($user, $video['id'], $liste['id']);
+				$liste = array_merge($liste, $array_date_ajout);
+			}
+		}
+		//echo '<pre>';var_dump($videos_user);exit;
+
+		return array(
+			'favoris' => $videos_user
+		);
+	}
+
+	/**
+	 * Fonction pour voir les listes de favoris de l'utilisateur
+	 * @Route("/profil/listes", name="user_voir_listes")
+	 * @Template()
+	 */
+	public function voirListeFavorisAction()
+	{
+		return array();
 	}
 }
 

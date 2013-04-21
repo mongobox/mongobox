@@ -39,6 +39,75 @@ class UserFavorisRepository extends EntityRepository
 		}
 		return $result;
 	}
+
+	/**
+	 * Fonction pour récupérer un tableau des vidéos favorites de l'utilisateur
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param int $page
+	 * @return arry
+	 */
+	public function getUniqueFavorisUser($user, $page)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->select('v')
+			->from('MongoboxJukeboxBundle:Videos', 'v')
+			->innerJoin('v.favoris', 'uf')
+			->where('uf.user = :user')
+			->setParameters(array(
+				'user' => $user
+			))
+			->groupBy('v.id')
+		;
+		return $qb->getQuery()->getArrayResult();
+	}
+
+	/**
+	 * Fonction pour récupérer la date d'ajout en favoris d'une vidéo à une liste
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user $user
+	 * @param int $id_video
+	 * @param int $id_liste
+	 * @return array
+	 */
+	public function getDateAddToList($user, $id_video, $id_liste)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->select('uf.date_favoris')
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->where('uf.user = :user')
+			->andWhere('uf.liste = :liste')
+			->andWhere('uf.video = :video')
+			->setParameters(array(
+				'user' => $user,
+				'video' => $this->getEntityManager()->getReference('MongoboxJukeboxBundle:Videos', $id_video),
+				'liste' => $this->getEntityManager()->getReference('MongoboxUsersBundle:ListeFavoris', $id_liste)
+			))
+		;
+		return $qb->getQuery()->getSingleResult();
+	}
+
+	/**
+	 * Fonction pour récupérer la date d'ajout aux favoris
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user $user
+	 * @param int $id_video
+	 */
+	public function getDateAddToFavorite($user, $id_video)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->select('uf.date_favoris')
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->where('uf.user = :user')
+			->andWhere('uf.liste IS NULL')
+			->andWhere('uf.video = :video')
+			->setParameters(array(
+				'user' => $user,
+				'video' => $this->getEntityManager()->getReference('MongoboxJukeboxBundle:Videos', $id_video),
+			))
+		;
+		return $qb->getQuery()->getSingleResult();
+	}
 }
 
 ?>

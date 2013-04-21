@@ -1,0 +1,48 @@
+{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+
+{% block title -%}- Favoris{%- endblock title %}
+
+{% block body %}
+<div class="hero-unit">
+	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
+
+	{% for video in favoris %}
+		<div class="well row-fluid content-block-bookmark">
+			<div class="span6">
+				<img src="{{video.thumbnailHq}}" alt="" style="max-height: 52px;" />
+				<a href="{{ path('videos_show', {'id': video.id}) }}">{{ video.title }}</a>
+			</div>
+			<div class="span6 info-fav">
+				<span class="span-date-favoris">Ajoutée aux favoris le {{ video.date_favoris|date('d/m/Y à H:i') }}</span>
+				<div class="bookmark-actions">
+					<a class="btn btn-link btn-actions-bookmark btn-lists-bookmark" title="Vos listes attribuées à cette vidéo">Listes</a>
+					<div class="content-lists-bookmark">
+						{% if video.listes|length == 0 %}
+							Vous n'avez attribué aucune liste à cette vidéo.
+						{% else %}
+						<table>
+							{% for liste in video.listes %}
+								<tr>
+									<td>
+										{{ liste.name }} | depuis le {{ liste.date_favoris|date('d/m/Y à H:i') }}
+									</td>
+									<td>
+										<a class="btn btn-link btn-actions-list-remove" title="Supprimer la vidéo de cette liste"><i class="icon-trash"></i></a>
+									</td>
+								</tr>
+							{% endfor %}
+						</table>
+						{% endif %}
+					</div>
+					<a class="btn btn-link btn-actions-bookmark" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
+					<a class="btn btn-link btn-actions-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block css %}
+	<link href="{{ asset('bundles/mongoboxusers/css/favoris.css') }}" rel="stylesheet">
+{% endblock css %}
