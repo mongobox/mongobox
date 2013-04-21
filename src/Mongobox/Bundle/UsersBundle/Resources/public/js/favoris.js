@@ -5,11 +5,14 @@ var favorisManager = favorisManager || {};
 	favorisManager.init = function()
 	{
 		this.boutonAddToFavoris = $('.btn-favoris-add');
+		this.boutonShowLists = $('.btn-lists-bookmark');
 		this.addingToFavorite = false;
 
 		this.observeFavorisAdd();
+		this.observeShowListsDetails();
 	};
 
+	// Fonction pour gérer l'ajout de la vidéo en favoris
 	favorisManager.observeFavorisAdd = function()
 	{
 		this.boutonAddToFavoris.bind('click', function(e)
@@ -47,5 +50,26 @@ var favorisManager = favorisManager || {};
 				}
 			});
 		});
+	};
+
+	// Fonction pour afficher les listes de favoris affectées à une vidéo
+	favorisManager.observeShowListsDetails = function()
+	{
+		this.boutonShowLists.bind('click', function(e)
+		{
+			e.preventDefault();
+			$(this).toggleClass('active');
+			var div_content = $(this).siblings('.content-lists-bookmark');
+			div_content
+				.css("left", $(this).offset().left + $(this).width() + 14 - div_content.width())
+				.css("top", $(this).offset().top + $(this).height())
+				.toggle()
+			;
+		});
+	};
+
+	favorisManager.observeRemoveVideoFromList = function()
+	{
+
 	};
 })(jQuery);
