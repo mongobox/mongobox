@@ -20,18 +20,23 @@ class UserActivityListener
         $this->container = $container;
     }
 
+    /**
+     * Retrieves the currently logged user.
+     *
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User | boolean
+     */
     protected function getCurrentUser()
     {
         $securityContext = $this->container->get('security.context');
-        if ($token = $securityContext->getToken()) {
-            return $token->getUser();
+        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $securityContext->getToken()->getUser();
         }
 
         return false;
     }
 
     /**
-     * Updates the date of last activity for the current user
+     * Updates the date of last activity for the current user.
      *
      * @param PostResponseEvent $event
      * @return void
