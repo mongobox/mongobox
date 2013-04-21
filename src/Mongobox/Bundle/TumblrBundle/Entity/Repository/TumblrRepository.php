@@ -183,10 +183,10 @@ class TumblrRepository extends EntityRepository
             return false;
         }
     }
-	
+
 	/**
      * Function to delete tumblr/tags relation
-	 *	 
+	 *
      * @param MongoboxTumblrBundle:Tumblr $tumblr
      */
     public function cleanTags($tumblr)
@@ -198,10 +198,10 @@ class TumblrRepository extends EntityRepository
         }
         $em->flush();
     }
-	
+
 	/**
      * Function to delete tumblr/groups relation
-	 *	 
+	 *
      * @param MongoboxTumblrBundle:Tumblr $tumblr
      */
     public function cleanGroups($tumblr)
@@ -212,5 +212,35 @@ class TumblrRepository extends EntityRepository
             $tumblr->removeTag($group);
         }
         $em->flush();
+    }
+
+    /**
+     * Retrieves the total number of images in the given group.
+     * If no group is given, then retrieves the total number of images in the application.
+     *
+     * @param integer $groupId
+     * @return integer
+     */
+    public function getCount($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('count(t.id_tumblr)')
+            ->from('MongoboxTumblrBundle:Tumblr', 't')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->innerJoin('t.groups', 'g')
+                ->where('g.id = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleScalarResult();
     }
 }

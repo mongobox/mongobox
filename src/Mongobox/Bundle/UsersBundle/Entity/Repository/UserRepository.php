@@ -31,4 +31,60 @@ class UserRepository extends EntityRepository
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
+
+    /**
+     * Retrieves the total number of users in the given group.
+     * If no group is given, then retrieves the total number of users in the application.
+     *
+     * @param integer $groupId
+     * @return integer
+     */
+    public function getCount($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('count(u.id)')
+            ->from('MongoboxUsersBundle:User', 'u')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->innerJoin('u.groups', 'g')
+                ->where('g.id = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Retrieves the last registered user or null if no registration was found.
+     *
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User | null
+     */
+    public function getLastRegistered()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('u')
+            ->from('MongoboxUsersBundle:User', 'u')
+            ->orderBy('u.date_create', 'DESC')
+            ->setMaxResults(1)
+        ;
+
+        $query = $qb->getQuery();
+
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\Orm\NoResultException $e) {
+            return null;
+        }
+    }
 }

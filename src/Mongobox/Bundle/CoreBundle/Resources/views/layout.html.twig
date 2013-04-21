@@ -77,7 +77,8 @@
 
     <footer class="footer">
       	<div class="container">
-	    <p>© {{project_name}} {{version}} By {{team_name}}</p>
+            {% render controller("MongoboxStatisticsBundle:Footer:statistics") %}
+	        <p>© {{project_name}} {{version}} By {{team_name}}</p>
         </div>
     </footer>
 

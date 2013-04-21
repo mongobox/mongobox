@@ -87,7 +87,7 @@ class VideosRepository extends EntityRepository
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
-	
+
 	public function wipeTags($video)
 	{
 		$em = $this->getEntityManager();
@@ -95,4 +95,34 @@ class VideosRepository extends EntityRepository
 		$sql = "DELETE FROM video_videos_tags WHERE id_video = ".$video->getId();
 		$conn->executeUpdate($sql);
 	}
+
+    /**
+     * Retrieves the total number of videos in the given group.
+     * If no group is given, then retrieves the total number of videos in the application.
+     *
+     * @param integer $groupId
+     * @return integer
+     */
+    public function getCount($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('count(v.id)')
+            ->from('MongoboxJukeboxBundle:Videos', 'v')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->innerJoin('v.video_groups', 'vg')
+                ->where('vg.group = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
 }
