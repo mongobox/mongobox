@@ -1,5 +1,6 @@
+<h3>{{title}}</h3>
 <ul>
 {% for video in video_listing %}
-	<li>{{video.title}} => {{video.url}}</li>
+		<li>{{video.title}} <a href="#" rel="{{video.url}}" class="btn video_search_send btn-small"><span class="icon-plus"></span></a></li>
 {% endfor %}
 </ul>

@@ -411,10 +411,13 @@ class VideosController extends Controller
 
 				//On rajoute les tags
 				$tags = $editForm->get('tags')->getData();
-				foreach($tags as $tag_id)
+				if(is_array($tags))
 				{
-					$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
-                    $entityTag->getVideos()->add($video);
+					foreach($tags as $tag_id)
+					{
+						$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
+						$entityTag->getVideos()->add($video);
+					}
 				}
 				$em->flush();
 
@@ -487,7 +490,7 @@ class VideosController extends Controller
 			{
 				$att = 'href';
 				$url = $video->link[0]->attributes()->$att;
-				$youtube_video[] = array('title' => $video->title->asXML(), 'url' => $url);
+				$youtube_video[] = array('title' => strip_tags($video->title->asXML()), 'url' => $url);
 			}
 
 			//Récupération des infos Mongobox
@@ -501,10 +504,12 @@ class VideosController extends Controller
 
         return new Response(json_encode(array(
 			'youtube' => $this->render('MongoboxJukeboxBundle:Partial:search-listing.html.twig', array(
-						'video_listing' => $youtube_video
+						'video_listing' => $youtube_video,
+						'title' => 'Youtube'
 					))->getContent(),
 			'mongobox' => $this->render('MongoboxJukeboxBundle:Partial:search-listing.html.twig', array(
-						'video_listing' => $mongobox_video
+						'video_listing' => $mongobox_video,
+						'title' => 'Mongobox'
 					))->getContent()
 			)));
     }

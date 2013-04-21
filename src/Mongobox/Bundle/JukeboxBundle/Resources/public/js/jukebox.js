@@ -207,8 +207,15 @@ $(document).ready(function()
 					$('#mongobox_search').html(data.mongobox);
 					$('#youtube_search').html(data.youtube);
 				}
-			});	
+			});
 	    }, 500 );
+	});
+
+	$(document).on('click', '.video_search_send', function(e)
+	{
+		e.preventDefault();
+		$('#video_lien').val($(this).attr('rel'));
+		btn_submit_video();
 	});
 });
 
