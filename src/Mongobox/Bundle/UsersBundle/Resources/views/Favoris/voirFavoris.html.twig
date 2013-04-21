@@ -7,7 +7,7 @@
 	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
 
 	{% for video in favoris %}
-		<div class="well row-fluid content-block-bookmark">
+		<div class="well row-fluid content-block-bookmark" id="bookmark-{{ video.id }}">
 			<div class="span6">
 				<img src="{{video.thumbnailHq}}" alt="" style="max-height: 52px;" />
 				<a href="{{ path('videos_show', {'id': video.id}) }}">{{ video.title }}</a>
@@ -22,20 +22,13 @@
 						{% else %}
 						<table>
 							{% for liste in video.listes %}
-								<tr>
-									<td>
-										{{ liste.name }} | depuis le {{ liste.date_favoris|date('d/m/Y à H:i') }}
-									</td>
-									<td>
-										<a class="btn btn-link btn-actions-list-remove" title="Supprimer la vidéo de cette liste"><i class="icon-trash"></i></a>
-									</td>
-								</tr>
+								{% include 'MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig' %}
 							{% endfor %}
 						</table>
 						{% endif %}
 					</div>
 					<a class="btn btn-link btn-actions-bookmark" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
-					<a class="btn btn-link btn-actions-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
+					<a class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
 				</div>
 			</div>
 		</div>
