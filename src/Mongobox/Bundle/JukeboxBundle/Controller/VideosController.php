@@ -484,7 +484,7 @@ class VideosController extends Controller
 			$keyword = $form_search->get('search')->getData();
 
 			//Récupération des infos de Youtube
-			$url = 'http://gdata.youtube.com/feeds/api/videos?q='.$keyword;
+			$url = 'http://gdata.youtube.com/feeds/api/videos?q='.$keyword.'&max-results=10';
 			$videos = @simplexml_load_file( $url );
 			foreach($videos->entry as $video)
 			{
