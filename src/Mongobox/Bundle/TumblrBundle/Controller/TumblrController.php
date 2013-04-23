@@ -32,14 +32,14 @@ class TumblrController extends Controller
     {
         $filters = array();
         $tag = $request->get('tag');
-        if( $tag ){
+        if ($tag) {
             $filters['tag'] = $tag;
         }
 
         $em = $this->getDoctrine()->getManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:Tumblr');
-		$session = $request->getSession();
-		$user = $this->get('security.context')->getToken()->getUser();
+        $session = $request->getSession();
+        $user = $this->get('security.context')->getToken()->getUser();
 
         $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1),$filters);
 
@@ -68,61 +68,54 @@ class TumblrController extends Controller
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->getUser();
+        $user = $this->getUser();
 
         $tumblr = new Tumblr();
         $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
 
-        if ( $request->isMethod('POST') || $request->isXmlHttpRequest() )
-		{
+        if ( $request->isMethod('POST') || $request->isXmlHttpRequest() ) {
             $form->bind($request);
-            if ( $form->isValid() )
-			{
+            if ( $form->isValid() ) {
                 $tumblr->setDate(new \Datetime());
 
-				// Get data tags switch request method
-				if( $request->isXmlHttpRequest() )
-				{
-					$datas = $request->request->get('tumblr');
-					$tags = $datas['tags'];
-					$access_tumblr = false;
-				} else
-				{
-					$tags = $form->get('tags')->getData();
-				}
+                // Get data tags switch request method
+                if ( $request->isXmlHttpRequest() ) {
+                    $datas = $request->request->get('tumblr');
+                    $tags = $datas['tags'];
+                    $access_tumblr = false;
+                } else {
+                    $tags = $form->get('tags')->getData();
+                }
 
                 // Set Tags
-                foreach( $tags as $tag_id)
-                {
+                foreach ($tags as $tag_id) {
                     $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
                     $entityTag->getTumblrs()->add($tumblr);
                 }
 
-				foreach($form->get('groups')->getData() as $group_id)
-				{
-					if(in_array($group_id, $user->getGroupsIds()) ) $access_tumblr = true;
-					$group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
-					$group->getTumblrs()->add($tumblr);
-				}
+                foreach ($form->get('groups')->getData() as $group_id) {
+                    if(in_array($group_id, $user->getGroupsIds()) ) $access_tumblr = true;
+                    $group = $em->getRepository('MongoboxGroupBundle:Group')->find($group_id);
+                    $group->getTumblrs()->add($tumblr);
+                }
 
                 $em->persist($tumblr);
                 $em->flush();
 
-				if( $request->isXmlHttpRequest() )
-				{
-					$datas = array();
-					$datas['success'] = $access_tumblr;
-					$datas['tumblrView'] = $this->render('MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig', array(
-						'mongo' => $tumblr
-					))->getContent();
-					$datas['showTumblr'] = ($this->getReferrerRouteName() === 'homepage')? true: false;
+                if ( $request->isXmlHttpRequest() ) {
+                    $datas = array();
+                    $datas['success'] = $access_tumblr;
+                    $datas['tumblrView'] = $this->render('MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig', array(
+                        'mongo' => $tumblr
+                    ))->getContent();
+                    $datas['showTumblr'] = ($this->getReferrerRouteName() === 'homepage')? true: false;
 
-					return new Response(json_encode($datas));
-				} else
-				{
-					$this->get('session')->setFlash('success', 'Tumblr posté avec succès');
-					return $this->redirect($this->generateUrl('mongo_pute'));
-				}
+                    return new Response(json_encode($datas));
+                } else {
+                    $this->get('session')->setFlash('success', 'Tumblr posté avec succès');
+
+                    return $this->redirect($this->generateUrl('mongo_pute'));
+                }
             }
         }
 
@@ -131,20 +124,20 @@ class TumblrController extends Controller
         );
     }
 
-	/**
-	 * @Template()
-	 * @Route("/ajax/add", name="mongo_pute_add_ajax")
-	 * @return type
-	 */
-	public function addAjaxAction()
-	{
+    /**
+     * @Template()
+     * @Route("/ajax/add", name="mongo_pute_add_ajax")
+     * @return type
+     */
+    public function addAjaxAction()
+    {
         $tumblr = new Tumblr();
         $form = $this->createForm(new TumblrType($this->get('security.context')->getToken()->getUser()->getGroups()), $tumblr);
 
         return array(
             'form' => $form->createView()
         );
-	}
+    }
 
     /**
      * Action to search tags for autocomplete field
@@ -174,13 +167,12 @@ class TumblrController extends Controller
         // récupération du mots clés en ajax selon la présélection du mot
         $value = $request->get('tag');
 
-
         $em = $this->getDoctrine()->getManager();
         $tumblrTagsRepository = $em->getRepository('MongoboxTumblrBundle:TumblrTag');
 
         // Check if tag Already exist
         $resultTag = $tumblrTagsRepository->loadOneTagByName($value);
-        if( false === $resultTag ){
+        if (false === $resultTag) {
 
             // Create a new tag
             $newEntityTag = new TumblrTag();
@@ -209,16 +201,16 @@ class TumblrController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $tumblr_vote = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
-		$session = $request->getSession();
-		$user = $this->get('security.context')->getToken()->getUser();
+        $session = $request->getSession();
+        $user = $this->get('security.context')->getToken()->getUser();
         //Wipe de son ancien vote
         $old_vote = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->findOneBy(array('tumblr' => $id_tumblr, 'user' => $user));
         if (!is_null($old_vote)) {
             $em->remove($old_vote);
             $em->flush();
         }
-		if((int)$note > 5) $note = 5;
-		elseif((int)$note < 0) $note = 0;
+        if((int) $note > 5) $note = 5;
+        elseif((int) $note < 0) $note = 0;
 
         $vote = new TumblrVote();
         $vote->setUser($user);
@@ -229,9 +221,9 @@ class TumblrController extends Controller
         $em->flush();
 
         $retour = array(
-        		'somme' => $tumblr_vote->getSomme(),
-        		'moyenne' => $tumblr_vote->getMoyenne(),
-        		'info_vote' => $this->render('MongoboxTumblrBundle:Slider:infoVote.html.twig', array('tumblr' => $tumblr_vote))->getContent()
+                'somme' => $tumblr_vote->getSomme(),
+                'moyenne' => $tumblr_vote->getMoyenne(),
+                'info_vote' => $this->render('MongoboxTumblrBundle:Slider:infoVote.html.twig', array('tumblr' => $tumblr_vote))->getContent()
         );
 
         return new Response(json_encode($retour));
@@ -244,59 +236,60 @@ class TumblrController extends Controller
     public function sliderAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$user = $this->get('security.context')->getToken()->getUser();
+        $session = $request->getSession();
+        $user = $this->get('security.context')->getToken()->getUser();
 
         $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
 
         $ajax_request = $request->isXmlHttpRequest();
+
         return array
         (
             'mongo_pute' => $mongo_pute,
-        	'ajax_request' => $ajax_request
+            'ajax_request' => $ajax_request
         );
     }
 
-	/**
-	 *
-	 *
-	 * @Route("/top", name="tumblr_top")
-	 * @Template()
-	 */
-	public function topAction(Request $request){
+    /**
+     *
+     *
+     * @Route("/top", name="tumblr_top")
+     * @Template()
+     */
+    public function topAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
+        $user = $this->get('security.context')->getToken()->getUser();
 
-		$em = $this->getDoctrine()->getManager();
-		$tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
-		$user = $this->get('security.context')->getToken()->getUser();
+        $top7 = $tumblrRepository->topPeriod($user->getGroupsIds(), 7);
+        $top30 = $tumblrRepository->topPeriod($user->getGroupsIds(), 30);
+        $topTumblr = $tumblrRepository->top($user->getGroupsIds());
 
-		$top7 = $tumblrRepository->topPeriod($user->getGroupsIds(), 7);
-		$top30 = $tumblrRepository->topPeriod($user->getGroupsIds(), 30);
-		$topTumblr = $tumblrRepository->top($user->getGroupsIds());
+        return array(
+            'top7' => $top7,
+            'top30' => $top30,
+            'topTumblr' => $topTumblr
+        );
+    }
 
-		return array(
-			'top7' => $top7,
-			'top30' => $top30,
-			'topTumblr' => $topTumblr
-		);
-	}
+    /**
+     * @Route("/load/popover/content/{id_tumblr}", name="tumblr_load_popover_content")
+     * @param Request $request
+     */
+    public function loadPopoverContentAction(Request $request, $id_tumblr)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
+        $class_tumblr = $request->request->get('class_tumblr');
 
-	/**
-	 * @Route("/load/popover/content/{id_tumblr}", name="tumblr_load_popover_content")
-	 * @param Request $request
-	 */
-	public function loadPopoverContentAction(Request $request, $id_tumblr)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->find($id_tumblr);
-		$class_tumblr = $request->request->get('class_tumblr');
+        $retour = array(
+                'content' => $this->render('MongoboxTumblrBundle:Slider:popoverContent.html.twig', array('tumblr' => $tumblr,'tumblr_class' => $class_tumblr))->getContent(),
+                'title' => $this->render('MongoboxTumblrBundle:Slider:titlePopover.html.twig', array('tumblr' => $tumblr))->getContent()
+        );
 
-		$retour = array(
-				'content' => $this->render('MongoboxTumblrBundle:Slider:popoverContent.html.twig', array('tumblr' => $tumblr,'tumblr_class' => $class_tumblr))->getContent(),
-				'title' => $this->render('MongoboxTumblrBundle:Slider:titlePopover.html.twig', array('tumblr' => $tumblr))->getContent()
-		);
-
-		return new Response(json_encode($retour));
-	}
+        return new Response(json_encode($retour));
+    }
 
     /**
      * Finds and displays a Tumblr entity.
@@ -322,7 +315,6 @@ class TumblrController extends Controller
         $entityNext = $tumblrRepository->getNextEntity($entityTumblr->getId(), $user->getGroupsIds());
         $entityPrev = $tumblrRepository->getPrevEntity($entityTumblr->getId(), $user->getGroupsIds());
 
-
         return array(
             'entity'    => $entityTumblr,
             'entityPrev' => $entityPrev,
@@ -334,29 +326,30 @@ class TumblrController extends Controller
      * @Route("/propose_votes", name="tumblr_propose_votes")
      * @Template()
      */
-	public function proposeVotesAction(Request $request)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
-		$tumblrs = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->getProposeTumblrVotes($user);
-		return array(
-			'tumblrs' => $tumblrs
-		);
-	}
+    public function proposeVotesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $tumblrs = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->getProposeTumblrVotes($user);
 
-	/**
-	 * Fonction pour récupérer la route referrer
-	 */
-	public function getReferrerRouteName()
-	{
-		$referer = $this->getRequest()->headers->get('referer');
-		$lastPath = substr($referer, strpos($referer, $this->getRequest()->getBaseUrl()));
-		$lastPath = str_replace($this->getRequest()->getBaseUrl(), '', $lastPath);
+        return array(
+            'tumblrs' => $tumblrs
+        );
+    }
 
-		$matcher = $this->get('router')->getMatcher();
-		$parameters = $matcher->match($lastPath);
-		$route = $parameters['_route'];
+    /**
+     * Fonction pour récupérer la route referrer
+     */
+    public function getReferrerRouteName()
+    {
+        $referer = $this->getRequest()->headers->get('referer');
+        $lastPath = substr($referer, strpos($referer, $this->getRequest()->getBaseUrl()));
+        $lastPath = str_replace($this->getRequest()->getBaseUrl(), '', $lastPath);
 
-		return $route;
-	}
+        $matcher = $this->get('router')->getMatcher();
+        $parameters = $matcher->match($lastPath);
+        $route = $parameters['_route'];
+
+        return $route;
+    }
 }

@@ -33,11 +33,11 @@ class SocketCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        	->setName('jukebox:socket')
-        	->setDescription('Manage the web sockets server.')
-			->addArgument('action', InputArgument::REQUIRED, 'Action to be performed on the server')
-			->addOption('debug', null, InputOption::VALUE_NONE, 'Show logs')
-		;
+            ->setName('jukebox:socket')
+            ->setDescription('Manage the web sockets server.')
+            ->addArgument('action', InputArgument::REQUIRED, 'Action to be performed on the server')
+            ->addOption('debug', null, InputOption::VALUE_NONE, 'Show logs')
+        ;
     }
 
     /**
@@ -66,17 +66,17 @@ class SocketCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-    	$action = $input->getArgument('action');
+        $action = $input->getArgument('action');
 
-    	if ($action === 'start') {
-    		$this->logger->addInfo('Launch of the server in progress...');
+        if ($action === 'start') {
+            $this->logger->addInfo('Launch of the server in progress...');
 
-    		$server = IoServer::factory(
-				new WsServer(new Stream()),
-				8001
-    		);
+            $server = IoServer::factory(
+                new WsServer(new Stream()),
+                8001
+            );
 
-    		$server->run();
-    	}
+            $server->run();
+        }
     }
 }

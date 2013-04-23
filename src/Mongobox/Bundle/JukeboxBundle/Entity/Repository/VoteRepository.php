@@ -17,7 +17,7 @@ class VoteRepository extends EntityRepository
         $em = $this->getEntityManager();
         $query = $em
                 ->createQuery('DELETE FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :playlist' )
-				->setParameter('playlist', $playlist)
+                ->setParameter('playlist', $playlist)
         ;
 
         return $query->getResult();
@@ -28,7 +28,7 @@ class VoteRepository extends EntityRepository
         $em = $this->getEntityManager();
         $query = $em
                 ->createQuery('SELECT SUM(v.sens) FROM MongoboxJukeboxBundle:Vote v WHERE v.playlist = :playlist')
-				->setParameter('playlist', $playlist  )
+                ->setParameter('playlist', $playlist  )
         ;
 
         $result = $query->getResult();

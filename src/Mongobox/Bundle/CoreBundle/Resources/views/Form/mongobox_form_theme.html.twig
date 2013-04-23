@@ -16,20 +16,20 @@
             <div class="control-group clearfix{{ errors|length > 0 ? ' error' : '' }}">
                 <div class="controls">
                 {{ form_widget(form) }}
-                
+
                 {% if form.vars['attr'] is defined %}
         			{% if form.vars['attr']['data-help'] is defined %}
         				<span class="help-block">{{ form.vars['attr']['data-help'] }}</span>
         			{% endif %}
                 {% endif %}
-    				
+
         		{{ form_errors(form) }}
-        				
+
                 </div>
             </div>
         {% endif %}
 {% endspaceless %}
-{% endblock field_row %} 
+{% endblock field_row %}
 
 {% block form_label %}
     {% if not compound %}
@@ -95,8 +95,8 @@
 
 
 {% block date_widget %}
-{% spaceless %} 
-	<div id="date_evenement" class="input-append date" data-date="{{ "now"|date("d/m/Y") }}">	   
+{% spaceless %}
+	<div id="date_evenement" class="input-append date" data-date="{{ "now"|date("d/m/Y") }}">
     	{{ block('field_widget') }}<span class="add-on"><i class="icon-th"></i></span>
 	</div>
 {% endspaceless %}

@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class AdminBuilder extends ContainerAware
 {
     /**
-     * @param FactoryInterface $factory
+     * @param  FactoryInterface        $factory
      * @return \Knp\Menu\ItemInterface
      */
     public function build(FactoryInterface $factory)

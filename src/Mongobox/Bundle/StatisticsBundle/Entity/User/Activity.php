@@ -39,7 +39,7 @@ class Activity
     /**
      * Set user
      *
-     * @param User $user
+     * @param  User     $user
      * @return Activity
      */
     public function setUser(User $user)
@@ -62,7 +62,7 @@ class Activity
     /**
      * Set typeId
      *
-     * @param integer $typeId
+     * @param  integer  $typeId
      * @return Activity
      */
     public function setTypeId($typeId)
@@ -85,7 +85,7 @@ class Activity
     /**
      * Set date
      *
-     * @param \DateTime $date
+     * @param  \DateTime $date
      * @return Activity
      */
     public function setDate($date)

@@ -13,7 +13,7 @@ class UserActivity
     /**
      * Constructor
      *
-     * @param EntityManager $entityManager
+     * @param  EntityManager $entityManager
      * @return void
      */
     public function __construct(EntityManager $entityManager)
@@ -24,7 +24,7 @@ class UserActivity
     /**
      * Updates the date of last activity for the current user
      *
-     * @param User $user
+     * @param  User $user
      * @return void
      */
     public function updateLastHeartBeat(User $user)
@@ -46,6 +46,6 @@ class UserActivity
         $userActivity->setDate(new \DateTime());
 
         $this->em->persist($userActivity);
-		$this->em->flush();
+        $this->em->flush();
     }
 }

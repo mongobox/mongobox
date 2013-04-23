@@ -50,9 +50,9 @@ class Playlist
     /**
      * @ORM\OneToMany(targetEntity="Vote", mappedBy="playlist")
      */
-	protected $votes;
+    protected $votes;
 
-	public function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -64,7 +64,7 @@ class Playlist
         return $this->id;
     }
 
-	public function setVideoGroup($video_group)
+    public function setVideoGroup($video_group)
     {
         $this->video_group = $video_group;
 
@@ -88,7 +88,7 @@ class Playlist
         return $this->group;
     }
 
-	public function setDate($date)
+    public function setDate($date)
     {
         $this->date = $date;
 

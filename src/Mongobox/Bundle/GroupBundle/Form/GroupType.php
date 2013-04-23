@@ -11,14 +11,14 @@ class GroupType extends AbstractType
     {
         $builder
             ->add('title', 'text', array(
-            	'label' => 'Nom',
-            	'attr' => array('size' => 15, 'placeholder' => 'Nom')
+                'label' => 'Nom',
+                'attr' => array('size' => 15, 'placeholder' => 'Nom')
             ))
             ->add('private', 'checkbox', array(
-            	'label' => 'Privé'
+                'label' => 'Privé'
             ))
         ;
-	}
+    }
 
     public function getName()
     {

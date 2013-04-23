@@ -24,7 +24,7 @@ class Users
      * Constructor
      *
      * @param \Mongobox\Bundle\TumblrBundle\Entity\Repository\TumblrRepository $tumblrRepository
-     * @param array $usersTags
+     * @param array                                                            $usersTags
      */
     public function __construct(TumblrRepository $tumblrRepository, array $usersTags)
     {

@@ -23,20 +23,20 @@ class TumblrVoteRepository extends EntityRepository
         else $somme = (int) $result[0][1];
         return $somme;
     }
-    
+
     public function top($group, $max = 5)
     {
         $em = $this->getEntityManager();
         $q = $em
                 ->createQuery('SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id IN (:groupe) GROUP BY t.id_tumblr ORDER BY total DESC')
                 ->setParameters(array(
-                		'groupe' => $group
+                        'groupe' => $group
                 ))
                 ->setMaxResults($max)
                 ;
-        
+
         //echo $q->getSQL();exit;
-        
+
         if($max == 1) $result = $q->getOneOrNullResult ();
         else $result = $q->getResult();
         return $result;
@@ -49,11 +49,11 @@ class TumblrVoteRepository extends EntityRepository
         $q = $em
                 ->createQuery("SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id IN (:group) AND t.date > '".$date."' GROUP BY t.id_tumblr ORDER BY total DESC")
                 ->setParameters(array(
-                		'group' => $group
+                        'group' => $group
                 ))
-				->setMaxResults($max)
+                ->setMaxResults($max)
                 ;
-        
+
         if($max == 1) $result = $q->getOneOrNullResult ();
         else $result = $q->getResult();
         return $result;
@@ -62,17 +62,18 @@ class TumblrVoteRepository extends EntityRepository
     public function getUserVotes($user)
     {
         $em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
-		$qb->select('t.id_tumblr')
-			->from('MongoboxTumblrBundle:Tumblr', 't')
-			->join('t.tumblr_vote', 'tv')
-			->where("tv.user = :user")
-			->setParameters(array('user' => $user))
-		;
-			
-		$query = $qb->getQuery();
+        $qb = $em->createQueryBuilder();
+        $qb->select('t.id_tumblr')
+            ->from('MongoboxTumblrBundle:Tumblr', 't')
+            ->join('t.tumblr_vote', 'tv')
+            ->where("tv.user = :user")
+            ->setParameters(array('user' => $user))
+        ;
+
+        $query = $qb->getQuery();
         $result = $query->getResult();
-		return $result;
+
+        return $result;
     }
 
     public function getProposeTumblrVotes($user, $max = 3)
@@ -80,26 +81,27 @@ class TumblrVoteRepository extends EntityRepository
         $em = $this->getEntityManager();
         $query = $em
                 ->createQuery('
-					SELECT t as tumblr, COUNT(tv.user) as total
-					FROM MongoboxTumblrBundle:Tumblr t
-					LEFT JOIN t.groups g
-					LEFT JOIN t.tumblr_vote tv
-					WHERE t.id_tumblr NOT IN (
-						SELECT tt.id_tumblr FROM MongoboxTumblrBundle:Tumblr tt
-						LEFT JOIN tt.tumblr_vote ttv
-						WHERE ttv.user = :user)
-					AND g.id IN(:user_group)
-					GROUP BY t.id_tumblr
-					ORDER BY total ASC, t.date ASC')
+                    SELECT t as tumblr, COUNT(tv.user) as total
+                    FROM MongoboxTumblrBundle:Tumblr t
+                    LEFT JOIN t.groups g
+                    LEFT JOIN t.tumblr_vote tv
+                    WHERE t.id_tumblr NOT IN (
+                        SELECT tt.id_tumblr FROM MongoboxTumblrBundle:Tumblr tt
+                        LEFT JOIN tt.tumblr_vote ttv
+                        WHERE ttv.user = :user)
+                    AND g.id IN(:user_group)
+                    GROUP BY t.id_tumblr
+                    ORDER BY total ASC, t.date ASC')
                 ;
-		$query->setMaxResults($max);
-		$query->setParameters(array(
-			'user' => $user,
-			'user_group' => $user->getGroupsIds()
-			));
-		//echo $query->getSQL().'<br />';
-		//exit;
+        $query->setMaxResults($max);
+        $query->setParameters(array(
+            'user' => $user,
+            'user_group' => $user->getGroupsIds()
+            ));
+        //echo $query->getSQL().'<br />';
+        //exit;
         $result = $query->getResult();
-		return $result;
+
+        return $result;
     }
 }

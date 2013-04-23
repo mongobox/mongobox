@@ -60,11 +60,11 @@ class Tumblr
      */
     public function __construct()
     {
-		$this->groups = new ArrayCollection();
+        $this->groups = new ArrayCollection();
         $this->tags = new ArrayCollection();
     }
 
-	public function setId($id_tumblr)
+    public function setId($id_tumblr)
     {
         $this->id_tumblr = $id_tumblr;
 
@@ -134,61 +134,69 @@ class Tumblr
         $somme = 0;
         $liste_vote = $this->getTumblrVote();
         foreach($liste_vote as $vote) $somme += $vote->getNote();
+
         return $somme;
     }
-    
+
     public function getMoyenne()
     {
         if( count($this->tumblr_vote) == 0 ) return 0;
-    	return round( $this->getSomme()/count($this->tumblr_vote), 2);
+
+        return round( $this->getSomme()/count($this->tumblr_vote), 2);
     }
 
     /**
      * Get id_tumblr
      *
-     * @return integer 
+     * @return integer
      */
-    public function getIdTumblr() {
+    public function getIdTumblr()
+    {
         return $this->id_tumblr;
     }
 
-    public function addGroup($group) {
-		if (!$this->groups->contains($tag)) {
-			$this->groups[] = $group;
-		}
-    	return $this;
+    public function addGroup($group)
+    {
+        if (!$this->groups->contains($tag)) {
+            $this->groups[] = $group;
+        }
+
+        return $this;
     }
-    
-    public function getGroups() {
-    	return $this->groups;
+
+    public function getGroups()
+    {
+        return $this->groups;
     }
-    
+
     public function setGroups($groups)
     {
-    	$this->groups = $groups;
-    	return $this;
+        $this->groups = $groups;
+
+        return $this;
     }
-	
-	/**
+
+    /**
      * Function to delete group
      * @param Group $group
      */
     public function removeGroup($group)
     {
         $this->groups->removeElement($group);
-		$group->deleteTumblr($this);
+        $group->deleteTumblr($this);
     }
-
 
     /**
      *
      * @param TumblrTag $tag
      */
-    public function addTag($tag) {
+    public function addTag($tag)
+    {
         if (!$this->tags->contains($tag)) {
-			$tag->addTumblr($this);
-			$this->tags[] = $tag;
-		}
+            $tag->addTumblr($this);
+            $this->tags[] = $tag;
+        }
+
         return $this;
     }
 
@@ -199,34 +207,37 @@ class Tumblr
     public function removeTag($tag)
     {
         $this->tags->removeElement($tag);
-		$tag->deleteTumblr($this);
+        $tag->deleteTumblr($this);
     }
 
     /**
      * @return the $tags
      */
-    public function getTags() {
+    public function getTags()
+    {
         return $this->tags;
     }
 
     /**
      * @return the $tags
      */
-    public function setTags(ArrayCollection $tags) {
+    public function setTags(ArrayCollection $tags)
+    {
         $this->tags = $tags;
+
         return $this;
     }
 
     /**
      * Check if entity has a certain tag
      *
-     * @param string $tag the tag system name
+     * @param  string  $tag the tag system name
      * @return boolean
      */
     public function hasTag($tag)
     {
-        foreach($this->tags as $tagElt) {
-            if($tagElt->getSystemName() == $tag) {
+        foreach ($this->tags as $tagElt) {
+            if ($tagElt->getSystemName() == $tag) {
                 return true;
             }
         }
