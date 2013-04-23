@@ -340,7 +340,6 @@ class VideosController extends Controller
 								->setUser($user)
 								->setDiffusion(0)
 								->setVolume(50)
-								->setVendredi(0)
 								->setVotes(0);
 					$em->persist($video_group);
 					$em->flush();

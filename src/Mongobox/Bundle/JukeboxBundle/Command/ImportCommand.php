@@ -137,7 +137,6 @@ class ImportCommand extends ContainerAwareCommand
 							->setTitle($youtubeData->title)
 							->setAddressIp('127.0.0.1')
 							->setDiffusion(0)
-							->setVendredi(0)
 							->setDuration($youtubeData->duration)
 							->setThumbnail($youtubeData->thumbnail->hqDefault)
 							->setThumbnailHq($youtubeData->thumbnail->sqDefault)
