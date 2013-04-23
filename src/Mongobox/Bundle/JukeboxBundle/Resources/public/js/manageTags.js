@@ -1,46 +1,46 @@
-var listTags = new Array();
-var tags = tags || {};
+var listVideoTags = new Array();
+var videoTags = videoTags || {};
 
 (function($){
 
-	tags.init = function(){
+	videoTags.init = function(){
 		this.clear();
 		this.observeAddTag();
 		this.observeRemoveTag();
 		this.observeSubmitForm();
 	};
 
-	tags.clear = function(){
-		tags.form = $('#form_video_info');
-		tags.containerSelectedTags = $('#container-selected-tags');
+	videoTags.clear = function(){
+		videoTags.form = $('#form_video_info');
+		videoTags.containerSelectedTags = $('#container-selected-tags');
 
-	        // Get the div that holds the collection of tags
-	        tags.collectionHolder = $('#video_tags_list');
+		// Get the div that holds the collection of videoTags
+		videoTags.collectionHolder = $('#video_tags_list');
 
 
-		tags.addTagButton = '#video-button-add-tag';
-		tags.removeTagButton = this.collectionHolder.find('button.close');
-		tags.buttonSubmit = $('#submit-form-video-tag-add');
+		videoTags.addTagButton = '#video-button-add-tag';
+		videoTags.removeTagButton = this.collectionHolder.find('button.close');
+		videoTags.buttonSubmit = $('#submit-form-video-tag-add');
 
-	        // count the current form inputs we have (e.g. 2), use that as the new
-	        // index when inserting a new item (e.g. 2)
-	        tags.collectionHolder.data('index', tags.collectionHolder.find(':input').length);
-	        tags.tags = new Array();
-	        tags.autocompleteField = $('#autocompleter_video_info_tag');
+		// count the current form inputs we have (e.g. 2), use that as the new
+		// index when inserting a new item (e.g. 2)
+		videoTags.collectionHolder.data('index', videoTags.collectionHolder.find(':input').length);
+		videoTags.videoTags = new Array();
+		videoTags.autocompleteField = $('#autocompleter_video_info_tag');
 	};
 
-	tags.observeAddTag = function(){
+	videoTags.observeAddTag = function(){
 
 		$(document).on('click', this.addTagButton, function(event)
 		{
 			event.preventDefault();
-            		tags.loadTag( tags.autocompleteField.val() );
-       		});
+            videoTags.loadTag( videoTags.autocompleteField.val() );
+       	});
 	};
 
-	tags.observeSubmitForm = function()
+	videoTags.observeSubmitForm = function()
 	{
-		this.form.on('click', '#submit-form-video-tags-add', function(e)
+		$(document).on('submit', '#form_video_info', function(e)
 		{
 			e.preventDefault();
 
@@ -51,12 +51,12 @@ var tags = tags || {};
 				return false;
 			}
 
-			tags.loadAjax();
+			videoTags.loadAjax();
 		});
 	};
 
 
-	tags.loadAjax = function()
+	videoTags.loadAjax = function()
 	{
 		this.submitting = true;
 		$.ajax({
@@ -71,16 +71,16 @@ var tags = tags || {};
 		});
 	};
 
-	tags.addTag = function(tag){
+	videoTags.addTag = function(tag){
 
         // si le mot clé n'appartient pas aux mots clés ajoutés précédemment, on génère "l'ajout"
-		if(jQuery.inArray(tag.id, this.tags) == -1){
+		if(jQuery.inArray(tag.id, this.videoTags) == -1){
 
             // Save list tag
-            this.tags.push(tag.id);
+            videoTags.videoTags.push(tag.id);
 
-            this.prototypeTagsContainer = $('#video_tags_list');
-            this.prototypeTags = this.prototypeTagsContainer.attr('data-prototype');
+            videoTags.prototypeTagsContainer = $('#video_tags_list');
+            videoTags.prototypeTags = this.prototypeTagsContainer.attr('data-prototype');
 
             // Get the data-prototype explained earlier
             var prototype = this.collectionHolder.data('prototype');
@@ -94,13 +94,13 @@ var tags = tags || {};
             newTagItem = newTagItem.replace(/__id__/g, tag.id);
 
             var $newFormLi = $('<span class="tag-item alert alert-info"></span>').append(newTagItem);
-            this.collectionHolder.append( $newFormLi );
+            videoTags.collectionHolder.append( $newFormLi );
 
             // increase the index with one for the next item
-            this.collectionHolder.data('index', index + 1);
+            videoTags.collectionHolder.data('index', index + 1);
 
-            this.autocompleteField.val('');
-            this.observeRemoveTag();
+            videoTags.autocompleteField.val('');
+            videoTags.observeRemoveTag();
             console.log( prototype, index );
         }
         else{
@@ -109,33 +109,32 @@ var tags = tags || {};
 
     };
 
-    tags.observeRemoveTag = function(){
+    videoTags.observeRemoveTag = function(){
 
-        this.removeTagButton = $('#video_tags_list').find('button.close');
-        this.removeTagButton.bind('click', function(event){
+		$(document).on('click', '#form_video_info .tag-item button.close',  function(event){
             event.preventDefault();
-            tags.removeTag( this );
+            videoTags.removeTag( this );
         });
 
     };
 
-    tags.removeTag = function(element){
+    videoTags.removeTag = function(element){
         var tagId = $(element).next('input:hidden').val();
-        this.tags.splice( $.inArray(tagId, this.tags), 1 );
+        this.videoTags.splice( $.inArray(tagId, this.videoTags), 1 );
         $(element).parent().remove();
         return false;
     };
 
-    tags.loadTag = function(tagName){
+    videoTags.loadTag = function(tagName){
 
         $.ajax({
-            url: tags.urlLoadTag,
+            url: videoTags.urlLoadTag,
             processData: false,
             data: 'tag=' + tagName,
             dataType: 'json',
             success:  function(tag){
                  if( tag ){
-                    tags.addTag( tag );
+                    videoTags.addTag( tag );
                  }
                  else{
                     alert("error during load tag");
