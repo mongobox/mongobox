@@ -27,7 +27,7 @@ class Group
      * @Assert\NotBlank()
      */
     protected $title;
-    
+
     /**
      * @ORM\Column(type="boolean")
      */
@@ -55,21 +55,21 @@ class Group
      * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\Playlist", mappedBy="group", cascade={"persist"})
      * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
      */
-	protected $playlists;
+    protected $playlists;
 
     /**
      * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="group", cascade={"persist"})
      * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
      */
-	protected $videos_group;
+    protected $videos_group;
 
     /**
      * @ORM\OneToMany(targetEntity="\Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag", mappedBy="group", cascade={"persist"})
      * @ORM\JoinColumn(name="id_group", referencedColumnName="id")
      */
-	protected $group_live_tag;
+    protected $group_live_tag;
 
-	/**
+    /**
      * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups_invitations")
      * @ORM\JoinTable(name="users_invitations",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
@@ -78,19 +78,19 @@ class Group
      */
     protected $users_invitations;
 
-	public function __construct()
+    public function __construct()
     {
-		//valeurs par défaut
-		$this->private = true;
+        //valeurs par défaut
+        $this->private = true;
         $this->users = new ArrayCollection();
         $this->users_invitations = new ArrayCollection();
-		$this->tumblrs = new ArrayCollection();
+        $this->tumblrs = new ArrayCollection();
     }
 
     /**
      * Set the value of id.
      *
-     * @param integer $id
+     * @param  integer                                   $id
      * @return \Mongobox\Bundle\GroupBundle\Entity\Group
      */
     public function setId($id)
@@ -113,7 +113,7 @@ class Group
     /**
      * Set the value of title.
      *
-     * @param string $title
+     * @param  string                                     $title
      * @return \Mongobox\Bundle\GroupsBundle\Entity\Group
      */
     public function setTitle($title)
@@ -136,7 +136,7 @@ class Group
     /**
      * Set the value of private.
      *
-     * @param string $private
+     * @param  string                                     $private
      * @return \Mongobox\Bundle\GroupsBundle\Entity\Group
      */
     public function setPrivate($private)
@@ -158,30 +158,33 @@ class Group
 
     public function addUser($user)
     {
-    	$this->users[] = $user;
-    	return $this;
+        $this->users[] = $user;
+
+        return $this;
     }
-    
+
     public function getUsers()
     {
-    	return $this->users;
+        return $this->users;
     }
-    
+
     public function setUsers($users)
     {
-    	$this->users = $users;
-    	return $this;
+        $this->users = $users;
+
+        return $this;
     }
-    
+
     public function getTumblrs()
     {
-    	return $this->tumblrs;
+        return $this->tumblrs;
     }
-    
+
     public function setTumblrs($tumblrs)
     {
-    	$this->tumblrs = $tumblrs;
-    	return $this;
+        $this->tumblrs = $tumblrs;
+
+        return $this;
     }
 
     public function deleteTumblr($tumblr)
@@ -191,12 +194,13 @@ class Group
 
     public function getUsersInvitations()
     {
-    	return $this->users_invitations;
+        return $this->users_invitations;
     }
-    
+
     public function setUsersInvitations($users_invitations)
     {
-    	$this->users_invitations = $users_invitations;
-    	return $this;
+        $this->users_invitations = $users_invitations;
+
+        return $this;
     }
 }

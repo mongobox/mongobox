@@ -10,14 +10,14 @@
 {% if error %}
 	<div class="alert alert-error">{{ error.message|trans([], 'validators') }}</div>
 {% endif %}
-	
+
 	<form action="{{ path('_login_check') }}" method="post">
 	    <label for="login">Login :</label>
 	    <input type="text" id="login" name="_username" value="{{ last_username }}" />
-	
+
 	    <label for="password">Password :</label>
 	    <input type="password" id="password" name="_password" /><br />
-	    
+
 	    <p>
 		    <input type="checkbox" id="remember_me" name="_remember_me" />
 	   	 	<label for="remember_me" style="display:inline-block;">Remember me</label><br />
@@ -26,7 +26,7 @@
         <input type="submit" class="btn btn-primary" value="Login">
 	</form>
 	<p>
-		<a href="{{ path('registration') }}" title="Registration">Registration</a>			
-	</p>		
+		<a href="{{ path('registration') }}" title="Registration">Registration</a>
+	</p>
 </div>
 {% endblock body %}

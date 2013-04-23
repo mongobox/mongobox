@@ -17,9 +17,9 @@ class Stream implements MessageComponentInterface
      */
     protected $_logger;
 
-	/**
-	 * Constructor
-	 */
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->_clients = new \SplObjectStorage;

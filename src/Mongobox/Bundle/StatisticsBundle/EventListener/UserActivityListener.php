@@ -12,7 +12,7 @@ class UserActivityListener
     /**
      * Constructor
      *
-     * @param ContainerInterface $container
+     * @param  ContainerInterface $container
      * @return void
      */
     public function __construct(ContainerInterface $container)
@@ -38,7 +38,7 @@ class UserActivityListener
     /**
      * Updates the date of last activity for the current user.
      *
-     * @param PostResponseEvent $event
+     * @param  PostResponseEvent $event
      * @return void
      */
     public function onKernelTerminate(PostResponseEvent $event)

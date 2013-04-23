@@ -64,5 +64,5 @@ class TumblrVote
     public function getNote()
     {
         return $this->note;
-    }    
+    }
 }

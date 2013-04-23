@@ -3,7 +3,7 @@
 {% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% block body %}
-        
+
 	<h1>Création d'un groupe</h1>
 	<form action="{{ path('group_create') }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
 		{{ form_widget(form) }}

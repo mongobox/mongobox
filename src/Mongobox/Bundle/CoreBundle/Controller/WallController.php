@@ -13,7 +13,6 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
 
 class WallController extends Controller
 {
@@ -30,13 +29,14 @@ class WallController extends Controller
 
         if (false !== $feed) {
             foreach ($feed->channel->item as $article) {
-                if (!$filter || (string)$article->{$filter_type} == $filter) {
+                if (!$filter || (string) $article->{$filter_type} == $filter) {
                     $results[] = $article;
                 }
                 $i++;
                 if($i == $limit) break;
             }
         }
+
         return $results;
     }
 
@@ -47,62 +47,55 @@ class WallController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
-		$user->getGroups();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $user->getGroups();
 
-		//Si l'utilisateur a au moins un groupe
-		if(count($user->getGroups()) > 0)
-		{
-			$session = $request->getSession();
+        //Si l'utilisateur a au moins un groupe
+        if (count($user->getGroups()) > 0) {
+            $session = $request->getSession();
 
-			//Si on a pas déjà de groupe défini, on va en trouver une
-			if(is_null($session->get('id_group')))
-			{
-				//On regarde si ya un cookie
-				if($request->cookies->has('id_group'))
-				{
-					$id_group = $request->cookies->get('id_group');
-				}
-				else
-				{
-					$id_group = $user->getGroupDefault();
-				}
-				$session->set('id_group', $id_group);
-			}
-			else $id_group = $session->get('id_group');
-			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
-			//$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+            //Si on a pas déjà de groupe défini, on va en trouver une
+            if (is_null($session->get('id_group'))) {
+                //On regarde si ya un cookie
+                if ($request->cookies->has('id_group')) {
+                    $id_group = $request->cookies->get('id_group');
+                } else {
+                    $id_group = $user->getGroupDefault();
+                }
+                $session->set('id_group', $id_group);
+            } else $id_group = $session->get('id_group');
+            //$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
+            //$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-			//$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($id_group));
-			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $id_group);
-			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $id_group);
-			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $id_group, 'current' => 1));
-			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-			else $somme = 0;
-			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
+            //$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($id_group));
+            $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $id_group);
+            $videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $id_group);
+            $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $id_group, 'current' => 1));
+            if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+            else $somme = 0;
+            $somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
-			return array
-			(
-				//'total_video' => $total_video,
-				'playlist' => $playlist,
-				'videos_historique' => $videos_historique,
-				'video_en_cours' => $video_en_cours,
-				'date_actuelle' => new \Datetime(),
-				'somme' => $somme,
-				'somme_pl' => $somme_pl
-			);
-		}
-		//Si l'utilisateur n'a pas de groupe, on propose une liste de group publics
-		else
-		{
-			return $this->redirect($this->generateUrl('group_index'));
-		}
+            return array
+            (
+                //'total_video' => $total_video,
+                'playlist' => $playlist,
+                'videos_historique' => $videos_historique,
+                'video_en_cours' => $video_en_cours,
+                'date_actuelle' => new \Datetime(),
+                'somme' => $somme,
+                'somme_pl' => $somme_pl
+            );
+        }
+        //Si l'utilisateur n'a pas de groupe, on propose une liste de group publics
+        else {
+            return $this->redirect($this->generateUrl('group_index'));
+        }
     }
 
-	public function postVideoFormAction()
-	{
+    public function postVideoFormAction()
+    {
 
-	}
+    }
 
     /**
      * @Template()
@@ -111,12 +104,11 @@ class WallController extends Controller
     public function jukeboxAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $session = $request->getSession();
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-        if (count($video_en_cours) > 0)
-		{
+        if (count($video_en_cours) > 0) {
             $total_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
             $video_en_cours->getVideoGroup()->setVotes($video_en_cours->getVideoGroup()->getVotes() + $total_vote);
             //On wipe les votes de la vidéo d'avant !
@@ -128,17 +120,16 @@ class WallController extends Controller
 
         //On va chercher la prochaine vidéo de la playlist
         $playlist_next = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
-		$playlist_next->setCurrent(1);
+        $playlist_next->setCurrent(1);
 
         $video_group = $playlist_next->getVideoGroup();
         $video_group->setDiffusion($video_group->getDiffusion() + 1);
         $video_group->setLastBroadcast(new \Datetime()); // date de diffusion
 
         //On la supprime de la playlist
-        if(is_object($video_en_cours))
-		{
-			$em->remove($video_en_cours);
-		}
+        if (is_object($video_en_cours)) {
+            $em->remove($video_en_cours);
+        }
 
         $total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findAll());
         $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $group);
@@ -194,32 +185,31 @@ class WallController extends Controller
      */
     public function voteAction(Request $request, $playlist, $sens)
     {
-		$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-		$user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.context')->getToken()->getUser();
 
         //Wipe de son ancien vote
         $old_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')
-						->findOneBy(array(
-							'user'	=> $user,
-							'playlist' => $playlist,
-							)
-						);
-		if (!is_null($old_vote)) {
+                        ->findOneBy(array(
+                            'user'	=> $user,
+                            'playlist' => $playlist,
+                            )
+                        );
+        if (!is_null($old_vote)) {
             $em->remove($old_vote);
             $em->flush();
         }
 
-		if($sens != 0)
-		{
-			$vote = new Vote();
-			$vote->setSens($sens)
-					->setPlaylist($playlist)
-					->setUser($user);
+        if ($sens != 0) {
+            $vote = new Vote();
+            $vote->setSens($sens)
+                    ->setPlaylist($playlist)
+                    ->setUser($user);
 
-			$em->persist($vote);
-			$em->flush();
-		}
+            $em->persist($vote);
+            $em->flush();
+        }
 
         return new Response($em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist));
     }
@@ -256,89 +246,84 @@ class WallController extends Controller
     }
 
     /**
-	 * @Template("MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig")
+     * @Template("MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig")
      * @Route( "/video_en_cours", name="video_en_cours")
      */
     public function videoEnCoursAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		if(!is_null($session->get('id_group')))
-		{
-			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
-			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-			else $somme = 0;
-		}
-		else
-		{
-			$video_en_cours = null;
-			$somme = 0;
-		}
+        $session = $request->getSession();
+        if (!is_null($session->get('id_group'))) {
+            $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
+            if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+            else $somme = 0;
+        } else {
+            $video_en_cours = null;
+            $somme = 0;
+        }
 
-		if(!is_null($request->query->get('json')))
-		{
-			$render = $this->render(
+        if (!is_null($request->query->get('json'))) {
+            $render = $this->render(
             'MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig',
             array(
-				'video_en_cours' => $video_en_cours,
-				'date_actuelle' => new \Datetime(),
-				'somme' => $somme
-	        ));
-			$json = array('render' => $render->getContent());
-	        return new Response(json_encode($json));
-		}
-		else return array(
-			'video_en_cours' => $video_en_cours,
-			'date_actuelle' => new \Datetime(),
-			'somme' => $somme
-		);
+                'video_en_cours' => $video_en_cours,
+                'date_actuelle' => new \Datetime(),
+                'somme' => $somme
+            ));
+            $json = array('render' => $render->getContent());
+
+            return new Response(json_encode($json));
+        } else return array(
+            'video_en_cours' => $video_en_cours,
+            'date_actuelle' => new \Datetime(),
+            'somme' => $somme
+        );
     }
 
     /**
-	 * @Template("MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig")
+     * @Template("MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig")
      * @Route( "/statistiques", name="statistiques")
      */
     public function statistiquesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
-		$session = $request->getSession();
-		$user->getGroups();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $session = $request->getSession();
+        $user->getGroups();
 
-		//Si l'utilisateur a au moins un groupe
-		if(count($user->getGroups()) > 0)
-		{
-			//$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
-			//$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        //Si l'utilisateur a au moins un groupe
+        if (count($user->getGroups()) > 0) {
+            //$userDb = $em->getRepository('EmakinaLdapBundle:User')->findOneByTrigramme($user->getUsername());
+            //$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-			//$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
-			$playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $session->get('id_group'));
-			$videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $session->get('id_group'));
-			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
-			$somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
+            //$total_video = count($em->getRepository('MongoboxJukeboxBundle:Videos')->findGroupAll($group));
+            $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $session->get('id_group'));
+            $videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $session->get('id_group'));
+            $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
+            $somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
 
-			if(!is_null($request->query->get('json')))
-			{
-				$render = $this->render(
-				'MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig',
-				array(
-					'video_en_cours' => $video_en_cours,
-					//'total_video' => $total_video,
-					'playlist' => $playlist,
-					'videos_historique' => $videos_historique,
-					'somme_pl' => $somme_pl
-				));
-				$json = array('render' => $render->getContent());
-				return new Response(json_encode($json));
-			}
-			else return array(
-					'video_en_cours' => $video_en_cours,
-					//'total_video' => $total_video,
-					'playlist' => $playlist,
-					'videos_historique' => $videos_historique,
-					'somme_pl' => $somme_pl
-				);
-		}
+            if (!is_null($request->query->get('json'))) {
+                $render = $this->render(
+                'MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig',
+                array(
+                    'video_en_cours' => $video_en_cours,
+                    //'total_video' => $total_video,
+                    'playlist' => $playlist,
+                    'videos_historique' => $videos_historique,
+                    'somme_pl' => $somme_pl
+                ));
+                $json = array('render' => $render->getContent());
+
+                return new Response(json_encode($json));
+            } else return array(
+                    'video_en_cours' => $video_en_cours,
+                    //'total_video' => $total_video,
+                    'playlist' => $playlist,
+                    'videos_historique' => $videos_historique,
+                    'somme_pl' => $somme_pl
+                );
+        }
+
         return new Response();
     }
 
@@ -378,28 +363,27 @@ class WallController extends Controller
     /**
      * @Route( "/get_info_video", name="get_info_video")
      */
-	public function getInfoVideoAction(Request $request)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$lien = Videos::parse_url_detail($request->request->get('lien'));
-		$video = new Videos();
-		$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $lien));
-		//Si la vidéo existe déjà, on dit au JS que tu zappe tout, on la rajoute à la playlist
-		if (is_object($video_new))
-		{
-			$response = array('video' => $video_new->getId(), 'type' => 'old');
-		}
-		//Sinon, on va chercher les infos YT
-		else
-		{
-			$video = new Videos();
-			$video->setLien($lien);
-			$video->setTitle($video->getTitleFromYoutube());
-			//On fait un bête split pour chopper artist et songName pour le moment
-			$response = $video->guessVideoInfos();
-			$response['type'] = 'new';
-		}
-		return new Response(json_encode($response));
+    public function getInfoVideoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $lien = Videos::parse_url_detail($request->request->get('lien'));
+        $video = new Videos();
+        $video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $lien));
+        //Si la vidéo existe déjà, on dit au JS que tu zappe tout, on la rajoute à la playlist
+        if (is_object($video_new)) {
+            $response = array('video' => $video_new->getId(), 'type' => 'old');
+        }
+        //Sinon, on va chercher les infos YT
+        else {
+            $video = new Videos();
+            $video->setLien($lien);
+            $video->setTitle($video->getTitleFromYoutube());
+            //On fait un bête split pour chopper artist et songName pour le moment
+            $response = $video->guessVideoInfos();
+            $response['type'] = 'new';
+        }
 
-	}
+        return new Response(json_encode($response));
+
+    }
 }

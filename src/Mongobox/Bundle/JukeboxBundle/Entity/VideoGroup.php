@@ -2,7 +2,6 @@
 
 namespace Mongobox\Bundle\JukeboxBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
-use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
@@ -51,7 +50,7 @@ class VideoGroup
      */
     protected $votes = 0;
 
-	/**
+    /**
      * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="videos_group")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -63,12 +62,12 @@ class VideoGroup
      */
     protected $playlist;
 
-	/**
+    /**
      * Constructor
      */
     public function __construct() {}
 
-	public function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -83,7 +82,7 @@ class VideoGroup
     /**
      * Set the value of video.
      *
-     * @param  string $video
+     * @param  string                                           $video
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
      */
     public function setVideo($video)
@@ -106,7 +105,7 @@ class VideoGroup
     /**
      * Set the value of group.
      *
-     * @param  string $group
+     * @param  string                                           $group
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
      */
     public function setGroup($group)
@@ -126,10 +125,10 @@ class VideoGroup
         return $this->group;
     }
 
-	/**
+    /**
      * Set the value of lastBroadcast.
      *
-     * @param  string                                  $lastBroadcast
+     * @param  string                                           $lastBroadcast
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
      */
     public function setLastBroadcast($lastBroadcast)
@@ -152,7 +151,7 @@ class VideoGroup
     /**
      * Set the value of diffusion.
      *
-     * @param  string                                  $diffusion
+     * @param  string                                           $diffusion
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
      */
     public function setDiffusion($diffusion)
@@ -199,7 +198,7 @@ class VideoGroup
     /**
      * Set user
      *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
+     * @param  \Mongobox\Bundle\UsersBundle\Entity\User $user
      * @return VideoGroup
      */
     public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)

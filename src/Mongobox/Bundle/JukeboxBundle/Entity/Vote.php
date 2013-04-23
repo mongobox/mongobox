@@ -66,25 +66,23 @@ class Vote
         return $this->sens;
     }
 
-
-
     /**
      * Set user
      *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
+     * @param  \Mongobox\Bundle\UsersBundle\Entity\User $user
      * @return Vote
      */
     public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User 
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User
      */
     public function getUser()
     {

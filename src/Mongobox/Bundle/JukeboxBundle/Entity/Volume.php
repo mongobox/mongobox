@@ -57,7 +57,7 @@ class Volume
     /**
      * Set user
      *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
+     * @param  \Mongobox\Bundle\UsersBundle\Entity\User $user
      * @return Vote
      */
     public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)

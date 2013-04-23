@@ -18,7 +18,7 @@ use Mongobox\Bundle\UsersBundle\Form\UserSearchType;
 
 /**
  * @Route( "/group")
- * 
+ *
  */
 class GroupController extends Controller
 {
@@ -29,12 +29,12 @@ class GroupController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
+        $groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
 
-		return array(
-				'groups' => $groups
-		);
-	}
+        return array(
+                'groups' => $groups
+        );
+    }
 
     /**
      * @Template()
@@ -43,35 +43,33 @@ class GroupController extends Controller
     public function groupCreateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.context')->getToken()->getUser();
 
-		//On créer le formulaire en utilisant un utilisateur vide
-		$group = new Group();
-		$form = $this->createForm(new GroupType(), $group);
-		
-		if('POST' === $request->getMethod())
-		{
-			$form->bind($request);
-			if($form->isValid())
-			{
-				$em->persist($group);
-				$em->flush();
-				
-				//On rajoute l'utilisateur courant dans le groupe
-				$group->getUsers()->add($user);
+        //On créer le formulaire en utilisant un utilisateur vide
+        $group = new Group();
+        $form = $this->createForm(new GroupType(), $group);
 
-				$em->flush();
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $em->persist($group);
+                $em->flush();
 
-				$this->get('session')->setFlash('success', 'Groupe créé avec succès');
+                //On rajoute l'utilisateur courant dans le groupe
+                $group->getUsers()->add($user);
 
-				return $this->redirect($this->generateUrl('homepage'));
-			}
-		}
+                $em->flush();
 
-		return array(
-				'form' => $form->createView()
-		);
-	}
+                $this->get('session')->setFlash('success', 'Groupe créé avec succès');
+
+                return $this->redirect($this->generateUrl('homepage'));
+            }
+        }
+
+        return array(
+                'form' => $form->createView()
+        );
+    }
 
     /**
      * @Template()
@@ -81,63 +79,56 @@ class GroupController extends Controller
     public function groupEditAction(Request $request, Group $group)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
-		$session = $request->getSession();
-		if($user->isMemberFrom($group->getId()))
-		{
-			//On créer le formulaire en utilisant un utilisateur vide
-			$form = $this->createForm(new GroupType(), $group);
+        $user = $this->get('security.context')->getToken()->getUser();
+        $session = $request->getSession();
+        if ($user->isMemberFrom($group->getId())) {
+            //On créer le formulaire en utilisant un utilisateur vide
+            $form = $this->createForm(new GroupType(), $group);
 
-			if('POST' === $request->getMethod())
-			{
-				$form->bind($request);
-				if($form->isValid())
-				{
-					$em->flush();
+            if ('POST' === $request->getMethod()) {
+                $form->bind($request);
+                if ($form->isValid()) {
+                    $em->flush();
 
-					$this->get('session')->setFlash('success', 'Groupe édité avec succès');
+                    $this->get('session')->setFlash('success', 'Groupe édité avec succès');
 
-					return $this->redirect($this->generateUrl('homepage'));
-				}
-			}
+                    return $this->redirect($this->generateUrl('homepage'));
+                }
+            }
 
-			return array(
-				'form' => $form->createView(),
-				'group' => $group
-			);
-		}
-		else
-		{
-			$this->get('session')->setFlash('notice', 'Vous n\'avez pas le droit de modifier ce groupe');
-			return $this->redirect($this->generateUrl('homepage'));
-		}
-	}
+            return array(
+                'form' => $form->createView(),
+                'group' => $group
+            );
+        } else {
+            $this->get('session')->setFlash('notice', 'Vous n\'avez pas le droit de modifier ce groupe');
 
-	/**
+            return $this->redirect($this->generateUrl('homepage'));
+        }
+    }
+
+    /**
      * @Template()
      * @Route( "/inscription/{id}", name="group_inscription")
      * @ParamConverter("group", class="MongoboxGroupBundle:Group")
      */
     public function groupInscriptionAction(Request $request, Group $group)
     {
-		if(!$group->getPrivate())
-		{
-			$em = $this->getDoctrine()->getManager();
-			$user = $this->get('security.context')->getToken()->getUser();
+        if (!$group->getPrivate()) {
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->get('security.context')->getToken()->getUser();
 
-			$group->getUsers()->add($user);
+            $group->getUsers()->add($user);
 
-			$em->flush();
+            $em->flush();
 
-			$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
-		}
-		else
-		{
-			$this->get('session')->setFlash('notice', 'Vous ne pouvez pas vous inscrire à un groupe privé.');
-		}
+            $this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+        } else {
+            $this->get('session')->setFlash('notice', 'Vous ne pouvez pas vous inscrire à un groupe privé.');
+        }
 
-		return $this->redirect($this->generateUrl('homepage'));
-	}
+        return $this->redirect($this->generateUrl('homepage'));
+    }
 
     /**
      * @Template()
@@ -146,39 +137,36 @@ class GroupController extends Controller
      */
     public function groupInviteAction(Request $request, Group $group)
     {
-		if($group->getPrivate())
-		{
-			$user = $this->get('security.context')->getToken()->getUser();
-			if($user->isMemberFrom($group->getId()))
-			{
-				$em = $this->getDoctrine()->getManager();
+        if ($group->getPrivate()) {
+            $user = $this->get('security.context')->getToken()->getUser();
+            if ($user->isMemberFrom($group->getId())) {
+                $em = $this->getDoctrine()->getManager();
 
-				//On créer le formulaire en utilisant un utilisateur vide
-				$form = $this->createForm(new UserSearchType());
+                //On créer le formulaire en utilisant un utilisateur vide
+                $form = $this->createForm(new UserSearchType());
 
-				if('POST' === $request->getMethod())
-				{
-					$form->bind($request);
-					if($form->isValid())
-					{
-						$user = $form->get('user')->getData();
-						if(is_object($user))
-						{
-							$group->getUsersInvitations()->add($user);
-							$em->flush();
+                if ('POST' === $request->getMethod()) {
+                    $form->bind($request);
+                    if ($form->isValid()) {
+                        $user = $form->get('user')->getData();
+                        if (is_object($user)) {
+                            $group->getUsersInvitations()->add($user);
+                            $em->flush();
 
-							$this->get('session')->setFlash('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
-							return $this->redirect($this->generateUrl('homepage'));
-						}
-					}
-				}
-				return array(
-						'form' => $form->createView(),
-						'group' => $group
-				);
-			}
-		}
-	}
+                            $this->get('session')->setFlash('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
+
+                            return $this->redirect($this->generateUrl('homepage'));
+                        }
+                    }
+                }
+
+                return array(
+                        'form' => $form->createView(),
+                        'group' => $group
+                );
+            }
+        }
+    }
 
     /**
      * @Template()
@@ -188,37 +176,37 @@ class GroupController extends Controller
      */
     public function groupAcceptInviteAction(Request $request, Group $group, User $user)
     {
-		$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-		//Suppression de l'invitation
-		$group->getUsersInvitations()->removeElement($user);
-		//Ajout au groupe
-		$group->getUsers()->add($user);
-		$em->flush();
+        //Suppression de l'invitation
+        $group->getUsersInvitations()->removeElement($user);
+        //Ajout au groupe
+        $group->getUsers()->add($user);
+        $em->flush();
 
-		$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
-		return $this->redirect($this->generateUrl('homepage'));
-	}
+        $this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
 
-	/**
-	 * @Route("/change/{id_group}", name="group_change")
-	 * @Template()
-	 * @author Coleyra
-	 * Change la groupe courante (via la liste de selection)
-	 */
-	public function changeGroupAction(Request $request, $id_group)
-	{
-		$user = $this->get('security.context')->getToken()->getUser();
-		if($user->isMemberFrom($id_group))
-		{
-			$session = $request->getSession();
-			$session->set('id_group', $id_group);
+        return $this->redirect($this->generateUrl('homepage'));
+    }
 
-			//On met l'id du groupe en cookie
-			$response = new RedirectResponse($this->generateUrl('wall_index')); 
-			$response->headers->setCookie(new Cookie('id_group', $id_group));
+    /**
+     * @Route("/change/{id_group}", name="group_change")
+     * @Template()
+     * @author Coleyra
+     * Change la groupe courante (via la liste de selection)
+     */
+    public function changeGroupAction(Request $request, $id_group)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+        if ($user->isMemberFrom($id_group)) {
+            $session = $request->getSession();
+            $session->set('id_group', $id_group);
 
-			return $response;
-		}
-	}
+            //On met l'id du groupe en cookie
+            $response = new RedirectResponse($this->generateUrl('wall_index'));
+            $response->headers->setCookie(new Cookie('id_group', $id_group));
+
+            return $response;
+        }
+    }
 }

@@ -54,7 +54,7 @@ class Timeline
     /**
      * Initialize series data
      *
-     * @param \DateTime $startDate
+     * @param  \DateTime $startDate
      * @return array
      */
     protected function initializeTimeline(\DateTime $startDate)

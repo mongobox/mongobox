@@ -19,12 +19,12 @@ class PlaylistRepository extends EntityRepository
         $q = $this
                 ->createQueryBuilder('p')
                 ->select('p')
-				->where('p.group = :group')
-				->andWhere('p.current = 0')
+                ->where('p.group = :group')
+                ->andWhere('p.current = 0')
                 ->orderBy('p.random', 'ASC')
                 ->addOrderBy('p.date', 'ASC')
                 ->setMaxResults($max)
-				->setParameters(array('group' => $group))
+                ->setParameters(array('group' => $group))
                 ->getQuery()
         ;
 

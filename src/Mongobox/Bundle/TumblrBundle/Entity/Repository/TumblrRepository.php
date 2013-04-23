@@ -16,13 +16,13 @@ class TumblrRepository extends EntityRepository
      * Function to build request in order to filter tumblrs
      *
      * @param $query
-     * @param array $params
-     * @param array $filters
+     * @param  array $params
+     * @param  array $filters
      * @return mixed
      */
-    private function _buildRequestByFilters( $query, $params = array(), $filters = array() ){
-
-        if( isset($filters['tag']) && !empty($filters['tag']) ){
+    private function _buildRequestByFilters( $query, $params = array(), $filters = array() )
+    {
+        if ( isset($filters['tag']) && !empty($filters['tag']) ) {
             $query
                 ->innerJoin('t.tags', 'tt')
                 ->andWhere("tt.system_name LIKE :tag")
@@ -35,16 +35,16 @@ class TumblrRepository extends EntityRepository
         return $query;
     }
 
-	public function findLast($groups, $maxResults = 0, $firstResult = 0, $filters = array() )
-	{
+    public function findLast($groups, $maxResults = 0, $firstResult = 0, $filters = array() )
+    {
         $params =  array(
             'groups' => $groups
         );
 
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
 
-		$qb->select('t')
+        $qb->select('t')
             ->from('MongoboxTumblrBundle:Tumblr', 't')
             ->leftJoin('t.groups', 'g')
             ->where("g.id IN (:groups)")
@@ -52,69 +52,63 @@ class TumblrRepository extends EntityRepository
         ;
 
         // Dynamic filter
-        if( isset($filters) && !empty($filters) && array_key_exists('sortBy', $filters))
-		{
+        if ( isset($filters) && !empty($filters) && array_key_exists('sortBy', $filters)) {
             $qb->orderBy($filters['sortBy'], strtoupper($filters['orderBy']) );
-        }
-        else{
+        } else {
             $qb->orderBy('t.date', 'DESC' );
         }
 
-		if($maxResults != 0)
-		{
-			$qb
+        if ($maxResults != 0) {
+            $qb
                 ->setMaxResults($maxResults)
-			    ->setFirstResult($firstResult)
+                ->setFirstResult($firstResult)
             ;
-		}
-
-        if( !empty($filters) ){
-            $qb = $this->_buildRequestByFilters( $qb, $params, $filters );
         }
-        else{
+
+        if ( !empty($filters) ) {
+            $qb = $this->_buildRequestByFilters( $qb, $params, $filters );
+        } else {
             $qb->setParameters( $params );
         }
 
-
-		$query = $qb->getQuery();
+        $query = $qb->getQuery();
 
        //echo $query->getSQL();exit;
+        return $query->getResult();
+    }
 
-		return $query->getResult();
-	}
+    public function findOneByGroup($tumblrId, $groups )
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
 
-	public function findOneByGroup($tumblrId, $groups )
-	{
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
-
-		$qb->select('t')
-		->from('MongoboxTumblrBundle:Tumblr', 't')
-		->leftJoin('t.groups', 'g')
-		->where("g.id IN (:groups)")
+        $qb->select('t')
+        ->from('MongoboxTumblrBundle:Tumblr', 't')
+        ->leftJoin('t.groups', 'g')
+        ->where("g.id IN (:groups)")
         ->andWhere('t.id_tumblr=:tumblrId')
-		->groupBy('t.id_tumblr')
+        ->groupBy('t.id_tumblr')
         ->setMaxResults(1)
-		->setParameters( array(
-				'groups' => $groups ,
-				'tumblrId' => $tumblrId
-		));
+        ->setParameters( array(
+                'groups' => $groups ,
+                'tumblrId' => $tumblrId
+        ));
 
-		$query = $qb->getQuery();
+        $query = $qb->getQuery();
 
-        try{
+        try {
             $result = $query->getSingleResult();
+
             return $result;
-        }
-        catch (\Doctrine\ORM\NoResultException $e){
+        } catch (\Doctrine\ORM\NoResultException $e) {
             return false;
         }
-	}
+    }
 
     /**
      * Function to get next tumblr
      *
-     * @param string|int $tumblrId
+     * @param  string|int    $tumblrId
      * @return boolean|array
      */
     public function getNextEntity( $tumblrId, $groups )
@@ -138,11 +132,11 @@ class TumblrRepository extends EntityRepository
 
         $query = $qb->getQuery();
 
-        try{
+        try {
             $result = $query->getSingleResult();
+
             return $result;
-        }
-        catch (\Doctrine\ORM\NoResultException $e){
+        } catch (\Doctrine\ORM\NoResultException $e) {
             return false;
         }
 
@@ -151,7 +145,7 @@ class TumblrRepository extends EntityRepository
     /**
      * Function to get prev tumblr
      *
-     * @param string|int $tumblrId
+     * @param  string|int    $tumblrId
      * @return boolean|array
      */
     public function getPrevEntity( $tumblrId, $groups )
@@ -177,38 +171,36 @@ class TumblrRepository extends EntityRepository
 
         try {
             $result = $query->getSingleResult();
+
             return $result;
-        }
-        catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Doctrine\ORM\NoResultException $e) {
             return false;
         }
     }
 
-	/**
+    /**
      * Function to delete tumblr/tags relation
-	 *
+     *
      * @param MongoboxTumblrBundle:Tumblr $tumblr
      */
     public function cleanTags($tumblr)
     {
         $em = $this->getEntityManager();
-        foreach ($tumblr->getTags() as $tag)
-        {
+        foreach ($tumblr->getTags() as $tag) {
             $tumblr->removeTag($tag);
         }
         $em->flush();
     }
 
-	/**
+    /**
      * Function to delete tumblr/groups relation
-	 *
+     *
      * @param MongoboxTumblrBundle:Tumblr $tumblr
      */
     public function cleanGroups($tumblr)
     {
         $em = $this->getEntityManager();
-        foreach ($tumblr->getGroups() as $group)
-        {
+        foreach ($tumblr->getGroups() as $group) {
             $tumblr->removeTag($group);
         }
         $em->flush();
@@ -218,7 +210,7 @@ class TumblrRepository extends EntityRepository
      * Retrieves the total number of images in the given group.
      * If no group is given, then retrieves the total number of images in the application.
      *
-     * @param integer $groupId
+     * @param  integer $groupId
      * @return integer
      */
     public function getCount($groupId = null)

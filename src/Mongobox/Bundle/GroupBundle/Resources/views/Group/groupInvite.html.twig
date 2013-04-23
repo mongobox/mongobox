@@ -1,7 +1,7 @@
 {% extends "MongoboxGroupBundle:Group:layout.html.twig" %}
 
 {% block body %}
-        
+
 	<h1>Invitation d'un utilisateur</h1>
 	<form action="{{ path('group_invite', {'id' : group.id}) }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
 		{{ form_widget(form) }}

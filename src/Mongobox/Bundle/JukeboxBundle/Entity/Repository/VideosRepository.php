@@ -3,7 +3,6 @@
 namespace Mongobox\Bundle\JukeboxBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * VideosRepository
@@ -37,21 +36,21 @@ class VideosRepository extends EntityRepository
     /**
      * Fonction de recherche des vidéos
      *
-     * @param unknown_type $search
-     * @param unknown_type $page
-     * @param unknown_type $limit
-     * @param unknown_type $filters
+     * @param  unknown_type $search
+     * @param  unknown_type $page
+     * @param  unknown_type $limit
+     * @param  unknown_type $filters
      * @return unknown
      */
     public function search($group, $search, $page, $limit, $filters = array('sortBy' => 'v.title', 'orderBy' => 'ASC') )
     {
-		$parameters = array('group' => $group);
+        $parameters = array('group' => $group);
         $q = $this->getEntityManager()
                 ->createQueryBuilder()
                 ->select('vg')
-				->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
-				->leftJoin('vg.video', 'v')
-				->where('vg.group = :group')
+                ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+                ->leftJoin('vg.video', 'v')
+                ->where('vg.group = :group')
                 ->orderBy($filters['sortBy'], strtoupper($filters['orderBy']) )
                 ->setMaxResults($limit)
                 ->setFirstResult($limit * ($page-1));
@@ -61,7 +60,7 @@ class VideosRepository extends EntityRepository
                 ->andWhere('v.title LIKE :title');
                 $parameters['title'] = '%'.$search['title'].'%';
         }
-		$q->setParameters($parameters);
+        $q->setParameters($parameters);
 
 
         $q = $q->getQuery();
@@ -71,36 +70,37 @@ class VideosRepository extends EntityRepository
         return $result;
     }
 
-	public function findGroupAll($group)
-	{
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
+    public function findGroupAll($group)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
 
-		$qb->select('v')
-		->from('MongoboxJukeboxBundle:Videos', 'v')
-		->innerJoin('v.video_groups', 'vg')
-		->where("vg.group = :group")
-		->setParameters( array(
-				'group' => $group
-		));
+        $qb->select('v')
+        ->from('MongoboxJukeboxBundle:Videos', 'v')
+        ->innerJoin('v.video_groups', 'vg')
+        ->where("vg.group = :group")
+        ->setParameters( array(
+                'group' => $group
+        ));
 
-		$query = $qb->getQuery();
-		return $query->getResult();
-	}
+        $query = $qb->getQuery();
 
-	public function wipeTags($video)
-	{
-		$em = $this->getEntityManager();
-		$conn = $em->getConnection();
-		$sql = "DELETE FROM video_videos_tags WHERE id_video = ".$video->getId();
-		$conn->executeUpdate($sql);
-	}
+        return $query->getResult();
+    }
+
+    public function wipeTags($video)
+    {
+        $em = $this->getEntityManager();
+        $conn = $em->getConnection();
+        $sql = "DELETE FROM video_videos_tags WHERE id_video = ".$video->getId();
+        $conn->executeUpdate($sql);
+    }
 
     /**
      * Retrieves the total number of videos in the given group.
      * If no group is given, then retrieves the total number of videos in the application.
      *
-     * @param integer $groupId
+     * @param  integer $groupId
      * @return integer
      */
     public function getCount($groupId = null)
