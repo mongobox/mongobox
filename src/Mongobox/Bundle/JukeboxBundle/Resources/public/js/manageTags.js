@@ -11,31 +11,31 @@ var tags = tags || {};
 	};
 
 	tags.clear = function(){
-		this.form = $('#form_video_info');
-		this.containerSelectedTags = $('#container-selected-tags');
+		tags.form = $('#form_video_info');
+		tags.containerSelectedTags = $('#container-selected-tags');
 
-        // Get the div that holds the collection of tags
-        this.collectionHolder = $('#video_tags_list');
+	        // Get the div that holds the collection of tags
+	        tags.collectionHolder = $('#video_tags_list');
 
 
-		this.addTagButton = '#video-button-add-tag';
-		this.removeTagButton = this.collectionHolder.find('button.close');
-		this.buttonSubmit = $('#submit-form-video-tag-add');
+		tags.addTagButton = '#video-button-add-tag';
+		tags.removeTagButton = this.collectionHolder.find('button.close');
+		tags.buttonSubmit = $('#submit-form-video-tag-add');
 
-        // count the current form inputs we have (e.g. 2), use that as the new
-        // index when inserting a new item (e.g. 2)
-        tags.collectionHolder.data('index', tags.collectionHolder.find(':input').length);
-        tags.tags = new Array();
-        this.autocompleteField = $('#autocompleter_video_info_tag');
+	        // count the current form inputs we have (e.g. 2), use that as the new
+	        // index when inserting a new item (e.g. 2)
+	        tags.collectionHolder.data('index', tags.collectionHolder.find(':input').length);
+	        tags.tags = new Array();
+	        tags.autocompleteField = $('#autocompleter_video_info_tag');
 	};
 
 	tags.observeAddTag = function(){
 
-		$(document).on('click', this.addTagButton, function(event){
+		$(document).on('click', this.addTagButton, function(event)
+		{
 			event.preventDefault();
-            tags.loadTag( tags.autocompleteField.val() );
-
-        });
+            		tags.loadTag( tags.autocompleteField.val() );
+       		});
 	};
 
 	tags.observeSubmitForm = function()
