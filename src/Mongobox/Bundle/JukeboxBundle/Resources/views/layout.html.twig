@@ -52,21 +52,21 @@
     <div class="container">
     <!-- CONTENT HERE -->
 
-	    {% if app.session.hasFlash('success') %}
-		    <div class="alert alert-success">
-		        {{ app.session.flash('success') }}
-		    </div>
-	 	{% endif %}
-	 	{% if app.session.hasFlash('notice') %}
-		    <div class="alert alert-error">
-		        {{ app.session.flash('notice') }}
-		    </div>
-	 	{% endif %}
-	 	{% if app.session.hasFlash('info') %}
-		    <div class="alert alert-info">
-		        {{ app.session.flash('info') }}
-		    </div>
-	 	{% endif %}
+	    {% for flashMessage in app.session.flashbag.get('success') %}
+			<div class="alert alert-success">
+				{{ flashMessage }}
+			</div>
+		{% endfor %}
+	    {% for flashMessage in app.session.flashbag.get('notice') %}
+			<div class="alert alert-notice">
+				{{ flashMessage }}
+			</div>
+		{% endfor %}
+	    {% for flashMessage in app.session.flashbag.get('info') %}
+			<div class="alert alert-info">
+				{{ flashMessage }}
+			</div>
+		{% endfor %}
 
       	{% block body %}{% endblock %}
 
