@@ -166,12 +166,12 @@ $(document).ready(function()
 
 	$(document).on('mouseover', '.show-edit-video', function(e)
 	{
-		$(this).find('.edit-video').show();
+		$(this).find('.edit-video').addClass('edit-video-visible');
 	});
 
 	$(document).on('mouseout', '.show-edit-video', function(e)
 	{
-		$(this).find('.edit-video').hide();
+		$(this).find('.edit-video').removeClass('edit-video-visible');
 	});
 
 	$(document).on('submit', '#form_video_info', function(e)

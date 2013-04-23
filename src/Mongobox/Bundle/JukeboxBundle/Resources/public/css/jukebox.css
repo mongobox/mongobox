@@ -181,7 +181,12 @@ Playlist
 
 .edit-video
 {
-	display : none;
+	visibility: hidden;
+}
+
+.edit-video-visible
+{
+	visibility: visible;
 }
 
 .total-clear-fix
