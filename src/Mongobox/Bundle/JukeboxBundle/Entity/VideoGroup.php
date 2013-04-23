@@ -42,11 +42,6 @@ class VideoGroup
     protected $diffusion;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $vendredi;
-
-    /**
      * @ORM\Column(type="integer", options={"default":50}))
      */
     protected $volume;
@@ -175,23 +170,6 @@ class VideoGroup
     public function getDiffusion()
     {
         return $this->diffusion;
-    }
-
-    public function isVendredi()
-    {
-        return $this->vendredi;
-    }
-
-    public function getVendredi()
-    {
-        return $this->vendredi;
-    }
-
-    public function setVendredi($vendredi)
-    {
-        $this->vendredi = $vendredi;
-
-        return $this;
     }
 
     public function getVolume()
