@@ -16,19 +16,22 @@
 				<span class="span-date-favoris">Ajoutée aux favoris le {{ video.date_favoris|date('d/m/Y à H:i') }}</span>
 				<div class="bookmark-actions">
 					<a class="btn btn-link btn-actions-bookmark btn-lists-bookmark" title="Vos listes attribuées à cette vidéo">Listes</a>
-					<div class="content-lists-bookmark">
+					<div class="content-block-hidden-div-bookmark content-lists-bookmark">
 						{% if video.listes|length == 0 %}
 							Vous n'avez attribué aucune liste à cette vidéo.
 						{% else %}
-						<table>
+						<table id="table-list-bookmark-{{ video.id }}">
 							{% for liste in video.listes %}
 								{% include 'MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig' %}
 							{% endfor %}
 						</table>
 						{% endif %}
 					</div>
-					<a class="btn btn-link btn-actions-bookmark" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
-					<a class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
+					<a class="btn btn-link btn-actions-bookmark btn-lists-add" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
+					<div class="content-block-hidden-div-bookmark content-add-bookmark-liste">
+						<input type="text" data-bookmark-id="{{ video.id }}" class="autocomplete-list-add-bookmark" placeholder="Choisir une liste" />
+					</div>
+					<a href="{{ path('remove_video_bookmark', {'id_video': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
 				</div>
 			</div>
 		</div>

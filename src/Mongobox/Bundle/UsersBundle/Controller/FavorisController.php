@@ -34,7 +34,7 @@ class FavorisController extends Controller
 			$newFavoris = new UserFavoris();
 			$newFavoris
 					->setUser($user)
-					->setVideo($em->getRepository('MongoboxJukeboxBundle:Videos')->find($id_video))
+					->setVideo($em->find('MongoboxJukeboxBundle:Videos', $id_video))
 					->setDateFavoris(new \DateTime)
 			;
 
@@ -74,6 +74,61 @@ class FavorisController extends Controller
 		return array(
 			'favoris' => $videos_user
 		);
+	}
+
+	/**
+	 * Fonction pour supprimer une vidéo des favoris
+	 * @Route("/ajax/favoris/{id_video}/remove", name="remove_video_bookmark", requirements={"id_video" = "\d+"})
+	 */
+	public function removeVideoFromBookmarkAction($id_video)
+	{
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+
+		$is_removed = $em->getRepository("MongoboxUsersBundle:UserFavoris")->removeVideoFromBookmark($user, $id_video);
+
+		$retour = array(
+			'success' => $is_removed,
+			'message' => ($is_removed) ? "Vidéo supprimée avec succès de vos favoris": "Echec lors de la suppression",
+			"fav" => $id_video
+		);
+
+		return new Response(json_encode($retour));
+	}
+
+	/**
+	 * Fonction pour supprimer une vidéo dans une liste
+	 * @Route("/ajax/favoris/{id_video}/remove/liste/{id_liste}", name="remove_video_liste", requirements={"id_video" = "\d+", "id_liste" = "\d+"})
+	 */
+	public function removeVideoFromList($id_video, $id_liste)
+	{
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+
+		$fav = $em->getRepository("MongoboxUsersBundle:UserFavoris")->findOneBy(array(
+			"user" => $user,
+			"video" => $em->find("MongoboxJukeboxBundle:Videos", $id_video),
+			"liste" => $em->find("MongoboxUsersBundle:ListeFavoris", $id_liste)
+		));
+
+		if( is_object($fav) )
+		{
+			$em->remove($fav);
+			$em->flush();
+
+			$retour = array(
+				"success" => true,
+				"message" => "Vidéo supprimée de la liste avec succès"
+			);
+		} else
+		{
+			$retour = array(
+				"success" => false,
+				"message" => "Echec lors de la suppression de la vidéo"
+			);
+		}
+
+		return new Response(json_encode($retour));
 	}
 
 	/**

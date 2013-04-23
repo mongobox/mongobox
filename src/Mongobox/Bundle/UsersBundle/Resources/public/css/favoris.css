@@ -1,6 +1,6 @@
 .content-block-bookmark { width: 95%; }
 
-.content-lists-bookmark {
+.content-block-hidden-div-bookmark {
 	display:none;
 	position:absolute;
 	padding:5px;
@@ -30,7 +30,7 @@
 	color: #000000;
 }
 
-.btn-lists-bookmark.active { box-shadow: none; }
+.btn-actions-bookmark.active { box-shadow: none; }
 
 .btn-actions-list-remove:hover {
 	background-color: lightgray;

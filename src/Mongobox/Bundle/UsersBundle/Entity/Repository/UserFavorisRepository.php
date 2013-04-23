@@ -89,7 +89,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer la date d'ajout aux favoris
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user $user
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
 	 * @param int $id_video
 	 */
 	public function getDateAddToFavorite($user, $id_video)
@@ -107,6 +107,26 @@ class UserFavorisRepository extends EntityRepository
 			))
 		;
 		return $qb->getQuery()->getSingleResult();
+	}
+
+	/**
+	 * Fonction pour supprimer une vidéo des favoris
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param int $id_video
+	 */
+	public function removeVideoFromBookmark($user, $id_video)
+	{
+		$em = $this->getEntityManager();
+		$favoris = $this->findBy(array(
+			"user" => $user,
+			"video" => $em->getReference("MongoboxJukeboxBundle:Videos", $id_video)
+		));
+		if( !is_array($favoris) )
+			return false;
+		foreach($favoris as $fav)
+			$em->remove($fav);
+		$em->flush();
+		return true;
 	}
 }
 
