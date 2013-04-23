@@ -30,6 +30,7 @@
 					<a class="btn btn-link btn-actions-bookmark btn-lists-add" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
 					<div class="content-block-hidden-div-bookmark content-add-bookmark-liste">
 						<input type="text" data-bookmark-id="{{ video.id }}" class="autocomplete-list-add-bookmark" placeholder="Choisir une liste" />
+						<a href="" class="btn">Ajouter la vidéo à la liste</a>
 					</div>
 					<a href="{{ path('remove_video_bookmark', {'id_video': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
 				</div>
