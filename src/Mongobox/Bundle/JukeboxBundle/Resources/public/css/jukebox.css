@@ -14,7 +14,6 @@ legend
 	margin-bottom : 5px;
 }
 
-
 .footer {
     background-color: #F5F5F5;
     border-top: 1px solid #E5E5E5;
@@ -140,6 +139,11 @@ Flux Rss
 Playlist
 
 ------------------------------------ */
+.over-highlight:hover
+{
+	background-color : #e9e9e9;
+}
+
 .playlist-icon, .playlist-thumbnail, .playlist-title, .playlist-time, .playlist-vote, .playlist-user
 {
 	display : block;

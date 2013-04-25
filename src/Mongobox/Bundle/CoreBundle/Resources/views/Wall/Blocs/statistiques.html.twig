@@ -7,7 +7,7 @@
 			{% endif %}
 			{% for pl in playlist %}
 
-				<li class="clearfix show-edit-video">
+				<li class="clearfix show-edit-video over-highlight">
 					<small>
                         <span class="playlist-icon">{% if pl.random == 1 %}<i class="icon-random"></i>{% else %}{% if pl.videoGroup.diffusion == 0 %}<i class="icon-star"></i>{% else %}<i class="icon-arrow-up"></i>{% endif %}{% endif %}</span>
                         <span class="playlist-thumbnail"><img src="{{ pl.videoGroup.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ pl.videoGroup.video.thumbnailHq }}' />" data-html="true" /></span>
@@ -33,15 +33,23 @@
 			{% endfor %}
 			</ul>
 			<legend>Historique</legend>
-			<ul class="unstyled">
+			<ul class="unstyled clearfix">
 			{% for video_hist in videos_historique %}
-				<li>
-					<a href="{{video_hist.video.youtubeUrl}}">{{video_hist.video.title}} ({{video_hist.lastBroadCast|date('d-m-Y H:i:s')}})</a>
-					{% if video_hist.user is not empty %}
-					<span class="playlist-user">
-						{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : video_hist.user, avatarMini : true} %}
-					</span>
-					{% endif %}
+				<li class="clearfix show-edit-video over-highlight">
+					<small>
+						<span class="playlist-icon">&nbsp;</span>
+                        <span class="playlist-thumbnail"><img src="{{ video_hist.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ video_hist.video.thumbnailHq }}' />" data-html="true" /></span>
+						<span class="playlist-title">
+							{% include 'MongoboxJukeboxBundle:Partial:videoTitle.html.twig' with {'videoGroup' : video_hist, 'infos' : '- Passée le : ' ~ video_hist.lastBroadCast|date('d-m-Y H:i:s')} %}
+						</span>
+						<span class="playlist-time label label-info">{{video_hist.video.duration|niceTime}}</span>
+						<span class="playlist-vote">-</span>
+						<span class="playlist-user">
+						{% if video_hist.user is not empty %}
+							{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : video_hist.user, avatarMini : true} %}
+						{% endif %}
+						</span>
+                    </small>
 				</li>
 			{% endfor %}
 			</ul>

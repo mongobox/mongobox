@@ -7,5 +7,12 @@
 	{% set userLogin = videoGroup.user.login %}
 {% endif %}
 
-<a href="{{videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}}{% if total is defined %} - Dans {{total|niceTime}} à {{heure|date("H:i")}}{% endif %} - Points : {{videoGroup.votes - videoGroup.diffusion}}"{% if somme_pl is defined and somme_pl <= -2 %} style="color : red;"{% endif %}>{{videoGroup.video.name}}</a>
+{% if infos is not defined %}
+	{% if total is defined and total is not null %}
+		{% set infos = ' - Dans '~total|niceTime~' à '~heure|date("H:i") %}
+	{% else %}
+		{% set infos = '' %}
+	{% endif %}
+{% endif %}
+<a href="{{videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}}{{infos}} - Points : {{videoGroup.votes - videoGroup.diffusion}}"{% if somme_pl is defined and somme_pl <= -2 %} style="color : red;"{% endif %}>{{videoGroup.video.name}}</a>
 <a href="{{url('video_edit_modal', {'id_video' : videoGroup.video.id})}}" class="edit-video"><span class="icon-edit{% if white is defined and white %} icon-white{% endif %}"></span></a>
