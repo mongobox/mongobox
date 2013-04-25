@@ -16,6 +16,7 @@ var favorisManager = favorisManager || {};
 		this.observeRemoveVideoFromList();
 		this.observeRemoveBookmark();
 		this.observeShowListsAdd();
+		this.listenAutocompleteAddList();
 	};
 
 	// Fonction pour gérer l'ajout de la vidéo en favoris
@@ -181,6 +182,15 @@ var favorisManager = favorisManager || {};
 
 	favorisManager.listenAutocompleteAddList = function()
 	{
-		alert('coco');
+		$( ".list-autocomplete" ).autocomplete({
+			source: basepath+"ajax_list_search",
+			minLength: 2,
+			select: function( event, ui )
+			{
+				$(this).siblings('.hid-value-autocomplete').val(ui.item.value);
+				$(event.target).val(ui.item.label);
+				return false;
+			}
+		});
 	};
 })(jQuery);

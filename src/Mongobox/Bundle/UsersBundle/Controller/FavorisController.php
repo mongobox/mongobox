@@ -69,7 +69,6 @@ class FavorisController extends Controller
 				$liste = array_merge($liste, $array_date_ajout);
 			}
 		}
-		//echo '<pre>';var_dump($videos_user);exit;
 
 		return array(
 			'favoris' => $videos_user
@@ -100,7 +99,7 @@ class FavorisController extends Controller
 	 * Fonction pour supprimer une vidéo dans une liste
 	 * @Route("/ajax/favoris/{id_video}/remove/liste/{id_liste}", name="remove_video_liste", requirements={"id_video" = "\d+", "id_liste" = "\d+"})
 	 */
-	public function removeVideoFromList($id_video, $id_liste)
+	public function removeVideoFromListAction($id_video, $id_liste)
 	{
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
@@ -139,6 +138,38 @@ class FavorisController extends Controller
 	public function voirListeFavorisAction()
 	{
 		return array();
+	}
+
+	/**
+	 * Fonction permettant de récupérer via JSON la liste des listes de favoris de l'utilisateur
+	 * @Route("/ajax_list_search", name="ajax_list_search")
+	 */
+	public function ajaxListSearchAction(Request $request)
+	{
+		$value = $request->get('term');
+		$em = $this->getDoctrine()->getManager();
+
+		$lists = $em->getRepository('MongoboxUsersBundle:ListeFavoris')->findList($value);
+
+		$json = array();
+		foreach ($lists as $list)
+		{
+			$json[] = array(
+				'label' => $list->getName(),
+				'value' => $list->getId()
+			);
+		}
+
+		return new Response(json_encode($json));
+	}
+
+	/**
+	 * Fonction pour ajouter un favoris à une liste
+	 * @Route("/ajax/favoris/{id_video}/add/liste", name="ajax_liste_favoris_add", requirements={"id_video" = "\d+"})
+	 */
+	public function addListToBookmarkAction()
+	{
+
 	}
 }
 
