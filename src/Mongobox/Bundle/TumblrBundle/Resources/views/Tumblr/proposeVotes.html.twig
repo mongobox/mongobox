@@ -2,9 +2,9 @@
 {% if tumblrs|length == 0 %}
 	Nothing to do here
 {% else %}
-	<ul style="list-style:none;">
+	<ul style="list-style:none;" class="tumblr-list-propose">
 		{% for tumblr in tumblrs %}
-			{% include 'MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig' with {'mongo' : tumblr.tumblr} %}
+			{% include 'MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig' with {'mongo' : tumblr.tumblr, 'loadAnother' : true} %}
 		{% endfor %}
 	</ul>
 {% endif %}

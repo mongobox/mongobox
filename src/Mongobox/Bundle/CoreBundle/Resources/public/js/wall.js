@@ -7,7 +7,7 @@ var loadRSS = function()
 var loadProposeVotes = function()
 {
 	$.ajax({
-		url: basepath + 'tumblr/propose_votes',
+		url: basepath + 'tumblr/propose_votes/0',
 		type: 'POST',
 		success: function(data)
 		{
