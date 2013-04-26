@@ -27,9 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LiveController extends Controller
 {
-	const UP_VOTE_VALUE		= 1;
-	const DOWN_VOTE_VALUE	= -1;
-    const VOLUME_STEP       = 5;
+    const UP_VOTE_VALUE		= 1;
+    const DOWN_VOTE_VALUE	= -1;
+    const VOLUME_STEP		= 10;
 
 	/**
 	 * Initialize Jukebox and return the current video
