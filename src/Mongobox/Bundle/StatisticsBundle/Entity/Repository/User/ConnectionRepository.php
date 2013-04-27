@@ -79,4 +79,26 @@ class ConnectionRepository extends EntityRepository
             $query->execute();
         }
     }
+
+    /**
+     * Retrieve the biggest connections peak
+     *
+     * @return \Mongobox\Bundle\StatisticsBundle\Entity\User\Connection
+     */
+    public function getMaximumPeak()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('connections')
+            ->from('MongoboxStatisticsBundle:User\Connection', 'connections')
+            ->orderBy('connections.number', 'DESC')
+            ->setMaxResults(1)
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleResult();
+    }
 }

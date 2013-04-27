@@ -38,6 +38,11 @@ class FooterController extends Controller
         $usersGlobalCount   = $usersRepository->getCount();
         $lastRegistered     = $usersRepository->getLastRegistered();
 
+        $connectionsPeak    = $dm
+            ->getRepository('MongoboxStatisticsBundle:User\Connection')
+            ->getMaximumPeak()
+        ;
+
         return array(
             'activities'        => $activities,
             'current_group_id'  => $currentGroupId,
@@ -55,7 +60,12 @@ class FooterController extends Controller
             'users'     => array(
                 'group_count'       => $usersGroupCount,
                 'global_count'      => $usersGlobalCount,
-                'last_registered'   => $lastRegistered
+                'last_registered'   => $lastRegistered,
+                'connections_peak'  => array(
+                    'number'    => $connectionsPeak->getNumber(),
+                    'date'      => $connectionsPeak->getDate()->format('d/m/Y'),
+                    'time'      => $connectionsPeak->getTime()->format('H:i')
+                )
             )
         );
     }
