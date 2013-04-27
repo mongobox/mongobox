@@ -1,0 +1,12 @@
+{% extends "MongoboxGroupBundle:Group:layout.html.twig" %}
+
+{% block body %}
+	<h2>Liste des membres</h2>
+	<div class="content-block">
+		{% for user in group.users %}
+			<div class="group-user">
+				{% include "MongoboxUsersBundle:User/Avatar:avatarBig.html.twig" %}
+			</div>
+		{% endfor %}
+	</div>
+{% endblock body %}
