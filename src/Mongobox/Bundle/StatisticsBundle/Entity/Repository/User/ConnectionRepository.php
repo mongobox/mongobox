@@ -99,6 +99,17 @@ class ConnectionRepository extends EntityRepository
 
         $query = $qb->getQuery();
 
-        return $query->getSingleResult();
+        try {
+            return $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            $currentDate = new \DateTime();
+
+            $result = new Connection();
+            $result->setNumber(1);
+            $result->setDate($currentDate);
+            $result->setTime($currentDate);
+
+            return $result;
+        }
     }
 }
