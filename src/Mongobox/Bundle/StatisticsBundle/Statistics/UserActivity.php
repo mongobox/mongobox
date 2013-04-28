@@ -22,7 +22,7 @@ class UserActivity
     }
 
     /**
-     * Updates the date of last activity for the current user
+     * Update the date of last activity for the current user
      *
      * @param User $user
      * @return void
@@ -47,5 +47,33 @@ class UserActivity
 
         $this->em->persist($userActivity);
 		$this->em->flush();
+    }
+
+    /**
+     * Update the maximum number of simultaneous connections
+     *
+     * @return void
+     */
+    public function updateConnectionsPeak()
+    {
+        $currentDate = new \DateTime();
+
+        $currentPeak = $this->em
+            ->getRepository('MongoboxStatisticsBundle:User\Connection')
+            ->getPeakByDate($currentDate)
+        ;
+
+        $currentUsers = $this->em
+            ->getRepository('MongoboxStatisticsBundle:User\Activity')
+            ->getActiveUsers()
+        ;
+
+        $newPeak = count($currentUsers);
+        if ($currentPeak < $newPeak) {
+            $this->em
+                ->getRepository('MongoboxStatisticsBundle:User\Connection')
+                ->updatePeak($currentDate, $currentPeak, $newPeak)
+            ;
+        }
     }
 }

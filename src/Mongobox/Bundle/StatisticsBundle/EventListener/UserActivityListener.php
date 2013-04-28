@@ -21,7 +21,7 @@ class UserActivityListener
     }
 
     /**
-     * Retrieves the currently logged user.
+     * Retrieve the currently logged user
      *
      * @return \Mongobox\Bundle\UsersBundle\Entity\User | boolean
      */
@@ -36,7 +36,7 @@ class UserActivityListener
     }
 
     /**
-     * Updates the date of last activity for the current user.
+     * Update the date of last activity for the current user
      *
      * @param PostResponseEvent $event
      * @return void
@@ -50,7 +50,9 @@ class UserActivityListener
 
         if ($currentUser = $this->getCurrentUser()) {
             $userActivity = $this->container->get('mongobox_statistics.user_activity');
+
             $userActivity->updateLastHeartBeat($currentUser);
+            $userActivity->updateConnectionsPeak();
         }
     }
 }
