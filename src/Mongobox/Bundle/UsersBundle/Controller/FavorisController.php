@@ -167,9 +167,51 @@ class FavorisController extends Controller
 	 * Fonction pour ajouter un favoris à une liste
 	 * @Route("/ajax/favoris/{id_video}/add/liste", name="ajax_liste_favoris_add", requirements={"id_video" = "\d+"})
 	 */
-	public function addListToBookmarkAction()
+	public function addListToBookmarkAction($id_video)
 	{
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$id_liste = $this->getRequest()->request->get('id_liste');
+		$liste = $em->getRepository('MongoboxUsersBundle:ListeFavoris')->find($id_liste);
+		$video = $em->find('MongoboxJukeboxBundle:Videos', $id_video);
 
+		$alreadyExist = $em->getRepository('MongoboxUsersBundle:UserFavoris')->findOneBy(array(
+			'user' => $user,
+			'video' => $video,
+			'liste' => $liste
+		));
+
+		$date = new \DateTime;
+		$message = 'La vidéo existe déjà dans la liste "'.$liste->getName().'"';
+		$result = false;
+
+		if( is_null($alreadyExist) )
+		{
+			$new_fav_list = new UserFavoris();
+			$new_fav_list
+				->setUser($user)
+				->setListe($liste)
+				->setVideo($video)
+				->setDateFavoris($date)
+			;
+			$em->persist($new_fav_list);
+			$em->flush();
+
+			$message = 'Vidéo ajoutée avec succès dans la liste "'.$liste->getName().'"';
+			$result = true;
+		}
+
+		$html = '';
+		if( $result )
+		{
+			$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
+		}
+
+		return new Response(json_encode(array(
+			"message" => $message,
+			"result" => $result,
+			"html" => $html
+		)));
 	}
 }
 

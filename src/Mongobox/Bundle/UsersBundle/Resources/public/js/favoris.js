@@ -9,6 +9,7 @@ var favorisManager = favorisManager || {};
 		this.boutonRemoveBookmark = $('.btn-remove-bookmark');
 		this.boutonRemoveBookmarkList = $('.btn-actions-list-remove');
 		this.boutonShowAddLists = $('.btn-lists-add');
+		this.boutonAddBookmarkToList = $('.btn-add-bookmark-to-list');
 		this.addingToFavorite = false;
 
 		this.observeFavorisAdd();
@@ -17,6 +18,7 @@ var favorisManager = favorisManager || {};
 		this.observeRemoveBookmark();
 		this.observeShowListsAdd();
 		this.listenAutocompleteAddList();
+		this.observeAddBookmarkToList();
 	};
 
 	// Fonction pour gérer l'ajout de la vidéo en favoris
@@ -92,6 +94,7 @@ var favorisManager = favorisManager || {};
 
 	favorisManager.observeRemoveVideoFromList = function()
 	{
+		this.boutonRemoveBookmarkList.unbind('click');
 		this.boutonRemoveBookmarkList.bind('click', function(e)
 		{
 			e.preventDefault();
@@ -112,7 +115,9 @@ var favorisManager = favorisManager || {};
 								bouton_cliquer.parents('tr:first').fadeOut(300, function()
 								{
 									var div_content = $(this).parents(".content-block-bookmark:first");
-									bouton_cliquer.remove();
+									bouton_cliquer.parents('tr:first').remove();
+									if( $('#table-list-'+div_content.attr('id')).find('tr').length == 0 )
+										$('#table-list-'+div_content.attr('id')).append('<tr class="no-bookmark"><td colspan=2>Vous n\'avez attribué aucune liste à cette vidéo.</td></tr>');
 									favorisManager.repositionnerDiv(div_content , "btn-lists-bookmark", "content-lists-bookmark");
 								});
 							} else
@@ -149,6 +154,7 @@ var favorisManager = favorisManager || {};
 								{
 									$("#bookmark-"+data.fav).remove();
 								});
+
 							} else
 							{
 								alertify.error(data.message);
@@ -191,6 +197,50 @@ var favorisManager = favorisManager || {};
 				$(event.target).val(ui.item.label);
 				return false;
 			}
+		});
+	};
+
+	favorisManager.observeAddBookmarkToList = function()
+	{
+		this.boutonAddBookmarkToList.bind('click', function(event)
+		{
+			event.preventDefault();
+			var bouton = $(this);
+			var div_parent = $(this).parents('.content-add-bookmark-liste:first');
+			var id_list = div_parent.find('.hid-value-autocomplete').val();
+			if( id_list === '' || div_parent.find('.list-autocomplete').val() === '' || div_parent.find('.list-autocomplete').val() === div_parent.find('.list-autocomplete').attr('placeholder') )
+			{
+				div_parent.find('.list-autocomplete').focus();
+				return false;
+			}
+			bouton.button('loading');
+			$.ajax({
+				url: $(this).attr('href'),
+				data: { id_liste: id_list },
+				type: 'POST',
+				dataType: 'json',
+				success: function(data)
+				{
+					div_parent.find('.list-autocomplete').val('');
+					if(data.result)
+					{
+						alertify.success(data.message);
+						var table = div_parent.siblings('.content-lists-bookmark').find('table');
+						if( table.find('.no-bookmark').length > 0 )
+							table.find('.no-bookmark').remove();
+						table.append(data.html);
+					} else
+					{
+						alertify.error(data.message);
+					}
+					bouton.button('reset');
+				},
+				complete: function()
+				{
+					favorisManager.boutonRemoveBookmarkList = $('.btn-actions-list-remove');
+					favorisManager.observeRemoveVideoFromList();
+				}
+			});
 		});
 	};
 })(jQuery);

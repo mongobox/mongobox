@@ -17,15 +17,15 @@
 				<div class="bookmark-actions">
 					<a class="btn btn-link btn-actions-bookmark btn-lists-bookmark" title="Vos listes attribuées à cette vidéo">Listes</a>
 					<div class="content-block-hidden-div-bookmark content-lists-bookmark">
-						{% if video.listes|length == 0 %}
-							Vous n'avez attribué aucune liste à cette vidéo.
-						{% else %}
 						<table id="table-list-bookmark-{{ video.id }}">
-							{% for liste in video.listes %}
-								{% include 'MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig' %}
-							{% endfor %}
+							{% if video.listes|length == 0 %}
+								<tr class="no-bookmark"><td colspan=2>Vous n'avez attribué aucune liste à cette vidéo.</td></tr>
+							{% else %}
+								{% for liste in video.listes %}
+									{% include 'MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig' %}
+								{% endfor %}
+							{% endif %}
 						</table>
-						{% endif %}
 					</div>
 					<a class="btn btn-link btn-actions-bookmark btn-lists-add" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
 					<div class="content-block-hidden-div-bookmark content-add-bookmark-liste">
@@ -38,7 +38,7 @@
 							</tr>
 							<tr>
 								<td>
-									<a href="{{ path('ajax_liste_favoris_add', {'id_video': video.id}) }}" class="btn">Ajouter la vidéo à la liste</a>
+									<a href="{{ path('ajax_liste_favoris_add', {'id_video': video.id}) }}" class="btn btn-add-bookmark-to-list" data-loading-text ="<img src='{{ asset('bundles/mongoboxcore/img/ajax-loader.gif') }}' title='Loading' />">Ajouter la vidéo à la liste</a>
 								</td>
 							</tr>
 						</table>
