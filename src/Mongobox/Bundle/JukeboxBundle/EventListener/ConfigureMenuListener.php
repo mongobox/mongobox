@@ -24,7 +24,7 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $jukeboxMenu = $menu->addChild('Jukebox', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown')));
+        $jukeboxMenu = $menu->addChild('Jukebox', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown'), 'label' => 'Jukebox <b class="caret"></b>', 'extras' => array('safe_label' => true)));
         $jukeboxMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $jukeboxMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
         $jukeboxMenu->moveToPosition(10);
