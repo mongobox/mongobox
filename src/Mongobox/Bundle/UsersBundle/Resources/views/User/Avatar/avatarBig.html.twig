@@ -1,10 +1,10 @@
 {% if user.avatar is not null %}
-	{% set avatar = user.avatarWebPath|apply_filter('avatar_thumbnail')%}
+	{% set avatar = user.avatarWebPath|apply_filter('avatar_moyen')%}
 {% else %}
 	{% if avatarMini is defined %}
 		{% set avatar = user.gravatar(20) %}
 	{% else %}
-		{% set avatar = user.gravatar %}
+		{% set avatar = user.gravatar(50) %}
 	{% endif %}
 {% endif %}
 {% if loginClass is not defined  %}

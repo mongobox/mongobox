@@ -429,6 +429,16 @@ class User implements AdvancedUserInterface
     }
 
     /**
+     * Get tumblr_vote
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTumblrVote()
+    {
+        return $this->tumblr_vote;
+    }
+
+    /**
      * Add videos
      *
      * @param \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group
@@ -675,6 +685,7 @@ class User implements AdvancedUserInterface
         $this->avatar->move($this->getUploadRootDir(), $file);
         //Suppression des thumbnail déjà  en cache
         @unlink(__DIR__.'/../../../../../web/imagine/avatar_thumbnail/avatars/'.$file);
+        @unlink(__DIR__.'/../../../../../web/imagine/avatar_moyen/avatars/'.$file);
         @unlink(__DIR__.'/../../../../../web/imagine/avatar_mini/avatars/'.$file);
 
         // set the path property to the filename where you'ved saved the file

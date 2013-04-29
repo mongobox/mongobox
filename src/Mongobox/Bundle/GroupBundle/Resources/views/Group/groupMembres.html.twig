@@ -4,9 +4,11 @@
 	<h2>Liste des membres</h2>
 	<div class="content-block">
 		{% for user in group.users %}
-			<div class="group-user">
-				{% include "MongoboxUsersBundle:User/Avatar:avatarBig.html.twig" %}
-			</div>
+			<a href="{{url('profile_user', {'id' : user.id})}}">
+				<span class="group-user">
+					{% include "MongoboxUsersBundle:User/Avatar:avatarBig.html.twig" %}
+				</span>
+			</a>
 		{% endfor %}
 	</div>
 {% endblock body %}

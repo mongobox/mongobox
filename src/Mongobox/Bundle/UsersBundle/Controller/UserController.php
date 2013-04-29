@@ -8,9 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Mongobox\Bundle\UsersBundle\Form\UserEditType;
 use Mongobox\Bundle\UsersBundle\Form\UserEditPasswordType;
+
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * @Route( "/user")
@@ -18,6 +21,19 @@ use Mongobox\Bundle\UsersBundle\Form\UserEditPasswordType;
  */
 class UserController extends Controller
 {
+	/**
+	 * Profil d'un utilisateur
+	 * @Template()
+	 * @Route("/profile/{id}", name="profile_user")
+	 * @ParamConverter("user", class="MongoboxUsersBundle:User")
+	 */
+	public function profileAction(Request $request, User $user)
+	{
+		return array(
+			'user' => $user
+		);
+	}
+
 	/**
 	 * Fonction permettant de récupérer via JSON la liste des utilisateurs
 	 * @Route("/ajax_user_search", name="ajax_user_search")
