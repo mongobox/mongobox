@@ -1,0 +1,3 @@
+{% if next_page is defined and next_page is sameas(true) %}
+	<a href="{{ path('user_voir_favoris', {'page':1}) }}" id="bouton-afficher-plus-favoris">Afficher plus de favoris</a>
+{% endif %}

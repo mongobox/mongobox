@@ -46,7 +46,7 @@ class UserFavorisRepository extends EntityRepository
 	 * @param int $page
 	 * @return arry
 	 */
-	public function getUniqueFavorisUser($user, $page)
+	public function getUniqueFavorisUser($user, $page, $limitation)
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
@@ -58,7 +58,13 @@ class UserFavorisRepository extends EntityRepository
 				'user' => $user
 			))
 			->groupBy('v.id')
+			->setMaxResults($limitation+1)
 		;
+
+		if( $page > 0)
+		{
+			$qb->setFirstResult($page * $limitation);
+		}
 		return $qb->getQuery()->getArrayResult();
 	}
 
@@ -113,6 +119,7 @@ class UserFavorisRepository extends EntityRepository
 	 * Fonction pour supprimer une vidéo des favoris
 	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
 	 * @param int $id_video
+	 * @return boolean
 	 */
 	public function removeVideoFromBookmark($user, $id_video)
 	{
@@ -127,6 +134,46 @@ class UserFavorisRepository extends EntityRepository
 			$em->remove($fav);
 		$em->flush();
 		return true;
+	}
+
+	/**
+	 * Fonction pour récupérer le nombre de favoris d'un utilisateur
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @return int
+	 */
+	public function getNombreFavoris($user)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+		$qb
+			->select('COUNT(DISTINCT uf.video )')
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->where('uf.user = :user')
+			->setParameters(array(
+				"user" => $user
+			))
+		;
+		return $qb->getQuery()->getSingleScalarResult();
+	}
+
+	/**
+	 * Fonction pour récupérer le nombre de listes d'un utilisateur
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @return int
+	 */
+	public function getNombreListes($user)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+		$qb
+			->select('COUNT(DISTINCT uf.liste )')
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->where('uf.user = :user')
+			->setParameters(array(
+				"user" => $user
+			))
+		;
+		return $qb->getQuery()->getSingleScalarResult();
 	}
 }
 

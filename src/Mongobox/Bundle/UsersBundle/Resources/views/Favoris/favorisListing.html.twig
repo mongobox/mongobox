@@ -1,0 +1,40 @@
+<div class="well row-fluid content-block-bookmark" id="bookmark-{{ video.id }}">
+	<div class="span6">
+		<img src="{{video.thumbnailHq}}" alt="" style="max-height: 52px;" />
+		<a href="{{ path('videos_show', {'id': video.id}) }}">{{ video.title }}</a>
+	</div>
+	<div class="span6 info-fav">
+		<span class="span-date-favoris">Ajoutée aux favoris le {{ video.date_favoris|date('d/m/Y à H:i') }}</span>
+		<div class="bookmark-actions">
+			<a class="btn btn-link btn-actions-bookmark btn-lists-bookmark" title="Vos listes attribuées à cette vidéo">Listes</a>
+			<div class="content-block-hidden-div-bookmark content-lists-bookmark">
+				<table id="table-list-bookmark-{{ video.id }}">
+					{% if video.listes|length == 0 %}
+						<tr class="no-bookmark"><td colspan=2>Vous n'avez attribué aucune liste à cette vidéo.</td></tr>
+					{% else %}
+						{% for liste in video.listes %}
+							{% include 'MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig' %}
+						{% endfor %}
+					{% endif %}
+				</table>
+			</div>
+			<a class="btn btn-link btn-actions-bookmark btn-lists-add" title="Ajouter la vidéo à une de vos listes">Ajouter à une liste</a>
+			<div class="content-block-hidden-div-bookmark content-add-bookmark-liste">
+				<table>
+					<tr>
+						<td>
+							<input type="text" class="list-autocomplete" placeholder="Taper le nom de votre liste" />
+							<input type="hidden" class="hid-value-autocomplete" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="{{ path('ajax_liste_favoris_add', {'id_video': video.id}) }}" class="btn btn-add-bookmark-to-list" data-loading-text ="<img src='{{ asset('bundles/mongoboxcore/img/ajax-loader.gif') }}' title='Loading' />">Ajouter la vidéo à la liste</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<a href="{{ path('remove_video_bookmark', {'id_video': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris">Supprimer de vos favoris</a>
+		</div>
+	</div>
+</div>

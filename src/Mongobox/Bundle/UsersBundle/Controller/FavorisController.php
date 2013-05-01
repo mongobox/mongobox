@@ -14,6 +14,8 @@ use Mongobox\Bundle\UsersBundle\Entity\UserFavoris;
 
 class FavorisController extends Controller
 {
+	const _limitation_favoris = 5;
+
 	/**
 	 * Fonction pour ajouter une vidéo à la liste des vidéos favorites
 	 * @Route("/ajax/favorite/new/{id_video}", name="ajax_new_video_favorite")
@@ -57,7 +59,17 @@ class FavorisController extends Controller
 	{
 		$manager = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
-		$videos_user = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getUniqueFavorisUser($user, $page);
+		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
+		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+		$videos_user = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getUniqueFavorisUser($user, $page, self::_limitation_favoris);
+
+		$nextPage = false;
+		if(count($videos_user) > self::_limitation_favoris)
+		{
+			unset($videos_user[self::_limitation_favoris-1]);
+			$nextPage = true;
+		}
+
 		foreach($videos_user as &$video)
 		{
 			$array_date_first_ajout = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getDateAddToFavorite($user, $video['id']);
@@ -71,7 +83,10 @@ class FavorisController extends Controller
 		}
 
 		return array(
-			'favoris' => $videos_user
+			'favoris' => $videos_user,
+			'nombre_favoris' => $nombre_favoris,
+			'nombre_listes' => $nombre_listes,
+			'next_page' => $nextPage
 		);
 	}
 
