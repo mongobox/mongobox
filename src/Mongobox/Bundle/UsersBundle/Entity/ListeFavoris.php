@@ -20,7 +20,7 @@ class ListeFavoris
 	protected $id;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="liste_favoris")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="listes_favoris")
      * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      */
 	protected $user;

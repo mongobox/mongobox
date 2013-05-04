@@ -5,11 +5,9 @@ var favorisManager = favorisManager || {};
 	favorisManager.init = function()
 	{
 		this.boutonAddToFavoris = $('.btn-favoris-add');
-		this.boutonShowLists = $('.btn-lists-bookmark');
-		this.boutonRemoveBookmark = $('.btn-remove-bookmark');
-		this.boutonRemoveBookmarkList = $('.btn-actions-list-remove');
-		this.boutonShowAddLists = $('.btn-lists-add');
-		this.boutonAddBookmarkToList = $('.btn-add-bookmark-to-list');
+		this.boutonShowMoreFav = $('#bouton-afficher-plus-favoris');
+		this.pageNumberHidden = $('#pageHidden');
+		this.listeFavoris = $('#liste-favoris');
 		this.addingToFavorite = false;
 
 		this.observeFavorisAdd();
@@ -19,6 +17,7 @@ var favorisManager = favorisManager || {};
 		this.observeShowListsAdd();
 		this.listenAutocompleteAddList();
 		this.observeAddBookmarkToList();
+		this.observeShowMoreFav();
 	};
 
 	// Fonction pour gérer l'ajout de la vidéo en favoris
@@ -64,7 +63,7 @@ var favorisManager = favorisManager || {};
 	// Fonction pour afficher les listes de favoris affectées à une vidéo
 	favorisManager.observeShowListsDetails = function()
 	{
-		this.boutonShowLists.bind('click', function(e)
+		$("body").delegate(".btn-lists-bookmark", "click", function(e)
 		{
 			e.preventDefault();
 			$(this).toggleClass('active');
@@ -82,6 +81,7 @@ var favorisManager = favorisManager || {};
 		});
 	};
 
+	// Fonction pour repositionner la div qui apparait en dessous du bouton
 	favorisManager.repositionnerDiv = function(div_content, class_bouton, class_div_to_move)
 	{
 		var bouton_div = div_content.find('.'+class_bouton);
@@ -92,10 +92,10 @@ var favorisManager = favorisManager || {};
 		;
 	};
 
+	// Fonction pour supprimer une vidéo d'une liste de favoris
 	favorisManager.observeRemoveVideoFromList = function()
 	{
-		this.boutonRemoveBookmarkList.unbind('click');
-		this.boutonRemoveBookmarkList.bind('click', function(e)
+		$("body").delegate(".btn-actions-list-remove", "click", function(e)
 		{
 			e.preventDefault();
 			var bouton_cliquer = $(this);
@@ -131,9 +131,10 @@ var favorisManager = favorisManager || {};
 		});
 	};
 
+	// Fonction pour supprimer une vidéo des favoris
 	favorisManager.observeRemoveBookmark = function()
 	{
-		this.boutonRemoveBookmark.bind('click', function(event)
+		$("body").delegate(".btn-remove-bookmark", "click", function(e)
 		{
 			event.preventDefault();
 			var bouton_cliquer = $(this);
@@ -166,9 +167,10 @@ var favorisManager = favorisManager || {};
 		});
 	};
 
+	// Fonction pour afficher la div d'ajout des favoris
 	favorisManager.observeShowListsAdd = function()
 	{
-		this.boutonShowAddLists.bind('click', function(event)
+		$("body").delegate(".btn-lists-add", "click", function(e)
 		{
 			event.preventDefault();
 			$(this).toggleClass('active');
@@ -186,6 +188,7 @@ var favorisManager = favorisManager || {};
 		});
 	};
 
+	// Fonction pour gérer l'autocomplete sur les listes
 	favorisManager.listenAutocompleteAddList = function()
 	{
 		$( ".list-autocomplete" ).autocomplete({
@@ -200,9 +203,10 @@ var favorisManager = favorisManager || {};
 		});
 	};
 
+	// Fonction pour ajouter un favoris à la liste
 	favorisManager.observeAddBookmarkToList = function()
 	{
-		this.boutonAddBookmarkToList.bind('click', function(event)
+		$("body").delegate(".btn-add-bookmark-to-list", "click", function(e)
 		{
 			event.preventDefault();
 			var bouton = $(this);
@@ -234,11 +238,40 @@ var favorisManager = favorisManager || {};
 						alertify.error(data.message);
 					}
 					bouton.button('reset');
+				}
+			});
+		});
+	};
+
+	// Fonction pour afficher plus de favoris
+	favorisManager.observeShowMoreFav = function()
+	{
+		this.boutonShowMoreFav.bind('click', function(event)
+		{
+			event.preventDefault();
+			var bouton = $(this);
+			bouton.button('loading');
+			$.ajax({
+				url: bouton.attr('href'),
+				type: 'POST',
+				data: {
+					page: favorisManager.pageNumberHidden.val()
 				},
-				complete: function()
+				dataType: 'json',
+				success: function(data)
 				{
-					favorisManager.boutonRemoveBookmarkList = $('.btn-actions-list-remove');
-					favorisManager.observeRemoveVideoFromList();
+					bouton.button('reset');
+					if( data.nextPage )
+					{
+						favorisManager.pageNumberHidden.val(data.page);
+						favorisManager.listeFavoris.append(data.html);
+					} else
+					{
+						favorisManager.listeFavoris.append(data.html);
+						favorisManager.pageNumberHidden.remove();
+						bouton.remove();
+					}
+					favorisManager.listenAutocompleteAddList();
 				}
 			});
 		});

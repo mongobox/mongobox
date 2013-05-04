@@ -52,24 +52,31 @@ class FavorisController extends Controller
 
 	/**
 	 * Fonction pour voir les favoris de l'utilisateur
-	 * @Route("/profil/favoris/{page}", name="user_voir_favoris", requirements={"page" = "\d+"}, defaults={"page" = 0})
+	 * @Route("/profil/favoris/{page}", name="user_voir_favoris", requirements={"page" = "\d+"}, defaults={"page" = 1})
+	 * @Route("/profil/favoris/plus", name="user_voir_plus_favoris", defaults={"page" = 2})
 	 * @Template()
 	 */
 	public function voirFavorisAction($page)
 	{
+		$request = $this->getRequest();
 		$manager = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
-		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
-		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+
+		if( $request->isXmlHttpRequest() )
+			$page = $request->request->get('page');
+
+		// On récupère les favoris
 		$videos_user = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getUniqueFavorisUser($user, $page, self::_limitation_favoris);
 
+		// On définit s'il y a une page après celle courante
 		$nextPage = false;
 		if(count($videos_user) > self::_limitation_favoris)
 		{
-			unset($videos_user[self::_limitation_favoris-1]);
+			unset($videos_user[self::_limitation_favoris]);
 			$nextPage = true;
 		}
 
+		// On traite les vidéos pour avoir les infos directement dedans
 		foreach($videos_user as &$video)
 		{
 			$array_date_first_ajout = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getDateAddToFavorite($user, $video['id']);
@@ -82,11 +89,27 @@ class FavorisController extends Controller
 			}
 		}
 
+		// Si c'est une requête ajax, on renvoie le tableau json avec le html et la page
+		if( $request->isXmlHttpRequest() )
+		{
+			$html = $this->render('MongoboxUsersBundle:Favoris/Listes:listeFavoris.html.twig', array('favoris' => $videos_user))->getContent();
+			return new Response(json_encode(array(
+				"html" => $html,
+				"nextPage" => $nextPage,
+				"page" => $page+1
+			)));
+		} else
+		{
+			$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
+			$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+		}
+
 		return array(
 			'favoris' => $videos_user,
 			'nombre_favoris' => $nombre_favoris,
 			'nombre_listes' => $nombre_listes,
-			'next_page' => $nextPage
+			'next_page' => $nextPage,
+			'page' => $page+1
 		);
 	}
 

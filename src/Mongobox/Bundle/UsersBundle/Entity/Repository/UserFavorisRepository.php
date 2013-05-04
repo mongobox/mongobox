@@ -57,13 +57,14 @@ class UserFavorisRepository extends EntityRepository
 			->setParameters(array(
 				'user' => $user
 			))
+			->orderBy('uf.date_favoris', 'DESC')
 			->groupBy('v.id')
 			->setMaxResults($limitation+1)
 		;
 
-		if( $page > 0)
+		if( $page > 1)
 		{
-			$qb->setFirstResult($page * $limitation);
+			$qb->setFirstResult( ($page-1) * $limitation);
 		}
 		return $qb->getQuery()->getArrayResult();
 	}

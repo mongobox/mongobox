@@ -7,11 +7,9 @@
 	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
 
 	<div id="liste-favoris">
-	{% for video in favoris %}
-		{% include 'MongoboxUsersBundle:Favoris:favorisListing.html.twig' %}
-	{% endfor %}
+		{% include 'MongoboxUsersBundle:Favoris/Listes:listeFavoris.html.twig' %}
 	</div>
-	
+
 	{% include 'MongoboxUsersBundle:Favoris:boutonAfficherPlusFavoris.html.twig' %}
 </div>
 {% endblock %}
