@@ -30,6 +30,7 @@ LivePlayer = function()
 	{
 		playlistId = currentPlaylistId;
 		this.getPlaylistScores(currentPlaylistId);
+        this.synchronizePlayerVolume();
 
 		this.initializeVideoRating();
         this.initializeVolumeControl();
@@ -248,7 +249,9 @@ LivePlayer = function()
 
     this.updateVolumeControl = function(data)
     {
-        player.setVolume(data.currentVolume);
+        if (typeof player !== 'undefined' && typeof player.setVolume === 'function') {
+            player.setVolume(data.currentVolume);
+        }
 
         $('#volume-up-votes').text('(' + data.upVotes + ')');
         $('#volume-down-votes').text('(' + data.downVotes + ')');
