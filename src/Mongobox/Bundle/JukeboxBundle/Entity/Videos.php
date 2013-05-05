@@ -71,6 +71,11 @@ class Videos
     protected $tags;
 
 	/**
+     * @ORM\OneToMany(targetEntity="Mongobox\Bundle\UsersBundle\Entity\UserFavoris", mappedBy="video", cascade={"persist"})
+     */
+	protected $favoris;
+
+	/**
      * Constructor
      */
     public function __construct()

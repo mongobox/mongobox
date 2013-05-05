@@ -17,7 +17,7 @@ use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * @Route( "/user")
- * 
+ *
  */
 class UserController extends Controller
 {
@@ -43,7 +43,7 @@ class UserController extends Controller
 		$value = $request->get('term');
 
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$users = $em->getRepository('MongoboxUsersBundle:User')->findUser($value);
 
 		$json = array();
@@ -62,22 +62,22 @@ class UserController extends Controller
 	 * Fonction pour l'édition de l'utilisateur courant
 	 * @Template()
 	 * @Route("/profil/edit", name="user_edit")
-	 * @Method({ "GET", "POST" }) 
+	 * @Method({ "GET", "POST" })
 	 */
 	public function editAction(Request $request, $id_user = null)
-	{		
+	{
 		$em = $this->getDoctrine()->getManager();
 
 		$request = $this->container->get('request');
 		$user = $this->container->get('security.context')->getToken()->getUser();
 
 		$old_user = clone $user;
-		
+
 		//Formulaire de modification de l'utilisateur
 		$form = $this->createForm(new UserEditType(), $user);
 		//Formulaire de modification du mot de passe si email non collectif
 		$form_password = $this->createForm(new UserEditPasswordType(), $user, array('validation_groups' => array('modify_password')));
-		
+
 		if('POST' === $request->getMethod())
 		{
 			//Validation pour l'utilisateur

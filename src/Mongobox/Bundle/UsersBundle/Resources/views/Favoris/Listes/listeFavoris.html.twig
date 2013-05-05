@@ -1,0 +1,7 @@
+<tr>
+{% for video in favoris %}
+	{% include 'MongoboxUsersBundle:Favoris:favorisListing.html.twig' %}
+{% else %}
+		<td>Vous n'avez pas de favoris actuellement.</td>
+{% endfor %}
+</tr>
