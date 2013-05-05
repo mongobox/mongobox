@@ -6,6 +6,7 @@ var tumblr = tumblr || {};
 		this.pathToImg = ''; // Path to get img folder for stars png
 		this.pathToRating = basepath+"tumblr/vote/"; // Path to submit rating
 		this.pathToContent = basepath+"tumblr/load/popover/content/"; // Path to load content
+		this.pathToPropose = basepath+"tumblr/propose_votes/"; // Path to get new proposition
 		this.regexClass = model_class; // String to match in regexp for tumblr class
 		this.classImg = class_img; // Img html class
 		this.noteModel = model_note; // Note's id model
@@ -98,6 +99,7 @@ var tumblr = tumblr || {};
 		    cancel: false,
 		    click : function(score, evt) 
 		    {
+				var btn = $(this);
 				// Regex matching to get tumblr's id
 		    	var pattern_regex_id = new RegExp('rating-'+tumblr.classImg+'-(\\d+)');
 				var tumblr_id = $(this).attr('id').match(pattern_regex_id)[1];
@@ -114,7 +116,39 @@ var tumblr = tumblr || {};
 						$("."+tumblr.noteModel+"-"+tumblr_id).val(data.somme);
 						$("."+tumblr.userModel+"-"+tumblr_id).val(score);
 						tumblr.initInfoVote();
-				    }
+
+						var tumblr_li = btn.parent().parent().parent().parent().parent().parent();
+						var another = tumblr_li.hasClass('un-tumblr-another');
+
+						//Si on veut afficher un autre tumblr à la place
+						if(another)
+						{
+							var tumblr_list = [];
+							//On récupère la liste des tumblr déjà affichés
+							$('.un-tumblr-another').each(function() {
+								tid = $(this).attr('id');
+								tumblr_array = tid.split('-');
+								tumblr_list.push(tumblr_array[1]);
+							});
+							//load a new one if needed
+							$.ajax({
+								type: 'POST',
+								url: tumblr.pathToPropose + '1',
+								data: { tumblrs : tumblr_list },
+								dataType: 'json',
+								success:function(data)
+								{
+									tumblr.closeAll();
+									tumblr_li.remove();
+									if(!data.done)
+									{
+										$('.tumblr-list-propose').append(data.html);
+										tumblr.loadPopover();
+									}
+								}
+							});
+						}
+					}
 				});
 		    },
 		    half: true,

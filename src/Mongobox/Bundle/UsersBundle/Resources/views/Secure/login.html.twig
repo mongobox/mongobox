@@ -6,27 +6,29 @@
 	<h1>{{project_name}}</h1>
 </div>
 <div class="content-block">
-	<h1>Login</h1>
+	<h1>Formulaire de connexion</h1>
 {% if error %}
 	<div class="alert alert-error">{{ error.message|trans([], 'validators') }}</div>
 {% endif %}
 	
 	<form action="{{ path('_login_check') }}" method="post">
-	    <label for="login">Login :</label>
-	    <input type="text" id="login" name="_username" value="{{ last_username }}" />
+		<div class="controls">
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-user"></i></span>
+				<input type="text" id="login" name="_username" value="{{ last_username }}" placeholder="Login" />
+			</div>
+		</div>
 	
-	    <label for="password">Password :</label>
-	    <input type="password" id="password" name="_password" /><br />
-	    
-	    <p>
-		    <input type="checkbox" id="remember_me" name="_remember_me" />
-	   	 	<label for="remember_me" style="display:inline-block;">Remember me</label><br />
-		</p>
-
-        <input type="submit" class="btn btn-primary" value="Login">
+		<div class="controls">
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-lock"></i></span>
+			    <input type="password" id="password" name="_password" placeholder="Mot de passe" /><br />
+			</div>
+		</div>
+        <input type="submit" class="btn btn-primary" value="Connexion">
 	</form>
 	<p>
-		<a href="{{ path('registration') }}" title="Registration">Registration</a>			
+		Si vous n'avez pas de compte, vous pouvez vous <a href="{{ path('registration') }}" title="Inscription">inscrire</a>.		
 	</p>		
 </div>
 {% endblock body %}

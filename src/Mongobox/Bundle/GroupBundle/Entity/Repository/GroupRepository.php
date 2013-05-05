@@ -12,4 +12,31 @@ use Doctrine\ORM\EntityRepository;
  */
 class GroupRepository extends EntityRepository
 {
+	function emptyPlaylist($group, $force = false)
+	{
+		$em = $this->getEntityManager();
+
+		$sql = "SELECT pl.id FROM MongoboxJukeboxBundle:Playlist pl
+			WHERE pl.group = :group
+			AND pl.current = 0";
+		if(!$force) $sql .= "
+			AND pl.random = 1";
+		$query = $em->createQuery($sql)
+					->setParameters(array('group' => $group));
+		$results = $query->getResult();
+
+		if(count($results) > 0)
+		{
+			$query = $em->createQuery("DELETE FROM MongoboxJukeboxBundle:Vote v
+				WHERE v.playlist IN(:results)")
+						->setParameters(array('results' => $results));
+			$query->getResult();
+
+			$query = $em->createQuery("DELETE FROM MongoboxJukeboxBundle:Playlist pl
+				WHERE pl.id IN(:results)")
+						->setParameters(array('results' => $results));
+		}
+
+		return $query->getResult();
+	}
 }

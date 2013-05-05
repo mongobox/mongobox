@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\JukeboxBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * VideosRepository
@@ -35,14 +36,14 @@ class VideosRepository extends EntityRepository
 
     /**
      * Fonction de recherche des vidéos
-     * 
+     *
      * @param unknown_type $search
      * @param unknown_type $page
      * @param unknown_type $limit
      * @param unknown_type $filters
      * @return unknown
      */
-    public function search($group, $search, $page, $limit, $filters )
+    public function search($group, $search, $page, $limit, $filters = array('sortBy' => 'v.title', 'orderBy' => 'ASC') )
     {
 		$parameters = array('group' => $group);
         $q = $this->getEntityManager()
@@ -61,8 +62,8 @@ class VideosRepository extends EntityRepository
                 $parameters['title'] = '%'.$search['title'].'%';
         }
 		$q->setParameters($parameters);
-        
-        
+
+
         $q = $q->getQuery();
 
         $result = $q->getResult();
@@ -86,4 +87,42 @@ class VideosRepository extends EntityRepository
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
+
+	public function wipeTags($video)
+	{
+		$em = $this->getEntityManager();
+		$conn = $em->getConnection();
+		$sql = "DELETE FROM video_videos_tags WHERE id_video = ".$video->getId();
+		$conn->executeUpdate($sql);
+	}
+
+    /**
+     * Retrieves the total number of videos in the given group.
+     * If no group is given, then retrieves the total number of videos in the application.
+     *
+     * @param integer $groupId
+     * @return integer
+     */
+    public function getCount($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('count(v.id)')
+            ->from('MongoboxJukeboxBundle:Videos', 'v')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->innerJoin('v.video_groups', 'vg')
+                ->where('vg.group = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
 }

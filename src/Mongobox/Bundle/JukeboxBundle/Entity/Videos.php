@@ -35,12 +35,12 @@ class Videos
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $artist;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $songName;
 
@@ -64,6 +64,11 @@ class Videos
      * @ORM\JoinColumn(name="id_video", referencedColumnName="id")
      */
 	protected $video_groups;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="VideoTag", mappedBy="videos", cascade={"persist"})
+     */
+    protected $tags;
 
 	/**
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\UsersBundle\Entity\UserFavoris", mappedBy="video", cascade={"persist"})
@@ -216,9 +221,9 @@ class Videos
         return (string) $xml->title;
     }
 
-    public function getDataFromYoutube()
+    static function getDataFromYoutube($YoutubeId)
     {
-        $feed = 'http://gdata.youtube.com/feeds/api/videos/'.$this->getLien() . '?v=2&alt=jsonc';
+        $feed = 'http://gdata.youtube.com/feeds/api/videos/'. $YoutubeId . '?v=2&alt=jsonc';
 
         $json = file_get_contents($feed);
         $data = json_decode($json);
@@ -294,4 +299,45 @@ class Videos
     {
         return $this->playlist;
     }
+
+    /**
+     *
+     * @param TumblrTag $tag
+     */
+    public function addTag($tag) {
+        // var_dump( $tag);exit;
+        $tag->addVideo($this);
+        $this->tags[] = $tag;
+        return $this;
+    }
+
+    /**
+     * Fonction to delete tag
+     * @param Discussion $discussion
+     */
+    public function removeTag($tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function getTags() {
+        return $this->tags;
+    }
+
+    /**
+     * @return the $tags
+     */
+    public function setTags(ArrayCollection $tags) {
+        $this->tags = $tags;
+        return $this;
+    }
+
+	public function getName()
+	{
+		if($this->getSongName() != '') return $this->getArtist().' - '.$this->getSongName ();
+		else return $this->getTitle();
+	}
 }

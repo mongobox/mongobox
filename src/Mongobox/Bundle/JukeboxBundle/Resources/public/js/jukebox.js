@@ -12,6 +12,14 @@ $(document).on("click", ".btn-vote", function(e)
     });
 });
 
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 function loadVideoEnCours()
 {
 	$('.video-thumbnail').tooltip('destroy');
@@ -39,31 +47,59 @@ function btn_submit_video()
 {
 	$.ajax({
 		type: "POST",
-		url: basepath + 'post_video',
-		data: $('#form_video').serialize()
-	}).done(function( msg )
-	{
-		$('.loader').hide();
-		$('#form_video').html('Vidéo ajoutée avec succès.');
+		dataType: "json",
+		url: basepath + 'videos/post_video',
+		data: $('#form_video').serialize(),
+		success: function(data)
+		{
+			$('.loader').hide();
+			$('#action-video-modal .modal-header h3').html(data.title);
+			$('#action-video-modal .modal-body').html(data.content);
+		}
 	});
 }
 
 $(document).ready(function()
 {
-	$('#post-video-modal').on('show', function () {
+	$(document).on('click', '#add-video-button', function(e)
+	{
+		e.preventDefault();
+		button = $(this);
+
 		$('.loader').show();
-		$('#post-video-modal .modal-content').html('');
+		$('#action-video-modal').modal('show');
+		$('#action-video-modal .modal-content').html('');
 		$.ajax({
 			type: "GET",
-			dataType: "html",
-			url: basepath + 'post_video'
-		}).done(
-		function( html )
-		{
-			$('#post-video-modal .modal-content').html(html);
-			$('.loader').hide();
+			dataType: "json",
+			url: basepath + 'videos/post_video',
+			success: function(data)
+			{
+				$('#action-video-modal .modal-header h3').html(data.title);
+				$('#action-video-modal .modal-body').html(data.content);
+				$('.loader').hide();
+			}
 		});
-    });
+	});
+
+	$(document).on('click', '.edit-video', function(e)
+	{
+		e.preventDefault();
+		button = $(this);
+
+		$('#action-video-modal').modal('show');
+		// Loading content from twig template
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: button.attr('href'),
+			success: function(data)
+			{
+				$('#action-video-modal .modal-header h3').html(data.title);
+				$('#action-video-modal .modal-body').html(data.content);
+			}
+		});
+	});
 
 	$(document).on('change', '#video_lien', function()
 	{
@@ -81,7 +117,7 @@ $(document).ready(function()
 			if(infos.type == 'new')
 			{
 				$('.loader').hide();
-				$('#form_video').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
+				$('#youtube_add').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
 				$('#btnSubmitVideo').bind('click', function(e)
 				{
 					$('.loader').show();
@@ -96,7 +132,91 @@ $(document).ready(function()
 		});
 	});
 
+	$(document).on('click', '#valide-tags-btn-video', function()
+	{
+		$.ajax({
+			type: "POST",
+			dataType: "html",
+			url: basepath + 'post_tag_video',
+			data: $('#form_tags').serialize()
+		}).done(
+		function( tag )
+		{
+			$('#tag-list').append(tag);
+		});
+	});
+
+	$(document).on('click', '.delete-tag-video', function(e)
+	{
+		e.preventDefault();
+		e.stopPropagation();
+		tag = $(this).parent();
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: $(this).attr('href')
+		}).done(
+		function()
+		{
+			tag.remove();
+		});
+	});
+
 	$('.video-thumbnail').tooltip({'html' : 'true', 'placement' : 'left'});
+
+	$(document).on('mouseover', '.show-edit-video', function(e)
+	{
+		$(this).find('.edit-video').addClass('edit-video-visible');
+	});
+
+	$(document).on('mouseout', '.show-edit-video', function(e)
+	{
+		$(this).find('.edit-video').removeClass('edit-video-visible');
+	});
+
+	$(document).on('submit', '#form_video_info', function(e)
+	{
+		e.preventDefault();
+
+		// Loading content from twig template
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: $('#form_video_info').attr('action'),
+			data : $('#form_video_info').serialize(),
+			success: function(data)
+			{
+				$('#action-video-modal .modal-body').html(data.content);
+			}
+		});
+	})
+	
+	$(document).on('keyup', '#video_search_search', function(e)
+	{
+		//On met un delai pour éviter de chercher pour chaque lettre tappée
+		delay(function()
+		{
+			// Loading content from twig template
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: basepath + 'videos/ajax/search/keyword',
+				data : $('#video_search_search').serialize(),
+				success: function(data)
+				{
+					$('#mongobox_search').html(data.mongobox);
+					$('#youtube_search').html(data.youtube);
+				}
+			});
+	    }, 500 );
+	});
+
+	$(document).on('click', '.video_search_send', function(e)
+	{
+		e.preventDefault();
+		$('#video_lien').val($(this).attr('rel'));
+		btn_submit_video();
+	});
 });
 
 var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);

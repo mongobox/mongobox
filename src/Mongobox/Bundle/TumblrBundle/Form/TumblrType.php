@@ -58,10 +58,10 @@ class TumblrType extends AbstractType
                     'placeholder' => 'Ajouter des tags',
                 ),
                 'required' => false,
-                'property_path' => false
+                'mapped' => false
             ))
             ->add('tags', 'hidden', array(
-                'property_path' => false
+                'mapped' => false
             ))
             ->add('groups', 'choice', array(
                 'label' => 'Partager dans ces groupes',
@@ -69,7 +69,7 @@ class TumblrType extends AbstractType
                 'data' => $dataGroups,
                 'multiple' => true,
                 'expanded' => true,
-                'property_path' => false
+                'mapped' => false
             ))
         ;
 

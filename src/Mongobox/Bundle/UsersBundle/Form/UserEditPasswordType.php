@@ -12,7 +12,7 @@ class UserEditPasswordType extends AbstractType
         $builder
             ->add('old_password', 'password', array(
                 'label' => 'Ancien mot de passe',
-                'property_path' => false,
+                'mapped' => false,
 				'attr' => array('data-help' => 'Veuillez renseigner votre ancien mot de passe.')
             ))
             ->add('new_password', 'repeated', array(
@@ -23,7 +23,7 @@ class UserEditPasswordType extends AbstractType
                 (
                     'label' => 'Mot de passe' 
                 ),
-                'property_path' => false,
+                'mapped' => false,
 				'attr' => array('data-help' => 'Veuillez renseigner un nouveau mot de passe pour pouvoir accéder à votre espace. Tout caractère sauf l\'espace.')
             ))   
         ;

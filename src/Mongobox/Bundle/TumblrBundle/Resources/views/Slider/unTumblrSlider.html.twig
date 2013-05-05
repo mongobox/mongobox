@@ -1,4 +1,4 @@
-<li style="display:inline;" class="{% if mongo.hasTag('nsfw') and app.user.nsfwmode %}nswf-elt{% endif %}">
+<li style="display:inline;" class="un-tumblr {% if mongo.hasTag('nsfw') and app.user.nsfwmode %}nswf-elt{% endif %}{% if loadAnother is defined and loadAnother %}un-tumblr-another{% endif %}" id="tumblr-{{mongo.id}}">
 	<span class="tumblr-img-bloc">
 		{% if mongo.hasTag('nsfw') and app.user.nsfwmode %}
 		    <span class="nsfw-mask active tumblr-popover tumblr-img-id-{{ mongo.id }}" title="Cliquer pour afficher l'image"></span>

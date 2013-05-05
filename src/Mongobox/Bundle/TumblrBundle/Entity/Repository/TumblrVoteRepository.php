@@ -75,22 +75,25 @@ class TumblrVoteRepository extends EntityRepository
 		return $result;
     }
 
-    public function getProposeTumblrVotes($user, $max = 3)
+    public function getProposeTumblrVotes($user, $max = 3, $tumblrs_exclude = array())
     {
         $em = $this->getEntityManager();
-        $query = $em
-                ->createQuery('
-					SELECT t as tumblr, COUNT(tv.user) as total
+
+		$sql = 'SELECT t as tumblr, COUNT(tv.user) as total
 					FROM MongoboxTumblrBundle:Tumblr t
 					LEFT JOIN t.groups g
 					LEFT JOIN t.tumblr_vote tv
 					WHERE t.id_tumblr NOT IN (
 						SELECT tt.id_tumblr FROM MongoboxTumblrBundle:Tumblr tt
 						LEFT JOIN tt.tumblr_vote ttv
-						WHERE ttv.user = :user)
-					AND g.id IN(:user_group)
+						WHERE ttv.user = :user)';
+		if(count($tumblrs_exclude) > 0) $sql .= 'AND t.id_tumblr NOT IN ('.implode(', ', $tumblrs_exclude).')';
+		$sql .= 'AND g.id IN(:user_group)
 					GROUP BY t.id_tumblr
-					ORDER BY total ASC, t.date ASC')
+					ORDER BY total ASC, t.date ASC';
+
+		$query = $em
+                ->createQuery($sql)
                 ;
 		$query->setMaxResults($max);
 		$query->setParameters(array(

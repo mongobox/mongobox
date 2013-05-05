@@ -2,13 +2,18 @@
 namespace Mongobox\Bundle\JukeboxBundle\Controller;
 
 use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoTag;
 use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
+use Mongobox\Bundle\GroupBundle\Entity\Group;
+use Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag;
 use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
+use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
@@ -22,9 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LiveController extends Controller
 {
-	const UP_VOTE_VALUE		= 1;
-	const DOWN_VOTE_VALUE	= -1;
-    const VOLUME_STEP       = 5;
+    const UP_VOTE_VALUE		= 1;
+    const DOWN_VOTE_VALUE	= -1;
+    const VOLUME_STEP		= 10;
 
 	/**
 	 * Initialize Jukebox and return the current video
@@ -54,20 +59,27 @@ class LiveController extends Controller
 
 		//On supprime la vidéo en cours
 		$playlist_current = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
-		$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
+		//Il n'y a pas de vidéo en cours, on va en chercher une
+		if(!is_null($playlist_current))
+		{
+			$votes = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($playlist_current);
 
-		$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
-		$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
+			$playlist_current->getVideoGroup()->setVotes($playlist_current->getVideoGroup()->getVotes() + $votes);
+			$playlist_current->getVideoGroup()->setDiffusion($playlist_current->getVideoGroup()->getDiffusion() + 1);
 
-		$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
-        $em->getRepository('MongoboxJukeboxBundle:Volume')->wipe($playlist_current);
-		$em->remove($playlist_current);
+			$em->getRepository('MongoboxJukeboxBundle:Vote')->wipe($playlist_current);
+			$em->getRepository('MongoboxJukeboxBundle:Volume')->wipe($playlist_current);
+			$em->remove($playlist_current);			
+		}
 
 		//On cherche la prochaine vidéo
 		$nextInPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(1, $group);
 
-		$nextInPlaylist->setCurrent(1);
-		$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
+		if(is_object($nextInPlaylist))
+		{
+			$nextInPlaylist->setCurrent(1);
+			$nextInPlaylist->getVideoGroup()->setLastBroadcast(new \Datetime());
+		}
 		$em->flush();
 
 		return $nextInPlaylist;
@@ -116,6 +128,8 @@ class LiveController extends Controller
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
     	$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $group->getId(), 'current' => 1));
+		$list_tags = null;
+		$groupLiveTags = null;
 
     	if (is_object($video_en_cours)) {
     		$currentPlayed = $video_en_cours;
@@ -156,10 +170,17 @@ class LiveController extends Controller
             $playerVars['controls']    = 0;
             $playerVars['disablekb']   = 1;
 		}
+		if($playerMode === 'admin')
+		{
+			$video = new Videos();
+			$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getTagsForGroup($group);
+			$groupLiveTags = $em->getRepository('MongoboxGroupBundle:GroupLiveTag')->findBy(array('group' => $group->getId()));
+		}
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
 
-    	return array(
+    	return array
+		(
     		'page_title'	=> 'Jukebox - Live stream',
     		'current_video'	=> $currentPlayed,
     		'player_mode'	=> $playerMode,
@@ -167,7 +188,10 @@ class LiveController extends Controller
     		'player_events'	=> json_encode($playerEvents),
 			'player_width'	=> $playerWidth,
 			'player_height'	=> $playerHeight,
-    		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001"
+    		'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001",
+			'group'			=> $group,
+			'list_tags'		=> $list_tags,
+			'groupLiveTags' => $groupLiveTags
     	);
     }
 
@@ -412,4 +436,76 @@ class LiveController extends Controller
 
         return $response;
     }
+	
+    /**
+     * @Route("/live_tag_select/{id}/{id_group}/{selected}", name="live_tag_select")
+	 * @ParamConverter("tag", class="MongoboxJukeboxBundle:VideoTag")
+	 * @ParamConverter("group", class="MongoboxGroupBundle:Group", options={"id" = "id_group"})     
+     */
+	function liveTagSelectAction(VideoTag $tag, Group $group, $selected)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$glt = new GroupLiveTag();
+		$glt->setGroup($group);
+		$glt->setSelected((boolean)$selected);
+		$glt->setVideoTag($tag);
+		$em->persist($glt);
+
+		$em->flush();
+		
+		$groupLiveTags = $em->getRepository('MongoboxGroupBundle:GroupLiveTag')->findBy(array('group' => $group->getId(), 'video_tag' => $tag->getId()));
+		$button_selected = 0;
+		$button_unselected = 0;
+		foreach($groupLiveTags as $glt)
+		{
+			if($glt->getSelected() == 1) $button_selected = 1;
+			else $button_unselected = 1;
+		}
+
+		$return = array
+		(
+			'selected' => $selected,
+			'html_tag' => $this->render('MongoboxJukeboxBundle:Partial:live-tag-video.html.twig', array(
+						'tag' => $glt
+					))->getContent(),
+			'html_button' => $this->render('MongoboxJukeboxBundle:Partial:live-button-tag-video.html.twig', array(
+						'tag' => $tag,
+						'group' => $group,
+						'selected' => $button_selected,
+						'unselected' => $button_unselected
+					))->getContent()
+		);
+		return new Response(json_encode($return));
+	}
+	
+    /**
+     * @Route("/live_tag_delete/{id}", name="live_tag_delete")
+	 * @ParamConverter("tag", class="MongoboxGroupBundle:GroupLiveTag")
+     */
+	function liveTagDeleteAction(GroupLiveTag $tag)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$em->remove($tag);
+
+		$em->flush();
+		
+		$return = array('success' => 'ok');
+		return new Response(json_encode($return));
+	}
+
+    /**
+     * @Route("/live_empty_playlist/{id_group}/{force}", name="live_empty_playlist", defaults={"force" = false})
+	 * @ParamConverter("group", class="MongoboxGroupBundle:Group", options={"id" = "id_group"})
+     */
+	function liveEmptyPlaylistAction(Group $group, $force)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$em->getRepository('MongoboxGroupBundle:Group')->emptyPlaylist($group, $force);
+		
+		$return = array('success' => 'ok');
+		return new Response(json_encode($return));
+	}
 }

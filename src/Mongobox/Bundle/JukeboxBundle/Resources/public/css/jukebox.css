@@ -14,7 +14,6 @@ legend
 	margin-bottom : 5px;
 }
 
-
 .footer {
     background-color: #F5F5F5;
     border-top: 1px solid #E5E5E5;
@@ -144,6 +143,11 @@ Flux Rss
 Playlist
 
 ------------------------------------ */
+.over-highlight:hover
+{
+	background-color : #e9e9e9;
+}
+
 .playlist-icon, .playlist-thumbnail, .playlist-title, .playlist-time, .playlist-vote, .playlist-user
 {
 	display : block;
@@ -181,4 +185,54 @@ Playlist
 }
 .playlist-user
 {
+}
+
+.edit-video
+{
+	visibility: hidden;
+}
+
+.edit-video-visible
+{
+	visibility: visible;
+}
+
+.total-clear-fix
+{
+	clear : both;
+}
+
+/* ----------------------------------
+ Tags
+------------------------------------ */
+
+#container-selected-tags span, #video_tags_list span
+{
+	float : left;
+	list-style-type: none;
+	margin-left: 5px;
+}
+
+/* ----------------------------------
+ Search Video
+------------------------------------ */
+
+#search ul, #search ul li
+{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#search ul li span.song_title
+{
+	width : 450px;
+	display: block;
+	float: left;
+}
+
+#search ul li a
+{
+	width : 25px;
+	float: left;
 }

@@ -1,0 +1,20 @@
+#list_tags
+{
+	margin : auto;
+}
+
+#playlist_tag_actif, #playlist_tag_inactif
+{
+	float : left;
+	width : 50%;
+}
+
+#playlist_tag_actif ul li, playlist_tag_inactif ul li
+{
+	list-style-type : none;
+}
+
+#playlist_action
+{
+	clear : both;
+}

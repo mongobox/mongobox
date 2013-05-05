@@ -331,17 +331,40 @@ class TumblrController extends Controller
     }
 
     /**
-     * @Route("/propose_votes", name="tumblr_propose_votes")
+     * @Route("/propose_votes/{another}", name="tumblr_propose_votes")
      * @Template()
      */
-	public function proposeVotesAction(Request $request)
+	public function proposeVotesAction(Request $request, $another)
 	{
 		$em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
-		$tumblrs = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->getProposeTumblrVotes($user);
-		return array(
-			'tumblrs' => $tumblrs
-		);
+		//Traitement en Ajax
+		if($another)
+		{
+			$tumblrs_exclude = $request->request->get('tumblrs');
+			$tumblrs = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->getProposeTumblrVotes($user, 1, $tumblrs_exclude);
+			if(count($tumblrs) > 0)
+			{
+				$html = $this->render('MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig', array('mongo' => $tumblrs[0]['tumblr'], 'loadAnother' => true))->getContent();
+				$done = false;
+			}
+			else
+			{
+				$html = '';
+				$done = true;
+			}
+			return new Response(json_encode(array(
+				'html' => $html,
+				'done' => $done
+			)));
+		}
+		else
+		{
+			$tumblrs = $em->getRepository('MongoboxTumblrBundle:TumblrVote')->getProposeTumblrVotes($user, 3);
+			return array(
+				'tumblrs' => $tumblrs
+			);
+		}
 	}
 
 	/**

@@ -1,0 +1,17 @@
+services:
+    mongobox_statistics.configure_menu_listener:
+        class: Mongobox\Bundle\StatisticsBundle\EventListener\ConfigureMenuListener
+        tags:
+            - { name: kernel.event_listener, event: mongobox_core.main_menu_configure, method: onMainMenuConfigure }
+            - { name: kernel.event_listener, event: mongobox_core.admin_menu_configure, method: onAdminMenuConfigure }
+
+    mongobox_statistics.user_activity:
+        class: Mongobox\Bundle\StatisticsBundle\Statistics\UserActivity
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    mongobox_statistics.user_heartbeat_listener:
+        class: Mongobox\Bundle\StatisticsBundle\EventListener\UserActivityListener
+        arguments:
+            - @service_container
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate }

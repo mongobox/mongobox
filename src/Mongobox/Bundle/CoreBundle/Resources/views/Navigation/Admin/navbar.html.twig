@@ -6,10 +6,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
+
             <a class="brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
-                <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}" style="height : 40px;"
-                     alt="{{ project_name }}" title="{{ project_name }} - Voir le front"/>
-                ADMIN
+                <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}"
+                     style="height : 40px;"
+                     alt="{{ project_name }}" title="{{ project_name }} - Homepage"
+                />
             </a>
 
             <div class="nav-collapse">
@@ -71,57 +73,10 @@
                         </li>
                     </ul>
                 {% endif %}
-                <ul class="nav">
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Jukebox
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                           <li>
-                                <a href="{{ path('videos') }}">Gestion des vidéos</a>
-                            </li>
-                            <li>
-                                <a href="#">Ajouter une vidéo</a>
-                            </li>
-                            <li>
-                                <a href="#">Gestion des tags</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" title="Poster une mongo pute">Tumblr
-                            <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li{% if app.request.attributes.get('_route') == 'admin_tumblr' %} class="active"{% endif %}>
-                                <a href="{{ path('admin_tumblr') }}">Gestion</a>
-                            </li>
-                            <li{% if app.request.attributes.get('_route') == 'tumblr_stats' %} class="active"{% endif %}>
-                                <a href="{{ path('tumblr_stats') }}">Statistiques</a>
-                            </li>
-                            <li>
-                                <a href="#">Gestion des tags</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" dir="dropdown" href="#">Membres</a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#">Ajouter un membre</a>
-                            </li>
-                            <li>
-                                <a href="#">Liste des membres</a>
-                            </li>
-                            <li>
-                                <a href="#">Gestion des groupes</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ path('live') }}" title="Voir le live">Live</a></li>
-                </ul>
+                {{ knp_menu_render('MongoboxCoreBundle:AdminBuilder:build', {'allow_safe_labels': true}) }}
+
             </div>
-            <!--/.nav-collapse -->
         </div>
     </div>
 </div>

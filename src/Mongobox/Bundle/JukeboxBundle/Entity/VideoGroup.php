@@ -42,11 +42,6 @@ class VideoGroup
     protected $diffusion;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $vendredi;
-
-    /**
      * @ORM\Column(type="integer", options={"default":50}))
      */
     protected $volume;
@@ -177,23 +172,6 @@ class VideoGroup
         return $this->diffusion;
     }
 
-    public function isVendredi()
-    {
-        return $this->vendredi;
-    }
-    
-    public function getVendredi()
-    {
-        return $this->vendredi;
-    }
-
-    public function setVendredi($vendredi)
-    {
-        $this->vendredi = $vendredi;
-
-        return $this;
-    }
-
     public function getVolume()
     {
         return $this->volume;
@@ -227,14 +205,14 @@ class VideoGroup
     public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User 
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User
      */
     public function getUser()
     {
