@@ -175,7 +175,16 @@ class FavorisController extends Controller
 	 */
 	public function voirListeFavorisAction()
 	{
-		return array();
+		$manager = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+
+		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
+		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+
+		return array(
+			'nombre_favoris' => $nombre_favoris,
+			'nombre_listes' => $nombre_listes
+		);
 	}
 
 	/**
