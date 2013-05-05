@@ -4,7 +4,7 @@ var favorisManager = favorisManager || {};
 {
 	favorisManager.init = function()
 	{
-		this.boutonAddToFavoris = $('.btn-favoris-add');
+		this.boutonAddToFavoris = $('#btn-favoris-add');
 		this.boutonShowMoreFav = $('#bouton-afficher-plus-favoris');
 		this.pageNumberHidden = $('#pageHidden');
 		this.listeFavoris = $('#liste-favoris');
@@ -24,7 +24,7 @@ var favorisManager = favorisManager || {};
 	// Fonction pour gérer l'ajout de la vidéo en favoris
 	favorisManager.observeFavorisAdd = function()
 	{
-		this.boutonAddToFavoris.bind('click', function(e)
+		$("body").delegate("#btn-favoris-add", "click", function(e)
 		{
 			e.preventDefault();
 
@@ -32,14 +32,17 @@ var favorisManager = favorisManager || {};
 				return false;
 
 			favorisManager.addingToFavorite = true;
+			var bouton = $(this);
 
 			$.ajax({
 				type: 'POST',
 				url: $(this).attr('href'),
 				dataType: 'json',
+				async: true,
 				success: function(data)
 				{
-					var span_bouton = favorisManager.boutonAddToFavoris.find('span');
+					favorisManager.addingToFavorite = false;
+					var span_bouton = bouton.find('span');
 					span_bouton.fadeOut(300, function()
 					{
 						if(data.add === true)
@@ -50,11 +53,10 @@ var favorisManager = favorisManager || {};
 							span_bouton.text(' Déjà dans vos favoris');
 						}
 						span_bouton.fadeIn('fast');
-						favorisManager.boutonAddToFavoris.delay(1000).fadeOut(300, function()
+						bouton.delay(1000).fadeOut(300, function()
 						{
-							favorisManager.boutonAddToFavoris.remove();
+							bouton.remove();
 						});
-						favorisManager.addingToFavorite = false;
 					});
 				}
 			});
