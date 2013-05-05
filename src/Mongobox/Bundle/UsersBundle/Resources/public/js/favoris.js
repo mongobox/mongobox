@@ -11,6 +11,7 @@ var favorisManager = favorisManager || {};
 		this.addingToFavorite = false;
 
 		this.observeFavorisAdd();
+		this.observeHoverFavoris();
 		this.observeShowListsDetails();
 		this.observeRemoveVideoFromList();
 		this.observeRemoveBookmark();
@@ -60,6 +61,24 @@ var favorisManager = favorisManager || {};
 		});
 	};
 
+	// Fonction pour initialiser l'event hover sur chaque favoris
+	favorisManager.observeHoverFavoris = function()
+	{
+		$('.un-favoris').hover(
+			function()
+			{
+				$(this).addClass('FavorisTdIsOver');
+				$(this).find('.actions-content').show();
+			}, function(e)
+			{
+				if( $('.ui-autocomplete:hover').length > 0 )
+					return false;
+				$(this).removeClass('FavorisTdIsOver');
+				$(this).find('.actions-content').hide();
+			}
+		);
+	};
+
 	// Fonction pour afficher les listes de favoris affectées à une vidéo
 	favorisManager.observeShowListsDetails = function()
 	{
@@ -69,7 +88,6 @@ var favorisManager = favorisManager || {};
 			$(this).toggleClass('active');
 			var div_content = $(this).siblings('.content-lists-bookmark');
 			div_content
-				.css("left", $(this).offset().left + $(this).width() + 14 - div_content.width())
 				.css("top", $(this).offset().top + $(this).height())
 				.toggle()
 			;
@@ -87,7 +105,6 @@ var favorisManager = favorisManager || {};
 		var bouton_div = div_content.find('.'+class_bouton);
 		var div_to_move = div_content.find('.'+class_div_to_move);
 		div_to_move
-			.css("left", bouton_div.offset().left + bouton_div.width() + 14 - div_to_move.width())
 			.css("top", bouton_div.offset().top + bouton_div.height())
 		;
 	};
@@ -112,13 +129,12 @@ var favorisManager = favorisManager || {};
 							if(data.success)
 							{
 								alertify.success(data.message);
-								bouton_cliquer.parents('tr:first').fadeOut(300, function()
+								bouton_cliquer.closest('tr').fadeOut(300, function()
 								{
-									var div_content = $(this).parents(".content-block-bookmark:first");
-									bouton_cliquer.parents('tr:first').remove();
+									var div_content = $(this).closest(".content-block-bookmark");
+									bouton_cliquer.closest('tr').remove();
 									if( $('#table-list-'+div_content.attr('id')).find('tr').length == 0 )
 										$('#table-list-'+div_content.attr('id')).append('<tr class="no-bookmark"><td colspan=2>Vous n\'avez attribué aucune liste à cette vidéo.</td></tr>');
-									favorisManager.repositionnerDiv(div_content , "btn-lists-bookmark", "content-lists-bookmark");
 								});
 							} else
 							{
@@ -154,6 +170,7 @@ var favorisManager = favorisManager || {};
 								$("#bookmark-"+data.fav).fadeOut(300, function()
 								{
 									$("#bookmark-"+data.fav).remove();
+									favorisManager.observeHoverFavoris();
 								});
 
 							} else
@@ -176,7 +193,6 @@ var favorisManager = favorisManager || {};
 			$(this).toggleClass('active');
 			var div_content = $(this).siblings('.content-add-bookmark-liste');
 			div_content
-				.css("left", $(this).offset().left + $(this).width() + 14 - div_content.width())
 				.css("top", $(this).offset().top + $(this).height())
 				.toggle()
 			;
@@ -271,6 +287,7 @@ var favorisManager = favorisManager || {};
 						favorisManager.pageNumberHidden.remove();
 						bouton.remove();
 					}
+					favorisManager.observeHoverFavoris();
 					favorisManager.listenAutocompleteAddList();
 				}
 			});

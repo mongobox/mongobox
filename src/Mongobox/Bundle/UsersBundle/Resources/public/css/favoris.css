@@ -1,4 +1,4 @@
-.content-block-bookmark { width: 95%; }
+/*.content-block-bookmark { width: 95%; }*/
 
 .content-block-hidden-div-bookmark {
 	display:none;
@@ -8,11 +8,11 @@
 	border: 1px solid lightgray;
 	background-color: #e6e6e6;
 
-	-webkit-border-radius: 10px;
+	-webkit-border-radius: 0px;
 	-webkit-border-top-right-radius: 0;
-	-moz-border-radius: 10px;
+	-moz-border-radius: 0px;
 	-moz-border-radius-topright: 0;
-	border-radius: 10px;
+	border-radius: 0px;
 	border-top-right-radius: 0;
 }
 
@@ -34,4 +34,25 @@
 
 .btn-actions-list-remove:hover {
 	background-color: lightgray;
+}
+
+.imgbox { text-align: center; }
+
+.un-favoris {
+	width: 20%;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+.FavorisTdIsOver {
+	box-shadow: 1px 1px 12px black;
+}
+
+#liste-favoris img { margin: 0 auto; }
+
+#liste-favoris > tbody > tr { height: 200px; }
+
+.actions-content {
+	text-align: center;
 }
