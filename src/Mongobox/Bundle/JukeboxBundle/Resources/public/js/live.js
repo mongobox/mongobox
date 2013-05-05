@@ -89,7 +89,7 @@ LivePlayer = function()
 		}
 
         if (params.action === 'update_volume') {
-            this.updateVolumeControl(params.volume);
+            this.synchronizePlayerVolume();
         }
 
 		if (playerMode == 'admin') {
@@ -115,7 +115,7 @@ LivePlayer = function()
                     volume: params.videoVolume
                 });
 
-                this.updateVolumeControl(params.videoVolume);
+                this.synchronizePlayerVolume();
 
                 this.initialize(params.playlistId);
 
