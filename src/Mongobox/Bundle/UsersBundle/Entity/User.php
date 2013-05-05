@@ -32,7 +32,7 @@ class User implements AdvancedUserInterface
      * @Assert\NotBlank()
      */
     protected $email;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
@@ -103,7 +103,7 @@ class User implements AdvancedUserInterface
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
      */
 	protected $tumblr_vote;
-	
+
 	/**
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="user")
 	 **/
@@ -119,6 +119,16 @@ class User implements AdvancedUserInterface
      */
     protected $groups_invitations;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="UserFavoris", mappedBy="user")
+	 */
+	protected $favoris;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="ListeFavoris", mappedBy="user")
+	 */
+	protected $listes_favoris;
+
 	public function __construct()
     {
 		//valeurs par défaut
@@ -127,6 +137,8 @@ class User implements AdvancedUserInterface
         $this->nsfw_mode = 0;
 		$this->groups = new ArrayCollection();
 		$this->groups_invitations = new ArrayCollection();
+		$this->favoris = new ArrayCollection();
+		$this->listes_favoris = new ArrayCollection();
     }
 
     /**
@@ -447,7 +459,7 @@ class User implements AdvancedUserInterface
     public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
     {
         $this->videos_group[] = $videos_group;
-    
+
         return $this;
     }
 
@@ -464,7 +476,7 @@ class User implements AdvancedUserInterface
     /**
      * Get videos_group
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getVideosGroup()
     {
@@ -476,12 +488,12 @@ class User implements AdvancedUserInterface
     	$this->groups[] = $group;
     	return $this;
     }
-    
+
     public function getGroups()
     {
     	return $this->groups;
     }
-    
+
     public function setGroups($groups)
     {
     	$this->groups = $groups;
@@ -492,7 +504,7 @@ class User implements AdvancedUserInterface
     {
     	return $this->groups_invitations;
     }
-    
+
     public function setGroupsInvitations($groups_invitations)
     {
     	$this->groups_invitations = $groups_invitations;
@@ -524,7 +536,7 @@ class User implements AdvancedUserInterface
             break;
         }
     }
-    
+
 	/**
 	 * Récupère tous les rôles symfony de l'utilisateur en fonction de ses communautés
 	 */
@@ -533,8 +545,8 @@ class User implements AdvancedUserInterface
     	$roles = array('ROLE_USER');
     	return $roles;
     }
-    
-    
+
+
     public function getGroupsIds()
 	{
 		$groups_ids = array();
@@ -544,7 +556,7 @@ class User implements AdvancedUserInterface
 		}
 		return $groups_ids;
 	}
-	
+
 	public function isMemberFrom($id_group)
 	{
 		foreach($this->getGroups() as $group_user)
@@ -570,7 +582,7 @@ class User implements AdvancedUserInterface
             );
         }
     }
-    
+
 	/**
 	 * Renvoi si le compte est non-expiré
 	 */
@@ -578,7 +590,7 @@ class User implements AdvancedUserInterface
     {
     	return true;
     }
-    
+
 	/**
 	 * Renvoi si le compte est actif
 	 */
@@ -587,12 +599,12 @@ class User implements AdvancedUserInterface
 		if($this->actif == 1) return true;
     	else return false;
     }
-    
+
     public function isCredentialsNonExpired()
     {
     	return true;
     }
-    
+
     public function isAccountNonLocked()
     {
     	return true;
@@ -610,7 +622,7 @@ class User implements AdvancedUserInterface
     {
         return $this->login;
     }
- 
+
          public function serialize()
          {
                 return serialize($this->getUserName());
@@ -620,7 +632,7 @@ class User implements AdvancedUserInterface
          {
                 $this->username = unserialize($data);
          }
- 
+
 	/**
 	 * Renvoi le role de l'utilisateur
 	 */
@@ -628,7 +640,7 @@ class User implements AdvancedUserInterface
 	{
 		return 'User';
 	}
-	
+
 	public function getGravatar($s = 50)
 	{
 		return 'http://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->getEmail() ) ) ).'?s='.$s;
@@ -667,7 +679,7 @@ class User implements AdvancedUserInterface
         // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
         return 'avatars';
     }
-    
+
 	/**
 	 * Permet l'upload de l'avatar, et la suppression des caches de thumbnail
 	 */
@@ -690,7 +702,7 @@ class User implements AdvancedUserInterface
 
         // set the path property to the filename where you'ved saved the file
         $this->avatar = $file;
-    }    
+    }
 
 	//Génère un lastname utilisable via l'url
 	public function getLastnameUrl()
@@ -711,4 +723,13 @@ class User implements AdvancedUserInterface
         }
         return 0;
     }
+
+	public function getFavoris() {
+		return $this->favoris;
+	}
+
+	public function setFavoris($favoris) {
+		$this->favoris = $favoris;
+		return $this;
+	}
 }

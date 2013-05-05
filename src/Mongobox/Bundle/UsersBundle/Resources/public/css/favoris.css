@@ -1,0 +1,58 @@
+/*.content-block-bookmark { width: 95%; }*/
+
+.content-block-hidden-div-bookmark {
+	display:none;
+	position:absolute;
+	padding:5px;
+	margin:0.7% 0 0 0;
+	border: 1px solid lightgray;
+	background-color: #e6e6e6;
+
+	-webkit-border-radius: 0px;
+	-webkit-border-top-right-radius: 0;
+	-moz-border-radius: 0px;
+	-moz-border-radius-topright: 0;
+	border-radius: 0px;
+	border-top-right-radius: 0;
+}
+
+.info-fav {
+	padding-left: 30px;
+	border-left: 1px solid black;
+}
+
+.btn-actions-bookmark, .btn-actions-list-remove {
+	cursor: pointer;
+}
+.btn-actions-bookmark:hover {
+	background-color: #e6e6e6;
+	text-decoration: none;
+	color: #000000;
+}
+
+.btn-actions-bookmark.active { box-shadow: none; }
+
+.btn-actions-list-remove:hover {
+	background-color: lightgray;
+}
+
+.imgbox { text-align: center; }
+
+.un-favoris {
+	width: 20%;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+.FavorisTdIsOver {
+	box-shadow: 1px 1px 12px black;
+}
+
+#liste-favoris img { margin: 0 auto; }
+
+#liste-favoris > tbody > tr { height: 200px; }
+
+.actions-content {
+	text-align: center;
+}

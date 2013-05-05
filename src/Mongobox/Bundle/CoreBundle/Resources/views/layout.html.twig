@@ -13,6 +13,8 @@
     <link href="{{ asset('bundles/mongoboxjukebox/css/jukebox.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/mongoboxcore/css/fancymoves.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/mongoboxtumblr/css/tumblr.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/mongoboxcore/css/alertify/alertify.core.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/mongoboxcore/css/alertify/alertify.bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/mongoboxcore/css/datatables/jquery.dataTables.css') }}" rel="stylesheet">
     <style>
       body {
@@ -89,7 +91,9 @@
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
 	{% if app.user %}
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxcore/js/vendor/alertify.min.js') }}"></script>
     <script src="{{ asset('bundles/mongoboxjukebox/js/jukebox.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxusers/js/favoris.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxtumblr/js/tumblr.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxtumblr/js/addTumblr.js') }}"></script>
 	<script src="{{ asset('bundles/mongoboxjukebox/js/manageTags.js') }}" type="text/javascript"></script>
@@ -97,6 +101,7 @@
 		$(function()
 		{
 			addTumblr.init();
+			favorisManager.init();
 		});
 		videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
 		videoTags.init();
