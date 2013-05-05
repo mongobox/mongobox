@@ -129,11 +129,6 @@ LivePlayer = function()
 		return playlistId;
 	},
 
-	this.getCurrentVideoId = function()
-	{
-		return videoId;
-	},
-
 	this.seekNextVideo = function(params)
 	{
         $.ajax({
