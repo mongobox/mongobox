@@ -52,6 +52,19 @@ class VideoGroupRepository extends EntityRepository
 		$glts = array();
 		foreach($glt_s as $s) $glts[] = $s->getVideoTag();
 
+		//Ne pas prendre la playlist
+		$qb = $em->createQueryBuilder();
+		$qb->select('p')
+		->from('MongoboxJukeboxBundle:Playlist', 'p')
+		->where("p.group = :group")
+		->setParameters( array(
+				'group' => $group
+		));
+		$query = $qb->getQuery();
+		$p_u = $query->getResult();
+		$playlist = array();
+		foreach($p_u as $u) $playlist[] = $u->getVideoGroup();		
+
 		//Tag à ne pas remonter obligatoirement
 		$qb = $em->createQueryBuilder();
 		$qb->select('glt')
@@ -98,6 +111,12 @@ class VideoGroupRepository extends EntityRepository
 		->where("vg.group = :group")
 		->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")
 		->groupBy('vg.id');
+		
+		if(count($playlist) > 0)
+		{
+			$qb->andWhere("vg.id NOT IN (:playlist)");
+			$parameters['playlist'] = $playlist;
+		}
 
 		if(count($results) > 0)
 		{
