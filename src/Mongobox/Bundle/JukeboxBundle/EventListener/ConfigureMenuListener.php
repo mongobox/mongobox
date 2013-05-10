@@ -13,7 +13,7 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menu->addChild('Gestion des vidéos', array('route' => 'videos'))->moveToFirstPosition();
+        $menu->addChild('Liste des vidéos', array('route' => 'videos'))->moveToFirstPosition();
         $menu->addChild('Live', array('route' => 'live'))->moveToLastPosition();
     }
 
