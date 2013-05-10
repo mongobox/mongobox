@@ -2,8 +2,6 @@
 
 namespace Mongobox\Bundle\StatisticsBundle\Statistics;
 
-use Mongobox\Bundle\StatisticsBundle\Statistics\Tumblr;
-
 class Tumblr
 {
     /**
@@ -19,8 +17,8 @@ class Tumblr
         $usersTags          = $this->getUsersTags();
         $tumblrRepository   = $this->getTumblrRepository();
 
-        $timelineChart = new Tumblr\Timeline($tumblrRepository);
-        $usersRankingChart = new Tumblr\Users($tumblrRepository, $usersTags);
+        $timelineChart      = new Tumblr\Timeline($tumblrRepository);
+        $usersRankingChart  = new Tumblr\Users($tumblrRepository, $usersTags);
 
         return array(
             'timeline'      => $timelineChart->getSeries(),
