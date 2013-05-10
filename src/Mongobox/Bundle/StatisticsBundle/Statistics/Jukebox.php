@@ -21,10 +21,12 @@ class Jukebox
     {
         $repository = $this->documentManager->getRepository('MongoboxJukeboxBundle:Videos');
 
-        $timelineChart = new Jukebox\Timeline($repository);
+        $timelineChart  = new Jukebox\Timeline($repository);
+        $usersChart     = new Jukebox\Users($repository);
 
         return array(
-            'timeline' => $timelineChart->getSeries()
+            'timeline'      => $timelineChart->getSeries(),
+            'usersRanking'  => $usersChart->getSeries()
         );
     }
 }

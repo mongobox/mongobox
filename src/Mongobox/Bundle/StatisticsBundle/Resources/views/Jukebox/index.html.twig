@@ -17,5 +17,13 @@
                 {% include 'MongoboxStatisticsBundle:Jukebox:timeline.html.twig' with {'timeline': statistics.timeline} %}
             </div>
         {% endif %}
+
+        <hr />
+
+        {% if statistics.usersRanking != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Jukebox:users.html.twig' with {'usersRanking': statistics.usersRanking} %}
+            </div>
+        {% endif %}
     </div>
 {% endblock body %}
