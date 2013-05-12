@@ -25,5 +25,13 @@
                 {% include 'MongoboxStatisticsBundle:Jukebox:users.html.twig' with {'usersRanking': statistics.usersRanking} %}
             </div>
         {% endif %}
+		
+		 <hr />
+		
+        {% if statistics.usersAvgVoteRanking != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Jukebox:usersAvgVote.html.twig' with {'usersAvgVoteRanking': statistics.usersAvgVoteRanking} %}
+            </div>
+        {% endif %}
     </div>
 {% endblock body %}

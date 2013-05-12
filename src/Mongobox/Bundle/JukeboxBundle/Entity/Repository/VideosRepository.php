@@ -160,4 +160,39 @@ class VideosRepository extends EntityRepository
 
         return $query->getResult();
     }
+
+    /**
+     * Retrieve the ranking of the top 10 appreciated video contributor
+     *
+     * @param int $groupId
+     * @return array
+     */
+    public function getMaxAvgVotePerUser($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('u.firstname, u.lastname, AVG(vg.votes) AS avg_votes')
+            ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->where('vg.group = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $qb
+            ->innerJoin('vg.user', 'u')
+            ->groupBy('u.id')
+            ->orderBy('avg_votes', 'DESC')
+            ->setMaxResults(10)
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }
