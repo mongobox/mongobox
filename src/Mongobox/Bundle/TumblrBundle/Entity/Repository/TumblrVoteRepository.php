@@ -28,9 +28,16 @@ class TumblrVoteRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $q = $em
-                ->createQuery('SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id IN (:groupe) GROUP BY t.id_tumblr ORDER BY total DESC')
+                ->createQuery("
+					SELECT tv, SUM(tv.note) as total
+					FROM MongoboxTumblrBundle:TumblrVote tv WHERE tv.tumblr IN (
+					SELECT t.id_tumblr FROM MongoboxTumblrBundle:Tumblr t JOIN t.groups tg
+					WHERE tg.id IN (:group)
+					)
+					GROUP BY tv.tumblr
+					ORDER BY total DESC")
                 ->setParameters(array(
-                		'groupe' => $group
+                		'group' => $group
                 ))
                 ->setMaxResults($max)
                 ;
@@ -47,7 +54,15 @@ class TumblrVoteRepository extends EntityRepository
         $date = date('Y-m-d 00:00:00', strtotime('-'.$days.' day'));
         $em = $this->getEntityManager();
         $q = $em
-                ->createQuery("SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv LEFT JOIN t.groups tg WHERE tg.id IN (:group) AND t.date > '".$date."' GROUP BY t.id_tumblr ORDER BY total DESC")
+                ->createQuery("
+					SELECT tv, SUM(tv.note) as total
+					FROM MongoboxTumblrBundle:TumblrVote tv WHERE tv.tumblr IN (
+					SELECT t.id_tumblr FROM MongoboxTumblrBundle:Tumblr t JOIN t.groups tg
+					WHERE tg.id IN (:group)
+					AND t.date > '".$date."'
+					)
+					GROUP BY tv.tumblr
+					ORDER BY total DESC")
                 ->setParameters(array(
                 		'group' => $group
                 ))

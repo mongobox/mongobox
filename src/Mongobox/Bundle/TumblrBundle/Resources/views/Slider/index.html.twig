@@ -8,7 +8,7 @@
 	{% if top is defined and top is sameas(true) %}<h2>{{ slider_title[loop.index0] }}</h2>{% endif %}
 	<ul style="list-style:none;">
 	    {% for mongo in list_tumblr %}
-	    	{% if top is defined and top is sameas(true) %}{% set mongo = mongo.tumblr %}{% endif %}
+	    	{% if top is defined and top is sameas(true) %}{% set mongo = mongo[0].tumblr %}{% endif %}
 	    	{% include 'MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig' %}
 	    {% endfor %}
 	</ul>
