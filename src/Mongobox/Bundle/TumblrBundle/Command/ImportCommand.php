@@ -136,7 +136,7 @@ class ImportCommand extends ContainerAwareCommand
             // Retrieve remote image
             $imageUrl = $_item->getImage();
             if ($tmp = $this->getRemoteImage($imageUrl)) {
-                $localImageName = md5(uniqid(rand(), true));
+                $localImageName = $_item->getId();
                 $imageExtension = pathinfo($imageUrl, PATHINFO_EXTENSION);
 
                 $localImagePath = $imagePath . DIRECTORY_SEPARATOR . $localImageName . '.' . $imageExtension;
