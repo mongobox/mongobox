@@ -20,6 +20,8 @@ use Mongobox\Bundle\JukeboxBundle\Command\Monolog\Handler\CliHandler;
 
 class ImportCommand extends ContainerAwareCommand
 {
+    const TUMBLR_DIR = 'archives';
+
     protected $_baseUrl;
     protected $_debug;
     protected $_logger;
@@ -78,7 +80,7 @@ class ImportCommand extends ContainerAwareCommand
             . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'web');
 
         // Check tumblr base path
-        $tumblrPath = $basePath . DIRECTORY_SEPARATOR . 'tumblr';
+        $tumblrPath = $basePath . DIRECTORY_SEPARATOR . self::TUMBLR_DIR;
         if (!is_dir($tumblrPath)) {
             mkdir($tumblrPath);
         }
@@ -141,7 +143,7 @@ class ImportCommand extends ContainerAwareCommand
 
                 $localImagePath = $imagePath . DIRECTORY_SEPARATOR . $localImageName . '.' . $imageExtension;
                 if (file_put_contents($localImagePath, $tmp)) {
-                    $localImageUrl = $this->_baseUrl . '/tumblr/' . $postDate . '/' . $localImageName . '.' . $imageExtension;
+                    $localImageUrl = $this->_baseUrl . '/' . self::TUMBLR_DIR . '/' . $postDate . '/' . $localImageName . '.' . $imageExtension;
                     $_item->setLocalPath($localImageUrl);
 
                     $em->persist($_item);
