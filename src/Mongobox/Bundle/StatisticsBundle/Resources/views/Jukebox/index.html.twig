@@ -1,0 +1,37 @@
+{% extends "MongoboxCoreBundle:Wall:layout.html.twig" %}
+
+{% block title -%}- Jukebox Statistics{%- endblock title %}
+
+{% block body %}
+    <script src="{{ asset('bundles/mongoboxstatistics/js/vendor/highcharts.js') }}" type="text/javascript"></script>
+    <div class="marketing">
+        <h1>
+            <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" />
+        </h1>
+        <h2>Statistiques du Jukebox</h2>
+    </div>
+
+    <div class="hero-unit">
+        {% if statistics.timeline != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Jukebox:timeline.html.twig' with {'timeline': statistics.timeline} %}
+            </div>
+        {% endif %}
+
+        <hr />
+
+        {% if statistics.usersRanking != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Jukebox:users.html.twig' with {'usersRanking': statistics.usersRanking} %}
+            </div>
+        {% endif %}
+		
+		 <hr />
+		
+        {% if statistics.usersAvgVoteRanking != false %}
+            <div class="row" style="margin: 0;">
+                {% include 'MongoboxStatisticsBundle:Jukebox:usersAvgVote.html.twig' with {'usersAvgVoteRanking': statistics.usersAvgVoteRanking} %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock body %}

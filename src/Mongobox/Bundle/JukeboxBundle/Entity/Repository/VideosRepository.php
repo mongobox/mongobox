@@ -97,11 +97,11 @@ class VideosRepository extends EntityRepository
 	}
 
     /**
-     * Retrieves the total number of videos in the given group.
+     * Retrieve the total number of videos in the given group.
      * If no group is given, then retrieves the total number of videos in the application.
      *
-     * @param integer $groupId
-     * @return integer
+     * @param int $groupId
+     * @return int
      */
     public function getCount($groupId = null)
     {
@@ -124,5 +124,75 @@ class VideosRepository extends EntityRepository
         $query = $qb->getQuery();
 
         return $query->getSingleScalarResult();
+    }
+
+    /**
+     * Retrieve the ranking of the top 10 contributors
+     *
+     * @param int $groupId
+     * @return array
+     */
+    public function getMaxCountPerUser($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('u.firstname, u.lastname, COUNT(u.id) AS nb_videos')
+            ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->where('vg.group = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $qb
+            ->innerJoin('vg.user', 'u')
+            ->groupBy('u.id')
+            ->orderBy('nb_videos', 'DESC')
+            ->setMaxResults(10)
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
+     * Retrieve the ranking of the top 10 appreciated video contributor
+     *
+     * @param int $groupId
+     * @return array
+     */
+    public function getMaxAvgVotePerUser($groupId = null)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('u.firstname, u.lastname, AVG(vg.votes) AS avg_votes')
+            ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+        ;
+
+        if ($groupId !== null) {
+            $qb
+                ->where('vg.group = :group')
+                ->setParameter('group', $groupId)
+            ;
+        }
+
+        $qb
+            ->innerJoin('vg.user', 'u')
+            ->groupBy('u.id')
+            ->orderBy('avg_votes', 'DESC')
+            ->setMaxResults(10)
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
     }
 }
