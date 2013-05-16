@@ -16,6 +16,7 @@ var favorisManager = favorisManager || {};
 		this.observeRemoveVideoFromList();
 		this.observeRemoveBookmark();
 		this.observeShowListsAdd();
+		this.observeAddToPlaylist();
 		this.listenAutocompleteAddList();
 		this.observeAddBookmarkToList();
 		this.observeShowMoreFav();
@@ -154,7 +155,7 @@ var favorisManager = favorisManager || {};
 	{
 		$("body").delegate(".btn-remove-bookmark", "click", function(e)
 		{
-			event.preventDefault();
+			e.preventDefault();
 			var bouton_cliquer = $(this);
 			alertify.confirm("Etes vous sûr de vouloir supprimer la vidéo de vos favoris ?\nElle sera ainsi supprimée de toutes vos listes.", function (e)
 			{
@@ -191,7 +192,7 @@ var favorisManager = favorisManager || {};
 	{
 		$("body").delegate(".btn-lists-add", "click", function(e)
 		{
-			event.preventDefault();
+			e.preventDefault();
 			$(this).toggleClass('active');
 			var div_content = $(this).siblings('.content-add-bookmark-liste');
 			div_content
@@ -217,6 +218,39 @@ var favorisManager = favorisManager || {};
 				$(this).siblings('.hid-value-autocomplete').val(ui.item.value);
 				$(event.target).val(ui.item.label);
 				return false;
+			}
+		});
+	};
+
+	// Fonction pour supprimer une vidéo des favoris
+	favorisManager.observeAddToPlaylist = function()
+	{
+		$("body").delegate(".btn-add-to-playlist", "click", function(e)
+		{
+			e.preventDefault();
+			var bouton_cliquer = $(this);
+			if (e)
+			{
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					url: bouton_cliquer.attr('href'),
+					success: function(data)
+					{
+						if(data.success)
+						{
+							alertify.success(data.message);
+							$(bouton_cliquer).fadeOut(300, function()
+							{
+								$(bouton_cliquer).remove();
+							});
+						}
+						else
+						{
+							alertify.error(data.message);
+						}
+					}
+				});
 			}
 		});
 	};

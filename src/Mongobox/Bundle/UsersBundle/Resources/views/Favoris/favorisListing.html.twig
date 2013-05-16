@@ -74,5 +74,6 @@
 			</table>
 		</div>
 		<a href="{{ path('remove_video_bookmark', {'id_video': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris"><i class="icon-remove"></i></a>
+		<a href="{{ path('videos_add_to_playlist', {'id': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-add-to-playlist" title="Ajouter à la playlist"><i class="icon-arrow-up"></i></a>
 	</div>
 </td>
