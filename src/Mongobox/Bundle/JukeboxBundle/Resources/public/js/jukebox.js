@@ -219,5 +219,5 @@ $(document).ready(function()
 	});
 });
 
-var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
+var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 15000);
 var refreshLoadVideoEnCoursFail = 0;
