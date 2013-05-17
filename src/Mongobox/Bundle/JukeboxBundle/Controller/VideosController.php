@@ -208,6 +208,32 @@ class VideosController extends Controller
     /**
      * Add the video to the playlist entity.
      *
+     * @Route("/{id}/add_to_playlist_vg", name="videos_add_to_playlist_vg")
+     * @ParamConverter("video", class="MongoboxJukeboxBundle:VideoGroup")
+     */
+    public function addToPlaylistVGAction(Request $request, VideoGroup $video)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$session = $request->getSession();
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+        $playlist_add = new Playlist();
+        $playlist_add->setVideoGroup($video);
+		$playlist_add->setGroup($group);
+        $playlist_add->setRandom(0);
+		$playlist_add->setCurrent(0);
+        $playlist_add->setDate(new \Datetime());
+        $em->persist($playlist_add);
+        $em->flush();
+
+		$this->get('session')->setFlash('success', 'Vidéo ajoutée à la playlist');
+
+        return $this->redirect($this->generateUrl('videos'));
+    }
+
+    /**
+     * Add the video to the playlist entity.
+     *
      * @Route("/{id}/add_to_playlist", name="videos_add_to_playlist")
      * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos")
      */
