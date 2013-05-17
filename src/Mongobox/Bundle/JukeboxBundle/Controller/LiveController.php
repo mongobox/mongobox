@@ -153,7 +153,9 @@ class LiveController extends Controller
         $playerVars = array(
             'start'     => $playerStart,
             'autoplay'  => 1,
-            'volume'    => $currentPlayed->getVideoGroup()->getVolume()
+            'volume'    => $currentPlayed->getVideoGroup()->getVolume(),
+			'iv_load_policy' => 3,
+			'rel' => 0
         );
 
         if ($playerMode !== 'mobile')  {
