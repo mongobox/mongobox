@@ -19,12 +19,6 @@
 				<a href="{{path('vote', {'sens' : 0, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote">/</a> <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
 				<span class="navbar-text">- Vote : <span id="nb_vote_video_en_cours">{{somme}}</span></span>
 			</div>
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			{% if alreadyFavorite is not defined or (alreadyFavorite is defined and alreadyFavorite is sameas(false)) %}
-			<div class="fav-div">
-				<a href="{{ path('ajax_new_video_favorite', {'id_video': video_en_cours.videoGroup.video.id}) }}" id="btn-favoris-add" title="Ajouter la chanson aux favoris"><i class="icon-bookmark icon-white"></i><span> Fav</span></a>
-			</div>
-			{% endif %}
 		</div>
 
 		<div id="container_progress-bar">

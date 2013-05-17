@@ -4,7 +4,7 @@ var favorisManager = favorisManager || {};
 {
 	favorisManager.init = function()
 	{
-		this.boutonAddToFavoris = $('#btn-favoris-add');
+		this.boutonAddToFavoris = $('.btn-favoris-add');
 		this.boutonShowMoreFav = $('#bouton-afficher-plus-favoris');
 		this.pageNumberHidden = $('#pageHidden');
 		this.listeFavoris = $('#liste-favoris');
@@ -25,7 +25,7 @@ var favorisManager = favorisManager || {};
 	// Fonction pour gérer l'ajout de la vidéo en favoris
 	favorisManager.observeFavorisAdd = function()
 	{
-		$("body").delegate("#btn-favoris-add", "click", function(e)
+		$("body").delegate(".btn-favoris-add", "click", function(e)
 		{
 			e.preventDefault();
 

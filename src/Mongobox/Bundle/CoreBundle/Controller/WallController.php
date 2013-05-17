@@ -263,14 +263,12 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
-		$alreadyFavorite = false;
 		if(!is_null($session->get('id_group')))
 		{
 			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
 			if(is_object($video_en_cours))
 			{
 				$somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-				$alreadyFavorite = $em->getRepository('MongoboxUsersBundle:UserFavoris')->checkUserFavorite($video_en_cours->getVideoGroup()->getVideo()->getId(), $this->getUser());
 			}
 			else $somme = 0;
 		}
@@ -287,8 +285,7 @@ class WallController extends Controller
             array(
 				'video_en_cours' => $video_en_cours,
 				'date_actuelle' => new \Datetime(),
-				'somme' => $somme,
-				'alreadyFavorite' => $alreadyFavorite
+				'somme' => $somme
 	        ));
 			$json = array('render' => $render->getContent());
 	        return new Response(json_encode($json));
@@ -296,8 +293,7 @@ class WallController extends Controller
 		else return array(
 			'video_en_cours' => $video_en_cours,
 			'date_actuelle' => new \Datetime(),
-			'somme' => $somme,
-			'alreadyFavorite' => $alreadyFavorite
+			'somme' => $somme
 		);
     }
 
