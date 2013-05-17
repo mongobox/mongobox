@@ -16,3 +16,13 @@ User
 {
 	box-shadow: 1px 1px 12px black;
 }
+
+.btn-link
+{
+	padding : 1px;
+}
+
+.btn-link:hover {
+	box-shadow: 1px 1px 5px black;
+	background-color: #e0e0e0;
+}
