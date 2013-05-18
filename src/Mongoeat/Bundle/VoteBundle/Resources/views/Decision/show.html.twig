@@ -1,0 +1,34 @@
+
+{% block body -%}
+    <h1>Choix du midi du {{ entity.date|date('d/m/Y') }}</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Date</th>
+                <td>{{ entity.date|date('d/m/Y') }}</td>
+            </tr>
+            <tr>
+                <th>Nombre de vote</th>
+                <td>{{ entity.votes|length }}/{{ entity.getNombrePersonne }}</td>
+            </tr>
+            <tr>
+                <th>Score restaurant</th>
+                <td><ol>
+                        {% for resto, nb in entity.getRestaurentScore %}
+                            <li>{{ resto }} : {% transchoice nb %}{0} pas de vote|{1} un vote|]1,INF] %nb% votes{% endtranschoice %}</li>
+                        {% endfor %}
+                </ol></td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('decision') }}">
+            Retour à la liste
+        </a>
+    </li>
+
+</ul>
+{% endblock %}

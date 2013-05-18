@@ -1,0 +1,55 @@
+{% block body -%}
+    <h1>Restaurant</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ entity.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Code postal</th>
+                <td>{{ entity.code }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ entity.city }}</td>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{{ entity.lat }}</td>
+            </tr>
+            <tr>
+                <th>Longitude</th>
+                <td>{{ entity.lng }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('restaurant') }}">
+            Retour à la liste
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('restaurant_edit', { 'id': entity.id }) }}">
+            Modifier
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('restaurant_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Supprimer</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

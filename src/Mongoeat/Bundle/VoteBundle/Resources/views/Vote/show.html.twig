@@ -1,0 +1,35 @@
+
+{% block body -%}
+    <h1>Vote</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Restaurant</th>
+                <td><a href="{{ path('restaurant_show',{'id':entity.restaurant.id}) }}">{{ entity.restaurant.name }}</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+
+    <li>
+        <a href="{{ path('decision', { 'id': entity.decision.id }) }}">
+            Revenir à la décision
+        </a>
+    </li>
+{% if entity.decision.date|date('Ymd') == "now"|date('Ymd')  %}
+    <li>
+        <a href="{{ path('vote_edit', { 'id': entity.id }) }}">
+            Modifier
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('vote_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Supprimer</button>
+        </form>
+    </li>
+{% endif %}
+</ul>
+{% endblock %}

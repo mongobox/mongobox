@@ -115,6 +115,11 @@ class User implements AdvancedUserInterface
     protected $groups;
 
     /**
+     * @ORM\OneToMany(targetEntity="Mongoeat\Bundle\VoteBundle\Entity\Vote", mappedBy="user", cascade={"persist"})
+     */
+    private $votes;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users_invitations", cascade={"persist"})
      */
     protected $groups_invitations;
@@ -699,5 +704,117 @@ class User implements AdvancedUserInterface
             if($tumblrVote->getTumblr()->getId() === $id_tumblr) return floatval($tumblrVote->getNote());
         }
         return 0;
+    }
+
+    /**
+     * Add tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     * @return User
+     */
+    public function addTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote[] = $tumblrVote;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     */
+    public function removeTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote->removeElement($tumblrVote);
+    }
+
+    /**
+     * Get tumblr_vote
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTumblrVote()
+    {
+        return $this->tumblr_vote;
+    }
+
+    /**
+     * Set group
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $group
+     * @return User
+     */
+    public function setGroup(\Mongobox\Bundle\GroupBundle\Entity\Group $group = null)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Mongobox\Bundle\GroupBundle\Entity\Group 
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Add votes
+     *
+     * @param \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
+     * @return User
+     */
+    public function addVote(\Mongoeat\Bundle\VoteBundle\Entity\Vote $votes)
+    {
+        $this->votes[] = $votes;
+    
+        return $this;
+    }
+
+    /**
+     * Remove votes
+     *
+     * @param \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
+     */
+    public function removeVote(\Mongoeat\Bundle\VoteBundle\Entity\Vote $votes)
+    {
+        $this->votes->removeElement($votes);
+    }
+
+    /**
+     * Get votes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
+     * Add groups_invitations
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations
+     * @return User
+     */
+    public function addGroupsInvitation(\Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations)
+    {
+        $this->groups_invitations[] = $groupsInvitations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove groups_invitations
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations
+     */
+    public function removeGroupsInvitation(\Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations)
+    {
+        $this->groups_invitations->removeElement($groupsInvitations);
     }
 }

@@ -1,0 +1,84 @@
+
+{% block body -%}
+    <h1>Ou manger ce midi ?</h1>
+    {% if not hasVoted %}
+        <p><a href="{{ url('vote_new',{'id':entity.id}) }}">Voter pour un restaurant</a></p>
+    {% endif %}
+    <h2>Vote pour ce midi</h2>
+    <table class="records_list">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Nombre vote</th>
+            <th>Resto #1</th>
+            <th>Resto #2</th>
+            <th>Resto #3</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="{{ path('decision_show', { 'id': entity.id }) }}">{% if entity.date %}{{ entity.date|date('d/m/Y') }}{% endif %}</a></td>
+                <td>{{ entity.votes|length }}/{{ entity.getNombrePersonne }}</td>
+                <td>{{ entity.getRestaurentTop(1) }}</td>
+                <td>{{ entity.getRestaurentTop(2) }}</td>
+                <td>{{ entity.getRestaurentTop(3) }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('vote_new',{'id':entity.id}) }}">Voir/Modifier son vote</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Restaurants</h2>
+    <ul>
+        <li><a href="{{ path('restaurant') }}">Voir les restaurants</a></li>
+        <li><a href="{{ path('restaurant_new') }}">Ajouter un nouveaux resto</a></li>
+        <li>
+            <a href="{{ path('restaurant_find') }}">
+                Ajouter via Foursquare des restaurants de {{ entity.group.city }}.
+            </a>
+        </li>
+    </ul>
+    <h2>Historique</h2>
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Nombre vote</th>
+                <th>Resto #1</th>
+                <th>Resto #2</th>
+                <th>Resto #3</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('decision_show', { 'id': entity.id }) }}">{% if entity.date %}{{ entity.date|date('d/m/Y') }}{% endif %}</a></td>
+                <td>{{ entity.votes|length }}/{{ entity.getNombrePersonne }}</td>
+                <td>{{ entity.getRestaurentTop(1) }}</td>
+                <td>{{ entity.getRestaurentTop(2) }}</td>
+                <td>{{ entity.getRestaurentTop(3) }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('vote_new',{'id':entity.id}) }}">Voir son vote</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

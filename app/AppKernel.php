@@ -32,6 +32,9 @@ class AppKernel extends Kernel
 			new Mongobox\Bundle\GroupBundle\MongoboxGroupBundle(),
 			new Mongobox\Bundle\StatisticsBundle\MongoboxStatisticsBundle(),
             new Mongobox\Bundle\CoreBundle\MongoboxCoreBundle(),
+            new Mongoeat\Bundle\FoursquareBundle\MongoeatFoursquareBundle(),
+            new Mongoeat\Bundle\RestaurantBundle\MongoeatRestaurantBundle(),
+            new Mongoeat\Bundle\VoteBundle\MongoeatVoteBundle(),
 	);
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

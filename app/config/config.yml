@@ -85,3 +85,10 @@ avalanche_imagine:
         avatar_mini:
             type:    thumbnail
             options: { size: [20, 20], mode: inbox }
+
+mongoeat_foursquare:
+    authentification:
+        id:      %foursquare_id%
+        secret:  %foursquare_secret%
+        url_auth:  "https://foursquare.com/oauth2"
+        url_api:  "https://api.foursquare.com/v2"
