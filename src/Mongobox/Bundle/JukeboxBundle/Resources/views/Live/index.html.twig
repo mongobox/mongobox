@@ -57,7 +57,28 @@
 
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-			{% endif %}
+            {% endif %}
+
+            <script type="text/javascript">
+                function onPlayerStateChange(event)
+                {
+                    if (event.data === -1) {
+                        livePlayer.synchronizePlayerVolume();
+                    }
+
+                    {% if player_mode == "admin" %}
+                        var params = new Object();
+                        params.status = event.data;
+
+                        if (event.data != 0) {
+                            params.currentTime = player.getCurrentTime();
+                            livePlayer.sendParameters(params);
+                        } else {
+                            livePlayer.seekNextVideo(params);
+                        }
+                    {% endif %}
+                }
+            </script>
 
 			<script type="text/javascript">
 	          	var tag = document.createElement('script');

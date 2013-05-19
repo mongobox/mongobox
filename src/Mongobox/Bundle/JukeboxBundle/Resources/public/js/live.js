@@ -1,24 +1,3 @@
-function onPlayerStateChange(event)
-{
-    if (event.data === -1) {
-        livePlayer.synchronizePlayerVolume();
-    }
-
-    if (playerMode != 'admin') {
-        return this;
-    }
-
-	var params = new Object();
-	params.status = event.data;
-
-	if (event.data != 0) {
-		params.currentTime = player.getCurrentTime();
-		livePlayer.sendParameters(params);
-	} else {
-		livePlayer.seekNextVideo(params);
-	}
-}
-
 var livePlayer;
 var connection;
 var playlistId;
@@ -93,10 +72,6 @@ LivePlayer = function()
             this.synchronizePlayerVolume();
         }
 
-		if (playerMode == 'admin') {
-            return this;
-        }
-
         switch(params.status) {
             case 1:
                 player.seekTo(params.currentTime);
@@ -129,27 +104,6 @@ LivePlayer = function()
 		return playlistId;
 	},
 
-	this.seekNextVideo = function(params)
-	{
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: nextVideoUrl,
-            data: { 'volume' : player.getVolume() }
-        }).done(function(data) {
-            player.loadVideoById({
-                videoId: data.videoId
-            });
-
-            params.playlistId = data.playlistId;
-            params.videoId = data.videoId;
-
-            this.sendParameters(params);
-
-            this.initialize(data.playlistId);
-        }.bind(this));
-	},
-
 	this.sendParameters = function(params)
 	{
 		json = JSON.stringify(params);
@@ -171,13 +125,6 @@ LivePlayer = function()
 		$('#up-score').text('(' + scores.upVotes + ')');
 		$('#down-score').text('(' + scores.downVotes + ')');
 		$('#video-score').text('Score : ' + scores.votesRatio);
-
-		if (scores.votesRatio <= -2 && playerMode == 'admin') {
-			var params = new Object();
-			params.status = 0;
-
-			livePlayer.seekNextVideo(params);
-		}
 	},
 
 	this.playlistScoresUpdate = function(data)
