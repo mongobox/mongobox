@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\UsersBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,7 @@ class FavorisController extends Controller
 			$result['already'] = false;
 		}
 
-		return new Response(json_encode($result));
+		return new JsonResponse($result);
 	}
 
 	/**
@@ -100,8 +101,8 @@ class FavorisController extends Controller
 			)));
 		} else
 		{
-			$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
-			$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+			$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
+			$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
 		}
 
 		return array(
@@ -130,7 +131,7 @@ class FavorisController extends Controller
 			"fav" => $id_video
 		);
 
-		return new Response(json_encode($retour));
+		return new JsonResponse($retour);
 	}
 
 	/**
@@ -153,19 +154,19 @@ class FavorisController extends Controller
 			$em->remove($fav);
 			$em->flush();
 
-			$retour = array(
+			$json = array(
 				"success" => true,
 				"message" => "Vidéo supprimée de la liste avec succès"
 			);
 		} else
 		{
-			$retour = array(
+			$json = array(
 				"success" => false,
 				"message" => "Echec lors de la suppression de la vidéo"
 			);
 		}
 
-		return new Response(json_encode($retour));
+		return new JsonResponse($json);
 	}
 
 	/**
@@ -178,12 +179,15 @@ class FavorisController extends Controller
 		$manager = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
 
-		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
-		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
+		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
+
+		$listes = $user->getListesFavoris();
 
 		return array(
 			'nombre_favoris' => $nombre_favoris,
-			'nombre_listes' => $nombre_listes
+			'nombre_listes' => $nombre_listes,
+			'listes' => $listes
 		);
 	}
 
@@ -207,7 +211,7 @@ class FavorisController extends Controller
 			);
 		}
 
-		return new Response(json_encode($json));
+		return new JsonResponse($json);
 	}
 
 	/**
@@ -254,11 +258,20 @@ class FavorisController extends Controller
 			$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
 		}
 
-		return new Response(json_encode(array(
+		return new JsonResponse(array(
 			"message" => $message,
 			"result" => $result,
 			"html" => $html
-		)));
+		));
+	}
+
+	/**
+	 * Fonction pour créer une nouvelle liste en ajax
+	 * @Route("/ajax/create/list", name="add_new_list")
+	 */
+	public function createNewListAction()
+	{
+
 	}
 }
 

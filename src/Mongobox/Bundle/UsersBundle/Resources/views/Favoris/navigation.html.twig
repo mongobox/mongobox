@@ -5,4 +5,24 @@
 	<li {% if app.request.get('_route') == 'user_voir_listes' %}class="active"{% endif %}>
 		<a href="{{ path('user_voir_listes') }}" title="Voir vos listes">Vos listes ({{ nombre_listes }})</a>
 	</li>
+	<li class="pull-right">
+		<a href="#modal_add_list" title="Créer une liste" class="btn" data-toggle="modal">Créer une liste</a>
+	</li>
+
+	<div class="modal hide fade" id="modal_add_list">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Création d'une liste</h3>
+		</div>
+		<div class="modal-body">
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-pencil"></i></span>
+				<input class="span2" id="add-list-name" type="text" placeholder="Le titre de votre liste">
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
+			<a id="btn-submit-list" data-route="{{ app.request.attributes.get('_route') }}" href="{{ path('add_new_list') }}" class="btn btn-primary" data-loading-text="<img src='{{ asset('bundles/mongoboxcore/img/ajax-loader.gif') }}' alt='Chargement' />">Créer la liste</a>
+		</div>
+	</div>
 </ul>
