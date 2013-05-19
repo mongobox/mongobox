@@ -72,7 +72,7 @@ var favorisManager = favorisManager || {};
 			{
 				$(this).addClass('FavorisTdIsOver');
 				$(this).find('.actions-content').show();
-			}, function(e)
+			}, function()
 			{
 				if( $('.ui-autocomplete:hover').length > 0 )
 					return false;
@@ -100,16 +100,6 @@ var favorisManager = favorisManager || {};
 				$(this).siblings('.btn-lists-add').removeClass('active');
 			}
 		});
-	};
-
-	// Fonction pour repositionner la div qui apparait en dessous du bouton
-	favorisManager.repositionnerDiv = function(div_content, class_bouton, class_div_to_move)
-	{
-		var bouton_div = div_content.find('.'+class_bouton);
-		var div_to_move = div_content.find('.'+class_div_to_move);
-		div_to_move
-			.css("top", bouton_div.offset().top + bouton_div.height())
-		;
 	};
 
 	// Fonction pour supprimer une vidéo d'une liste de favoris
@@ -260,7 +250,7 @@ var favorisManager = favorisManager || {};
 	{
 		$("body").delegate(".btn-add-bookmark-to-list", "click", function(e)
 		{
-			event.preventDefault();
+			e.preventDefault();
 			var bouton = $(this);
 			var div_parent = $(this).parents('.content-add-bookmark-liste:first');
 			var id_list = div_parent.find('.hid-value-autocomplete').val();
