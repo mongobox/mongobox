@@ -12,10 +12,14 @@ class GroupType extends AbstractType
         $builder
             ->add('title', 'text', array(
             	'label' => 'Nom',
-            	'attr' => array('size' => 15, 'placeholder' => 'Nom')
+            	'attr'  => array('size' => 15, 'placeholder' => 'Nom')
             ))
             ->add('private', 'checkbox', array(
             	'label' => 'Privé'
+            ))
+            ->add('liveMaxDislikes', 'integer', array(
+                'label' => 'Nombre maximum de votes négatifs sur une vidéo',
+                'attr'  => array('min' => 1)
             ))
         ;
 	}
