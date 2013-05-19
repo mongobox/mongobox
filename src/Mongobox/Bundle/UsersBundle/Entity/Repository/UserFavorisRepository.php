@@ -167,9 +167,9 @@ class UserFavorisRepository extends EntityRepository
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
 		$qb
-			->select('COUNT(DISTINCT uf.liste )')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
-			->where('uf.user = :user')
+			->select('COUNT(DISTINCT l.id )')
+			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->where('l.user = :user')
 			->setParameters(array(
 				"user" => $user
 			))
