@@ -48,3 +48,5 @@
 #liste-favoris img { margin: 0 auto; }
 
 #liste-favoris > tbody > tr { height: 200px; }
+
+.alertify-logs { top: 50px; }
