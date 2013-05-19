@@ -72,10 +72,11 @@ var favorisManager = favorisManager || {};
 			{
 				$(this).addClass('FavorisTdIsOver');
 				$(this).find('.actions-content').show();
-			}, function()
+			}, function(event)
 			{
-				if( $('.ui-autocomplete:hover').length > 0 )
+				if( $(event.target).hasClass('ui-autocomplete-input') )
 					return false;
+				$('.ui-autocomplete').css('display', 'none');
 				$(this).removeClass('FavorisTdIsOver');
 				$(this).find('.actions-content').hide();
 			}
