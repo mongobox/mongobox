@@ -1,25 +1,28 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
 
+{% form_theme edit_form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 {% block body -%}
+    <p style="float: right;">
+        <a class="btn" href="{{ path('restaurant') }}">
+            <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à la liste
+        </a>
+    </p>
     <h1>Modification du restaurant {{ entity.name }}</h1>
 
-    <form action="{{ path('restaurant_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    <form class="form-horizontal" action="{{ path('restaurant_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
         {{ form_widget(edit_form) }}
-        <p>
-            <button type="submit">Modifier</button>
-        </p>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Modifier</button>
+            </div>
+        </div>
     </form>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('restaurant') }}">
-            Retour à la liste
-        </a>
-    </li>
-    <li>
+
+    <p>
         <form action="{{ path('restaurant_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Supprimer</button>
+            <button class="btn btn-danger" type="submit">Supprimer</button>
         </form>
-    </li>
-</ul>
+    </p>
 {% endblock %}

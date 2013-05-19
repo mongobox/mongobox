@@ -1,12 +1,25 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
+
+{% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% block body -%}
     <h1>Voter pour un resto</h1>
 
-    <form action="{{ path('vote_create',{'id':entity.decision.id}) }}" method="post" {{ form_enctype(form) }}>
+    <form class="form-horizontal" action="{{ path('vote_create',{'id':entity.decision.id}) }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-        <p>
-            <button type="submit">Create</button>
-        </p>
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Voter</button>
+            </div>
+        </div>
     </form>
 
+    <p>
+        <a class="btn btn-primary" href="{{ path('decision') }}">
+            <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à Mongoeat
+        </a>
+    </p>
+
 {% endblock %}
+

@@ -4,6 +4,7 @@ namespace Mongoeat\Bundle\RestaurantBundle\Controller;
 
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -31,10 +32,10 @@ class RestaurantController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MongoeatRestaurantBundle:Restaurant')->findAll();
+        $entities = $em->getRepository('MongoeatRestaurantBundle:Restaurant')->findSortVotes();
 
         return array(
-            'entities' => $entities,
+            'entities' => $entities->getQuery()->getResult(),
 
         );
     }
@@ -127,6 +128,26 @@ class RestaurantController extends Controller
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         );
+    }
+
+
+    /**
+     * Finds and displays a Restaurant entity.
+     *
+     * @Route("/json/{id}", name="restaurant_show_ajax")
+     * @Method("GET")
+     */
+    public function showAjaxAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('MongoeatRestaurantBundle:Restaurant')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Restaurant entity.');
+        }
+
+        return new JsonResponse($entity->toArray());
     }
 
     /**

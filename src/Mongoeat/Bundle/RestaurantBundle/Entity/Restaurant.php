@@ -76,6 +76,18 @@ class Restaurant
      */
     private $votes;
 
+    public function toArray(){
+        return array(
+            'id'=>$this->id,
+            'name'=>$this->name,
+            'phone'=>$this->phone,
+            'adresse'=>$this->adresse,
+            'code'=>$this->code,
+            'city'=>$this->city,
+            'lat'=>$this->lat,
+            'lng'=>$this->lng
+        );
+    }
     /**
      * Get id
      *

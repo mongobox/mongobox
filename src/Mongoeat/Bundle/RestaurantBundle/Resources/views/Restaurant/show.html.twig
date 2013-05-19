@@ -1,7 +1,9 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
+
 {% block body -%}
     <h1>Restaurant</h1>
 
-    <table class="record_properties">
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <th>Name</th>
@@ -34,22 +36,19 @@
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('restaurant') }}">
-            Retour à la liste
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('restaurant_edit', { 'id': entity.id }) }}">
-            Modifier
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('restaurant_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Supprimer</button>
-        </form>
-    </li>
-</ul>
+<p>
+    <a class="btn" href="{{ path('restaurant') }}">
+        <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à la liste
+    </a>
+</p>
+<p>
+    <a class="btn btn-info" href="{{ path('restaurant_edit', { 'id': entity.id }) }}">
+        Modifier
+    </a>
+
+</p>
+<form action="{{ path('restaurant_delete', { 'id': entity.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+    <button class="btn btn-danger" type="submit">Supprimer</button>
+</form>
 {% endblock %}

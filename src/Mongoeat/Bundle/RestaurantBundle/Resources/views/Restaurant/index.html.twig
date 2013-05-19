@@ -1,17 +1,21 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
 
 {% block body -%}
+    <p style="float: right">
+        <a class="btn btn-success" href="{{ path('restaurant_new') }}">
+            Ajouter un nouveau restaurant
+        </a>
+    </p>
     <h1>Liste des restaurants</h1>
 
-    <table class="records_list">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Libelle</th>
                 <th>Téléphone</th>
                 <th>Adresse</th>
-                <th>Code Postal</th>
                 <th>Ville</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
+                <th>Popularité</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,10 +25,8 @@
                 <td><a href="{{ path('restaurant_show', { 'id': entity.id }) }}">{{ entity.name }}</a></td>
                 <td>{{ entity.phone }}</td>
                 <td>{{ entity.adresse }}</td>
-                <td>{{ entity.code }}</td>
-                <td>{{ entity.city }}</td>
-                <td>{{ entity.lat }}</td>
-                <td>{{ entity.lng }}</td>
+                <td>{{ entity.code }} {{ entity.city }}</td>
+                <td>{{ entity.votes|length }}</td>
                 <td>
                 <ul>
                     <li>
@@ -39,12 +41,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('restaurant_new') }}">
-                Ajouter un nouveau restaurant
-            </a>
-        </li>
-    </ul>
     {% endblock %}

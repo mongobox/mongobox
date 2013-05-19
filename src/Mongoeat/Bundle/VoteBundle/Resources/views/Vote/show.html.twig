@@ -1,8 +1,9 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
 
 {% block body -%}
     <h1>Vote</h1>
 
-    <table class="record_properties">
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <th>Restaurant</th>
@@ -13,23 +14,23 @@
 
         <ul class="record_actions">
 
-    <li>
-        <a href="{{ path('decision', { 'id': entity.decision.id }) }}">
-            Revenir à la décision
+
+    <p>
+        <a class="btn" href="{{ path('decision') }}">
+            <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à Mongoeat
         </a>
-    </li>
+    </p>
 {% if entity.decision.date|date('Ymd') == "now"|date('Ymd')  %}
-    <li>
-        <a href="{{ path('vote_edit', { 'id': entity.id }) }}">
+    <p>
+        <a class="btn btn-info" href="{{ path('vote_edit', { 'id': entity.id }) }}">
             Modifier
         </a>
-    </li>
-    <li>
+
+    </p>
         <form action="{{ path('vote_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Supprimer</button>
+            <button class="btn btn-danger" type="submit">Supprimer</button>
         </form>
-    </li>
 {% endif %}
 </ul>
 {% endblock %}

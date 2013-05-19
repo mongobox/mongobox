@@ -6,14 +6,12 @@
 
 
     <parameters>
-        <parameter key="mongoeat_restaurant.find_command.class">Mongoeat\Bundle\RestaurantBundle\Command\FindCommand</parameter>
+        <parameter key="mongoeat_restaurant.configure_menu_listener.class">Mongoeat\Bundle\RestaurantBundle\EventListener\ConfigureMenuListener</parameter>
     </parameters>
 
     <services>
-        <service id="mongoeat_restaurant.find_command" class="%mongoeat_restaurant.find_command.class%">
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
+        <service id="mongoeat_restaurant.configure_menu_listener" class="%mongoeat_restaurant.configure_menu_listener.class%">
+            <tag name="kernel.event_listener" event="mongobox_core.eat_menu_configure" method="onEatMenuConfigure" />
         </service>
     </services>
 

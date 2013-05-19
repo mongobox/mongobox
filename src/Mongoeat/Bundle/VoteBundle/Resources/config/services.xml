@@ -4,17 +4,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="mongoeat_vote.example.class">Mongoeat\Bundle\VoteBundle\Example</parameter>
+        <parameter key="mongoeat_vote.configure_menu_listener.class">Mongoeat\Bundle\VoteBundle\EventListener\ConfigureMenuListener</parameter>
     </parameters>
 
     <services>
-        <service id="mongoeat_vote.example" class="%mongoeat_vote.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="mongoeat_vote.configure_menu_listener" class="%mongoeat_vote.configure_menu_listener.class%">
+            <tag name="kernel.event_listener" event="mongobox_core.eat_menu_configure" method="onEatMenuConfigure" />
         </service>
     </services>
-    -->
 </container>

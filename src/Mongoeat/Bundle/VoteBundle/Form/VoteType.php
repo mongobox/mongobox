@@ -3,6 +3,7 @@
 namespace Mongoeat\Bundle\VoteBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Mongoeat\Bundle\RestaurantBundle\Entity\RestaurantRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -22,10 +23,8 @@ class VoteType extends AbstractType
         $builder
             ->add('restaurant','entity',array(
                 'class' => 'MongoeatRestaurantBundle:Restaurant',
-                'query_builder' => function(EntityRepository $er) use ($city) {
-                    return $er->createQueryBuilder('b')
-                        ->where('b.city = :city')
-                        ->setParameter('city',$city);
+                'query_builder' => function(RestaurantRepository $er) use ($city) {
+                    return $er->findSortVotes($city);
                 },
                 'multiple'	=> false,
                 'expanded'	=> true,

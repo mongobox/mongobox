@@ -1,8 +1,9 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
 
 {% block body -%}
     <h1>Choix du midi du {{ entity.date|date('d/m/Y') }}</h1>
 
-    <table class="record_properties">
+    <table class="table table-bordered">
         <tbody>
             <tr>
                 <th>Date</th>
@@ -23,12 +24,9 @@
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('decision') }}">
-            Retour à la liste
+    <p>
+        <a class="btn" href="{{ path('decision') }}">
+            <i class="icon-repeat" style="margin-right: 5px"></i>Retour à la liste
         </a>
-    </li>
-
-</ul>
+    </p>
 {% endblock %}
