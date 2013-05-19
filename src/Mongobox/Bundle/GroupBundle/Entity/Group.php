@@ -27,11 +27,18 @@ class Group
      * @Assert\NotBlank()
      */
     protected $title;
-    
+
     /**
      * @ORM\Column(type="boolean")
      */
     protected $private;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="live_max_dislikes", type="integer", nullable=true)
+     */
+    protected $liveMaxDislikes;
 
     /**
      * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
@@ -78,13 +85,15 @@ class Group
      */
     protected $users_invitations;
 
-	public function __construct()
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-		//valeurs par défaut
-		$this->private = true;
-        $this->users = new ArrayCollection();
-        $this->users_invitations = new ArrayCollection();
-		$this->tumblrs = new ArrayCollection();
+		$this->private              = true;
+        $this->users                = new ArrayCollection();
+        $this->users_invitations    = new ArrayCollection();
+		$this->tumblrs              = new ArrayCollection();
     }
 
     /**
@@ -156,28 +165,39 @@ class Group
         return $this->private;
     }
 
+    public function getLiveMaxDislikes()
+    {
+        return $this->liveMaxDislikes;
+    }
+
+    public function setLiveMaxDislikes($liveMaxDislikes)
+    {
+        $this->liveMaxDislikes = $liveMaxDislikes;
+        return $this;
+    }
+
     public function addUser($user)
     {
     	$this->users[] = $user;
     	return $this;
     }
-    
+
     public function getUsers()
     {
     	return $this->users;
     }
-    
+
     public function setUsers($users)
     {
     	$this->users = $users;
     	return $this;
     }
-    
+
     public function getTumblrs()
     {
     	return $this->tumblrs;
     }
-    
+
     public function setTumblrs($tumblrs)
     {
     	$this->tumblrs = $tumblrs;
@@ -193,7 +213,7 @@ class Group
     {
     	return $this->users_invitations;
     }
-    
+
     public function setUsersInvitations($users_invitations)
     {
     	$this->users_invitations = $users_invitations;
