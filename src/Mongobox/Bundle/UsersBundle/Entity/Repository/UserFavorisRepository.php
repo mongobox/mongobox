@@ -142,7 +142,7 @@ class UserFavorisRepository extends EntityRepository
 	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
 	 * @return int
 	 */
-	public function getNombreFavoris($user)
+	public function getBookmarkNumber($user)
 	{
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
@@ -162,7 +162,7 @@ class UserFavorisRepository extends EntityRepository
 	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
 	 * @return int
 	 */
-	public function getNombreListes($user)
+	public function getListsNumber($user)
 	{
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
