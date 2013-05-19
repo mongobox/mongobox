@@ -43,12 +43,12 @@ class VoteController extends Controller
             $user = $this->get('security.context')->getToken()->getUser();
             $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findOneBy(array('user'=>$user->getId(),'decision'=>$id));
 
-            if(!empty($vote)){
+            if (!empty($vote)) {
                 return $this->redirect($this->generateUrl('vote_show',array('id'=>$vote->getId())));
             }
 
             $now = new \DateTime();
-            if($decision->getDate()->format('Ymd') != $now->format('Ymd')){
+            if ($decision->getDate()->format('Ymd') != $now->format('Ymd')) {
                 return $this->redirect($this->generateUrl('decision'));
             }
 
@@ -79,7 +79,7 @@ class VoteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findOneBy(array('user'=>$user->getId(),'decision'=>$id));
-        if(!empty($vote)){
+        if (!empty($vote)) {
             return $this->redirect($this->generateUrl('vote_show',array('id'=>$vote->getId())));
         }
         $entity = new Vote();
@@ -90,7 +90,7 @@ class VoteController extends Controller
             throw $this->createNotFoundException('Unable to find Decision entity.');
         }
         $now = new \DateTime();
-        if($decision->getDate()->format('Ymd') != $now->format('Ymd')){
+        if ($decision->getDate()->format('Ymd') != $now->format('Ymd')) {
             return $this->redirect($this->generateUrl('decision'));
         }
         $entity->setDecision($decision);
@@ -145,7 +145,7 @@ class VoteController extends Controller
             throw $this->createNotFoundException('Unable to find Vote entity.');
         }
         $now = new \DateTime();
-        if($entity->getDecision()->getDate()->format('Ymd') != $now->format('Ymd')){
+        if ($entity->getDecision()->getDate()->format('Ymd') != $now->format('Ymd')) {
             return $this->redirect($this->generateUrl('vote_show',array('id'=>$entity->getId())));
         }
         $editForm = $this->createForm(new VoteType($entity->getDecision()->getGroup()->getCity()), $entity);
@@ -182,7 +182,7 @@ class VoteController extends Controller
         if ($editForm->isValid()) {
 
             $now = new \DateTime();
-            if($entity->getDecision()->getDate()->format('Ymd') != $now->format('Ymd')){
+            if ($entity->getDecision()->getDate()->format('Ymd') != $now->format('Ymd')) {
                 return $this->redirect($this->generateUrl('vote_show',array('id'=>$entity->getId())));
             }
 
@@ -219,7 +219,7 @@ class VoteController extends Controller
             }
 
             $now = new \DateTime();
-            if($entity->getDecision()->getDate()->format('Ymd') != $now->format('Ymd')){
+            if ($entity->getDecision()->getDate()->format('Ymd') != $now->format('Ymd')) {
                 return $this->redirect($this->generateUrl('vote_show',array('id'=>$entity->getId())));
             }
 

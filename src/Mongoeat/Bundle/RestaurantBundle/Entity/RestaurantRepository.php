@@ -12,17 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class RestaurantRepository extends EntityRepository
 {
-    public function findSortVotes($city = null){
+    public function findSortVotes($city = null)
+    {
         $q = $this->createQueryBuilder('b')
             ->addSelect('COUNT(v.id) AS HIDDEN cou')
             ->leftJoin('b.votes','v')
             ->orderBy('cou','DESC')
             ->groupBy('b.id');
 
-        if(!empty($city)){
+        if (!empty($city)) {
             $q  ->where('b.city = :city')
                 ->setParameter('city',$city);
         }
+
         return $q;
     }
 }

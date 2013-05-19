@@ -70,13 +70,13 @@ class Restaurant
      */
     private $lng;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Mongoeat\Bundle\VoteBundle\Entity\Vote", mappedBy="restaurant", cascade={"persist"})
      */
     private $votes;
 
-    public function toArray(){
+    public function toArray()
+    {
         return array(
             'id'=>$this->id,
             'name'=>$this->name,
@@ -91,7 +91,7 @@ class Restaurant
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -101,20 +101,20 @@ class Restaurant
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string     $name
      * @return Restaurant
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -124,20 +124,20 @@ class Restaurant
     /**
      * Set phone
      *
-     * @param string $phone
+     * @param  string     $phone
      * @return Restaurant
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
-    
+
         return $this;
     }
 
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -147,20 +147,20 @@ class Restaurant
     /**
      * Set adresse
      *
-     * @param string $adresse
+     * @param  string     $adresse
      * @return Restaurant
      */
     public function setAdresse($adresse)
     {
         $this->adresse = $adresse;
-    
+
         return $this;
     }
 
     /**
      * Get adresse
      *
-     * @return string 
+     * @return string
      */
     public function getAdresse()
     {
@@ -170,20 +170,20 @@ class Restaurant
     /**
      * Set lat
      *
-     * @param string $lat
+     * @param  string     $lat
      * @return Restaurant
      */
     public function setLat($lat)
     {
         $this->lat = $lat;
-    
+
         return $this;
     }
 
     /**
      * Get lat
      *
-     * @return string 
+     * @return string
      */
     public function getLat()
     {
@@ -193,20 +193,20 @@ class Restaurant
     /**
      * Set lng
      *
-     * @param string $lng
+     * @param  string     $lng
      * @return Restaurant
      */
     public function setLng($lng)
     {
         $this->lng = $lng;
-    
+
         return $this;
     }
 
     /**
      * Get lng
      *
-     * @return string 
+     * @return string
      */
     public function getLng()
     {
@@ -216,20 +216,20 @@ class Restaurant
     /**
      * Set code
      *
-     * @param string $code
+     * @param  string     $code
      * @return Restaurant
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -239,20 +239,20 @@ class Restaurant
     /**
      * Set city
      *
-     * @param string $city
+     * @param  string     $city
      * @return Restaurant
      */
     public function setCity($city)
     {
         $this->city = $city;
-    
+
         return $this;
     }
 
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {
@@ -266,17 +266,17 @@ class Restaurant
     {
         $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add votes
      *
-     * @param \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
+     * @param  \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
      * @return Restaurant
      */
     public function addVote(\Mongoeat\Bundle\VoteBundle\Entity\Vote $votes)
     {
         $this->votes[] = $votes;
-    
+
         return $this;
     }
 
@@ -293,14 +293,15 @@ class Restaurant
     /**
      * Get votes
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getVotes()
     {
         return $this->votes;
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->name;
     }
 }

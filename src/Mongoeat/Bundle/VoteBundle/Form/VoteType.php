@@ -2,7 +2,6 @@
 
 namespace Mongoeat\Bundle\VoteBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
 use Mongoeat\Bundle\RestaurantBundle\Entity\RestaurantRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +30,6 @@ class VoteType extends AbstractType
             ))
         ;
     }
-
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

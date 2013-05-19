@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mongoeat\Bundle\VoteBundle\Entity\Decision;
-use Mongoeat\Bundle\VoteBundle\Form\DecisionType;
 
 /**
  * Decision controller.
@@ -35,7 +34,7 @@ class DecisionController extends Controller
         $entities = $em->getRepository('MongoeatVoteBundle:Decision')->findByGroup($group);
 
         $entity = $em->getRepository('MongoeatVoteBundle:Decision')->findOneBy(array("date" => new \DateTime(),"group"=>$group));
-        if(empty($entity)){
+        if (empty($entity)) {
             $entity = new Decision();
             $entity->setDate(new \DateTime());
             $entity->setGroup($group);
@@ -43,13 +42,14 @@ class DecisionController extends Controller
             $em->flush();
         }
 
-        foreach($entities as $d){
-            if($d!==$entity){
+        foreach ($entities as $d) {
+            if ($d!==$entity) {
                 $historique[] = $d;
             }
         }
         $user = $this->get('security.context')->getToken()->getUser();
         $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findBy(array('user'=>$user->getId(),'decision'=>$entity->getId()));
+
         return array(
             'entities' => $historique,
             'entity' => $entity,

@@ -39,11 +39,10 @@ class Vote
      */
     private $restaurant;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -53,20 +52,20 @@ class Vote
     /**
      * Set decision
      *
-     * @param \Mongoeat\Bundle\VoteBundle\Entity\Decision $decision
+     * @param  \Mongoeat\Bundle\VoteBundle\Entity\Decision $decision
      * @return Vote
      */
     public function setDecision(\Mongoeat\Bundle\VoteBundle\Entity\Decision $decision = null)
     {
         $this->decision = $decision;
-    
+
         return $this;
     }
 
     /**
      * Get decision
      *
-     * @return \Mongoeat\Bundle\VoteBundle\Entity\Decision 
+     * @return \Mongoeat\Bundle\VoteBundle\Entity\Decision
      */
     public function getDecision()
     {
@@ -76,20 +75,20 @@ class Vote
     /**
      * Set user
      *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
+     * @param  \Mongobox\Bundle\UsersBundle\Entity\User $user
      * @return Vote
      */
     public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User 
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User
      */
     public function getUser()
     {
@@ -99,20 +98,20 @@ class Vote
     /**
      * Set restaurant
      *
-     * @param \Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant $restaurant
+     * @param  \Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant $restaurant
      * @return Vote
      */
     public function setRestaurant(\Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant $restaurant = null)
     {
         $this->restaurant = $restaurant;
-    
+
         return $this;
     }
 
     /**
      * Get restaurant
      *
-     * @return \Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant 
+     * @return \Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant
      */
     public function getRestaurant()
     {

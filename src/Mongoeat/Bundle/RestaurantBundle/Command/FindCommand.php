@@ -2,15 +2,13 @@
 
 namespace Mongoeat\Bundle\RestaurantBundle\Command;
 
-
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FindCommand extends ContainerAwareCommand {
-
+class FindCommand extends ContainerAwareCommand
+{
     protected function configure()
     {
         $this
@@ -31,8 +29,8 @@ class FindCommand extends ContainerAwareCommand {
         $progress = $this->getApplication()->getHelperSet()->get('progress');
 
         $progress->start($output, count($liste));
-        foreach($liste as $rest){
-            if(count($em->getRepository('MongoeatRestaurantBundle:Restaurant')->findByName($rest->getName())) === 0){
+        foreach ($liste as $rest) {
+            if (count($em->getRepository('MongoeatRestaurantBundle:Restaurant')->findByName($rest->getName())) === 0) {
                 $em->persist($rest);
             }
             $progress->advance();

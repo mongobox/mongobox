@@ -2,8 +2,6 @@
 
 namespace Mongoeat\Bundle\RestaurantBundle\Controller;
 
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -54,6 +52,7 @@ class RestaurantController extends Controller
         $p = new Process('php ../app/console mongoeat:restaurant:find '.$group->getCity());
         $p->run();
         if($p->isSuccessful())
+
             return $this->redirect($this->generateUrl('restaurant'));
         else
             var_dump($p->getErrorOutput());
@@ -129,7 +128,6 @@ class RestaurantController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
-
 
     /**
      * Finds and displays a Restaurant entity.
