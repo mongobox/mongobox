@@ -8,12 +8,7 @@
 	border: 1px solid lightgray;
 	background-color: #e6e6e6;
 
-	-webkit-border-radius: 0px;
-	-webkit-border-top-right-radius: 0;
-	-moz-border-radius: 0px;
-	-moz-border-radius-topright: 0;
-	border-radius: 0px;
-	border-top-right-radius: 0;
+	border-radius: 0;
 }
 
 .info-fav {
@@ -36,7 +31,8 @@
 	background-color: lightgray;
 }
 
-.imgbox { text-align: center; }
+.imgbox, .actions-content, #modal_add_list > div
+{ text-align: center; }
 
 .un-favoris {
 	width: 20%;
@@ -52,7 +48,3 @@
 #liste-favoris img { margin: 0 auto; }
 
 #liste-favoris > tbody > tr { height: 200px; }
-
-.actions-content {
-	text-align: center;
-}
