@@ -443,7 +443,7 @@ class User implements AdvancedUserInterface
     /**
      * Get tumblr_vote
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTumblrVote()
     {
@@ -731,5 +731,9 @@ class User implements AdvancedUserInterface
 	public function setFavoris($favoris) {
 		$this->favoris = $favoris;
 		return $this;
+	}
+
+	public function getListesFavoris() {
+		return $this->listes_favoris;
 	}
 }
