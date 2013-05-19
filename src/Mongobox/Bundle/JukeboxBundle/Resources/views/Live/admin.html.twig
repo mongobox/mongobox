@@ -55,41 +55,10 @@
 </div>
 
 <script type="text/javascript">
-    $("#play-video-button").click(function() {
-        player.playVideo();
-    });
-
-    $("#pause-video-button").click(function() {
-        player.pauseVideo();
-    });
-
-    $("#skip-video-button").click(function() {
-        params = new Object();
-        params.status = 0;
-
-        livePlayer.seekNextVideo(params);
-    });
-
-    var replaceUrl = '{{ path('live_replace') }}';
-    $("#replace-video-button").click(function() {
-        livePlayer.getReplaceForm();
-    });
-
-    $('#admin-tab a').click(function (e) {
-	    e.preventDefault();
-		$(this).tab('show');
-    })
-	
-	$('#list_tags').dataTable({
-        "bPaginate": true,
-        "bLengthChange": true,
-        "bFilter": true,
-        "bSort": false,
-        "bInfo": false,
-        "bAutoWidth": true,
-		"bStateSave": true
-    });
+    var replaceUrl          = '{{ path('live_replace') }}';
+    var worstScoreAllowed   = -{{ max_dislikes }};
 </script>
 
 <link href="{{ asset('bundles/mongoboxjukebox/css/admin.css') }}" rel="stylesheet">
+<script src="{{ asset('bundles/mongoboxjukebox/js/live-admin.js') }}"></script>
 <script src="{{ asset('bundles/mongoboxjukebox/js/liveManageTags.js') }}"></script>
