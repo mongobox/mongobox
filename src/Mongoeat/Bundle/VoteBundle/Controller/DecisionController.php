@@ -31,7 +31,7 @@ class DecisionController extends Controller
         $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
         $historique = array();
-        $entities = $em->getRepository('MongoeatVoteBundle:Decision')->findByGroup($group);
+        $entities = $em->getRepository('MongoeatVoteBundle:Decision')->findByGroup($group,array('date' => 'DESC'));
 
         $entity = $em->getRepository('MongoeatVoteBundle:Decision')->findOneBy(array("date" => new \DateTime(),"group"=>$group));
         if (empty($entity)) {
@@ -47,11 +47,18 @@ class DecisionController extends Controller
                 $historique[] = $d;
             }
         }
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $historique,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            7/*limit per page*/
+        );
+
         $user = $this->get('security.context')->getToken()->getUser();
         $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findBy(array('user'=>$user->getId(),'decision'=>$entity->getId()));
 
         return array(
-            'entities' => $historique,
+            'pagination' => $pagination,
             'entity' => $entity,
             'hasVoted' => !empty($vote)
         );

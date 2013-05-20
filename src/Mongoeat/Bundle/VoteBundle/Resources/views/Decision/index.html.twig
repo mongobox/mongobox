@@ -78,7 +78,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for entity in entities %}
+                {% for entity in pagination %}
                     <tr>
                         <td><a href="{{ path('decision_show', { 'id': entity.id }) }}">{% if entity.date %}{{ entity.date|date('d/m/Y') }}{% endif %}</a></td>
                         <td>{{ entity.votes|length }}/{{ entity.getNombrePersonne }}</td><td>
@@ -110,6 +110,9 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -7,20 +7,20 @@
         </a>
     </p>
     <h1>Liste des restaurants</h1>
-
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Libelle</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Libelle', 'b.name') }}</th>
                 <th>Téléphone</th>
                 <th>Adresse</th>
-                <th>Ville</th>
-                <th>Popularité</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Ville', 'b.ville') }}</th>
+                <th>
+                    {{ knp_pagination_sortable(pagination, 'Popularité', 'cou') }}</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for entity in entities %}
+        {% for entity in pagination %}
             <tr>
                 <td><a href="{{ path('restaurant_show', { 'id': entity.id }) }}">{{ entity.name }}</a></td>
                 <td>{{ entity.phone }}</td>
@@ -41,4 +41,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
     {% endblock %}

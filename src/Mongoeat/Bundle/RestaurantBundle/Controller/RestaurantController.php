@@ -31,9 +31,15 @@ class RestaurantController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('MongoeatRestaurantBundle:Restaurant')->findSortVotes();
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            10/*limit per page*/
+        );
 
         return array(
-            'entities' => $entities->getQuery()->getResult(),
+            'pagination' => $pagination,
 
         );
     }
