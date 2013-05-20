@@ -65,6 +65,38 @@ class DecisionController extends Controller
     }
 
     /**
+     * Lists all Decision entities.
+     *
+     * @Route("/small", name="decision_small")
+     * @Method("GET")
+     * @Template()
+     */
+    public function smallAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $session = $request->getSession();
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+
+        $entity = $em->getRepository('MongoeatVoteBundle:Decision')->findOneBy(array("date" => new \DateTime(),"group"=>$group));
+        if (empty($entity)) {
+            $entity = new Decision();
+            $entity->setDate(new \DateTime());
+            $entity->setGroup($group);
+            $em->persist($entity);
+            $em->flush();
+        }
+
+        $user = $this->get('security.context')->getToken()->getUser();
+        $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findBy(array('user'=>$user->getId(),'decision'=>$entity->getId()));
+
+        return array(
+            'entity' => $entity,
+            'hasVoted' => !empty($vote)
+        );
+    }
+
+    /**
      * Finds and displays a Decision entity.
      *
      * @Route("/{id}", name="decision_show")
