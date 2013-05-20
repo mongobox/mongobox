@@ -15,6 +15,7 @@ var listesManager = listesManager || {};
 		this.observeListDetailsDisplay();
 	};
 
+	// Function to init tooltip on some btn
 	listesManager.initTooltip = function()
 	{
 		$('.btn-tooltip').tooltip();
@@ -133,6 +134,15 @@ var listesManager = listesManager || {};
 						alertify.error(data.message);
 				}
 			});
+		});
+	};
+
+	// Function to handle deleting bookmark from list
+	listesManager.observeRemoveBookmarkFromList = function()
+	{
+		$('.list-details-bookmarks').on('click', '', function(e)
+		{
+			e.preventDefault();
 		});
 	};
 
