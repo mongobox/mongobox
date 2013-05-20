@@ -1,0 +1,22 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
+
+{% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+{% block body -%}
+    <p style="float: right;">
+        <a class="btn" href="{{ path('restaurant') }}">
+            <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à la liste
+        </a>
+    </p>
+    <h1>Nouveau restaurant</h1>
+
+    <form class="form-horizontal" action="{{ path('restaurant_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Créer</button>
+            </div>
+        </div>
+    </form>
+
+
+{% endblock %}

@@ -10,6 +10,7 @@ class ConfigureMenuEvent extends Event
 {
     const MAIN_MENU     = 'mongobox_core.main_menu_configure';
     const ADMIN_MENU    = 'mongobox_core.admin_menu_configure';
+    const EAT_MENU    = 'mongobox_core.eat_menu_configure';
 
     private $factory;
     private $menu;

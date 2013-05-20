@@ -1,0 +1,29 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
+
+{% form_theme edit_form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+
+{% block body -%}
+    <h1>Modifier son vote</h1>
+
+    <form class="form-horizontal" action="{{ path('vote_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        {{ form_widget(edit_form) }}
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Voter</button>
+            </div>
+        </div>
+    </form>
+
+
+    <p>
+        <a class="btn" href="{{ path('decision') }}">
+            <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à Mongoeat
+        </a>
+    </p>
+    <form action="{{ path('vote_delete', { 'id': entity.id }) }}" method="post">
+        {{ form_widget(delete_form) }}
+        <button class="btn btn-danger" type="submit">Supprimer</button>
+    </form>
+
+{% endblock %}
