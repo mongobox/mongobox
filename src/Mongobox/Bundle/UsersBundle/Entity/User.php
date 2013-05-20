@@ -762,16 +762,6 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * Get tumblr_vote
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTumblrVote()
-    {
-        return $this->tumblr_vote;
-    }
-
-    /**
      * Set group
      *
      * @param \Mongobox\Bundle\GroupBundle\Entity\Group $group
