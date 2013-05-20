@@ -5,6 +5,31 @@
 {% block body %}
 <div class="hero-unit">
 	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
-</div>
 
+	<div class="row-fluid">
+		<div class="span6">
+			<ul class="listes-content">
+			{% for liste in listes %}
+				{% include 'MongoboxUsersBundle:Favoris/Listes:uneListe.html.twig' %}
+			{% else %}
+				<li class="no-list">Vous n'avez pas de listes.</li>
+			{% endfor %}
+			</ul>
+		</div>
+		<div class="hide ajax-loader-div-hidden">
+			<img alt="Chargement" src='{{ asset('bundles/mongoboxjukebox/img/ajax-loader-tumblr-add.gif') }}' />
+		</div>
+		<div class="span6" id="details-liste">
+			Veuillez séléctionner une liste pour afficher les vidéos
+		</div>
+	</div>
+</div>
 {% endblock %}
+
+{% block css %}
+	<link href="{{ asset('bundles/mongoboxusers/css/favoris.css') }}" rel="stylesheet">
+{% endblock css %}
+
+{% block javascripts %}
+	<script src="{{ asset('bundles/mongoboxusers/js/listes.js') }}"></script>
+{% endblock javascripts %}

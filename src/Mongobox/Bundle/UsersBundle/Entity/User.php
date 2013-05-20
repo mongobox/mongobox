@@ -448,7 +448,7 @@ class User implements AdvancedUserInterface
     /**
      * Get tumblr_vote
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTumblrVote()
     {
@@ -839,4 +839,9 @@ class User implements AdvancedUserInterface
     {
         $this->groups_invitations->removeElement($groupsInvitations);
     }
+
+
+	public function getListesFavoris() {
+		return $this->listes_favoris;
+	}
 }

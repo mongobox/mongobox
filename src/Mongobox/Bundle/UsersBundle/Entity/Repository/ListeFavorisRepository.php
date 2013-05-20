@@ -55,6 +55,30 @@ class ListeFavorisRepository extends EntityRepository
 		$query = $qb->getQuery();
 		return $query->getResult();
 	}
+
+	/**
+	 * Fonction pour récupérer la liste des vidéos en favoris dans une liste
+	 * @param $list
+	 * @param $user
+	 * @return array
+	 */
+	public function getBookmarkFromList($list, $user)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->select('v as video', 'uf.date_favoris as date')
+			->from('MongoboxJukeboxBundle:Videos', 'v')
+			->innerJoin('v.favoris', 'uf')
+			->where('uf.liste = :list')
+			->andWhere('uf.user = :user')
+			->andWhere('uf.video IS NOT NULL')
+			->setParameters(array(
+				'list' => $list,
+				'user' => $user
+			))
+		;
+		return $qb->getQuery()->getResult();
+	}
 }
 
 ?>

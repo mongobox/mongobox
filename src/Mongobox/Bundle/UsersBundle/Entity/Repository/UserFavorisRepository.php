@@ -142,7 +142,7 @@ class UserFavorisRepository extends EntityRepository
 	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
 	 * @return int
 	 */
-	public function getNombreFavoris($user)
+	public function getBookmarkNumber($user)
 	{
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
@@ -162,19 +162,41 @@ class UserFavorisRepository extends EntityRepository
 	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
 	 * @return int
 	 */
-	public function getNombreListes($user)
+	public function getListsNumber($user)
 	{
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
 		$qb
-			->select('COUNT(DISTINCT uf.liste )')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
-			->where('uf.user = :user')
+			->select('COUNT(DISTINCT l.id )')
+			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->where('l.user = :user')
 			->setParameters(array(
 				"user" => $user
 			))
 		;
 		return $qb->getQuery()->getSingleScalarResult();
+	}
+
+	/**
+	 * Fonction pour supprimer toutes les vidéos en favoris de la liste
+	 * @param Mongobox\Bundle\UsersBundle\Entity\ListeFavoris $list
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @return array
+	 */
+	public function removeBookmarkFromList($list, $user)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->delete()
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->where('uf.liste = :list')
+			->andWhere('uf.user = :user')
+			->setParameters(array(
+				'list' => $list,
+				'user' => $user
+			))
+		;
+		return $qb->getQuery()->getResult();
 	}
 }
 
