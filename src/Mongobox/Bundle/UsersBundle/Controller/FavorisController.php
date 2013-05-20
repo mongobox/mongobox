@@ -348,22 +348,18 @@ class FavorisController extends Controller
 		$user = $this->getUser();
 		$manager = $this->getDoctrine()->getManager();
 		$json = array();
-		/*try
+		try
 		{
-
+			$list = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->find($id_list);
+			$videos = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getBookmarkFromList($list, $user);
+			$json['success'] = true;
+			$json['html'] = $this->renderView('MongoboxUsersBundle:Favoris/Listes:listeDetails.html.twig', array('list' => $list, 'bookmarks' => $videos));
 		} catch( \Exception $e )
 		{
 			$json['success'] = false;
 			$json['error'] = 'Le chargement de la liste a échoué';
-		}*/
-		$list = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->find($id_list);
-		$videos = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getBookmarkFromList($list, $user);
-		$json['success'] = true;
-		$json['html'] = $this->renderView('MongoboxUsersBundle:Favoris/Listes:listeDetails.html.twig', array('list' => $list, 'bookmarks' => $videos));
+		}
 
-		/*echo '<pre>';
-		\Doctrine\Common\Util\Debug::dump($videos);
-		exit;*/
 		return new JsonResponse($json);
 	}
 }

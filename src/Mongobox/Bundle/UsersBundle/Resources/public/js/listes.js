@@ -131,7 +131,7 @@ var listesManager = listesManager || {};
 						listesManager.initTooltip();
 					}
 					else
-						alertify.error(data.message);
+						alertify.error(data.error);
 				}
 			});
 		});
