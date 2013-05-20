@@ -41,6 +41,14 @@ class Group
     protected $liveMaxDislikes;
 
     /**
+     * @var integer
+     *
+     * @ORM\OneToOne(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User")
+     * @ORM\JoinColumn(name="live_current_admin", referencedColumnName="id")
+     */
+    protected $liveCurrentAdmin;
+
+    /**
      * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
      * @ORM\JoinTable(name="users_groups",
      * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
@@ -173,6 +181,17 @@ class Group
     public function setLiveMaxDislikes($liveMaxDislikes)
     {
         $this->liveMaxDislikes = $liveMaxDislikes;
+        return $this;
+    }
+
+    public function getLiveCurrentAdmin()
+    {
+        return $this->liveCurrentAdmin;
+    }
+
+    public function setLiveCurrentAdmin($user)
+    {
+        $this->liveCurrentAdmin = $user;
         return $this;
     }
 
