@@ -51,7 +51,9 @@ $(document).ready(function() {
             type: 'POST',
             dataType: 'json',
             url: nextVideoUrl,
-            data: { 'volume' : player.getVolume() }
+            data: {
+                'volume' : player.getVolume()
+            }
         }).done(function(data) {
             player.loadVideoById({
                 videoId: data.videoId
@@ -80,8 +82,47 @@ $(document).ready(function() {
         }
     };
 
+    livePlayer.getReplaceForm = function()
+    {
+        $('#replace-video-modal').on('show', function () {
+            $('.loader').show();
+            $('#replace-video-modal .modal-content').html('');
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'html',
+                url: replaceUrl
+            }).done(function(html) {
+                $('#replace-video-modal .modal-content').html(html);
+                $('.loader').hide();
+            });
+        });
+    }
+
     livePlayer.receivePutschAttempt = function (params)
     {
-        //TODO
+        $.ajax({
+            type: 'GET',
+            dataType: 'html',
+            url: putschUrl,
+            data: "user=" + params.userId
+        }).done(function(html) {
+            if (html !== '') {
+                $('#putsch-modal').modal('show');
+                $('.loader').show();
+                $('#putsch-modal').html(html);
+                $('.loader').hide();
+            }
+        }.bind(this));
     };
+
+    livePlayer.acceptPutsch = function()
+    {
+        $('#putsch-modal').modal('hide');
+    }
+
+    livePlayer.refusePutsch = function()
+    {
+        $('#putsch-modal').modal('hide');
+    }
 });

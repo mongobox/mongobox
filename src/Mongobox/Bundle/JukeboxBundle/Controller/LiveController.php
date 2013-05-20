@@ -239,6 +239,25 @@ class LiveController extends Controller
     }
 
     /**
+     * @Route("/putsch", name="live_putsch")
+     * @Template()
+     */
+    public function putschAction(Request $request)
+    {
+        if (!$userId = (int) $request->get('user')) {
+            throw $this->createNotFoundException();
+        }
+
+        /** @var \Doctrine\ORM\EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $userEntity = $em->getRepository('MongoboxUsersBundle:User')->find($userId);
+
+        return array(
+            'user'  => $userEntity
+        );
+    }
+
+    /**
      * Retrieve current volume of the given playlist
      *
      * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist

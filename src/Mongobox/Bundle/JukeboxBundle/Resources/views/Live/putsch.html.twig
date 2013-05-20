@@ -1,0 +1,48 @@
+{% if user is not null %}
+    <link href="{{ asset('bundles/mongoboxjukebox/css/countdown.css') }}" rel="stylesheet">
+    <script src="{{ asset('bundles/mongoboxjukebox/js/countdown.js') }}" type="text/javascript"></script>
+
+    <div class="modal-header">
+        <a href="#" class="close">&times;</a>
+        <h3>Tentative de putsch</h3>
+    </div>
+    <div class="modal-body">
+        <div class="loader"></div>
+            <div class="modal-content">
+            <div class="cell">
+                <div id="holder">
+                    <div class="digits"></div>
+                </div>
+            </div>
+
+            <p>
+                <b>{{ user.firstname }} {{ user.lastname }}</b> (<i>{{ user.login }}</i>) désire prendre votre place !<br />
+                Êtes-vous d'accord pour lui laisser vos droits d'administrateur du live ?
+            </p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" id="accept-putsch" class="btn btn-success" role="button" title="Accepter le putsch">Oui</a>
+        <a href="#" id="refuse-putsch" class="btn btn-danger" role="button" title="Refuser le putsch">Non</a>
+    </div>
+
+    <script type="text/javascript">
+        $('#accept-putsch').click(function(event) {
+            event.preventDefault();
+            livePlayer.acceptPutsch();
+        });
+
+        $('#refuse-putsch').click(function(event) {
+            event.preventDefault();
+            livePlayer.refusePutsch();
+        });
+
+        $(function(){
+            $(".digits").countdown({
+                image: "{{ asset('bundles/mongoboxjukebox/img/digits.png') }}",
+                format: "mm:ss",
+                startTime: "01:00"
+            });
+        });
+    </script>
+{% endif %}

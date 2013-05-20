@@ -54,8 +54,11 @@
     </div>
 </div>
 
+<div id="putsch-modal" class="modal hide fade"></div>
+
 <script type="text/javascript">
-    var replaceUrl          = '{{ path('live_replace') }}';
+    var replaceUrl          = "{{ path('live_replace') }}";
+    var putschUrl           = "{{ path('live_putsch') }}";
     var worstScoreAllowed   = -{{ max_dislikes }};
 </script>
 
