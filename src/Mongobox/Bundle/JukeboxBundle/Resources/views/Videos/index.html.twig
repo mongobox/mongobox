@@ -30,7 +30,7 @@
                 {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
                     'route':'videos',
                     'property':'v.title',
-                    'label':'Titre'
+                    'label':'Vidéo'
                 } %}
             </th>
             <th>
@@ -62,18 +62,30 @@
                 {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
                     'route':'videos',
                     'property':'vg.votes',
-                    'label':'Nb Votes'
+                    'label':'Votes'
                 } %}
             </th>
-            <th>Postée par</th>
+            <th>Posteur</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr class="show-edit-video">
+        <tr class="show-edit-video show-tag-video">
             <td><a href="{{ path('videos_show', { 'id': entity.video.id }) }}">{{ entity.video.id }}</a></td>
-            <td><img src="{{ entity.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ entity.video.thumbnailHq }}' />" data-html="true" /> {{ entity.video.title }}</td>
+            <td>
+				<div class="liste-video-title">
+					<img src="{{ entity.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ entity.video.thumbnailHq }}' />" data-html="true" />
+					{{ entity.video.name }}
+				</div>
+				<div class="liste-video-tag">
+					{% for tag in entity.video.tags %}
+						<span class="alert alert-info">
+							<span>{{tag.name}}</span>
+						</span>
+					{% endfor %}
+				</div>
+			</td>
             <td>{{entity.video.duration|niceTime}}</td>
             <td>{% if entity.lastBroadcast %}{{ entity.lastBroadcast|date('d-m-Y H:i:s') }}{% endif %}</td>
 			<td>{{entity.diffusion}}</td>
