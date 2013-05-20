@@ -137,23 +137,6 @@ LivePlayer = function()
 		this.sendParameters(params);
 	},
 
-    this.getReplaceForm = function()
-    {
-        $('#replace-video-modal').on('show', function () {
-            $('.loader').show();
-            $('#replace-video-modal .modal-content').html('');
-
-            $.ajax({
-                type: 'GET',
-                dataType: 'html',
-                url: replaceUrl
-            }).done(function(html) {
-                $('#replace-video-modal .modal-content').html(html);
-                $('.loader').hide();
-            });
-        });
-    }
-
     this.updatePlayerVolume = function(direction)
     {
         $.ajax({
