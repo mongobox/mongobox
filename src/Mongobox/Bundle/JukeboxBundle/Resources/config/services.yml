@@ -4,3 +4,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: mongobox_core.main_menu_configure, method: onMainMenuConfigure }
             - { name: kernel.event_listener, event: mongobox_core.admin_menu_configure, method: onAdminMenuConfigure }
+
+    mongobox_jukebox.live_admin:
+        class: Mongobox\Bundle\JukeboxBundle\Live\Admin
+        arguments:
+            - @service_container
+            - @doctrine.orm.entity_manager
