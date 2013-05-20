@@ -10,3 +10,9 @@ services:
         arguments:
             - @service_container
             - @doctrine.orm.entity_manager
+
+    mongobox_jukebox.live_configurator:
+        class: Mongobox\Bundle\JukeboxBundle\Live\Configurator
+        arguments:
+            - @service_container
+            - @doctrine.orm.entity_manager
