@@ -249,3 +249,9 @@ Playlist
 	width : 25px;
 	float: left;
 }
+
+#putsch-button
+{
+    float: right;
+    margin-top: 10px;
+}
