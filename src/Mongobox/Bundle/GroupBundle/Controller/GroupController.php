@@ -112,6 +112,28 @@ class GroupController extends Controller
 			return $this->redirect($this->generateUrl('homepage'));
 		}
 	}
+	
+    /**
+     * @Template()
+     * @Route( "/membres/{id}", name="group_membres")
+     * @ParamConverter("group", class="MongoboxGroupBundle:Group")
+     */
+    public function groupMembresAction(Request $request, Group $group)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$user = $this->get('security.context')->getToken()->getUser();
+		if($user->isMemberFrom($group->getId()))
+		{
+			return array(
+				'group' => $group
+			);
+		}
+		else
+		{
+			$this->get('session')->setFlash('notice', 'Vous n\'avez pas le visualiser ce groupe');
+			return $this->redirect($this->generateUrl('homepage'));
+		}
+	}
 
 	/**
      * @Template()

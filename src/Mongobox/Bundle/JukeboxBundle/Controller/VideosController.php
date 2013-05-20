@@ -208,10 +208,10 @@ class VideosController extends Controller
     /**
      * Add the video to the playlist entity.
      *
-     * @Route("/{id}/add_to_playlist", name="videos_add_to_playlist")
+     * @Route("/{id}/add_to_playlist_vg", name="videos_add_to_playlist_vg")
      * @ParamConverter("video", class="MongoboxJukeboxBundle:VideoGroup")
      */
-    public function addToPlaylistAction(Request $request, VideoGroup $video)
+    public function addToPlaylistVGAction(Request $request, VideoGroup $video)
     {
         $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
@@ -226,7 +226,43 @@ class VideosController extends Controller
         $em->persist($playlist_add);
         $em->flush();
 
+		$this->get('session')->setFlash('success', 'Vidéo ajoutée à la playlist');
+
         return $this->redirect($this->generateUrl('videos'));
+    }
+
+    /**
+     * Add the video to the playlist entity.
+     *
+     * @Route("/{id}/add_to_playlist", name="videos_add_to_playlist")
+     * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos")
+     */
+    public function addToPlaylistAction(Request $request, Videos $video)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$session = $request->getSession();
+		$is_added = false;
+		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+		$videoGroup = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneBy(array('group' => $group, 'video' => $video));
+		if(is_object($videoGroup))
+		{
+			$playlist_add = new Playlist();
+			$playlist_add->setVideoGroup($videoGroup);
+			$playlist_add->setGroup($group);
+			$playlist_add->setRandom(0);
+			$playlist_add->setCurrent(0);
+			$playlist_add->setDate(new \Datetime());
+			$em->persist($playlist_add);
+			$em->flush();
+			$is_added = true;
+		}
+
+		$retour = array(
+			'success' => $is_added,
+			'message' => ($is_added) ? "Vidéo ajoutée à la playlist": "Echec lors de l'ajout",
+		);
+
+		return new Response(json_encode($retour));
     }
 
     private function createDeleteForm($id)

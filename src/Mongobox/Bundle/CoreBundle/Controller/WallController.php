@@ -266,7 +266,10 @@ class WallController extends Controller
 		if(!is_null($session->get('id_group')))
 		{
 			$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array('group' => $session->get('id_group'), 'current' => 1));
-			if(is_object($video_en_cours)) $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+			if(is_object($video_en_cours))
+			{
+				$somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
+			}
 			else $somme = 0;
 		}
 		else

@@ -13,8 +13,23 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $tumblrMenu = $menu->getChild('Tumblr');
-        $tumblrMenu->addChild('Statistiques', array('route' => 'tumblr_stats'));
+
+        $statsMenu = $menu->addChild(
+            'Jukebox',
+            array(
+                'route'         => 'homepage',
+                'attributes'    => array('class' => 'dropdown'),
+                'label'         => 'Stats <b class="caret"></b>',
+                'extras'        => array('safe_label' => true)
+            )
+        );
+
+        $statsMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
+        $statsMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
+        $statsMenu->moveToPosition(2);
+
+        $statsMenu->addChild('Jukebox', array('route' => 'jukebox_stats'));
+        $statsMenu->addChild('Tumblr', array('route' => 'tumblr_stats'));
     }
 
     /**

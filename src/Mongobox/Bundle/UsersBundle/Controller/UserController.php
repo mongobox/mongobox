@@ -8,16 +8,32 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Mongobox\Bundle\UsersBundle\Form\UserEditType;
 use Mongobox\Bundle\UsersBundle\Form\UserEditPasswordType;
 
+use Mongobox\Bundle\UsersBundle\Entity\User;
+
 /**
  * @Route( "/user")
- * 
+ *
  */
 class UserController extends Controller
 {
+	/**
+	 * Profil d'un utilisateur
+	 * @Template()
+	 * @Route("/profile/{id}", name="profile_user")
+	 * @ParamConverter("user", class="MongoboxUsersBundle:User")
+	 */
+	public function profileAction(Request $request, User $user)
+	{
+		return array(
+			'user' => $user
+		);
+	}
+
 	/**
 	 * Fonction permettant de récupérer via JSON la liste des utilisateurs
 	 * @Route("/ajax_user_search", name="ajax_user_search")
@@ -27,7 +43,7 @@ class UserController extends Controller
 		$value = $request->get('term');
 
 		$em = $this->getDoctrine()->getManager();
-		
+
 		$users = $em->getRepository('MongoboxUsersBundle:User')->findUser($value);
 
 		$json = array();
@@ -46,22 +62,22 @@ class UserController extends Controller
 	 * Fonction pour l'édition de l'utilisateur courant
 	 * @Template()
 	 * @Route("/profil/edit", name="user_edit")
-	 * @Method({ "GET", "POST" }) 
+	 * @Method({ "GET", "POST" })
 	 */
 	public function editAction(Request $request, $id_user = null)
-	{		
+	{
 		$em = $this->getDoctrine()->getManager();
 
 		$request = $this->container->get('request');
 		$user = $this->container->get('security.context')->getToken()->getUser();
 
 		$old_user = clone $user;
-		
+
 		//Formulaire de modification de l'utilisateur
 		$form = $this->createForm(new UserEditType(), $user);
 		//Formulaire de modification du mot de passe si email non collectif
 		$form_password = $this->createForm(new UserEditPasswordType(), $user, array('validation_groups' => array('modify_password')));
-		
+
 		if('POST' === $request->getMethod())
 		{
 			//Validation pour l'utilisateur

@@ -1,14 +1,14 @@
 <h4>Utilisateurs en ligne</h4>
 <p>
     {% if activities is empty %}
-        Il n'y a actuellement <strong>aucun</strong> utilisateur en ligne.
+        Il n'y a actuellement <b>aucun</b> utilisateur en ligne.
     {% else %}
         {% set nb_active_users = activities|length %}
 
         {% if nb_active_users == 1 %}
-            Il y a actuellement <strong>{{ nb_active_users }}</strong> utilisateur connecté :
+            Il y a actuellement <b>{{ nb_active_users }}</b> utilisateur connecté :
         {% else %}
-            Il y a actuellement <strong>{{ nb_active_users }}</strong> utilisateurs connectés :
+            Il y a actuellement <b>{{ nb_active_users }}</b> utilisateurs connectés :
         {% endif %}
 
         {% for activity in activities %}
@@ -34,6 +34,11 @@
                 .
             {%- endif -%}
         {% endfor %}
+
+        <br />
+
+        Le record de connexions simultanées est actuellement de : <b>{{ users.connections_peak.number }}</b>.
+        Il a eu lieu le <b>{{ users.connections_peak.date }}</b> à <b>{{ users.connections_peak.time }}</b>.
     {% endif %}
 </p>
 
@@ -60,7 +65,7 @@
     <span class="global-value">{{ users.global_count }}</span>
 
     {% if users.last_registered %}
-        • Dernier inscrit : <strong>{{ users.last_registered.firstname }} {{ users.last_registered.lastname }}</strong>
+        • Dernier inscrit : <b>{{ users.last_registered.firstname }} {{ users.last_registered.lastname }}</b>
     {% endif %}
 </p>
 

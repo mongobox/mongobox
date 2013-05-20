@@ -82,8 +82,9 @@
 			{% if entity.user is not empty %}{{ entity.user.login }}{% endif %}
 			</td>
             <td>
-            	<a href="{{ path('videos_add_to_playlist', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
-				<a href="{{url('video_edit_modal', {'id_video' : entity.video.id})}}" class="edit-video" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="icon-edit"></span></a>
+            	<a href="{{ path('videos_add_to_playlist_vg', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
+				<a href="{{ path('ajax_new_video_favorite', {'id_video': entity.video.id}) }}" class="btn-favoris-add btn" title="Ajouter la chanson aux favoris"><i class="icon-bookmark"></i> <span></span></a>
+				<a href="{{url('video_edit_modal', {'id_video' : entity.video.id})}}" class="edit-video btn" title="Modifier la vidéo" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="icon-edit"></span></a>
             </td>
         </tr>
     {% endfor %}

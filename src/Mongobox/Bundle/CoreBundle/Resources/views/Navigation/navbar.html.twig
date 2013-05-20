@@ -36,11 +36,14 @@
 							<a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="icon-ok"></span>{% endif %}</a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="{{path('group_edit', {'id' : group.id})}}" title="Groupes">Modifier le groupe</a>
+									<a href="{{path('group_membres', {'id' : group.id})}}" title="Liste des membres">Liste des membres</a>
+								</li>
+								<li>
+									<a href="{{path('group_edit', {'id' : group.id})}}" title="Modifier le groupe">Modifier le groupe</a>
 								</li>
 								{% if group.private %}
 								<li>
-									<a href="{{path('group_invite', {'id' : group.id})}}" title="Groupes">Inviter un utilisateur</a>
+									<a href="{{path('group_invite', {'id' : group.id})}}" title="Inviter un utilisateur">Inviter un utilisateur</a>
 								</li>
 								{% endif %}
 							</ul>
@@ -48,6 +51,9 @@
 
 					{% endfor %}
 					<li class="divider"></li>
+					<li>
+						<a href="{{ path('user_voir_favoris') }}" title="Modifier vos favoris"><span class="icon-bookmark"></span> Vos favoris</a>
+					</li>
 					<li>
 						<a href="{{ path('user_edit')}}" title="Modifier votre compte"><span class="icon-edit"></span> Modifier votre compte</a>
 					</li>
@@ -59,7 +65,7 @@
 		 </ul>
 		{% endif %}
 
-        {{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build') }}
+        {{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build', {'allow_safe_labels': true}) }}
 
 		<div id="video_en_cours">
 			{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}

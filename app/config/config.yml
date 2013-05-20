@@ -82,6 +82,9 @@ avalanche_imagine:
         avatar_thumbnail:
             type:    thumbnail
             options: { size: [80, 80], mode: inbox }
+        avatar_moyen:
+            type:    thumbnail
+            options: { size: [50, 50], mode: inbox }
         avatar_mini:
             type:    thumbnail
             options: { size: [20, 20], mode: inbox }

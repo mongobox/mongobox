@@ -1,0 +1,81 @@
+<div id="timeline-container"></div>
+<script type="text/javascript">
+    $(function () {
+        var timelineChart;
+        $(document).ready(function() {
+            timelineChart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'timeline-container',
+                    zoomType: 'x',
+                    spacingRight: 20
+                },
+                title: {
+                    text: 'Evolution du volume de vidéos postées depuis le début'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                            'Cliquez et déplacez le curseur dans une zone pour zoomer' :
+                            'Déplacez votre doigt dans la zone à agrandir'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    maxZoom: 14 * 24 * 3600000,
+                    title: {
+                        text: null
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Vidéos postées / jour'
+                    },
+                    showFirstLabel: false
+                },
+                tooltip: {
+                    shared: true
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, 'rgba(2,0,0,0)']
+                            ]
+                        },
+                        lineWidth: 1,
+                        marker: {
+                            enabled: false,
+                            states: {
+                                hover: {
+                                    enabled: true,
+                                    radius: 5
+                                }
+                            }
+                        },
+                        shadow: false,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        threshold: null
+                    }
+                },
+                series: [{
+                    type: 'area',
+                    name: 'Nouvelles vidéos',
+                    pointInterval: {{ timeline.pointInterval }},
+                    pointStart: Date.UTC(
+                        {{ timeline.pointStart.format('Y') }},
+                        {{ timeline.pointStart.format('m') }} - 1,
+                        {{ timeline.pointStart.format('d') }}
+                    ),
+                    data: {{ timeline.data|json_encode|raw }}
+                }]
+            });
+        });
+    });
+</script>

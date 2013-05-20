@@ -14,5 +14,7 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    default_max_dislikes: 2
+    
     foursquare_id:
     foursquare_secret:

@@ -1,0 +1,19 @@
+{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+
+{% block title -%}- Favoris{%- endblock title %}
+
+{% block body %}
+<div class="hero-unit">
+	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
+
+	<table id="liste-favoris">
+		{% include 'MongoboxUsersBundle:Favoris/Listes:listeFavoris.html.twig' %}
+	</table>
+
+	{% include 'MongoboxUsersBundle:Favoris:boutonAfficherPlusFavoris.html.twig' %}
+</div>
+{% endblock %}
+
+{% block css %}
+	<link href="{{ asset('bundles/mongoboxusers/css/favoris.css') }}" rel="stylesheet">
+{% endblock css %}

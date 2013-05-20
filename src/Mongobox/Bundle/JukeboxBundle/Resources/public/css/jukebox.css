@@ -90,7 +90,7 @@ Video en cours
     margin-left: 0.5em;
 	float: none;
 }
-#video_en_cours .vote{
+#video_en_cours .vote, #video_en_cours .fav-div {
 	display : inline;
 }
 .navbar .navbar-text {
@@ -109,6 +109,10 @@ Video en cours
 	width : 16px;
 	height : 16px;
 	display : none;
+}
+
+#video_en_cours .fav-div a {
+	text-decoration: none;
 }
 
 /* ---------------------------------
@@ -196,6 +200,19 @@ Playlist
 .total-clear-fix
 {
 	clear : both;
+}
+
+/* ----------------------------------
+ Video Title
+ ------------------------------------- */
+.jukebox-hidden
+{
+	visibility: hidden;
+}
+
+.jukebox-visible
+{
+	visibility: visible;
 }
 
 /* ----------------------------------

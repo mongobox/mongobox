@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+	<li {% if app.request.get('_route') == 'user_voir_favoris' %}class="active"{% endif %}>
+		<a href="{{ path('user_voir_favoris') }}" title="Voir vos favoris">Vos favoris ({{ nombre_favoris }})</a>
+	</li>
+	<li {% if app.request.get('_route') == 'user_voir_listes' %}class="active"{% endif %}>
+		<a href="{{ path('user_voir_listes') }}" title="Voir vos listes">Vos listes ({{ nombre_listes }})</a>
+	</li>
+</ul>

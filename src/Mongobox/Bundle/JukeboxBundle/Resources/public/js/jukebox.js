@@ -167,11 +167,13 @@ $(document).ready(function()
 	$(document).on('mouseover', '.show-edit-video', function(e)
 	{
 		$(this).find('.edit-video').addClass('edit-video-visible');
+		$(this).find('.btn-favoris-add').addClass('jukebox-visible');
 	});
 
 	$(document).on('mouseout', '.show-edit-video', function(e)
 	{
 		$(this).find('.edit-video').removeClass('edit-video-visible');
+		$(this).find('.btn-favoris-add').removeClass('jukebox-visible');
 	});
 
 	$(document).on('submit', '#form_video_info', function(e)
@@ -219,5 +221,5 @@ $(document).ready(function()
 	});
 });
 
-var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 5000);
+var refreshLoadVideoEnCours = setInterval('loadVideoEnCours()', 15000);
 var refreshLoadVideoEnCoursFail = 0;

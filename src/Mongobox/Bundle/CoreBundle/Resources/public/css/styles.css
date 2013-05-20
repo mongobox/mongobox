@@ -1,0 +1,28 @@
+/* ----------------------------------
+
+User
+
+------------------------------------ */
+.group-user
+{
+    float: left;
+    height: 50px;
+    margin: 5px;
+    padding: 5px;
+    width: 200px;
+}
+
+.group-user:hover
+{
+	box-shadow: 1px 1px 12px black;
+}
+
+.btn-link
+{
+	padding : 1px;
+}
+
+.btn-link:hover {
+	box-shadow: 1px 1px 5px black;
+	background-color: #e0e0e0;
+}

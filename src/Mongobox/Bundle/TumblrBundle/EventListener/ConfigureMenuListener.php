@@ -13,7 +13,7 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $tumblrMenu = $menu->addChild('Tumblr', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown')));
+        $tumblrMenu = $menu->addChild('Tumblr', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown'), 'label' => 'Tumblr <b class="caret"></b>', 'extras' => array('safe_label' => true)));
         $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
 
@@ -31,7 +31,7 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $tumblrMenu = $menu->addChild('Tumblr', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown')));
+        $tumblrMenu = $menu->addChild('Tumblr', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown'), 'label' => 'Tumblr <b class="caret"></b>', 'extras' => array('safe_label' => true)));
         $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
 

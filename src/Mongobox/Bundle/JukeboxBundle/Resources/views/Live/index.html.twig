@@ -57,7 +57,28 @@
 
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-			{% endif %}
+            {% endif %}
+
+            <script type="text/javascript">
+                function onPlayerStateChange(event)
+                {
+                    if (event.data === -1) {
+                        livePlayer.synchronizePlayerVolume();
+                    }
+
+                    {% if player_mode == "admin" %}
+                        var params = new Object();
+                        params.status = event.data;
+
+                        if (event.data != 0) {
+                            params.currentTime = player.getCurrentTime();
+                            livePlayer.sendParameters(params);
+                        } else {
+                            livePlayer.seekNextVideo(params);
+                        }
+                    {% endif %}
+                }
+            </script>
 
 			<script type="text/javascript">
 	          	var tag = document.createElement('script');
@@ -88,24 +109,20 @@
 		          		});
 					});
 	          	}
-			</script>
 
-			<script type="text/javascript">
-				$(document).ready(function() {
-					livePlayer = new LivePlayer();
-					livePlayer.initialize('{{ current_video.id }}');
+                var livePlayer = new LivePlayer();
+                livePlayer.initialize('{{ current_video.id }}');
 
-					connection = new WebSocket('{{ socket_params }}');
-					connection.onmessage = function(e) {
-						json = e.data;
+                var connection = new WebSocket('{{ socket_params }}');
+                connection.onmessage = function(e) {
+                    var json = e.data;
 
-						params = JSON.parse(json);
-						params.mode	= '{{ player_mode }}';
-						params.currentVideo = '{{ current_video.id }}';
+                    var params = JSON.parse(json);
+                    params.mode	= '{{ player_mode }}';
+                    params.currentVideo = '{{ current_video.id }}';
 
-						livePlayer.synchronizePlayerState(params);
-					};
-				});
+                    livePlayer.synchronizePlayerState(params);
+                };
 			</script>
 		{% else %}
 			Jukebox HS

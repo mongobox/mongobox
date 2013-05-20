@@ -63,6 +63,11 @@
     width: 213px;
 }
 
+.ui-menu-item
+{
+	cursor: pointer;
+}
+
 .tumblr-row-page{
     position: relative;
 }
