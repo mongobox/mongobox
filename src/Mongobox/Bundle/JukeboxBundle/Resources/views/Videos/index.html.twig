@@ -34,11 +34,11 @@
                 } %}
             </th>
             <th>
-                {# Filter on Lien #}
+                {# Filter on Duration #}
                 {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
                     'route':'videos',
-                    'property':'v.lien',
-                    'label':'Lien'
+                    'property':'v.duration',
+                    'label':'Durée'
                 } %}
             </th>
             <th>
@@ -54,7 +54,7 @@
                 {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
                     'route':'videos',
                     'property':'vg.diffusion',
-                    'label':'Nb Diffusions'
+                    'label':'Diffusions'
                 } %}
             </th>
             <th>
@@ -65,7 +65,7 @@
                     'label':'Nb Votes'
                 } %}
             </th>
-            <th>User</th>
+            <th>Postée par</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -73,16 +73,18 @@
     {% for entity in entities %}
         <tr class="show-edit-video">
             <td><a href="{{ path('videos_show', { 'id': entity.video.id }) }}">{{ entity.video.id }}</a></td>
-            <td>{{ entity.video.title }}</td>
-            <td>{{ entity.video.lien }}</td>
+            <td><img src="{{ entity.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ entity.video.thumbnailHq }}' />" data-html="true" /> {{ entity.video.title }}</td>
+            <td>{{entity.video.duration|niceTime}}</td>
             <td>{% if entity.lastBroadcast %}{{ entity.lastBroadcast|date('d-m-Y H:i:s') }}{% endif %}</td>
 			<td>{{entity.diffusion}}</td>
 			<td>{{ entity.votes }}</td>
 			<td>
-			{% if entity.user is not empty %}{{ entity.user.login }}{% endif %}
+			{% if entity.user is not empty %}
+				{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : entity.user, avatarMini : true} %}
+			{% endif %}
 			</td>
             <td>
-            	<a href="{{ path('videos_add_to_playlist_vg', { 'id': entity.id }) }}" class="btn">Add to Playlist</a>
+            	<a href="{{ path('videos_add_to_playlist_vg', { 'id': entity.id }) }}" class="btn" title="Ajouter à la playlist"><i class="icon-arrow-up"></i></a>
 				<a href="{{ path('ajax_new_video_favorite', {'id_video': entity.video.id}) }}" class="btn-favoris-add btn" title="Ajouter la chanson aux favoris"><i class="icon-bookmark"></i> <span></span></a>
 				<a href="{{url('video_edit_modal', {'id_video' : entity.video.id})}}" class="edit-video btn" title="Modifier la vidéo" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="icon-edit"></span></a>
             </td>
