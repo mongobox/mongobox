@@ -1,3 +1,13 @@
+mongoeat_vote:
+    resource: "@MongoeatVoteBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+mongoeat_restaurant:
+    resource: "@MongoeatRestaurantBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 MongoboxTumblrBundle:
     resource: "@MongoboxTumblrBundle/Controller/"
     type:     annotation

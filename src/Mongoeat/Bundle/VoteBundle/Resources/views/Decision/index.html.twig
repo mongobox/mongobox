@@ -1,0 +1,118 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
+
+{% block body -%}
+    {% if not hasVoted %}
+        <p style="float: right" ><a class="btn btn-success btn-large" href="{{ url('vote_new',{'id':entity.id}) }}">Voter pour un restaurant</a></p>
+    {% endif %}
+    <h1>Ou manger ce midi ?</h1>
+    <div class="row-fluid">
+        <div class="span8">
+            <h3>Vote pour ce midi</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Nombre vote</th>
+                    <th>Resto #1</th>
+                    <th>Resto #2</th>
+                    <th>Resto #3</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><a href="{{ path('decision_show', { 'id': entity.id }) }}">{% if entity.date %}{{ entity.date|date('d/m/Y') }}{% endif %}</a></td>
+                    <td>{{ entity.votes|length }}/{{ entity.getNombrePersonne }}</td><td>
+                        {% for resto, nb in entity.getRestaurentScore|slice(0,1) %}
+                            {{ resto }} ({{ nb }})
+                        {% endfor %}</td><td>
+                        {% for resto, nb in entity.getRestaurentScore|slice(1,1) %}
+                            {{ resto }} ({{ nb }})
+                        {% endfor %}</td><td>
+                        {% for resto, nb in entity.getRestaurentScore|slice(2,1) %}
+                            {{ resto }} ({{ nb }})
+                        {% endfor %}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
+                            </li>
+                            <li><a href="{{ url('vote_new',{'id':entity.id}) }}">
+                                    {% if not hasVoted %}
+                                    Voter pour un restaurant
+                                    {% else %}
+                                    Voir/Modifier son vote
+                                </a></p></li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="span4">
+            <h3>Restaurants</h3>
+            <ul>
+                <li><a href="{{ path('restaurant') }}">Voir les restaurants</a></li>
+                <li><a href="{{ path('restaurant_new') }}">Ajouter un nouveaux resto</a></li>
+                <li>
+                    <a href="{{ path('restaurant_find') }}">
+                        Ajouter via Foursquare des restaurants de {{ entity.group.city }}.
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Historique</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Nombre vote</th>
+                    <th>Resto #1</th>
+                    <th>Resto #2</th>
+                    <th>Resto #3</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entity in pagination %}
+                    <tr>
+                        <td><a href="{{ path('decision_show', { 'id': entity.id }) }}">{% if entity.date %}{{ entity.date|date('d/m/Y') }}{% endif %}</a></td>
+                        <td>{{ entity.votes|length }}/{{ entity.getNombrePersonne }}</td><td>
+                        {% for resto, nb in entity.getRestaurentScore|slice(0,1) %}
+                            {{ resto }} ({{ nb }})
+                        {% endfor %}</td><td>
+                            {% for resto, nb in entity.getRestaurentScore|slice(1,1) %}
+                                {{ resto }} ({{ nb }})
+                            {% endfor %}</td><td>
+                            {% for resto, nb in entity.getRestaurentScore|slice(2,1) %}
+                                {{ resto }} ({{ nb }})
+                            {% endfor %}</td>
+                        <td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('vote_new',{'id':entity.id}) }}">Voir son vote</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">Pas d'historique trouvé.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

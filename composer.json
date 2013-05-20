@@ -24,7 +24,9 @@
 		"avalanche123/imagine-bundle": "dev-master",
         "genemu/form-bundle": "2.1.x-dev",
 		"cboden/Ratchet": "dev-master",
-        "knplabs/knp-menu-bundle":"dev-master"
+        "knplabs/knp-menu-bundle":"dev-master",
+        "knplabs/knp-paginator-bundle": "dev-master"
+
     },
     "scripts": {
         "post-install-cmd": [

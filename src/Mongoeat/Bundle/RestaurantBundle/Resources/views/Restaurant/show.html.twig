@@ -1,0 +1,54 @@
+{% extends "MongoeatVoteBundle::layout.html.twig" %}
+
+{% block body -%}
+    <h1>Restaurant</h1>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ entity.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Code postal</th>
+                <td>{{ entity.code }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ entity.city }}</td>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{{ entity.lat }}</td>
+            </tr>
+            <tr>
+                <th>Longitude</th>
+                <td>{{ entity.lng }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<p>
+    <a class="btn" href="{{ path('restaurant') }}">
+        <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à la liste
+    </a>
+</p>
+<p>
+    <a class="btn btn-info" href="{{ path('restaurant_edit', { 'id': entity.id }) }}">
+        Modifier
+    </a>
+
+</p>
+<form action="{{ path('restaurant_delete', { 'id': entity.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+    <button class="btn btn-danger" type="submit">Supprimer</button>
+</form>
+{% endblock %}
