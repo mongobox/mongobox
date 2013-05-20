@@ -330,7 +330,7 @@ class LiveController extends Controller
 	 * @ParamConverter("tag", class="MongoboxJukeboxBundle:VideoTag")
 	 * @ParamConverter("group", class="MongoboxGroupBundle:Group", options={"id" = "id_group"})
      */
-	function liveTagSelectAction(VideoTag $tag, Group $group, $selected)
+	public function liveTagSelectAction(VideoTag $tag, Group $group, $selected)
 	{
 		$em = $this->getDoctrine()->getManager();
 
@@ -371,7 +371,7 @@ class LiveController extends Controller
      * @Route("/live_tag_delete/{id}", name="live_tag_delete")
 	 * @ParamConverter("tag", class="MongoboxGroupBundle:GroupLiveTag")
      */
-	function liveTagDeleteAction(GroupLiveTag $tag)
+	public function liveTagDeleteAction(GroupLiveTag $tag)
 	{
 		$em = $this->getDoctrine()->getManager();
 
@@ -387,7 +387,7 @@ class LiveController extends Controller
      * @Route("/live_empty_playlist/{id_group}/{force}", name="live_empty_playlist", defaults={"force" = false})
 	 * @ParamConverter("group", class="MongoboxGroupBundle:Group", options={"id" = "id_group"})
      */
-	function liveEmptyPlaylistAction(Group $group, $force)
+	public function liveEmptyPlaylistAction(Group $group, $force)
 	{
 		$em = $this->getDoctrine()->getManager();
 
