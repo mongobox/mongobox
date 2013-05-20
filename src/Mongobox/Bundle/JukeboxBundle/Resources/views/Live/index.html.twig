@@ -116,7 +116,7 @@
 	          	}
 
                 var livePlayer = new LivePlayer();
-                livePlayer.initialize('{{ current_video.id }}');
+                livePlayer.initialize('{{ current_video.id }}', '{{ app.user.id }}');
 
                 var connection = new WebSocket('{{ socket_params }}');
                 connection.onmessage = function(e) {
