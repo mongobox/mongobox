@@ -1,0 +1,8 @@
+<span class="list-name">{{ list.name }}</span>
+<div class="">
+	{% for bookmark in bookmarks %}
+		{% include 'MongoboxUsersBundle:Favoris/Listes:unFavorisDansListeDetails.html.twig' with { 'video': bookmark.video, 'date': bookmark.date } %}
+	{% else %}
+		Vous n'avez aucune vidéo dans cette liste
+	{% endfor %}
+</div>
