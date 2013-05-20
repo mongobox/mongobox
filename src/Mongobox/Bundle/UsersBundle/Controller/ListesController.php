@@ -104,7 +104,7 @@ class ListesController extends Controller
 		$html = '';
 		if( $result )
 		{
-			$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
+			$html = $this->renderView('MongoboxUsersBundle:Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
 		}
 
 		return new JsonResponse(array(
@@ -149,7 +149,7 @@ class ListesController extends Controller
 			{
 				$json['currentRoute'] = true;
 				$json['limitation'] = self::_limitation_listes;
-				$json['html'] = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListe.html.twig', array('liste' => $newList));
+				$json['html'] = $this->renderView('MongoboxUsersBundle:Listes:uneListe.html.twig', array('liste' => $newList));
 			}
 		} catch( \Exception $e)
 		{
@@ -200,7 +200,7 @@ class ListesController extends Controller
 			$list = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->find($id_list);
 			$videos = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getBookmarkFromList($list, $user);
 			$json['success'] = true;
-			$json['html'] = $this->renderView('MongoboxUsersBundle:Favoris/Listes:listeDetails.html.twig', array('list' => $list, 'bookmarks' => $videos));
+			$json['html'] = $this->renderView('MongoboxUsersBundle:Listes:listeDetails.html.twig', array('list' => $list, 'bookmarks' => $videos));
 		} catch( \Exception $e )
 		{
 			$json['success'] = false;
