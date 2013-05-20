@@ -12,7 +12,7 @@ use Mongoeat\Bundle\VoteBundle\Entity\Decision;
 /**
  * Decision controller.
  *
- * @Route("/decision")
+ * @Route("/mongoeat/decision")
  */
 class DecisionController extends Controller
 {

@@ -14,7 +14,7 @@ use Mongoeat\Bundle\VoteBundle\Form\VoteType;
 /**
  * Vote controller.
  *
- * @Route("/vote")
+ * @Route("/mongoeat/vote")
  */
 class VoteController extends Controller
 {

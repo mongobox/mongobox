@@ -11,6 +11,7 @@
     <services>
         <service id="mongoeat_vote.configure_menu_listener" class="%mongoeat_vote.configure_menu_listener.class%">
             <tag name="kernel.event_listener" event="mongobox_core.eat_menu_configure" method="onEatMenuConfigure" />
+            <tag name="kernel.event_listener" event="mongobox_core.main_menu_configure" method="onMainMenuConfigure" />
         </service>
     </services>
 </container>

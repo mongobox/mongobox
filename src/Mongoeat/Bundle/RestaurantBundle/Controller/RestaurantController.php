@@ -15,7 +15,7 @@ use Symfony\Component\Process\Process;
 /**
  * Restaurant controller.
  *
- * @Route("/restaurant")
+ * @Route("/mongoeat/restaurant")
  */
 class RestaurantController extends Controller
 {
