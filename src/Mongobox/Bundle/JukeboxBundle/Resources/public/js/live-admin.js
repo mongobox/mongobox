@@ -79,4 +79,9 @@ $(document).ready(function() {
             livePlayer.seekNextVideo(params);
         }
     };
+
+    livePlayer.receivePutschAttempt = function (params)
+    {
+        //TODO
+    };
 });

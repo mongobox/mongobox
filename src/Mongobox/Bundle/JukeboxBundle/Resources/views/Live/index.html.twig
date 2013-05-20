@@ -126,7 +126,15 @@
                     params.mode	= '{{ player_mode }}';
                     params.currentVideo = '{{ current_video.id }}';
 
-                    livePlayer.synchronizePlayerState(params);
+                    {% if player_mode == "admin" %}
+                        if (typeof params.action !== 'undefined' && params.action === 'putsch_attempt') {
+                            livePlayer.receivePutschAttempt(params);
+                        } else {
+                            livePlayer.synchronizePlayerState(params);
+                        }
+                    {% else %}
+                        livePlayer.synchronizePlayerState(params);
+                    {% endif %}
                 };
 			</script>
 		{% else %}

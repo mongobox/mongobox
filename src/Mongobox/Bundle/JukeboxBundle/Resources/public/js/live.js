@@ -5,8 +5,8 @@ LivePlayer = function()
 {
 	this.initialize = function(currentPlaylistId, currentUserId)
 	{
-        this.userId     = currentUserId;
         this.playlistId = currentPlaylistId;
+        this.userId     = currentUserId;
 
 		this.getPlaylistScores(currentPlaylistId);
         this.synchronizePlayerVolume();
@@ -14,12 +14,10 @@ LivePlayer = function()
 		this.initializeVideoRating();
         this.initializeVolumeControl();
 
-        /*
         $("#putsch-button").click(function(event) {
             event.preventDefault();
             this.sendPutschAttempt();
         }.bind(this));
-        */
 	},
 
     this.initializeVideoRating = function()
@@ -65,17 +63,6 @@ LivePlayer = function()
             this.updatePlayerVolume('down');
         }.bind(this));
     },
-
-    /*
-    this.sendPutschAttempt = function ()
-    {
-        var params = new Object();
-        params.action   = 'putsch_attempt';
-        params.userId   = this.userId;
-
-        console.log(params);
-    },
-    */
 
 	this.synchronizePlayerState = function(params)
 	{
@@ -211,5 +198,14 @@ LivePlayer = function()
         $('#volume-up-votes').text('(' + data.upVotes + ')');
         $('#volume-down-votes').text('(' + data.downVotes + ')');
         $('#video-volume').text('Volume : ' + data.currentVolume + '%');
+    },
+
+    this.sendPutschAttempt = function ()
+    {
+        var params = new Object();
+        params.action   = 'putsch_attempt';
+        params.userId   = this.userId;
+
+        this.sendParameters(params);
     }
 };
