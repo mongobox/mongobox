@@ -1,4 +1,4 @@
-<li class="une-liste" title="Cliquer pour afficher les vidéos de cette liste" id="liste-{{ liste.id }}" data-liste-id="{{ liste.id }}">
-	<button type="button" class="close btn-remove-list" title="Supprimer la liste" href="{{ path('remove_list_action', {'id_list': liste.id}) }}">&times;</button>
+<li class="une-liste btn-tooltip" id="liste-{{ liste.id }}" data-liste-id="{{ liste.id }}" href="{{ path('details_list_action', {'id_list': liste.id}) }}" title="Afficher les détails de la liste">
+	<button type="button" class="close btn-remove-list btn-tooltip" title="Supprimer la liste" href="{{ path('remove_list_action', {'id_list': liste.id}) }}">&times;</button>
 	{{ liste.name }}
 </li>
