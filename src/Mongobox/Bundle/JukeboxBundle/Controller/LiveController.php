@@ -64,26 +64,23 @@ class LiveController extends Controller
 		return $data;
 	}
 
-    protected function _isJukeboxAdmin()
-    {
-        $liveAdmin = $this->get('mongobox_jukebox.live_admin');
-        if ($liveAdmin->isCurrentAdmin()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 	/**
      * @Route("/", name="live")
      * @Template()
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $adminMode = $this->_isJukeboxAdmin();
-        $liveConfigurator = $this->get('mongobox_jukebox.live_configurator');
+        $liveAdmin = $this->get('mongobox_jukebox.live_admin');
+        if ($liveAdmin->isCurrentAdmin() === true) {
+            $adminMode = true;
+        } else {
+            $adminMode = false;
+        }
 
-        return $liveConfigurator->initializeJukebox($adminMode);
+        $liveConfigurator   = $this->get('mongobox_jukebox.live_configurator');
+        $jukeboxParams      = $liveConfigurator->initializeJukebox($adminMode);
+
+        return $jukeboxParams;
     }
 
     /**
