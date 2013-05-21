@@ -105,20 +105,41 @@ $(document).ready(function() {
             type: 'GET',
             dataType: 'html',
             url: putschUrl,
-            data: "user=" + params.userId
+            data: {
+                'user': params.userId
+            }
         }).done(function(html) {
             if (html !== '') {
                 $('#putsch-modal').modal('show');
-                $('.loader').show();
+                $('#putsch-modal .loader').show();
                 $('#putsch-modal').html(html);
-                $('.loader').hide();
+                $('#putsch-modal .loader').hide();
             }
         }.bind(this));
     };
 
-    livePlayer.acceptPutsch = function()
+    livePlayer.acceptPutsch = function(userId)
     {
         $('#putsch-modal').modal('hide');
+
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: putschResponseUrl,
+            data: {
+                'user': userId,
+                'response': 1
+            }
+        }).done(function(data) {
+            if (data.status === "done") {
+                var params = new Object();
+                params.action   = "refresh_page";
+                params.userId   = userId;
+
+                livePlayer.sendParameters(params);
+                window.location.reload();
+            }
+        }.bind(this));
     }
 
     livePlayer.refusePutsch = function()

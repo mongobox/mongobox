@@ -66,6 +66,11 @@ LivePlayer = function()
 
 	this.synchronizePlayerState = function(params)
 	{
+        if (params.action === 'refresh_page' && parseInt(params.userId) === parseInt(this.userId)) {
+            window.location.reload();
+            return true;
+        }
+
 		if (params.action === 'update_scores') {
 			var scores = JSON.parse(params.scores);
 			this.updatePlaylistScores(scores);
