@@ -104,7 +104,7 @@ class ListesController extends Controller
 		$html = '';
 		if( $result )
 		{
-			$html = $this->renderView('MongoboxUsersBundle:Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
+			$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
 		}
 
 		return new JsonResponse(array(
@@ -233,6 +233,7 @@ class ListesController extends Controller
 			$manager->remove($uf);
 			$manager->flush();
 			$json["success"] = true;
+			unset($json["message"]);
 		}
 
 		return new JsonResponse($json);
