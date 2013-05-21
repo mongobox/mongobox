@@ -169,16 +169,16 @@ var listesManager = listesManager || {};
 	// Function to change DOM between click
 	listesManager.handleEditingAction = function(bouton, $type)
 	{
-		console.log($type);
 		if( $type === "editing" )
 		{
-			var span_list_title = bouton.siblings('span.list-name');
-			span_list_title.hide();
+			bouton.siblings('span.list-name').hide();
 			bouton.siblings('.input-submitting-list-name').show();
-			var list_name = span_list_title.text();
-			console.log(list_name);
+			bouton.attr('data-action', 'submitting');
 		} else if( $type === "submitting")
 		{
+			bouton.siblings('span.list-name').show();
+			bouton.siblings('.input-submitting-list-name').hide();
+			bouton.attr('data-action', 'editing');
 		}
 	};
 
