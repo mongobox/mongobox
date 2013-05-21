@@ -1,5 +1,9 @@
 <div class="bookmark-list">
 	{{ video.title }}
-	<button class="btn-link pull-right btn-tooltip" title="Supprimer la vidéo de cette liste"><i class="icon-trash"></i></button>
-	<button class="btn-link pull-right btn-tooltip" title="Ajoutée à la liste le {{ date|date('d/m/Y') }}"><i class="icon-time"></i></button>
+	<button class="btn-link pull-right btn-tooltip" title="Supprimer la vidéo de cette liste" href="{{ path('remove_bookmark_list_action', {'id_list': list.id, 'id_video': video.id}) }}">
+		<i class="icon-trash"></i>
+	</button>
+	<button class="btn-link pull-right btn-tooltip" title="Ajoutée à la liste le {{ date|date('d/m/Y') }}">
+		<i class="icon-time"></i>
+	</button>
 </div>
