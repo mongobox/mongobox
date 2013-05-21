@@ -301,10 +301,7 @@ class LiveController extends Controller
             throw $this->createNotFoundException();
         }
 
-        if (!$response = (bool) $request->get('response')) {
-            throw $this->createNotFoundException();
-        }
-
+        $response = (bool) $request->get('response');
         if ($liveAdmin->switchAdmin($userId, $response) === true) {
             $status = 'done';
         } else {
