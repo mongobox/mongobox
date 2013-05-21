@@ -77,10 +77,15 @@ class LiveController extends Controller
             $adminMode = false;
         }
 
+        $data = array(
+            'page_title'	=> 'Jukebox - Live stream',
+            'current_admin' => $liveAdmin->getCurrentAdmin()
+        );
+
         $liveConfigurator   = $this->get('mongobox_jukebox.live_configurator');
         $jukeboxParams      = $liveConfigurator->initializeJukebox($adminMode);
 
-        return $jukeboxParams;
+        return array_merge($data, $jukeboxParams);
     }
 
     /**

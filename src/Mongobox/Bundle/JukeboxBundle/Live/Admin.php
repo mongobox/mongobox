@@ -50,6 +50,21 @@ class Admin
     }
 
     /**
+     * Retrieve the live current administrator
+     *
+     * @return \Mongobox\Bundle\UsersBundle\Entity\User
+     */
+    public function getCurrentAdmin()
+    {
+        $session = $this->container->get('session');
+
+        $groupRepository    = $this->em->getRepository('MongoboxGroupBundle:Group');
+        $groupEntity        = $groupRepository->find($session->get('id_group'));
+
+        return $groupEntity->getLiveCurrentAdmin();
+    }
+
+    /**
      * Initialize the jukebox playlist
      *
      * @param Group $group

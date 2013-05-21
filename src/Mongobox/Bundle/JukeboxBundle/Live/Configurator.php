@@ -92,7 +92,6 @@ class Configurator
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
 
         return array(
-            'page_title'	=> 'Jukebox - Live stream',
             'current_video'	=> $currentPlayed,
             'player_mode'	=> $playerMode,
             'player_vars'	=> json_encode($playerVars),
