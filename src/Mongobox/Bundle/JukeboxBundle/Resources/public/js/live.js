@@ -66,18 +66,38 @@ LivePlayer = function()
 
 	this.synchronizePlayerState = function(params)
 	{
-        if (params.action === 'refresh_page' && parseInt(params.userId) === parseInt(this.userId)) {
-            window.location.reload();
-            return true;
-        }
+        switch (params.action) {
+            case 'update_scores':
+                var scores = JSON.parse(params.scores);
+                this.updatePlaylistScores(scores);
 
-		if (params.action === 'update_scores') {
-			var scores = JSON.parse(params.scores);
-			this.updatePlaylistScores(scores);
-		}
+                return;
+            break;
 
-        if (params.action === 'update_volume') {
-            this.synchronizePlayerVolume();
+            case 'update_volume':
+                this.synchronizePlayerVolume();
+
+                return;
+            break;
+
+            case 'refresh_page':
+                if (parseInt(params.userId) === parseInt(this.userId)) {
+                    window.location.reload();
+
+                    return;
+                }
+            break;
+
+            case 'refuse_putsch':
+                if (parseInt(params.userId) === parseInt(this.userId)) {
+                    $('#putsch-modal').modal('show');
+                    $('.loader').show();
+                    $('#putsch-modal .modal-content').html($('#putsch-refuse-callback').html());
+                    $('.loader').hide();
+
+                    return;
+                }
+            break;
         }
 
         switch(params.status) {
@@ -100,9 +120,7 @@ LivePlayer = function()
                 });
 
                 this.synchronizePlayerVolume();
-
                 this.initialize(params.playlistId);
-
             break;
         }
 	},

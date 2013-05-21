@@ -123,7 +123,7 @@ $(document).ready(function() {
         $('#putsch-modal').modal('hide');
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             dataType: 'json',
             url: putschResponseUrl,
             data: {
@@ -142,8 +142,27 @@ $(document).ready(function() {
         }.bind(this));
     }
 
-    livePlayer.refusePutsch = function()
+    livePlayer.refusePutsch = function(userId)
     {
         $('#putsch-modal').modal('hide');
+        $('#putsch-video-modal .modal-content').html('');
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: putschResponseUrl,
+            data: {
+                'user': userId,
+                'response': 0
+            }
+        }).done(function(data) {
+            if (data.status === "done") {
+                var params = new Object();
+                params.action   = "refuse_putsch";
+                params.userId   = userId;
+
+                livePlayer.sendParameters(params);
+            }
+        }.bind(this));
     }
 });
