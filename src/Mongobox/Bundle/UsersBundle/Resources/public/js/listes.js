@@ -13,6 +13,7 @@ var listesManager = listesManager || {};
 		this.observeSubmit();
 		this.observeRemoveList();
 		this.observeListDetailsDisplay();
+		this.observeRemoveBookmarkFromList();
 	};
 
 	// Function to init tooltip on some btn
@@ -140,9 +141,27 @@ var listesManager = listesManager || {};
 	// Function to handle deleting bookmark from list
 	listesManager.observeRemoveBookmarkFromList = function()
 	{
-		$('.list-details-bookmarks').on('click', '', function(e)
+		$('#details-liste').on('click', '.btn-remove-bookmark-list', function(e)
 		{
 			e.preventDefault();
+			e.stopPropagation();
+			var bouton_suppr = $(this);
+			var div_bookmark = bouton_suppr.closest('.bookmark-list');
+			div_bookmark.fadeOut(300);
+			$.ajax({
+				url: bouton_suppr.attr('href'),
+				type: 'POST',
+				dataType: 'json',
+				success: function(data)
+				{
+					if(data.success)
+					{
+						div_bookmark.remove();
+						alertify.success(data.message);
+					} else
+						alertify.error(data.message);
+				}
+			});
 		});
 	};
 

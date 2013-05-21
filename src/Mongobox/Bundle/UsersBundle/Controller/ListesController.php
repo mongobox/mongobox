@@ -233,7 +233,7 @@ class ListesController extends Controller
 			$manager->remove($uf);
 			$manager->flush();
 			$json["success"] = true;
-			unset($json["message"]);
+			$json["message"] = "La vidéo a bien été supprimée";
 		}
 
 		return new JsonResponse($json);
