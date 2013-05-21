@@ -174,6 +174,7 @@ var listesManager = listesManager || {};
 		{
 			var span_list_title = bouton.siblings('span.list-name');
 			span_list_title.hide();
+			bouton.siblings('.input-submitting-list-name').show();
 			var list_name = span_list_title.text();
 			console.log(list_name);
 		} else if( $type === "submitting")
