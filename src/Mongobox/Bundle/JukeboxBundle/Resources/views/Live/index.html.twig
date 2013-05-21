@@ -92,12 +92,12 @@
 	          	var firstScriptTag = document.getElementsByTagName('script')[0];
 	          	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-	          	var playerMode		= '{{ player_mode }}';
-	          	var nextVideoUrl	= '{{ path('live_next') }}';
-	          	var voteUrl			= '{{ path('live_vote') }}';
-	          	var scoreUrl		= '{{ path('live_score') }}';
-                var volumeUrl       = '{{ path('live_volume') }}';
+	          	var voteUrl			        = '{{ path('live_vote') }}';
+	          	var scoreUrl		        = '{{ path('live_score') }}';
+                var volumeUrl               = '{{ path('live_volume') }}';
+                var putschEligibilityUrl    = '{{ path('putsch_eligibility') }}';
 
+                var playerMode		= '{{ player_mode }}';
                 var playerVars      = {{ player_vars|raw }}
                 var defaultVolume   = playerVars.volume;
 

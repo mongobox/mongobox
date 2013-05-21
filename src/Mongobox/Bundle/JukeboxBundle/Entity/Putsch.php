@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Putsch
  *
  * @ORM\Table(name="putsches_attempts")
- * @ORM\Entity(repositoryClass="Mongobox\Bundle\JukeboxBundle\Entity\PutschRepository")
+ * @ORM\Entity(repositoryClass="Mongobox\Bundle\JukeboxBundle\Entity\Repository\PutschRepository")
  */
 class Putsch
 {
@@ -20,6 +20,14 @@ class Putsch
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var \Mongobox\Bundle\GroupBundle\Entity\Group
+     *
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
+     */
+    private $group;
 
     /**
      * @var \Mongobox\Bundle\UsersBundle\Entity\User
@@ -39,7 +47,7 @@ class Putsch
     /**
      * @var integer
      *
-     * @ORM\Column(name="response", type="smallint")
+     * @ORM\Column(name="response", type="smallint", nullable=true)
      */
     private $response;
 
@@ -52,6 +60,29 @@ class Putsch
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set group
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $group
+     * @return Putsch
+     */
+    public function setGroup(\Mongobox\Bundle\GroupBundle\Entity\Group $group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Mongobox\Bundle\GroupBundle\Entity\Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 
     /**
