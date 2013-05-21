@@ -14,6 +14,7 @@ var listesManager = listesManager || {};
 		this.observeRemoveList();
 		this.observeListDetailsDisplay();
 		this.observeRemoveBookmarkFromList();
+		this.observeEditingListTitle();
 	};
 
 	// Function to init tooltip on some btn
@@ -162,6 +163,34 @@ var listesManager = listesManager || {};
 						alertify.error(data.message);
 				}
 			});
+		});
+	};
+
+	// Function to change DOM between click
+	listesManager.handleEditingAction = function(bouton, $type)
+	{
+		console.log($type);
+		if( $type === "editing" )
+		{
+			var span_list_title = bouton.siblings('span.list-name');
+			span_list_title.hide();
+			var list_name = span_list_title.text();
+			console.log(list_name);
+		} else if( $type === "submitting")
+		{
+		}
+	};
+
+	// Function to handle editing list title
+	listesManager.observeEditingListTitle = function()
+	{
+		$('#details-liste').on('click', '.btn-edit-list-name', function(e)
+		{
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $type = $(this).attr('data-action');
+			listesManager.handleEditingAction( $(this), $type);
 		});
 	};
 
