@@ -239,7 +239,7 @@ class LiveController extends Controller
     }
 
     /**
-     * @Route("/putsch/eligibility", name="putsch_eligibility")
+     * @Route("/putsch/eligibility", name="live_putsch_eligibility")
      */
     public function putschEligibilityAction(Request $request)
     {
@@ -266,7 +266,6 @@ class LiveController extends Controller
         }
 
         return new Response(json_encode($permission));
-
     }
 
     /**
@@ -286,6 +285,33 @@ class LiveController extends Controller
         return array(
             'user'  => $userEntity
         );
+    }
+
+    /**
+     * @Route("/putsch/response", name="live_putsch_response")
+     */
+    public function putschResponseAction(Request $request)
+    {
+        $liveAdmin = $this->get('mongobox_jukebox.live_admin');
+        if ($liveAdmin->isCurrentAdmin() !== true) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$userId = (int) $request->get('user')) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$response = (bool) $request->get('response')) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($liveAdmin->switchAdmin($userId, $response) === true) {
+            $status = 'done';
+        } else {
+            $status = 'fail';
+        }
+
+        return new Response(json_encode(array('status' => $status)));
     }
 
     /**

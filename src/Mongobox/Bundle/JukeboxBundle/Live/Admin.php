@@ -86,4 +86,51 @@ class Admin
 
         return $nextInPlaylist;
     }
+
+    /**
+     * Switch or not (depending of the given status) the administrator of the live
+     *
+     * @param integer $userId
+     * @param boolean $status
+     * @return boolean
+     */
+    public function switchAdmin($userId, $status)
+    {
+        try {
+            $session = $this->container->get('session');
+
+            $userRepository = $this->em->getRepository('MongoboxUsersBundle:User');
+            if (!$userEntity = $userRepository->find($userId)) {
+                return false;
+            }
+
+            $groupRepository = $this->em->getRepository('MongoboxGroupBundle:Group');
+            if (!$groupEntity = $groupRepository->find($session->get('id_group'))) {
+                return false;
+            }
+
+            if ($status === true) {
+                $groupEntity->setLiveCurrentAdmin($userEntity);
+                $this->em->flush($groupEntity);
+            }
+
+            $conditions = array(
+                'group'     => $groupEntity,
+                'user'      => $userEntity,
+                'response'  => null
+            );
+
+            $putschRepository = $this->em->getRepository('MongoboxJukeboxBundle:Putsch');
+            if (!$putschEntity = $putschRepository->findOneBy($conditions)) {
+                return false;
+            }
+
+            $putschEntity->setResponse($status);
+            $this->em->flush($putschEntity);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }
