@@ -9,6 +9,17 @@
         <a href="#" id="putsch-button" class="btn btn-primary" role="button">Devenir l'administrateur</a>
     {% endif %}
 
+    <div id="putsch-modal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Tentative de putsch</h3>
+        </div>
+        <div class="modal-body">
+            <div class="loader"></div>
+            <div class="modal-content"></div>
+        </div>
+    </div>
+
 	<div class="marketing">
 		<h1>{{ page_title }}</h1>
 		{% if current_video is not null %}
