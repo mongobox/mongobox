@@ -226,14 +226,14 @@ class ListesController extends Controller
 
 		$json = array(
 			"success" => false,
-			"message" => "Une erreur est survenue pendant la suppression"
+			"message" => "Une erreur est survenue pendant la suppression de la vidéo"
 		);
 		if( $uf )
 		{
 			$manager->remove($uf);
 			$manager->flush();
 			$json["success"] = true;
-			$json["message"] = "La vidéo a bien été supprimée";
+			$json["message"] = "La vidéo a bien été supprimée de la liste";
 		}
 
 		return new JsonResponse($json);
