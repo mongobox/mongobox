@@ -41,7 +41,10 @@
             $(".digits").countdown({
                 image: "{{ asset('bundles/mongoboxjukebox/img/digits.png') }}",
                 format: "mm:ss",
-                startTime: "01:00"
+                startTime: "01:00",
+                timerEnd: function() {
+                    livePlayer.acceptPutsch();
+                }
             });
         });
     </script>
