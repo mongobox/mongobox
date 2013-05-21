@@ -8,7 +8,7 @@
     </div>
     <div class="modal-body">
         <div class="loader"></div>
-            <div class="modal-content">
+        <div class="modal-content">
             <div class="cell">
                 <div id="holder">
                     <div class="digits"></div>
@@ -27,24 +27,26 @@
     </div>
 
     <script type="text/javascript">
-        $('#accept-putsch').click(function(event) {
-            event.preventDefault();
-            livePlayer.acceptPutsch({{ user.id }});
-        });
-
-        $('#refuse-putsch').click(function(event) {
-            event.preventDefault();
-            livePlayer.refusePutsch({{ user.id }});
-        });
-
         $(function(){
             $(".digits").countdown({
                 image: "{{ asset('bundles/mongoboxjukebox/img/digits.png') }}",
                 format: "mm:ss",
                 startTime: "01:00",
                 timerEnd: function() {
-                    livePlayer.acceptPutsch({{ user.id }});
+                    if ($('#putsch-modal').is(':visible')) {
+                        livePlayer.acceptPutsch({{ user.id }});
+                    }
                 }
+            });
+
+            $('#accept-putsch').click(function(event) {
+                event.preventDefault();
+                livePlayer.acceptPutsch({{ user.id }});
+            });
+
+            $('#refuse-putsch').click(function(event) {
+                event.preventDefault();
+                livePlayer.refusePutsch({{ user.id }});
             });
         });
     </script>

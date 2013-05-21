@@ -7,6 +7,17 @@
 
     {% if player_mode != "admin" %}
         <a href="#" id="putsch-button" class="btn btn-primary" role="button">Devenir l'administrateur</a>
+        <div id="putsch-refuse-callback" style="display: none">
+            <div style="text-align: center">
+                <p>
+                    <img src="{{ asset('bundles/mongoboxjukebox/img/at-least-you-tried.jpg') }}" alt="nice try" title="Dommage !" />
+                </p>
+                <p>
+                    <b>Votre demande vient d'être rejetée par l'administrateur actuel !</b><br />
+                    <i>Réessayez un peu plus tard...</i>
+                </p>
+            </div>
+        </div>
     {% endif %}
 
     <div id="putsch-modal" class="modal hide fade">
