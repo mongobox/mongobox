@@ -188,7 +188,7 @@ class ListesController extends Controller
 
 	/**
 	 * Fonction pour récupérer les détails d'une liste
-	 * @Route("/ajax/list/details/{id_list}", name="details_list_action", requirements={"id" = "\d+"})
+	 * @Route("/ajax/list/details/{id_list}", name="details_list_action", requirements={"id_list" = "\d+"})
 	 */
 	public function getListDetailsAction($id_list)
 	{
@@ -205,6 +205,34 @@ class ListesController extends Controller
 		{
 			$json['success'] = false;
 			$json['error'] = 'Le chargement de la liste a échoué';
+		}
+
+		return new JsonResponse($json);
+	}
+
+	/**
+	 * Fonction pour supprimer une vidéo d'une liste de favoris
+	 * @Route("/ajax/list/{id_list}/remove/bookmark/{id_video}", name="remove_bookmark_list_action", requirements={"id_list" = "\d+", "id_video" = "\d+"})
+	 */
+	public function removeVideoFromListAction($id_list, $id_video)
+	{
+		$user = $this->getUser();
+		$manager = $this->getDoctrine()->getManager();
+		$uf = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->findOneBy(array(
+			"user" => $user,
+			"liste" => $manager->find("MongoboxUsersBundle:ListeFavoris", $id_list),
+			"video" => $manager->find("MongoboxJukeboxBundle:Videos", $id_video)
+		));
+
+		$json = array(
+			"success" => false,
+			"message" => "Une erreur est survenue pendant la suppression"
+		);
+		if( $uf )
+		{
+			$manager->remove($uf);
+			$manager->flush();
+			$json["success"] = true;
 		}
 
 		return new JsonResponse($json);
