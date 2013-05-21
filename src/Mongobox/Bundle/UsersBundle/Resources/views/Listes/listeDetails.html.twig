@@ -1,4 +1,4 @@
-<span class="list-name">{{ list.name }}</span>
+<span class="list-name">{{ list.name }}</span><button class="btn-edit-list-name btn-link btn-tooltip" title="Modifier le titre de la liste"><i class="icon-pencil"></i></button>
 <div class="list-details-bookmarks">
 	{% for bookmark in bookmarks %}
 		{% include 'MongoboxUsersBundle:Listes:unFavorisDansListeDetails.html.twig' with { 'video': bookmark.video, 'date': bookmark.date } %}
