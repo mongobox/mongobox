@@ -239,6 +239,37 @@ class LiveController extends Controller
     }
 
     /**
+     * @Route("/putsch/eligibility", name="putsch_eligibility")
+     */
+    public function putschEligibilityAction(Request $request)
+    {
+        $em         = $this->getDoctrine()->getManager();
+        $session    = $request->getSession();
+
+        $currentGroup   = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $currentUser    = $this->get('security.context')->getToken()->getUser();
+
+        $repository     = $em->getRepository('MongoboxJukeboxBundle:Putsch');
+        $permission     = $repository->checkPutschAttempt($currentGroup, $currentUser);
+
+        if ($permission['result'] === 'deny') {
+            $permission['details'] = $this->renderView(
+                'MongoboxJukeboxBundle:Partial:live-putsch-callback.html.twig',
+                array(
+                    'permission'    => $permission,
+                    'group'         => $currentGroup,
+                    'user'          => $currentUser
+                )
+            );
+        } else {
+            $permission['details'] = null;
+        }
+
+        return new Response(json_encode($permission));
+
+    }
+
+    /**
      * @Route("/putsch", name="live_putsch")
      * @Template()
      */

@@ -3,6 +3,9 @@
 namespace Mongobox\Bundle\JukeboxBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Mongobox\Bundle\GroupBundle\Entity\Group;
+use Mongobox\Bundle\JukeboxBundle\Entity\Putsch;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * PutschRepository
@@ -12,4 +15,119 @@ use Doctrine\ORM\EntityRepository;
  */
 class PutschRepository extends EntityRepository
 {
+    /**
+     * Check if there is not already an ongoing attempt to this given group
+     *
+     * @param Group $group
+     * @return array|boolean
+     */
+    protected function _checkAttemptForGroup(Group $group)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('putsches')
+            ->from('MongoboxJukeboxBundle:Putsch', 'putsches')
+            ->where('putsches.group = :group')
+            ->andWhere('putsches.response is null')
+            ->setParameters(array(
+                'group' => $group
+            ))
+            ->setMaxResults(1)
+            ->getQuery()
+        ;
+
+        $query = $qb->getQuery();
+
+        try {
+            $result = $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            $result = false;
+        }
+
+        if ($result === false) {
+            return true;
+        } else {
+            return array(
+                'result'    => 'deny',
+                'fail'      => 'group'
+            );
+        }
+    }
+
+    /**
+     * Checks if the user does not already have an ongoing attempt
+     *
+     * @param User $user
+     * @return array|boolean
+     */
+    protected function _checkAttemptForUser(User $user)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('putsches')
+            ->from('MongoboxJukeboxBundle:Putsch', 'putsches')
+            ->where('putsches.user = :user')
+            ->andWhere('putsches.response is null')
+            ->setParameters(array(
+                'user' => $user
+            ))
+            ->setMaxResults(1)
+            ->getQuery()
+        ;
+
+        $query = $qb->getQuery();
+
+        try {
+            $result = $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            $result = false;
+        }
+
+        if ($result === false) {
+            return true;
+        } else {
+            return array(
+                'result'    => 'deny',
+                'fail'      => 'user'
+            );
+        }
+    }
+
+    /**
+     * Check if the user can perform a putsch in the given group
+     *
+     * @param Group $group
+     * @param User $user
+     * @return array
+     */
+    public function checkPutschAttempt(Group $group, User $user)
+    {
+        $groupAvailability = $this->_checkAttemptForGroup($group);
+        if ($groupAvailability !== true) {
+            return $groupAvailability;
+        }
+
+        $userAvailability = $this->_checkAttemptForUser($user);
+        if ($userAvailability !== true) {
+            return $userAvailability;
+        }
+
+        $newAttempt = new Putsch();
+        $newAttempt->setDate(new \DateTime());
+        $newAttempt->setGroup($group);
+        $newAttempt->setUser($user);
+
+        $em = $this->getEntityManager();
+        $em->persist($newAttempt);
+        $em->flush($newAttempt);
+
+        return array(
+            'result'    => 'allow',
+            'fail'      => null
+        );
+    }
 }

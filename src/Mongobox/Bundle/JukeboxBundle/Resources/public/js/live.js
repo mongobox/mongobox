@@ -185,10 +185,26 @@ LivePlayer = function()
 
     this.sendPutschAttempt = function ()
     {
-        var params = new Object();
-        params.action   = 'putsch_attempt';
-        params.userId   = this.userId;
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: putschEligibilityUrl,
+            data: {
+                'user' : this.userId
+            }
+        }).done(function(data) {
+            if (data.result === 'allow') {
+                var params = new Object();
+                params.action   = 'putsch_attempt';
+                params.userId   = this.userId;
 
-        this.sendParameters(params);
+                this.sendParameters(params);
+            } else {
+                $('#putsch-modal').modal('show');
+                $('.loader').show();
+                $('#putsch-modal .modal-content').html(data.details);
+                $('.loader').hide();
+            }
+        }.bind(this));
     }
 };
