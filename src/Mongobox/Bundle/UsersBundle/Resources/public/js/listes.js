@@ -8,6 +8,7 @@ var listesManager = listesManager || {};
 		this.textNewListTitle = $('#add-list-name'); // input type text, champs titre de la nouvelle liste
 		this.btnRemoveList = '.btn-remove-list';
 		this.contentList = $('#details-liste');
+		this.editing = false;
 
 		this.initTooltip();
 		this.observeSubmit();
@@ -172,12 +173,16 @@ var listesManager = listesManager || {};
 		if( $type === "editing" )
 		{
 			bouton.siblings('span.list-name').hide();
-			bouton.siblings('.input-submitting-list-name').show();
+			//bouton.siblings('.input-submitting-list-name').show().focus();
+			$('#list-input-edit-name').show().focus();
+			bouton.find('i').hide();
 			bouton.attr('data-action', 'submitting');
+			listesManager.observeEditingSubmitListTitle();
 		} else if( $type === "submitting")
 		{
 			bouton.siblings('span.list-name').show();
-			bouton.siblings('.input-submitting-list-name').hide();
+			$('#list-input-edit-name').hide();
+			bouton.find('i').show();
 			bouton.attr('data-action', 'editing');
 		}
 	};
@@ -192,6 +197,44 @@ var listesManager = listesManager || {};
 
 			var $type = $(this).attr('data-action');
 			listesManager.handleEditingAction( $(this), $type);
+		});
+	};
+
+	// Fonction pour envoyer
+	listesManager.observeEditingSubmitListTitle = function()
+	{
+		$('#list-input-edit-name').unbind('keypress');
+		$('#list-input-edit-name').bind('keypress', function(e)
+		{
+			if(e.which === 13 && !listesManager.editing )
+			{
+				listesManager.editing = true;
+				$('#img-loader-edit-name').show();
+				$(this).attr('disabled', 'disabled');
+				var input_text = $(this);
+				$.ajax({
+					url: basepath+"ajax/list/"+$(this).attr('data-id-list')+"/update/title",
+					type: "POST",
+					data: { 'name': $(this).val() },
+					dataType: 'json',
+					success: function(data)
+					{
+						if( data.success )
+						{
+							alertify.success(data.message);
+							$('.list-name', $('#liste-'+input_text.attr('data-id-list'))).html(data.newName);
+							input_text.siblings('.list-name').html(data.newName);
+						} else
+						{
+							alertify.error(data.message);
+						}
+						input_text.removeAttr('disabled');
+						listesManager.editing = false;
+						listesManager.handleEditingAction(input_text.siblings('.btn-edit-list-name'), 'submitting');
+						$('#img-loader-edit-name').hide();
+					}
+				});
+			}
 		});
 	};
 
