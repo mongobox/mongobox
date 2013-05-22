@@ -88,6 +88,10 @@ LivePlayer = function()
                 }
             break;
 
+            case 'putsch_acknowledgment':
+                clearInterval(this.putschTimer);
+            break;
+
             case 'refuse_putsch':
                 if (parseInt(params.userId) === parseInt(this.userId)) {
                     $('#putsch-modal').modal('show');
@@ -209,7 +213,7 @@ LivePlayer = function()
     this.sendPutschAttempt = function ()
     {
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             dataType: 'json',
             url: putschEligibilityUrl,
             data: {
@@ -222,6 +226,7 @@ LivePlayer = function()
                 params.userId   = this.userId;
 
                 this.sendParameters(params);
+                this.waitPutschAcknowledgment();
             } else {
                 $('#putsch-modal').modal('show');
                 $('.loader').show();
@@ -229,5 +234,19 @@ LivePlayer = function()
                 $('.loader').hide();
             }
         }.bind(this));
+    },
+
+    this.waitPutschAcknowledgment = function()
+    {
+        var maximumWaiting  = 10;
+        var currentWaiting  = 0;
+
+        this.putschTimer = setInterval(function() {
+            currentWaiting++;
+
+            if (currentWaiting === maximumWaiting) {
+                clearInterval(this.putschTimer);
+            }
+        }, 1000);
     }
 };

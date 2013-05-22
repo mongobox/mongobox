@@ -99,8 +99,10 @@ $(document).ready(function() {
         });
     }
 
-    livePlayer.receivePutschAttempt = function (params)
+    livePlayer.receivePutschAttempt = function(params)
     {
+        this.sendPutschAcknowledgment();
+
         $.ajax({
             type: 'GET',
             dataType: 'html',
@@ -116,6 +118,14 @@ $(document).ready(function() {
                 $('#putsch-modal .loader').hide();
             }
         }.bind(this));
+    };
+
+    livePlayer.sendPutschAcknowledgment = function()
+    {
+        var params = new Object();
+        params.action = 'putsch_acknowledgment';
+
+        this.sendParameters(params);
     };
 
     livePlayer.acceptPutsch = function(userId)
