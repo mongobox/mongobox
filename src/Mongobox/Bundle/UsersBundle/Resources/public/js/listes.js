@@ -172,14 +172,16 @@ var listesManager = listesManager || {};
 	{
 		if( $type === "editing" )
 		{
+			// Hide span / Show input
 			bouton.siblings('span.list-name').hide();
-			//bouton.siblings('.input-submitting-list-name').show().focus();
 			$('#list-input-edit-name').show().focus();
 			bouton.find('i').hide();
 			bouton.attr('data-action', 'submitting');
+			// Listen keypress enter
 			listesManager.observeEditingSubmitListTitle();
 		} else if( $type === "submitting")
 		{
+			// Show span / Hide input
 			bouton.siblings('span.list-name').show();
 			$('#list-input-edit-name').hide();
 			bouton.find('i').show();
@@ -208,9 +210,11 @@ var listesManager = listesManager || {};
 		{
 			if(e.which === 13 && !listesManager.editing )
 			{
+				// Lock submit
 				listesManager.editing = true;
-				$('#img-loader-edit-name').show();
 				$(this).attr('disabled', 'disabled');
+				// Show loader
+				$('#img-loader-edit-name').show();
 				var input_text = $(this);
 				$.ajax({
 					url: basepath+"ajax/list/"+$(this).attr('data-id-list')+"/update/title",
@@ -222,6 +226,7 @@ var listesManager = listesManager || {};
 						if( data.success )
 						{
 							alertify.success(data.message);
+							// Refresh list name on DOM
 							$('.list-name', $('#liste-'+input_text.attr('data-id-list'))).html(data.newName);
 							input_text.siblings('.list-name').html(data.newName);
 						} else
@@ -229,6 +234,7 @@ var listesManager = listesManager || {};
 							alertify.error(data.message);
 						}
 						input_text.removeAttr('disabled');
+						// Unlock submit
 						listesManager.editing = false;
 						listesManager.handleEditingAction(input_text.siblings('.btn-edit-list-name'), 'submitting');
 						$('#img-loader-edit-name').hide();
