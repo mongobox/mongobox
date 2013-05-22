@@ -66,3 +66,7 @@
 .une-liste:hover {
 	border: 1px solid black;
 }
+
+#img-loader-edit-name {
+	margin-bottom: 10px;
+}
