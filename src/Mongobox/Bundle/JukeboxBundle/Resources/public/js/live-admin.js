@@ -51,7 +51,9 @@ $(document).ready(function() {
             type: 'POST',
             dataType: 'json',
             url: nextVideoUrl,
-            data: { 'volume' : player.getVolume() }
+            data: {
+                'volume' : player.getVolume()
+            }
         }).done(function(data) {
             player.loadVideoById({
                 videoId: data.videoId
@@ -79,4 +81,98 @@ $(document).ready(function() {
             livePlayer.seekNextVideo(params);
         }
     };
+
+    livePlayer.getReplaceForm = function()
+    {
+        $('#replace-video-modal').on('show', function () {
+            $('.loader').show();
+            $('#replace-video-modal .modal-content').html('');
+
+            $.ajax({
+                type: 'GET',
+                dataType: 'html',
+                url: replaceUrl
+            }).done(function(html) {
+                $('#replace-video-modal .modal-content').html(html);
+                $('.loader').hide();
+            });
+        });
+    }
+
+    livePlayer.receivePutschAttempt = function(params)
+    {
+        this.sendPutschAcknowledgment();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'html',
+            url: putschUrl,
+            data: {
+                'user': params.userId
+            }
+        }).done(function(html) {
+            if (html !== '') {
+                $('#putsch-modal').modal('show');
+                $('#putsch-modal .loader').show();
+                $('#putsch-modal').html(html);
+                $('#putsch-modal .loader').hide();
+            }
+        }.bind(this));
+    };
+
+    livePlayer.sendPutschAcknowledgment = function()
+    {
+        var params = new Object();
+        params.action = 'putsch_acknowledgment';
+
+        this.sendParameters(params);
+    };
+
+    livePlayer.acceptPutsch = function(userId)
+    {
+        $('#putsch-modal').modal('hide');
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: putschResponseUrl,
+            data: {
+                'user': userId,
+                'response': 1
+            }
+        }).done(function(data) {
+            if (data.status === "done") {
+                var params = new Object();
+                params.action   = "refresh_page";
+                params.userId   = userId;
+
+                livePlayer.sendParameters(params);
+                window.location.reload();
+            }
+        }.bind(this));
+    }
+
+    livePlayer.refusePutsch = function(userId)
+    {
+        $('#putsch-modal').modal('hide');
+        $('#putsch-video-modal .modal-content').html('');
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: putschResponseUrl,
+            data: {
+                'user': userId,
+                'response': 0
+            }
+        }).done(function(data) {
+            if (data.status === "done") {
+                var params = new Object();
+                params.action   = "refuse_putsch";
+                params.userId   = userId;
+
+                livePlayer.sendParameters(params);
+            }
+        }.bind(this));
+    }
 });

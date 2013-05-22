@@ -55,7 +55,10 @@
 </div>
 
 <script type="text/javascript">
-    var replaceUrl          = '{{ path('live_replace') }}';
+    var nextVideoUrl	    = '{{ path('live_next') }}';
+    var replaceUrl          = "{{ path('live_replace') }}";
+    var putschUrl           = "{{ path('live_putsch') }}";
+    var putschResponseUrl   = "{{ path('live_putsch_response') }}";
     var worstScoreAllowed   = -{{ max_dislikes }};
 </script>
 

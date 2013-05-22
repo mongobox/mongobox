@@ -1,0 +1,23 @@
+{%- if permission.fail == 'group' -%}
+<div style="text-align: center">
+    <p>
+        <img src="{{ asset('bundles/mongoboxjukebox/img/no.jpg') }}" alt="grumpy cat - no" title="No !" />
+    </p>
+    <p>
+        <b>Quelqu'un essaye déjà de récupérer les droits d'administrateurs !</b><br />
+        <i>Réessayez un peu plus tard...</i>
+    </p>
+</div>
+{%- endif -%}
+
+{%- if permission.fail == 'user' -%}
+<div style="text-align: center">
+    <p>
+        <img src="{{ asset('bundles/mongoboxjukebox/img/soon.jpg') }}" alt="grumpy cat - soon" title="Soon..." />
+    </p>
+    <p>
+        <b>Un peu de patience ! Vous avez déjà une demande en attente...</b><br />
+        <i>Vous devez attendre la réponse de l'administrateur actuel du live ou une minute.</i>
+    </p>
+</div>
+{%- endif -%}

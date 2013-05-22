@@ -1,0 +1,18 @@
+.cell {
+    display: table-cell;
+    margin: 0 auto;
+    padding-left: 70px;
+    padding-bottom: 20px;
+    width: 330px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#holder {
+    background: url('../img/time-placeholder.png') no-repeat;
+}
+
+.cntSeparator { display: none; }
+
+.cntDigit#cnt_0 { margin-left: 52px; }
+.cntDigit#cnt_2 { margin-left: 7px; }
