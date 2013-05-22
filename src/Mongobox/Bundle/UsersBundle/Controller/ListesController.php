@@ -238,4 +238,30 @@ class ListesController extends Controller
 
 		return new JsonResponse($json);
 	}
+
+	/**
+	 * Fonction pour mettre à jour le titre d'une liste
+	 * @Route("/ajax/list/{id_list}/update/title", name="update_title_list_action", requirements={"id_list" = "\d+"})
+	 */
+	public function ajaxUpdateListNameAction($id_list)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$list = $em->find("MongoboxUsersBundle:ListeFavoris", $id_list);
+
+		$json = array(
+			"success" => false,
+			"message" => "Une erreur est survenue lors de la mise à jour de la liste"
+		);
+		if( $list )
+		{
+			$newName = $this->getRequest()->request->get('name');
+			$list->setName($newName);
+			$em->flush();
+			$json["success"] = true;
+			$json["message"] = "La liste a bien été mise à jour";
+			$json["newName"] = $newName;
+		}
+
+		return new JsonResponse($json);
+	}
 }
