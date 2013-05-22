@@ -260,3 +260,11 @@ Playlist
 	margin-right: 5px;
 	padding-right: 14px;
 }
+
+#live-admin-data
+{
+    right: 25px;
+    margin-top: 15px;
+    position: absolute;
+    text-align: center;
+}
