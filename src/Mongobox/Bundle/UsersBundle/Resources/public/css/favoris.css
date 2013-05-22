@@ -70,3 +70,7 @@
 #img-loader-edit-name {
 	margin-bottom: 10px;
 }
+
+.ui-autocomplete {
+	z-index: 2000 !important;
+}
