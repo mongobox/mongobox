@@ -202,7 +202,7 @@ var listesManager = listesManager || {};
 		});
 	};
 
-	// Fonction pour envoyer
+	// Function to listen on "ENTER", send & refresh list name
 	listesManager.observeEditingSubmitListTitle = function()
 	{
 		$('#list-input-edit-name').unbind('keypress');
