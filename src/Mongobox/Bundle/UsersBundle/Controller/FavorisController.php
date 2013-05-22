@@ -169,6 +169,30 @@ class FavorisController extends Controller
 
 		return new JsonResponse($json);
 	}
+
+	/**
+	 * Fonction permettant de récupérer via JSON la liste des favoris pour l'utilisateur
+	 * @Route("/ajax_bookmark_search", name="ajax_bookmark_search")
+	 */
+	public function ajaxBookmarkSearchAction()
+	{
+		$value = $this->getRequest()->get('term');
+		$em = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+
+		$bookmarks = $em->getRepository('MongoboxUsersBundle:UserFavoris')->findBookmark($user, $value);
+
+		$json = array();
+		foreach ($bookmarks as $bookmark)
+		{
+			$json[] = array(
+				'label' => $bookmark->getTitle(),
+				'value' => $bookmark->getId()
+			);
+		}
+
+		return new JsonResponse($json);
+	}
 }
 
 ?>

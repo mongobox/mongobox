@@ -48,8 +48,9 @@ class ListesController extends Controller
 	{
 		$value = $request->get('term');
 		$em = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
 
-		$lists = $em->getRepository('MongoboxUsersBundle:ListeFavoris')->findList($value);
+		$lists = $em->getRepository('MongoboxUsersBundle:ListeFavoris')->findList($user, $value);
 
 		$json = array();
 		foreach ($lists as $list)
@@ -104,7 +105,11 @@ class ListesController extends Controller
 		$html = '';
 		if( $result )
 		{
-			$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
+			$paramList = $this->getRequest()->request->get('liste');
+			if( !is_null($paramList) )
+				$html = $this->renderView('MongoboxUsersBundle:Listes:unFavorisDansListeDetails.html.twig', array('video' => $video, 'date' => $date, 'list' => $liste));
+			else
+				$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
 		}
 
 		return new JsonResponse(array(
