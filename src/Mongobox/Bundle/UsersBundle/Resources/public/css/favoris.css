@@ -31,7 +31,7 @@
 	background-color: lightgray;
 }
 
-.imgbox, .actions-content, #modal_add_list > div, .ajax-loader-div-hidden
+.imgbox, .actions-content, #modal_add_list > div, .ajax-loader-div-hidden, #modal_add_bookmark_list > div
 { text-align: center; }
 
 .un-favoris {
