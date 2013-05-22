@@ -34,11 +34,12 @@
 		<div class="input-prepend">
 			<span class="add-on"><i class="icon-pencil"></i></span>
 			<input class="span2" id="add-bookmark-name" type="text" placeholder="Le titre de la vidéo">
+			<input type="hidden" id="hid-bookmark-id" />
 		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
-		<a id="btn-submit-bookmark" href="{{ path('add_new_list') }}" class="btn btn-primary" data-loading-text="<img src='{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}' alt='Chargement' />">Confirmer</a>
+		<a id="btn-submit-bookmark" class="btn btn-primary" data-loading-text="<img src='{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}' alt='Chargement' />">Confirmer</a>
 	</div>
 </div>
 {% endblock %}

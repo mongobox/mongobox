@@ -4,8 +4,11 @@ var listesManager = listesManager || {};
 {
 	listesManager.init = function()
 	{
-		this.btnSubmitCreating = $('#btn-submit-list'); // bouton de soumission du formulaire de création
-		this.textNewListTitle = $('#add-list-name'); // input type text, champs titre de la nouvelle liste
+		this.btnSubmitCreating = $('#btn-submit-list'); // submit button of list creation
+		this.textNewListTitle = $('#add-list-name'); // input type text, title field of new list
+		this.btnSubmitBookmarkAdd = $('#btn-submit-bookmark'); // submit button of new bookmark in list
+		this.textNewBookmark = $('#add-bookmark-name'); // input of autocomplete on bookmark
+		this.hidIdBookmark = $('#hid-bookmark-id'); // input hidden with id of autocomplete
 		this.btnRemoveList = '.btn-remove-list';
 		this.contentList = $('#details-liste');
 		this.editing = false;
@@ -16,6 +19,8 @@ var listesManager = listesManager || {};
 		this.observeListDetailsDisplay();
 		this.observeRemoveBookmarkFromList();
 		this.observeEditingListTitle();
+
+		this.autocompleteBookmarkNameOnList();
 		this.observeAddNewBookmarkToList();
 	};
 
@@ -245,16 +250,58 @@ var listesManager = listesManager || {};
 		});
 	};
 
+	// Function to handle autocomplete on bookmark name
+	listesManager.autocompleteBookmarkNameOnList = function()
+	{
+		this.textNewBookmark.autocomplete({
+			source: basepath+"ajax_bookmark_search",
+			minLength: 2,
+			select: function( event, ui )
+			{
+				listesManager.hidIdBookmark.val(ui.item.value);
+				$(event.target).val(ui.item.label);
+				return false;
+			}
+		});
+	};
+
 	// Function to handle click on add button
 	listesManager.observeAddNewBookmarkToList = function()
 	{
-		/*$('#details-liste').on('click', '#btn-add-bookmark-to-list', function(e)
+		this.btnSubmitBookmarkAdd.bind('click', function(e)
 		{
 			e.preventDefault();
-			e.stopPropagation();
+			var id_list = $('#btn-add-bookmark-to-list').attr('data-id-list');
 
-			$('#modal_add_bookmark_list').modal('show');
-		});*/
+			if( listesManager.hidIdBookmark.val() == '' || listesManager.textNewBookmark.val() == '' || listesManager.textNewBookmark.val() == listesManager.textNewBookmark.attr('placeholder') )
+			{
+				listesManager.textNewBookmark.focus();
+				return false;
+			}
+
+			var bouton = $(this);
+			bouton.button('loading');
+			$.ajax({
+				url: basepath+"ajax/favoris/"+listesManager.hidIdBookmark.val()+"/add/liste",
+				dataType: 'json',
+				type: 'POST',
+				data: {'id_liste': id_list, 'liste': true},
+				success: function(data)
+				{
+					listesManager.textNewBookmark.val('');
+					listesManager.hidIdBookmark.val('');
+					if(data.result)
+					{
+						alertify.success(data.message);
+						$('.list-details-bookmarks').append(data.html);
+					} else
+					{
+						alertify.error(data.message);
+					}
+					bouton.button('reset');
+				}
+			});
+		});
 	};
 
 })(jQuery);
