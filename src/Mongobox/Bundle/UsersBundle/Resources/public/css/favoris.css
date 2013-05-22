@@ -8,12 +8,7 @@
 	border: 1px solid lightgray;
 	background-color: #e6e6e6;
 
-	-webkit-border-radius: 0px;
-	-webkit-border-top-right-radius: 0;
-	-moz-border-radius: 0px;
-	-moz-border-radius-topright: 0;
-	border-radius: 0px;
-	border-top-right-radius: 0;
+	border-radius: 0;
 }
 
 .info-fav {
@@ -36,7 +31,8 @@
 	background-color: lightgray;
 }
 
-.imgbox { text-align: center; }
+.imgbox, .actions-content, #modal_add_list > div, .ajax-loader-div-hidden
+{ text-align: center; }
 
 .un-favoris {
 	width: 20%;
@@ -53,6 +49,20 @@
 
 #liste-favoris > tbody > tr { height: 200px; }
 
-.actions-content {
-	text-align: center;
+.alertify-logs { top: 80px; }
+
+.listes-content {
+	list-style-type: none;
+	border-right: 1px solid black;
+	padding-right: 10px;
+}
+
+.une-liste {
+	height: 50px;
+	cursor: pointer;
+	padding: 5px;
+}
+
+.une-liste:hover {
+	border: 1px solid black;
 }

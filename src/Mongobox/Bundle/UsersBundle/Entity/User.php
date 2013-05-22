@@ -103,7 +103,7 @@ class User implements AdvancedUserInterface
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
      */
 	protected $tumblr_vote;
-
+	
 	/**
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="user")
 	 **/
@@ -113,6 +113,11 @@ class User implements AdvancedUserInterface
      * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
      */
     protected $groups;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Mongoeat\Bundle\VoteBundle\Entity\Vote", mappedBy="user", cascade={"persist"})
+     */
+    private $votes;
 
     /**
      * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users_invitations", cascade={"persist"})
@@ -443,7 +448,7 @@ class User implements AdvancedUserInterface
     /**
      * Get tumblr_vote
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTumblrVote()
     {
@@ -459,7 +464,7 @@ class User implements AdvancedUserInterface
     public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
     {
         $this->videos_group[] = $videos_group;
-
+    
         return $this;
     }
 
@@ -731,5 +736,112 @@ class User implements AdvancedUserInterface
 	public function setFavoris($favoris) {
 		$this->favoris = $favoris;
 		return $this;
+	}
+
+    /**
+     * Add tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     * @return User
+     */
+    public function addTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote[] = $tumblrVote;
+
+        return $this;
+    }
+
+    /**
+     * Remove tumblr_vote
+     *
+     * @param \Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote
+     */
+    public function removeTumblrVote(\Mongobox\Bundle\TumblrBundle\Entity\TumblrVote $tumblrVote)
+    {
+        $this->tumblr_vote->removeElement($tumblrVote);
+    }
+
+    /**
+     * Set group
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $group
+     * @return User
+     */
+    public function setGroup(\Mongobox\Bundle\GroupBundle\Entity\Group $group = null)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Mongobox\Bundle\GroupBundle\Entity\Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Add votes
+     *
+     * @param \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
+     * @return User
+     */
+    public function addVote(\Mongoeat\Bundle\VoteBundle\Entity\Vote $votes)
+    {
+        $this->votes[] = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Remove votes
+     *
+     * @param \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
+     */
+    public function removeVote(\Mongoeat\Bundle\VoteBundle\Entity\Vote $votes)
+    {
+        $this->votes->removeElement($votes);
+    }
+
+    /**
+     * Get votes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
+     * Add groups_invitations
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations
+     * @return User
+     */
+    public function addGroupsInvitation(\Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations)
+    {
+        $this->groups_invitations[] = $groupsInvitations;
+
+        return $this;
+    }
+
+    /**
+     * Remove groups_invitations
+     *
+     * @param \Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations
+     */
+    public function removeGroupsInvitation(\Mongobox\Bundle\GroupBundle\Entity\Group $groupsInvitations)
+    {
+        $this->groups_invitations->removeElement($groupsInvitations);
+    }
+
+
+	public function getListesFavoris() {
+		return $this->listes_favoris;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\UsersBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use Mongobox\Bundle\UsersBundle\Entity\ListeFavoris;
 use Mongobox\Bundle\UsersBundle\Entity\UserFavoris;
 
 
@@ -47,7 +49,7 @@ class FavorisController extends Controller
 			$result['already'] = false;
 		}
 
-		return new Response(json_encode($result));
+		return new JsonResponse($result);
 	}
 
 	/**
@@ -93,15 +95,15 @@ class FavorisController extends Controller
 		if( $request->isXmlHttpRequest() )
 		{
 			$html = $this->render('MongoboxUsersBundle:Favoris/Listes:listeFavoris.html.twig', array('favoris' => $videos_user))->getContent();
-			return new Response(json_encode(array(
+			return new JsonResponse(array(
 				"html" => $html,
 				"nextPage" => $nextPage,
 				"page" => $page+1
-			)));
+			));
 		} else
 		{
-			$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
-			$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
+			$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
+			$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
 		}
 
 		return array(
@@ -130,7 +132,7 @@ class FavorisController extends Controller
 			"fav" => $id_video
 		);
 
-		return new Response(json_encode($retour));
+		return new JsonResponse($retour);
 	}
 
 	/**
@@ -153,112 +155,19 @@ class FavorisController extends Controller
 			$em->remove($fav);
 			$em->flush();
 
-			$retour = array(
+			$json = array(
 				"success" => true,
 				"message" => "Vidéo supprimée de la liste avec succès"
 			);
 		} else
 		{
-			$retour = array(
+			$json = array(
 				"success" => false,
 				"message" => "Echec lors de la suppression de la vidéo"
 			);
 		}
 
-		return new Response(json_encode($retour));
-	}
-
-	/**
-	 * Fonction pour voir les listes de favoris de l'utilisateur
-	 * @Route("/profil/listes", name="user_voir_listes")
-	 * @Template()
-	 */
-	public function voirListeFavorisAction()
-	{
-		$manager = $this->getDoctrine()->getManager();
-		$user = $this->getUser();
-
-		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreFavoris($user);
-		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getNombreListes($user);
-
-		return array(
-			'nombre_favoris' => $nombre_favoris,
-			'nombre_listes' => $nombre_listes
-		);
-	}
-
-	/**
-	 * Fonction permettant de récupérer via JSON la liste des listes de favoris de l'utilisateur
-	 * @Route("/ajax_list_search", name="ajax_list_search")
-	 */
-	public function ajaxListSearchAction(Request $request)
-	{
-		$value = $request->get('term');
-		$em = $this->getDoctrine()->getManager();
-
-		$lists = $em->getRepository('MongoboxUsersBundle:ListeFavoris')->findList($value);
-
-		$json = array();
-		foreach ($lists as $list)
-		{
-			$json[] = array(
-				'label' => $list->getName(),
-				'value' => $list->getId()
-			);
-		}
-
-		return new Response(json_encode($json));
-	}
-
-	/**
-	 * Fonction pour ajouter un favoris à une liste
-	 * @Route("/ajax/favoris/{id_video}/add/liste", name="ajax_liste_favoris_add", requirements={"id_video" = "\d+"})
-	 */
-	public function addListToBookmarkAction($id_video)
-	{
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$id_liste = $this->getRequest()->request->get('id_liste');
-		$liste = $em->getRepository('MongoboxUsersBundle:ListeFavoris')->find($id_liste);
-		$video = $em->find('MongoboxJukeboxBundle:Videos', $id_video);
-
-		$alreadyExist = $em->getRepository('MongoboxUsersBundle:UserFavoris')->findOneBy(array(
-			'user' => $user,
-			'video' => $video,
-			'liste' => $liste
-		));
-
-		$date = new \DateTime;
-		$message = 'La vidéo existe déjà dans la liste "'.$liste->getName().'"';
-		$result = false;
-
-		if( is_null($alreadyExist) )
-		{
-			$new_fav_list = new UserFavoris();
-			$new_fav_list
-				->setUser($user)
-				->setListe($liste)
-				->setVideo($video)
-				->setDateFavoris($date)
-			;
-			$em->persist($new_fav_list);
-			$em->flush();
-
-			$message = 'Vidéo ajoutée avec succès dans la liste "'.$liste->getName().'"';
-			$result = true;
-		}
-
-		$html = '';
-		if( $result )
-		{
-			$html = $this->renderView('MongoboxUsersBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
-		}
-
-		return new Response(json_encode(array(
-			"message" => $message,
-			"result" => $result,
-			"html" => $html
-		)));
+		return new JsonResponse($json);
 	}
 }
 

@@ -250,6 +250,17 @@ Playlist
 	float: left;
 }
 
+.liste-video-tag
+{
+	margin : 8px 0 3px 0;
+}
+
+.liste-video-tag > span
+{
+	margin-right: 5px;
+	padding-right: 14px;
+}
+
 #live-admin-data
 {
     right: 25px;
