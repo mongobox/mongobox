@@ -238,15 +238,27 @@ LivePlayer = function()
 
     this.waitPutschAcknowledgment = function()
     {
-        var maximumWaiting  = 10;
+        var maximumWaiting  = 5;
         var currentWaiting  = 0;
 
         this.putschTimer = setInterval(function() {
             currentWaiting++;
-
             if (currentWaiting === maximumWaiting) {
                 clearInterval(this.putschTimer);
+
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: adminSwitchUrl,
+                    data: {
+                        'user' : this.userId
+                    }
+                }).done(function(data) {
+                    if (data.status === 'done') {
+                        window.location.reload();
+                    }
+                }.bind(this));
             }
-        }, 1000);
+        }.bind(this), 1000);
     }
 };

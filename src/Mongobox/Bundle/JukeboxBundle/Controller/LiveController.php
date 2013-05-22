@@ -245,6 +245,7 @@ class LiveController extends Controller
 
     /**
      * @Route("/putsch/eligibility", name="live_putsch_eligibility")
+     * @Method("POST")
      */
     public function putschEligibilityAction(Request $request)
     {
@@ -294,6 +295,7 @@ class LiveController extends Controller
 
     /**
      * @Route("/putsch/response", name="live_putsch_response")
+     * @Method("POST")
      */
     public function putschResponseAction(Request $request)
     {
@@ -308,6 +310,26 @@ class LiveController extends Controller
 
         $response = (bool) $request->get('response');
         if ($liveAdmin->switchAdmin($userId, $response) === true) {
+            $status = 'done';
+        } else {
+            $status = 'fail';
+        }
+
+        return new Response(json_encode(array('status' => $status)));
+    }
+
+    /**
+     * @Route("/admin/switch", name="live_admin_switch")
+     * @Method("POST")
+     */
+    public function adminSwitchAction(Request $request)
+    {
+        if (!$userId = (int) $request->get('user')) {
+            throw $this->createNotFoundException();
+        }
+
+        $liveAdmin = $this->get('mongobox_jukebox.live_admin');
+        if ($liveAdmin->switchAdmin($userId, true) === true) {
             $status = 'done';
         } else {
             $status = 'fail';
