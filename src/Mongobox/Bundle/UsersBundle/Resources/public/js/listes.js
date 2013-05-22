@@ -16,6 +16,7 @@ var listesManager = listesManager || {};
 		this.observeListDetailsDisplay();
 		this.observeRemoveBookmarkFromList();
 		this.observeEditingListTitle();
+		this.observeAddNewBookmarkToList();
 	};
 
 	// Function to init tooltip on some btn
@@ -242,6 +243,18 @@ var listesManager = listesManager || {};
 				});
 			}
 		});
+	};
+
+	// Function to handle click on add button
+	listesManager.observeAddNewBookmarkToList = function()
+	{
+		/*$('#details-liste').on('click', '#btn-add-bookmark-to-list', function(e)
+		{
+			e.preventDefault();
+			e.stopPropagation();
+
+			$('#modal_add_bookmark_list').modal('show');
+		});*/
 	};
 
 })(jQuery);
