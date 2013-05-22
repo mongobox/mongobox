@@ -198,6 +198,33 @@ class UserFavorisRepository extends EntityRepository
 		;
 		return $qb->getQuery()->getResult();
 	}
+
+	/**
+	 * Fonction pour récupérer des favoris en JSON
+	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param string $value
+	 * @return array
+	 */
+	public function findBookmark($user, $value)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+
+		$qb->select('DISTINCT v')
+			->from('MongoboxJukeboxBundle:Videos', 'v')
+			->innerJoin('v.favoris', 'f')
+			->where("v.title LIKE :value")
+			->andWhere('f.user = :user')
+			->orderBy('v.title', 'ASC')
+			->setMaxResults(10)
+			->setParameters( array(
+				'value' => '%'.$value.'%',
+				'user' => $user
+			));
+
+		$query = $qb->getQuery();
+		return $query->getResult();
+	}
 }
 
 ?>

@@ -38,7 +38,7 @@ class ListeFavorisRepository extends EntityRepository
 	 * @param string $value
 	 * @return array
 	 */
-	public function findList($value)
+	public function findList($user, $value)
 	{
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
@@ -46,10 +46,12 @@ class ListeFavorisRepository extends EntityRepository
 		$qb->select('l')
 			->from('MongoboxUsersBundle:ListeFavoris', 'l')
 			->where("l.name LIKE :value")
+			->andWhere('l.user = :user')
 			->orderBy('l.name', 'ASC')
 			->setMaxResults(10)
 			->setParameters( array(
-				'value' => '%'.$value.'%'
+				'value' => '%'.$value.'%',
+				'user' => $user
 			));
 
 		$query = $qb->getQuery();
