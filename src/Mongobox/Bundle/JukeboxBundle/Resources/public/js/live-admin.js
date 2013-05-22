@@ -104,7 +104,7 @@ $(document).ready(function() {
         this.sendPutschAcknowledgment();
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             dataType: 'html',
             url: putschUrl,
             data: {

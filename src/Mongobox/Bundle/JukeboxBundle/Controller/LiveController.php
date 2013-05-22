@@ -276,6 +276,7 @@ class LiveController extends Controller
 
     /**
      * @Route("/putsch", name="live_putsch")
+     * @Method("POST")
      * @Template()
      */
     public function putschAction(Request $request)
