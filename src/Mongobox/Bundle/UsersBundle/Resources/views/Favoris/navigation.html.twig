@@ -5,6 +5,9 @@
 	<li {% if app.request.get('_route') == 'user_voir_listes' %}class="active"{% endif %}>
 		<a href="{{ path('user_voir_listes') }}" title="Voir vos listes">Vos listes (<span id="lists_number">{{ nombre_listes }}</span>)</a>
 	</li>
+	<li {% if app.request.get('_route') == 'import_favoris_index_action' %}class="active"{% endif %}>
+		<a href="{{ path('import_favoris_index_action') }}">Importer les favoris dans un groupe</a>
+	</li>
 	<li class="pull-right">
 		<a href="#modal_add_list" title="Créer une liste" class="btn" data-toggle="modal">Créer une liste</a>
 	</li>
