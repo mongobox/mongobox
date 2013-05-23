@@ -51,7 +51,7 @@ class Decision
             $rest[] = $vote->getRestaurant()->getName();
         }
         $res = array_count_values($rest);
-        asort($res,SORT_NUMERIC);
+        arsort($res,SORT_NUMERIC);
         for ($i=1;$i<$pos && current($res) !== FALSE;$i++) {
             next($res);
         }
@@ -69,7 +69,7 @@ class Decision
             $rest[] = $vote->getRestaurant()->getName();
         }
         $res = array_count_values($rest);
-        asort($res,SORT_NUMERIC);
+        arsort($res,SORT_NUMERIC);
 
         return $res;
     }
