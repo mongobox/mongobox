@@ -456,7 +456,8 @@ class LiveController extends Controller
 		(
 			'selected' => $selected,
 			'html_tag' => $this->render('MongoboxJukeboxBundle:Partial:live-tag-video.html.twig', array(
-						'tag' => $glt
+						'tag' => $glt,
+						'player_mode' => 'admin'
 					))->getContent(),
 			'html_button' => $this->render('MongoboxJukeboxBundle:Partial:live-button-tag-video.html.twig', array(
 						'tag' => $tag,

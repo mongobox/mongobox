@@ -49,8 +49,8 @@
 
     <ul id="live-tab" class="nav nav-tabs">
 		<li class="active"><a href="#vote" data-toggle="tab">Votes</a></li>
+		<li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
 		{% if player_mode == "admin" %}
-			<li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
 			<li><a href="#playlist" data-toggle="tab">Playlist</a></li>
 		{% endif %}
     </ul>
@@ -93,7 +93,9 @@
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
             {% else %}
+			<div class="tab-pane" id="playlist_controll">
 				{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode} %}
+			</div>
 			{% endif %}
 
             <script type="text/javascript">
