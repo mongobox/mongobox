@@ -1,4 +1,6 @@
 <li class="badge tag-video">
 	<span>{{ tag.videoTag.name }}</span>
-	<a href="{{url('live_tag_delete', {'id' : tag.id})}}" class="delete-live-tag-video"><i class="icon-remove"></i></a>
+	{% if player_mode == "admin" %}
+		<a href="{{url('live_tag_delete', {'id' : tag.id})}}" class="delete-live-tag-video"><i class="icon-remove"></i></a>
+	{% endif %}
 </li>

@@ -92,7 +92,9 @@
 
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-            {% endif %}
+            {% else %}
+				{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode} %}
+			{% endif %}
 
             <script type="text/javascript">
                 function onPlayerStateChange(event)
