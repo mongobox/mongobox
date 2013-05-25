@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Doctrine\Common\Util\Debug;
 
 class ImportController extends Controller
 {
@@ -19,6 +20,24 @@ class ImportController extends Controller
 	 */
 	public function indexAction()
 	{
-		return array();
+		$manager = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+
+		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
+		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
+
+		$lists = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getListsAndVideos($user);
+		$favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getAllUserFavoris($user);
+
+		/*echo '<pre>';
+		Debug::dump($favoris);
+		exit;*/
+
+		return array(
+			'nombre_favoris' => $nombre_favoris,
+			'nombre_listes' => $nombre_listes,
+			'lists' => $lists,
+			'favoris' => $favoris
+		);
 	}
 }
