@@ -18,6 +18,8 @@
 		{% endfor %}
 	</ul>
 </div>
+{% if player_mode == "admin" %}
 <div id="playlist_action">
 	<a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : false})}}" class="btn btn-warning btn-empty-playlist">Vider les randoms de la playlist</a> <a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : true})}}" class="btn btn-danger btn-empty-playlist">Vider la playlist entièrement</a>
 </div>
+{% endif %}

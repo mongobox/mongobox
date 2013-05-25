@@ -94,7 +94,7 @@
                 {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
             {% else %}
 			<div class="tab-pane" id="playlist_controll">
-				{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode} %}
+				{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode, 'groupLiveTags' : groupLiveTags} %}
 			</div>
 			{% endif %}
 
