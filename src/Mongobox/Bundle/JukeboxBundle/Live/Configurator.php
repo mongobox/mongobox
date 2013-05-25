@@ -74,6 +74,8 @@ class Configurator
             $playerVars['disablekb']   = 1;
         }
 
+        $groupLiveTags  = $this->em->getRepository('MongoboxGroupBundle:GroupLiveTag')->findBy(array('group' => $currentGroup->getId()));
+
         if ($playerMode === 'admin') {
             if ($currentGroup->getLiveMaxDislikes() ===  null) {
                 $maxDislikes = $this->container->getParameter('default_max_dislikes');
@@ -82,11 +84,9 @@ class Configurator
             }
 
             $tagsList       = $this->em->getRepository('MongoboxJukeboxBundle:VideoTag')->getTagsForGroup($currentGroup);
-            $groupLiveTags  = $this->em->getRepository('MongoboxGroupBundle:GroupLiveTag')->findBy(array('group' => $currentGroup->getId()));
         } else {
             $maxDislikes    = null;
             $tagsList       = null;
-            $groupLiveTags  = null;
         }
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
