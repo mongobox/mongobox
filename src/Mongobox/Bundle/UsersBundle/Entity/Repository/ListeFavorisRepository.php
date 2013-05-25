@@ -3,6 +3,8 @@
 namespace Mongobox\Bundle\UsersBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Mongobox\Bundle\UsersBundle\Entity\ListeFavoris;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * Description of ListeFavorisRepository
@@ -13,7 +15,7 @@ class ListeFavorisRepository extends EntityRepository
 {
 	/**
 	 * Fonction pour récupérer les listes de favoris pour une vidéo d'un user
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @param int $video
 	 */
 	public function getListesUserForOneVideo($user, $id_video)
@@ -60,11 +62,11 @@ class ListeFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer la liste des vidéos en favoris dans une liste
-	 * @param $list
-	 * @param $user
+	 * @param ListeFavoris $list
+	 * @param User $user
 	 * @return array
 	 */
-	public function getBookmarkFromList($list, $user)
+	public function getBookmarkFromList(ListeFavoris $list, User $user)
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
@@ -79,6 +81,27 @@ class ListeFavorisRepository extends EntityRepository
 				'user' => $user
 			))
 		;
+		return $qb->getQuery()->getResult();
+	}
+
+	/**
+	 * Fonction pur récupérer les listes avec les vidéos en favoris
+	 * @param User $user
+	 */
+	public function getListsAndVideos(User $user)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->select('l as object, f as user_favoris, v as video')
+			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->innerJoin('l.favoris', 'f')
+			->innerJoin('f.video', 'v')
+			->where('l.user = :user')
+			->setParameters(array(
+				"user" => $user
+			))
+		;
+
 		return $qb->getQuery()->getResult();
 	}
 }

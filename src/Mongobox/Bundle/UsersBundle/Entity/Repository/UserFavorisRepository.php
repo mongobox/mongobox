@@ -3,6 +3,8 @@
 namespace Mongobox\Bundle\UsersBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Mongobox\Bundle\UsersBundle\Entity\ListeFavoris;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * Description of UserFavorisRepository
@@ -42,9 +44,9 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer un tableau des vidéos favorites de l'utilisateur
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @param int $page
-	 * @return arry
+	 * @return array
 	 */
 	public function getUniqueFavorisUser($user, $page, $limitation)
 	{
@@ -71,7 +73,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer la date d'ajout en favoris d'une vidéo à une liste
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user $user
+	 * @param User $user $user
 	 * @param int $id_video
 	 * @param int $id_liste
 	 * @return array
@@ -96,7 +98,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer la date d'ajout aux favoris
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @param int $id_video
 	 */
 	public function getDateAddToFavorite($user, $id_video)
@@ -118,7 +120,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour supprimer une vidéo des favoris
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @param int $id_video
 	 * @return boolean
 	 */
@@ -139,7 +141,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer le nombre de favoris d'un utilisateur
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @return int
 	 */
 	public function getBookmarkNumber($user)
@@ -159,7 +161,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer le nombre de listes d'un utilisateur
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @return int
 	 */
 	public function getListsNumber($user)
@@ -179,8 +181,8 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour supprimer toutes les vidéos en favoris de la liste
-	 * @param Mongobox\Bundle\UsersBundle\Entity\ListeFavoris $list
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param ListeFavoris $list
+	 * @param User $user
 	 * @return array
 	 */
 	public function removeBookmarkFromList($list, $user)
@@ -201,7 +203,7 @@ class UserFavorisRepository extends EntityRepository
 
 	/**
 	 * Fonction pour récupérer des favoris en JSON
-	 * @param Mongobox\Bundle\UsersBundle\Entity\User $user
+	 * @param User $user
 	 * @param string $value
 	 * @return array
 	 */
@@ -224,6 +226,28 @@ class UserFavorisRepository extends EntityRepository
 
 		$query = $qb->getQuery();
 		return $query->getResult();
+	}
+
+	/**
+	 * Fonction pour récupérer tous les favoris d'un utilisateur
+	 * @param User $user
+	 * @return array
+	 */
+	public function getAllUserFavoris(User $user)
+	{
+		$em = $this->getEntityManager();
+		$qb = $em->createQueryBuilder();
+		$qb
+			->select('v as video, uf as user_favoris')
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->innerJoin('uf.video', 'v')
+			->where('uf.user = :user')
+			->groupBy("uf.video")
+			->setParameters(array(
+				"user" => $user
+			))
+		;
+		return $qb->getQuery()->getArrayResult();
 	}
 }
 
