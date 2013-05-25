@@ -117,7 +117,7 @@ $(document).ready(function()
 			if(infos.type == 'new')
 			{
 				$('.loader').hide();
-				$('#youtube_add').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Chanson : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
+				$('#youtube_add').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Vidéo : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
 				$('#btnSubmitVideo').bind('click', function(e)
 				{
 					$('.loader').show();

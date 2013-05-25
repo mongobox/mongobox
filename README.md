@@ -8,8 +8,8 @@ Mongobox est un jukebox participatif fait en Symfony 2.
 
 Il comprend :
 - La lecture de la même vidéo sur plusieurs ordinateurs différents, avec un administrateur qui peut accélérer, mettre en pause, etc.
-- Un système de vote pour passer à la chanson suivante
-- Un système de playlist aléatoire, remontant principalement les chansons les moins diffusées et qui ont le plus de vote positif.
+- Un système de vote pour passer à la vidéo suivante
+- Un système de playlist aléatoire, remontant principalement les vidéos les moins diffusées et qui ont le plus de vote positif.
 - Un système de tumblr intégré.
 - Un regroupement de Flux RSS.
 

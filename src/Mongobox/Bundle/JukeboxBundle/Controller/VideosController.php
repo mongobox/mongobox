@@ -392,7 +392,7 @@ class VideosController extends Controller
 				$em->flush();
 				$form_video_info = $this->createForm(new VideoInfoType(), $video_new);
 
-				//On récupère tous les tags de cette chanson
+				//On récupère tous les tags de cette vidéo
 				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video_new);
 
 				$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(

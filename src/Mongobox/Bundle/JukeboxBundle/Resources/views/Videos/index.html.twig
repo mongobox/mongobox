@@ -97,7 +97,7 @@
 			</td>
             <td>
             	<a href="{{ path('videos_add_to_playlist_vg', { 'id': entity.id }) }}" class="btn" title="Ajouter à la playlist"><i class="icon-arrow-up"></i></a>
-				<a href="{{ path('ajax_new_video_favorite', {'id_video': entity.video.id}) }}" class="btn-favoris-add btn" title="Ajouter la chanson aux favoris"><i class="icon-bookmark"></i> <span></span></a>
+				<a href="{{ path('ajax_new_video_favorite', {'id_video': entity.video.id}) }}" class="btn-favoris-add btn" title="Ajouter la vidéo aux favoris"><i class="icon-bookmark"></i> <span></span></a>
 				<a href="{{url('video_edit_modal', {'id_video' : entity.video.id})}}" class="edit-video btn" title="Modifier la vidéo" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="icon-edit"></span></a>
             </td>
         </tr>
