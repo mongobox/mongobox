@@ -1,7 +1,7 @@
 {% if top is defined and top is sameas(true) %}
 	{% set array_list_tumblr = [top7, top30, topTumblr]  %}
 {% else %}
-	{% set array_list_tumblr = [mongo_pute] %}
+	{% set array_list_tumblr = [tumblr] %}
 {% endif %}
 
 {% for list_tumblr in array_list_tumblr %}
