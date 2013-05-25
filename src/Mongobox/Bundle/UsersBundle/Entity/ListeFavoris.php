@@ -81,12 +81,12 @@ class ListeFavoris
 		return $this;
 	}
 
-	public function getVideos() {
-		return $this->videos;
+	public function getFavoris() {
+		return $this->favoris;
 	}
 
-	public function setVideos($videos) {
-		$this->videos = $videos;
+	public function setFavoris($fav) {
+		$this->favoris = $fav;
 		return $this;
 	}
 }
