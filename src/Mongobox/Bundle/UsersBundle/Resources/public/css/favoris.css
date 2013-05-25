@@ -74,3 +74,28 @@
 .ui-autocomplete {
 	z-index: 2000 !important;
 }
+
+.no-bullet-please {
+	list-style-type: none;
+}
+
+.list-favoris-import {
+	clear: both;
+}
+
+.list-favoris-import li {
+	margin-left: 4%;
+}
+
+.span-link {
+	cursor: pointer;
+	color: cornflowerblue;
+}
+
+.checkbox-import {
+	margin: 0 6px 0 0 !important;
+}
+
+.list-import {
+	clear: both;
+}

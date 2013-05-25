@@ -1,0 +1,38 @@
+{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+
+{% block title -%}- Import des favoris{%- endblock title %}
+
+{% block body %}
+
+<div class="hero-unit">
+	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
+
+	<div class="alert alert-info">
+		Vous pouvez choisir d'importer vos favoris :
+		<ul>
+			<li>Par liste en choisissant une liste complète ou des chansons individuellement dans les listes</li>
+			<li>Par favoris en choisissant les vidéos dans tous vos favoris</li>
+		</ul>
+	</div>
+	<div class="">
+		{% for list in lists %}
+			<div class="list-import">
+				<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left" />
+				<a class="span-link">
+					<i class="icon-chevron-right"></i>
+					{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
+				</a>
+				<ul class="no-bullet-please list-favoris-import hide">
+					{% for fav in list.object.favoris %}
+						<li><input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="checkbox-import" /> {{ fav.video.name }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock body %}
+
+{% block css %}
+	<link href="{{ asset('bundles/mongoboxusers/css/favoris.css') }}" rel="stylesheet">
+{% endblock css %}
