@@ -18,29 +18,7 @@
 		{% endfor %}
 		</tbody>
 	</table>
-	<div id="playlist_tag_actif" class="total-clear-fix">
-		<legend>Tag qui passe</legend>
-		<ul>
-			{% for tag in groupLiveTags %}
-				{% if tag.selected == 1 %}
-					{% include 'MongoboxJukeboxBundle:Partial:live-tag-video.html.twig' with {'tag' : tag} %}
-				{% endif %}
-			{% endfor %}
-		</ul>
-	</div>
-	<div id="playlist_tag_inactif">
-		<legend>Tag qui ne passe pas</legend>
-		<ul>
-			{% for tag in groupLiveTags %}
-				{% if tag.selected == 0 %}
-					{% include 'MongoboxJukeboxBundle:Partial:live-tag-video.html.twig' with {'tag' : tag} %}
-				{% endif %}
-			{% endfor %}
-		</ul>
-	</div>
-	<div id="playlist_action">
-		<a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : false})}}" class="btn btn-warning btn-empty-playlist">Vider les randoms de la playlist</a> <a href="{{url('live_empty_playlist', {'id_group' : group.id, 'force' : true})}}" class="btn btn-danger btn-empty-playlist">Vider la playlist entièrement</a>
-	</div>
+	{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode, 'groupLiveTags' : groupLiveTags} %}
 </div>
 
 <div id="replace-video-modal" class="modal hide fade">

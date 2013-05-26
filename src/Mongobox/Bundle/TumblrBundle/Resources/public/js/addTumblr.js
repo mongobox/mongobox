@@ -126,7 +126,7 @@ var addTumblr = addTumblr || {};
 					}
 				} else
 				{
-					addTumblr.slider.before('<div class="alert alert-error error-add-tumblr">Vous avez ajouté une mongo pute sans groupe, veuillez l\'éditer pour qu\'elle apparaisse sur le wall.</div>');
+					addTumblr.slider.before('<div class="alert alert-error error-add-tumblr">Vous avez ajouté un tumblr sans groupe, veuillez l\'éditer pour qu\'elle apparaisse sur le wall.</div>');
 				}
 			}
 		});

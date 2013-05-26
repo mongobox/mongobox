@@ -14,7 +14,7 @@ use Mongobox\Bundle\TumblrBundle\Entity\TumblrVote;
 use Mongobox\Bundle\TumblrBundle\Entity\TumblrTag;
 
 /**
- * Page pute controller.
+ * Tumblr controller.
  *
  * @Route("/tumblr")
  */
@@ -25,7 +25,7 @@ class TumblrController extends Controller
     /**
      *
      *
-     * @Route("/{page}", name="mongo_pute",requirements={"page" = "\d+"}, defaults={"page" = 1})
+     * @Route("/{page}", name="tumblr",requirements={"page" = "\d+"}, defaults={"page" = 1})
      * @Template()
      */
     public function indexAction(Request $request, $page)
@@ -41,13 +41,13 @@ class TumblrController extends Controller
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
 
-        $entitiesMongoPute = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1),$filters);
+        $entitiesTumblr = $tumblrRepository->findLast($user->getGroupsIds(), $this->_limitPagination, $this->_limitPagination * ($page-1),$filters);
 
         $nbTumblrEntities = count($tumblrRepository->findLast($user->getGroupsIds(),0,0,$filters));
         $nbPages = (int) ceil($nbTumblrEntities / $this->_limitPagination);
 
         return array(
-            'mongo_pute' => $entitiesMongoPute,
+            'tumblr' => $entitiesTumblr,
             'current_filters' => $filters,
             'pagination' => array(
                     'page' => $page,
@@ -62,7 +62,7 @@ class TumblrController extends Controller
     /**
      *
      *
-     * @Route("/add", name="mongo_pute_add")
+     * @Route("/add", name="tumblr_add")
      * @Template()
      */
     public function addAction(Request $request)
@@ -121,7 +121,7 @@ class TumblrController extends Controller
 				} else
 				{
 					$this->get('session')->setFlash('success', 'Tumblr posté avec succès');
-					return $this->redirect($this->generateUrl('mongo_pute'));
+					return $this->redirect($this->generateUrl('tumblr'));
 				}
             }
         }
@@ -133,7 +133,7 @@ class TumblrController extends Controller
 
 	/**
 	 * @Template()
-	 * @Route("/ajax/add", name="mongo_pute_add_ajax")
+	 * @Route("/ajax/add", name="tumblr_add_ajax")
 	 * @return type
 	 */
 	public function addAjaxAction()
@@ -247,12 +247,12 @@ class TumblrController extends Controller
 		$session = $request->getSession();
 		$user = $this->get('security.context')->getToken()->getUser();
 
-        $mongo_pute = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
+        $tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
 
         $ajax_request = $request->isXmlHttpRequest();
         return array
         (
-            'mongo_pute' => $mongo_pute,
+            'tumblr' => $tumblr,
         	'ajax_request' => $ajax_request
         );
     }

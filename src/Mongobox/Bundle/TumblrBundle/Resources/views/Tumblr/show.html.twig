@@ -8,7 +8,7 @@
 <div class="marketing">
 
     <h1><img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
-    <h2>Mongo pute</h2>
+    <h2>Tumblr</h2>
 </div>
 <div class="vote"></div>
 <div class="hero-unit" style="text-align:center;">
@@ -32,7 +32,7 @@
         {% if entity.tags is not empty %}
             <div class="tags">
                 Tags:
-                {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('mongo_pute',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
+                {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('tumblr',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
             </div>
         {% endif %}
 

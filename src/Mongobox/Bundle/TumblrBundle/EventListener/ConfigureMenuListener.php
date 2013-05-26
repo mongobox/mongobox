@@ -17,8 +17,8 @@ class ConfigureMenuListener
         $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
 
-        $tumblrMenu->addChild('Nouvelle image', array('route' => 'mongo_pute_add'));
-        $tumblrMenu->addChild('Listing', array('route' => 'mongo_pute'));
+        $tumblrMenu->addChild('Nouvelle image', array('route' => 'tumblr_add'));
+        $tumblrMenu->addChild('Listing', array('route' => 'tumblr'));
         $tumblrMenu->addChild('Classement', array('route' => 'tumblr_top'));
 
         $tumblrMenu->moveToPosition(20);
@@ -35,9 +35,9 @@ class ConfigureMenuListener
         $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
 
-        $tumblrMenu->addChild('Nouvelle image', array('route' => 'mongo_pute_add'));
+        $tumblrMenu->addChild('Nouvelle image', array('route' => 'tumblr_add'));
         $tumblrMenu->addChild('Gestion des images', array('route' => 'admin_tumblr'));
-        $tumblrMenu->addChild('Listing', array('route' => 'mongo_pute'));
+        $tumblrMenu->addChild('Listing', array('route' => 'tumblr'));
         $tumblrMenu->addChild('Classement', array('route' => 'tumblr_top'));
         $tumblrMenu->addChild('Statistiques', array('route' => 'tumblr_stats'));
 

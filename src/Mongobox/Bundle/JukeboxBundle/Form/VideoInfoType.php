@@ -15,7 +15,7 @@ class VideoInfoType extends AbstractType
                 'attr' => array('size' => 40)
             ))
             ->add('songName', 'text', array(
-                'label' => 'Nom de la chanson',
+                'label' => 'Nom de la vidéo',
                 'attr' => array('size' => 40)
             ))
             ->add('tag', 'genemu_jqueryautocompleter_entity', array(

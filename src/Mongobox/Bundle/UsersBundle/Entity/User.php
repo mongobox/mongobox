@@ -844,4 +844,8 @@ class User implements AdvancedUserInterface
 	public function getListesFavoris() {
 		return $this->listes_favoris;
 	}
+	
+	public function __sleep() {
+		return array('id', 'login', 'email');
+	}
 }

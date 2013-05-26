@@ -31,7 +31,7 @@
             $(".digits").countdown({
                 image: "{{ asset('bundles/mongoboxjukebox/img/digits.png') }}",
                 format: "mm:ss",
-                startTime: "01:00",
+                startTime: "00:59",
                 timerEnd: function() {
                     if ($('#putsch-modal').is(':visible')) {
                         livePlayer.acceptPutsch({{ user.id }});

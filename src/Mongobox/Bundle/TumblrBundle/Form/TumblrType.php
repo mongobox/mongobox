@@ -45,7 +45,7 @@ class TumblrType extends AbstractType
             ->add('text', 'text', array(
             	'label' => 'Texte',
 				'attr' => array(
-                    'placeholder' => 'Texte de la mongo pute',
+                    'placeholder' => 'Texte du tumblr',
                 ),
 				'required' => true
             ))

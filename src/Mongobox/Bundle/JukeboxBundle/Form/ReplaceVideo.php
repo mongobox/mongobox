@@ -25,7 +25,7 @@ class ReplaceVideo extends AbstractType
                 'attr'  => array('size' => 15)
             ))
             ->add('songName', 'text', array(
-                'label' => 'Titre de la chanson',
+                'label' => 'Titre de la vidéo',
                 'attr'  => array('size' => 15)
             ))
             ->add('lien', 'text', array(
