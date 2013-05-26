@@ -17,14 +17,20 @@
 	<div class="">
 		{% for list in lists %}
 			<div class="list-import">
-				<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left" />
-				<a class="span-link">
-					<i class="icon-chevron-right"></i>
-					{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
-				</a>
+				<label class="checkbox">
+					<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left" />
+					<a class="span-link">
+						<i class="icon-chevron-right"></i>
+						{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
+					</a>
+				</label>
 				<ul class="no-bullet-please list-favoris-import hide">
 					{% for fav in list.object.favoris %}
-						<li><input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="checkbox-import" /> {{ fav.video.name }}</li>
+						<li>
+							<label class="checkbox">
+								<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="checkbox-import" /> {{ fav.video.name }}
+							</label>
+						</li>
 					{% endfor %}
 				</ul>
 			</div>
