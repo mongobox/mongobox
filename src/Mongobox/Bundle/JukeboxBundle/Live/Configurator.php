@@ -78,7 +78,7 @@ class Configurator
 
         if ($playerMode === 'admin') {
             if ($currentGroup->getLiveMaxDislikes() ===  null) {
-                $maxDislikes = $this->container->getParameter('default_max_dislikes');
+                $maxDislikes = (int) $this->container->getParameter('live_max_dislikes');
             } else {
                 $maxDislikes = (int) $currentGroup->getLiveMaxDislikes();
             }

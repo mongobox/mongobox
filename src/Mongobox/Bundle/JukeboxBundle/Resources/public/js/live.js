@@ -90,6 +90,13 @@ LivePlayer = function()
 
             case 'putsch_acknowledgment':
                 clearInterval(this.putschTimer);
+
+                $('#putsch-modal').modal('show');
+                $('.loader').show();
+                $('#putsch-modal .modal-content').html($('#putsch-request-callback').html());
+                $('.loader').hide();
+
+                return;
             break;
 
             case 'refuse_putsch':
