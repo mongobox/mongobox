@@ -256,7 +256,11 @@ class LiveController extends Controller
         $currentUser    = $this->get('security.context')->getToken()->getUser();
 
         $repository     = $em->getRepository('MongoboxJukeboxBundle:Putsch');
-        $permission     = $repository->checkPutschAttempt($currentGroup, $currentUser);
+        $permission     = $repository->checkPutschAttempt(
+            $currentGroup,
+            $currentUser,
+            $this->container->getParameter('next_putsch_waiting')
+        );
 
         if ($permission['result'] === 'deny') {
             $permission['details'] = $this->renderView(

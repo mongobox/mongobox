@@ -57,12 +57,12 @@ class PutschRepository extends EntityRepository
     }
 
     /**
-     * Checks if the user does not already have an ongoing attempt
+     * Check if the user does not already have an ongoing attempt
      *
      * @param User $user
      * @return array|boolean
      */
-    protected function _checkAttemptForUser(User $user)
+    protected function _checkUserOngoingAttempt(User $user)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
@@ -92,9 +92,58 @@ class PutschRepository extends EntityRepository
         } else {
             return array(
                 'result'    => 'deny',
-                'fail'      => 'user'
+                'fail'      => 'user-duplicate'
             );
         }
+
+        return true;
+    }
+
+    /**
+     * Check if the user has not made ​​a too recent request
+     *
+     * @param User $user
+     * @param integer $waiting
+     * @return array|boolean
+     */
+    protected function _checkUserWaitingLimit(User $user, $waiting)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $date = new \DateTime();
+        $date->modify("- $waiting minutes");
+
+        $qb
+            ->select('putsches')
+            ->from('MongoboxJukeboxBundle:Putsch', 'putsches')
+            ->where('putsches.user = :user')
+            ->andWhere('putsches.date > :date')
+            ->setParameters(array(
+                'user'  => $user,
+                'date'  => $date
+            ))
+            ->setMaxResults(1)
+            ->getQuery()
+        ;
+
+        $query = $qb->getQuery();
+
+        try {
+            $result = $query->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            $result = false;
+        }
+
+        if ($result === false) {
+            return true;
+        } else {
+            return array(
+                'result'    => 'deny',
+                'fail'      => 'user-waiting'
+            );
+        }
+
     }
 
     /**
@@ -102,18 +151,24 @@ class PutschRepository extends EntityRepository
      *
      * @param Group $group
      * @param User $user
+     * @param integer $waiting
      * @return array
      */
-    public function checkPutschAttempt(Group $group, User $user)
+    public function checkPutschAttempt(Group $group, User $user, $waiting = 0)
     {
         $groupAvailability = $this->_checkAttemptForGroup($group);
         if ($groupAvailability !== true) {
             return $groupAvailability;
         }
 
-        $userAvailability = $this->_checkAttemptForUser($user);
-        if ($userAvailability !== true) {
-            return $userAvailability;
+        $userOngoingCheck = $this->_checkUserOngoingAttempt($user);
+        if ($userOngoingCheck !== true) {
+            return $userOngoingCheck;
+        }
+
+        $userWaitingCheck = $this->_checkUserWaitingLimit($user, $waiting);
+        if ($userWaitingCheck !== true) {
+            return $userWaitingCheck;
         }
 
         $newAttempt = new Putsch();
