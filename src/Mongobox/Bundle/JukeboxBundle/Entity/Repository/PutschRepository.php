@@ -19,9 +19,10 @@ class PutschRepository extends EntityRepository
      * Check if there is not already an ongoing attempt to this given group
      *
      * @param Group $group
+     * @param User $user
      * @return array|boolean
      */
-    protected function _checkAttemptForGroup(Group $group)
+    protected function _checkAttemptForGroup(Group $group, User $user)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
@@ -30,9 +31,11 @@ class PutschRepository extends EntityRepository
             ->select('putsches')
             ->from('MongoboxJukeboxBundle:Putsch', 'putsches')
             ->where('putsches.group = :group')
+            ->andWhere('putsches.user != :user')
             ->andWhere('putsches.response is null')
             ->setParameters(array(
-                'group' => $group
+                'group' => $group,
+                'user'  => $user
             ))
             ->setMaxResults(1)
             ->getQuery()
@@ -156,7 +159,7 @@ class PutschRepository extends EntityRepository
      */
     public function checkPutschAttempt(Group $group, User $user, $waiting = 0)
     {
-        $groupAvailability = $this->_checkAttemptForGroup($group);
+        $groupAvailability = $this->_checkAttemptForGroup($group, $user);
         if ($groupAvailability !== true) {
             return $groupAvailability;
         }
