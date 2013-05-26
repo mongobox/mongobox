@@ -10,7 +10,7 @@
 </div>
 {%- endif -%}
 
-{%- if permission.fail == 'user' -%}
+{%- if permission.fail == 'user-duplicate' -%}
 <div style="text-align: center">
     <p>
         <img src="{{ asset('bundles/mongoboxjukebox/img/soon.jpg') }}" alt="grumpy cat - soon" title="Soon..." />
@@ -20,4 +20,16 @@
         <i>Vous devez attendre la réponse de l'administrateur actuel du live ou une minute.</i>
     </p>
 </div>
+{%- endif -%}
+
+{%- if permission.fail == 'user-waiting' -%}
+    <div style="text-align: center">
+        <p>
+            <img src="{{ asset('bundles/mongoboxjukebox/img/game.jpg') }}" alt="lolcat - game" title="It's not a game !" />
+        </p>
+        <p>
+            <b>Un peu de patience ! Vous avez déjà effectué une demande récemment...</b><br />
+            <i>Vous devez attendre quelques minutes avant de pouvoir essayer à nouveau.</i>
+        </p>
+    </div>
 {%- endif -%}
