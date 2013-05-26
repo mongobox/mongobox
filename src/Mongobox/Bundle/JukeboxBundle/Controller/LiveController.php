@@ -255,12 +255,14 @@ class LiveController extends Controller
         $currentGroup   = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
         $currentUser    = $this->get('security.context')->getToken()->getUser();
 
+        if ($currentGroup->getNextPutschWaiting() !== null) {
+            $putschWaiting = $currentGroup->getNextPutschWaiting();
+        } else {
+            $putschWaiting = $this->container->getParameter('next_putsch_waiting');
+        }
+
         $repository     = $em->getRepository('MongoboxJukeboxBundle:Putsch');
-        $permission     = $repository->checkPutschAttempt(
-            $currentGroup,
-            $currentUser,
-            $this->container->getParameter('next_putsch_waiting')
-        );
+        $permission     = $repository->checkPutschAttempt($currentGroup, $currentUser, $putschWaiting);
 
         if ($permission['result'] === 'deny') {
             $permission['details'] = $this->renderView(
