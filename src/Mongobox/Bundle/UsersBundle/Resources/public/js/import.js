@@ -10,6 +10,7 @@ var importBookmark = importBookmark || {};
 
 		this.observeShowBookmarks();
 		this.observeParentCheckboxClick();
+		this.observeChildrenCheckboxClick();
 	};
 
 	importBookmark.observeShowBookmarks = function()
@@ -35,10 +36,18 @@ var importBookmark = importBookmark || {};
 
 	importBookmark.observeParentCheckboxClick = function()
 	{
-		this.parentCheckbox.on('click', function()
+		this.parentCheckbox.bind('click', function()
 		{
 			var id_list = $(this).val();
 			$('#list-bookmarks-'+id_list).find('.children-checkbox').prop("checked", this.checked);
+		});
+	};
+
+	importBookmark.observeChildrenCheckboxClick = function()
+	{
+		this.childrenCheckbox.bind('click', function()
+		{
+			$(this).closest('.list-import').find('.parent-checkbox').prop("checked", false);
 		});
 	};
 
