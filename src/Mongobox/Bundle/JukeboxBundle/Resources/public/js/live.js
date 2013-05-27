@@ -89,14 +89,16 @@ LivePlayer = function()
             break;
 
             case 'putsch_acknowledgment':
-                clearInterval(this.putschTimer);
+                if (parseInt(params.userId) === parseInt(this.userId)) {
+                    clearInterval(this.putschTimer);
 
-                $('#putsch-modal').modal('show');
-                $('.loader').show();
-                $('#putsch-modal .modal-content').html($('#putsch-request-callback').html());
-                $('.loader').hide();
+                    $('#putsch-modal').modal('show');
+                    $('.loader').show();
+                    $('#putsch-modal .modal-content').html($('#putsch-request-callback').html());
+                    $('.loader').hide();
 
-                return;
+                    return;
+                }
             break;
 
             case 'refuse_putsch':

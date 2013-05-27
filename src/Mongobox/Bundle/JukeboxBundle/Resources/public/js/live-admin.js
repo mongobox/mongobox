@@ -101,7 +101,7 @@ $(document).ready(function() {
 
     livePlayer.receivePutschAttempt = function(params)
     {
-        this.sendPutschAcknowledgment();
+        this.sendPutschAcknowledgment(params.userId);
 
         $.ajax({
             type: 'POST',
@@ -120,10 +120,11 @@ $(document).ready(function() {
         }.bind(this));
     };
 
-    livePlayer.sendPutschAcknowledgment = function()
+    livePlayer.sendPutschAcknowledgment = function(userId)
     {
         var params = new Object();
-        params.action = 'putsch_acknowledgment';
+        params.action   = 'putsch_acknowledgment';
+        params.userId   = userId;
 
         this.sendParameters(params);
     };
