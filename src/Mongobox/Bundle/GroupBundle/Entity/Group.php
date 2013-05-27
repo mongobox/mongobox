@@ -33,7 +33,7 @@ class Group
      * @Assert\NotBlank()
      */
     protected $city;
-    
+
     /**
      * @ORM\Column(type="boolean")
      */
@@ -45,6 +45,13 @@ class Group
      * @ORM\Column(name="live_max_dislikes", type="integer", nullable=true)
      */
     protected $liveMaxDislikes;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="next_putsch_waiting", type="integer", nullable=true)
+     */
+    protected $nextPutschWaiting;
 
     /**
      * @var integer
@@ -103,7 +110,7 @@ class Group
      * @ORM\OneToMany(targetEntity="Mongoeat\Bundle\VoteBundle\Entity\Decision", mappedBy="group", cascade={"persist"})
      */
     private $decisions;
-    
+
     /**
      * Constructor
      */
@@ -195,6 +202,17 @@ class Group
         return $this;
     }
 
+    public function getNextPutschWaiting()
+    {
+        return $this->nextPutschWaiting;
+    }
+
+    public function setNextPutschWaiting($nextPutschWaiting)
+    {
+        $this->nextPutschWaiting = $nextPutschWaiting;
+        return $this;
+    }
+
     public function getLiveCurrentAdmin()
     {
         return $this->liveCurrentAdmin;
@@ -269,7 +287,7 @@ class Group
     public function addTumblr(\Mongobox\Bundle\TumblrBundle\Entity\Tumblr $tumblrs)
     {
         $this->tumblrs[] = $tumblrs;
-    
+
         return $this;
     }
 
@@ -292,7 +310,7 @@ class Group
     public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlists)
     {
         $this->playlists[] = $playlists;
-    
+
         return $this;
     }
 
@@ -309,7 +327,7 @@ class Group
     /**
      * Get playlists
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPlaylists()
     {
@@ -325,7 +343,7 @@ class Group
     public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videosGroup)
     {
         $this->videos_group[] = $videosGroup;
-    
+
         return $this;
     }
 
@@ -342,7 +360,7 @@ class Group
     /**
      * Get videos_group
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getVideosGroup()
     {
@@ -358,7 +376,7 @@ class Group
     public function addGroupLiveTag(\Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag $groupLiveTag)
     {
         $this->group_live_tag[] = $groupLiveTag;
-    
+
         return $this;
     }
 
@@ -375,7 +393,7 @@ class Group
     /**
      * Get group_live_tag
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGroupLiveTag()
     {
@@ -391,7 +409,7 @@ class Group
     public function addUsersInvitation(\Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations)
     {
         $this->users_invitations[] = $usersInvitations;
-    
+
         return $this;
     }
 
@@ -415,7 +433,7 @@ class Group
     public function addDecision(\Mongoeat\Bundle\VoteBundle\Entity\Decision $decisions)
     {
         $this->decisions[] = $decisions;
-    
+
         return $this;
     }
 
@@ -432,7 +450,7 @@ class Group
     /**
      * Get decisions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDecisions()
     {
@@ -448,14 +466,14 @@ class Group
     public function setCity($city)
     {
         $this->city = $city;
-    
+
         return $this;
     }
 
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {

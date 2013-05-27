@@ -21,6 +21,10 @@ class GroupType extends AbstractType
                 'label' => 'Nombre maximum de votes négatifs sur une vidéo',
                 'attr'  => array('min' => 1)
             ))
+            ->add('nextPutschWaiting', 'integer', array(
+                'label' => 'Temps entre chaque tentative de putsch sur le live (minutes)',
+                'attr'  => array('min' => 1)
+            ))
         ;
 	}
 
