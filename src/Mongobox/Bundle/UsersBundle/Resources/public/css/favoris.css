@@ -96,3 +96,15 @@
 .list-import {
 	clear: both;
 }
+
+#import-content {
+	background-color: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px 4px 4px 4px;
+	padding: 19px 19px 14px;
+}
+
+#groupes-import {
+	text-align: center;
+	padding-top: 20px;
+}
