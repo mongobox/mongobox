@@ -15,7 +15,7 @@ class AdminBuilder extends ContainerAware
     public function build(FactoryInterface $factory)
     {
         $menu = $factory->createItem('root');
-        $menu->setChildrenAttributes(array('class' => 'nav'));
+        $menu->setChildrenAttributes(array('class' => 'nav nav-collapse collapse nav-collapse-primary'));
 
         $menu->addChild('Dashboard', array('route' => 'admin_index'))->moveToFirstPosition();
 
