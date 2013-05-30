@@ -56,133 +56,134 @@
                 {% include 'MongoboxJukeboxBundle:Partial:live-admin-control.html.twig' %}
 			{% endif %}
 
-    <ul id="live-tab" class="nav nav-tabs">
-		<li class="active"><a href="#vote" data-toggle="tab">Votes</a></li>
-		<li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
-		{% if player_mode == "admin" %}
-			<li><a href="#playlist" data-toggle="tab">Playlist</a></li>
-		{% endif %}
-    </ul>
+            <ul id="live-tab" class="nav nav-tabs">
+                <li class="active"><a href="#vote" data-toggle="tab">Votes</a></li>
+                <li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
+                {% if player_mode == "admin" %}
+                    <li><a href="#playlist" data-toggle="tab">Playlist</a></li>
+                {% endif %}
+            </ul>
 
-	<div class="tab-content">
-		<div class="tab-pane active" id="vote">
-			<div class="video-rating">
-				<h3>Vote</h3>
-                <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
-                    <i class="icon-thumbs-up icon-white"></i>
-                </a>
-                <span id="up-score"></span>
+            <div class="tab-content">
+                <div class="tab-pane active" id="vote">
+                    <div class="video-rating">
+                        <h3>Vote</h3>
+                        <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
+                            <i class="icon-thumbs-up icon-white"></i>
+                        </a>
+                        <span id="up-score"></span>
 
-                <a href="#" class="btn btn-danger" id="down-vote" role="button" data-toggle="modal" title="Bof...">
-                    <i class="icon-thumbs-down icon-white"></i>
-                </a>
-                <span id="down-score"></span>
+                        <a href="#" class="btn btn-danger" id="down-vote" role="button" data-toggle="modal" title="Bof...">
+                            <i class="icon-thumbs-down icon-white"></i>
+                        </a>
+                        <span id="down-score"></span>
 
-                <br />
+                        <br />
 
-                <span id="video-score"></span>
-			</div>
+                        <span id="video-score"></span>
+                    </div>
 
-            <div class="volume-control">
-				<h3>Volume</h3>
-                <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
-                    <i class="icon-volume-up icon-white"></i>
-                </a>
-                <span id="volume-up-votes"></span>
+                    <div class="volume-control">
+                        <h3>Volume</h3>
+                        <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
+                            <i class="icon-volume-up icon-white"></i>
+                        </a>
+                        <span id="volume-up-votes"></span>
 
-                <a href="#" class="btn btn-danger" id="down-volume" role="button" data-toggle="modal" title="Bof...">
-                    <i class="icon-volume-down icon-white"></i>
-                </a>
-                <span id="volume-down-votes"></span>
+                        <a href="#" class="btn btn-danger" id="down-volume" role="button" data-toggle="modal" title="Bof...">
+                            <i class="icon-volume-down icon-white"></i>
+                        </a>
+                        <span id="volume-down-votes"></span>
 
-                <span id="video-volume"></span>
-            </div>
-		</div>
-
-            {% if player_mode == "admin" %}
-                {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-            {% else %}
-			<div class="tab-pane" id="playlist_controll">
-				{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode, 'groupLiveTags' : groupLiveTags} %}
-			</div>
-			{% endif %}
-
-            <script type="text/javascript">
-                function onPlayerStateChange(event)
-                {
-                    if (event.data === -1) {
-                        livePlayer.synchronizePlayerVolume();
-                    }
+                        <span id="video-volume"></span>
+                    </div>
+                </div>
 
                     {% if player_mode == "admin" %}
-                        var params = new Object();
-                        params.status = event.data;
-
-                        if (event.data != 0) {
-                            params.currentTime = player.getCurrentTime();
-                            livePlayer.sendParameters(params);
-                        } else {
-                            livePlayer.seekNextVideo(params);
-                        }
-                    {% endif %}
-                }
-            </script>
-
-			<script type="text/javascript">
-	          	var tag = document.createElement('script');
-	          	tag.src = '//www.youtube.com/iframe_api';
-
-	          	var firstScriptTag = document.getElementsByTagName('script')[0];
-	          	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-	          	var voteUrl			        = '{{ path('live_vote') }}';
-	          	var scoreUrl		        = '{{ path('live_score') }}';
-                var volumeUrl               = '{{ path('live_volume') }}';
-                var putschEligibilityUrl    = '{{ path('live_putsch_eligibility') }}';
-                var adminSwitchUrl          = '{{ path('live_admin_switch') }}';
-
-                var playerMode		= '{{ player_mode }}';
-                var playerVars      = {{ player_vars|raw }}
-                var defaultVolume   = playerVars.volume;
-
-	          	var player;
-	          	function onYouTubeIframeAPIReady()
-	          	{
-					$(document).ready(function() {
-		          		player = new YT.Player('player', {
-		          			height: '{{ player_height }}',
-		          			width: '{{ player_width }}',
-		          			videoId: '{{ current_video.videoGroup.video.lien }}',
-		          			playerVars: playerVars,
-		          			events: {{ player_events|raw }}
-		          		});
-					});
-	          	}
-
-                var livePlayer = new LivePlayer();
-                livePlayer.initialize('{{ current_video.id }}', '{{ app.user.id }}');
-
-                var connection = new WebSocket('{{ socket_params }}');
-                connection.onmessage = function(e) {
-                    var json = e.data;
-
-                    var params = JSON.parse(json);
-                    params.mode	= '{{ player_mode }}';
-                    params.currentVideo = '{{ current_video.id }}';
-
-                    {% if player_mode == "admin" %}
-                        if (typeof params.action !== 'undefined' && params.action === 'putsch_attempt') {
-                            livePlayer.receivePutschAttempt(params);
-                        } else {
-                            livePlayer.synchronizePlayerState(params);
-                        }
+                        {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
                     {% else %}
-                        livePlayer.synchronizePlayerState(params);
+                    <div class="tab-pane" id="playlist_controll">
+                        {% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode, 'groupLiveTags' : groupLiveTags} %}
+                    </div>
                     {% endif %}
-                };
-			</script>
-		{% else %}
-			Jukebox HS
-		{% endif %}
-	</div>
+
+                    <script type="text/javascript">
+                        function onPlayerStateChange(event)
+                        {
+                            if (event.data === -1) {
+                                livePlayer.synchronizePlayerVolume();
+                            }
+
+                            {% if player_mode == "admin" %}
+                                var params = new Object();
+                                params.status = event.data;
+
+                                if (event.data != 0) {
+                                    params.currentTime = player.getCurrentTime();
+                                    livePlayer.sendParameters(params);
+                                } else {
+                                    livePlayer.seekNextVideo(params);
+                                }
+                            {% endif %}
+                        }
+                    </script>
+
+                    <script type="text/javascript">
+                        var tag = document.createElement('script');
+                        tag.src = '//www.youtube.com/iframe_api';
+
+                        var firstScriptTag = document.getElementsByTagName('script')[0];
+                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                        var voteUrl			        = '{{ path('live_vote') }}';
+                        var scoreUrl		        = '{{ path('live_score') }}';
+                        var volumeUrl               = '{{ path('live_volume') }}';
+                        var putschEligibilityUrl    = '{{ path('live_putsch_eligibility') }}';
+                        var adminSwitchUrl          = '{{ path('live_admin_switch') }}';
+
+                        var playerMode		= '{{ player_mode }}';
+                        var playerVars      = {{ player_vars|raw }}
+                        var defaultVolume   = playerVars.volume;
+
+                        var player;
+                        function onYouTubeIframeAPIReady()
+                        {
+                            $(document).ready(function() {
+                                player = new YT.Player('player', {
+                                    height: '{{ player_height }}',
+                                    width: '{{ player_width }}',
+                                    videoId: '{{ current_video.videoGroup.video.lien }}',
+                                    playerVars: playerVars,
+                                    events: {{ player_events|raw }}
+                                });
+                            });
+                        }
+
+                        var livePlayer = new LivePlayer();
+                        livePlayer.initialize('{{ current_video.id }}', '{{ app.user.id }}');
+
+                        var connection = new WebSocket('{{ socket_params }}');
+                        connection.onmessage = function(e) {
+                            var json = e.data;
+
+                            var params = JSON.parse(json);
+                            params.mode	= '{{ player_mode }}';
+                            params.currentVideo = '{{ current_video.id }}';
+
+                            {% if player_mode == "admin" %}
+                                if (typeof params.action !== 'undefined' && params.action === 'putsch_attempt') {
+                                    livePlayer.receivePutschAttempt(params);
+                                } else {
+                                    livePlayer.synchronizePlayerState(params);
+                                }
+                            {% else %}
+                                livePlayer.synchronizePlayerState(params);
+                            {% endif %}
+                        };
+                    </script>
+                {% else %}
+                    Jukebox HS
+                {% endif %}
+            </div>
+    </div>
 {% endblock body %}
