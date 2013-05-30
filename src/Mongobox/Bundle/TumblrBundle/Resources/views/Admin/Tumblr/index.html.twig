@@ -7,59 +7,113 @@
 {% block body %}
 	{{ parent() }}
 
-	<h1>Tumblr list</h1>
+    <div class="row-fluid">
+        <div class="area-top clearfix">
+            <div class="pull-left header">
+                <h3 class="title">
+                    <i class="icon-dashboard"></i>
+                    Tumblr list
+                </h3>
+                <h5>
+                    A subtitle can be added here
+                </h5>
+            </div>
+        </div>
+    </div>
 
-	{# Pagination #}
-	{% set parameter = {} %}
-	{% include ('MongoboxCoreBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+    <div class="container-fluid padded">
+        <div class="row-fluid">
 
-	<table class="table table-bordered table-striped">
-	    <thead>
-	        <tr>
-	            <th>
-	                {# Filter on Id #}
-                    {% include ('MongoboxCoreBundle:Partial:tableFilter.html.twig') with {
-                        'route':'admin_tumblr',
-                        'property':'t.id_tumblr',
-                        'label':'ID'
-                    } %}
-                </th>
+            <!-- Breadcrumb line -->
 
-	            <th>Image</th>
-	            <th>Text</th>
-	            <th>
-                    {# Filter on Text #}
-                    {% include ('MongoboxCoreBundle:Partial:tableFilter.html.twig') with {
-                        'route':'admin_tumblr',
-                        'property':'t.date',
-                        'label':'Date'
-                    } %}
-                </th>
-	            <th>Actions</th>
-	        </tr>
-	    </thead>
-	    <tbody>
-	    {% for entity in entities %}
-	        <tr>
-	            <td><a href="{{ path('tumblr_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-	            <td>
-                    {% if entity.localPath is null %}
-                        <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" width="100"/>
-                    {% else %}
-                        <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" width="100"/>
-                    {% endif %}
-	            </td>
-	            <td>{{ entity.text }}</td>
-	            <td>{% if entity.date %}le {{ entity.date|date('d/m/Y à H:i:s') }}{% endif %}</td>
-	            <td>
-                    <a class="btn" href="{{ path('tumblr_show', { 'id': entity.id }) }}">Voir</a>
-                    <a class="btn" href="{{ path('admin_tumblr_edit', { 'id': entity.id }) }}"><i class="icon-ok-sign"></i> Modifier</a>
-	            </td>
-	        </tr>
-	    {% endfor %}
-	    </tbody>
-	</table>
+            <div id="breadcrumbs">
+                <div class="breadcrumb-button blue">
+                    <span class="breadcrumb-label"><i class="icon-home"></i> Home</span>
+                    <span class="breadcrumb-arrow"><span></span></span>
+                </div>
 
-	{# Pagination #}
-{% include ('MongoboxCoreBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+
+
+                <div class="breadcrumb-button">
+          <span class="breadcrumb-label">
+            <i class="icon-dashboard"></i> Dashboard
+          </span>
+                    <span class="breadcrumb-arrow"><span></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid padded">
+        <div class="row-fluid">
+            <div class="span12">
+
+                {# Pagination #}
+                {% set parameter = {} %}
+                {% include ('MongoboxCoreBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+
+                <div class="box">
+                    <div class="box-header">
+                        <span class="title">Data Tables</span>
+                    </div>
+
+                    <div class="box-content">
+
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        {# Filter on Id #}
+                                        {% include ('MongoboxCoreBundle:Partial:tableFilter.html.twig') with {
+                                            'route':'admin_tumblr',
+                                            'property':'t.id_tumblr',
+                                            'label':'ID'
+                                        } %}
+                                    </th>
+
+                                    <th>Image</th>
+                                    <th>Text</th>
+                                    <th>
+                                        {# Filter on Text #}
+                                        {% include ('MongoboxCoreBundle:Partial:tableFilter.html.twig') with {
+                                            'route':'admin_tumblr',
+                                            'property':'t.date',
+                                            'label':'Date'
+                                        } %}
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for entity in entities %}
+                                <tr>
+                                    <td><a href="{{ path('tumblr_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                                    <td>
+                                        {% if entity.localPath is null %}
+                                            <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" width="100"/>
+                                        {% else %}
+                                            <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" width="100"/>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ entity.text }}</td>
+                                    <td>{% if entity.date %}le {{ entity.date|date('d/m/Y à H:i:s') }}{% endif %}</td>
+                                    <td>
+                                        <a class="btn" href="{{ path('tumblr_show', { 'id': entity.id }) }}">Voir</a>
+                                        <a class="btn" href="{{ path('admin_tumblr_edit', { 'id': entity.id }) }}"><i class="icon-ok-sign"></i> Modifier</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {# Pagination #}
+                {% include ('MongoboxCoreBundle:Partial:pagination.html.twig') with {'route':'admin_tumblr', 'parameter' : parameter, 'pagination' : pagination } %}
+
+            </div>
+        </div>
+    </div>
 {% endblock body %}

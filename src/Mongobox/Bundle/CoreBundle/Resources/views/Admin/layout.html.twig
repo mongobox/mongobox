@@ -19,7 +19,8 @@
     <link href="{{ asset('bundles/mongoboxcore/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
 
     <link href="{{ asset('bundles/mongoboxcore/css/Admin/admin.css') }}" rel="stylesheet">
-	<link href="{{ asset('bundles/mongoboxtumblr/css/tumblr.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/mongoboxcore/css/Admin/application.css') }}" rel="stylesheet">
+
 
     {% block css %}{% endblock %}
 	{% block stylesheets %}{% endblock %}
@@ -52,7 +53,11 @@
   	{% include "MongoboxCoreBundle::Navigation/Admin/navbar.html.twig" %}
 	{% endif %}
 
-    <div class="container">
+    {# Sidebar #}
+    {% include "MongoboxCoreBundle::Navigation/Admin/primary-sidebar.html.twig" %}
+
+
+    <div class="main-content">
         <!-- CONTENT HERE -->
 
 	    {% for flashMessage in app.session.flashbag.get('success') %}
