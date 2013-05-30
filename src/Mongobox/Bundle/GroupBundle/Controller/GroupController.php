@@ -18,7 +18,7 @@ use Mongobox\Bundle\UsersBundle\Form\UserSearchType;
 
 /**
  * @Route( "/group")
- * 
+ *
  */
 class GroupController extends Controller
 {
@@ -48,7 +48,7 @@ class GroupController extends Controller
 		//On créer le formulaire en utilisant un utilisateur vide
 		$group = new Group();
 		$form = $this->createForm(new GroupType(), $group);
-		
+
 		if('POST' === $request->getMethod())
 		{
 			$form->bind($request);
@@ -56,7 +56,7 @@ class GroupController extends Controller
 			{
 				$em->persist($group);
 				$em->flush();
-				
+
 				//On rajoute l'utilisateur courant dans le groupe
 				$group->getUsers()->add($user);
 
@@ -71,6 +71,22 @@ class GroupController extends Controller
 		return array(
 				'form' => $form->createView()
 		);
+	}
+
+	/**
+	 * Création d'un groupe en ajax lors de l'import des favoris
+	 * @Route("/ajax/group/create", name="ajax_group_create")
+	 */
+	public function ajaxCreateGroupeAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$group = new Group();
+		$form = $this->createForm(new GroupType(), $group);
+
+		return $this->render('MongoboxGroupBundle:Group:groupAjaxCreate.html.twig', array(
+			"form" => $form->createView()
+		));
 	}
 
     /**
@@ -112,7 +128,7 @@ class GroupController extends Controller
 			return $this->redirect($this->generateUrl('homepage'));
 		}
 	}
-	
+
     /**
      * @Template()
      * @Route( "/membres/{id}", name="group_membres")
@@ -237,7 +253,7 @@ class GroupController extends Controller
 			$session->set('id_group', $id_group);
 
 			//On met l'id du groupe en cookie
-			$response = new RedirectResponse($this->generateUrl('wall_index')); 
+			$response = new RedirectResponse($this->generateUrl('wall_index'));
 			$response->headers->setCookie(new Cookie('id_group', $id_group));
 
 			return $response;
