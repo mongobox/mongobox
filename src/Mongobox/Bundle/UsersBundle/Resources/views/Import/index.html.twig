@@ -49,6 +49,34 @@
 	</div>
 	<div id="groupes-import">
 		<h3>Dans quel groupe ?</h3>
+		<span>Choisissez parmis vos groupes</span><br/>
+		<select>
+		{% for group in app.user.groups %}
+			<option value="{{ group.id }}">{{ group.title }}</option>
+		{% endfor %}
+		</select>
+		<br/><span>Ou bien, <a id="create-groupe-import" href="{{ path('ajax_group_create') }}">créer un autre groupe</a></span>
+
+		<br/><br/><button id="btn-start-import" class="btn btn-primary" tilte="Démarrer l'import des favoris">Importer les favoris</button>
+	</div>
+
+	<div class="modal hide fade" id="modal-import-group-create">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Créer un nouveau groupe</h3>
+		</div>
+		<div class="modal-body">
+			<div class="alert alert-info">
+				Vous serez automatiquement ajouter dans le groupe, celui-ci serait visible au rafraichissement de la page dans la liste de vos groupe.
+			</div>
+			<div id="loader-group-ajax">
+				<img src="{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}" alt="Chargement" />
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button data-dismiss="modal" aria-hidden="true" class="btn">Annuler</button>
+			<a href="#" class="btn btn-primary">Créer le groupe</a>
+		</div>
 	</div>
 </div>
 {% endblock body %}

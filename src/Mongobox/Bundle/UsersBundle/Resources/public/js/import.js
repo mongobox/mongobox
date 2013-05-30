@@ -7,10 +7,14 @@ var importBookmark = importBookmark || {};
 		this.linkList = $('.span-link');
 		this.parentCheckbox = $('.parent-checkbox');
 		this.childrenCheckbox = $('.children-checkbox');
+		this.btnStartImport = $('#btn-start-import');
+		this.btnCreateGroup = $('#create-groupe-import');
 
 		this.observeShowBookmarks();
 		this.observeParentCheckboxClick();
 		this.observeChildrenCheckboxClick();
+		this.observeBtnStartImport();
+		this.observeCreateGroup();
 	};
 
 	importBookmark.observeShowBookmarks = function()
@@ -48,6 +52,39 @@ var importBookmark = importBookmark || {};
 		this.childrenCheckbox.bind('click', function()
 		{
 			$(this).closest('.list-import').find('.parent-checkbox').prop("checked", false);
+		});
+	};
+
+	importBookmark.observeCreateGroup = function()
+	{
+		this.btnCreateGroup.bind('click', function(e)
+		{
+			e.preventDefault();
+
+			$('#modal-import-group-create').modal({
+				show: true,
+				backdrop: 'static',
+				keyboard: false
+			});
+
+			$.ajax({
+				url: $(this).attr('href'),
+				type: 'POST',
+				success: function(data)
+				{
+					$('#loader-group-ajax').hide();
+					$("#modal-import-group-create .modal-body").append(data);
+				}
+			});
+		});
+	};
+
+	importBookmark.observeBtnStartImport = function()
+	{
+		this.btnStartImport.bind('click', function(e)
+		{
+			e.preventDefault();
+			alert('start import');
 		});
 	};
 

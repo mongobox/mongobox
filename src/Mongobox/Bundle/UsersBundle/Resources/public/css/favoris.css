@@ -108,3 +108,7 @@
 	text-align: center;
 	padding-top: 20px;
 }
+
+#modal-import-group-create .modal-body {
+	text-align: center;
+}
