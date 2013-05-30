@@ -239,7 +239,7 @@ class TumblrController extends Controller
 
     /**
      * @Template("MongoboxTumblrBundle:Slider:index.html.twig")
-     * @Route( "/tumblr", name="tumblr")
+     * @Route( "/tumblr", name="tumblr_slider")
      */
     public function sliderAction(Request $request)
     {
