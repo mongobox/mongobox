@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\GroupBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -79,10 +80,33 @@ class GroupController extends Controller
 	 */
 	public function ajaxCreateGroupeAction()
 	{
-		$em = $this->getDoctrine()->getManager();
+		$request = $this->getRequest();
 
 		$group = new Group();
 		$form = $this->createForm(new GroupType(), $group);
+
+		if( $request->isMethod('POST') )
+		{
+			$form->bind($request);
+			if( $form->isValid() )
+			{
+				$em = $this->getDoctrine()->getManager();
+				$user = $this->getUser();
+				$em->persist($group);
+				$group->getUsers()->add($user);
+				$em->flush();
+
+				$json = array(
+					"success" => true,
+					"html_navbar" => $this->renderView('MongoboxGroupBundle:Navigation:groupNavbar.html.twig', array('group' => $group)),
+					"message" => "Le groupe a bien été crée",
+					"group_id" => $group->getId(),
+					"group_text" => $group->getTitle()
+				);
+
+				return new JsonResponse($json);
+			}
+		}
 
 		return $this->render('MongoboxGroupBundle:Group:groupAjaxCreate.html.twig', array(
 			"form" => $form->createView()

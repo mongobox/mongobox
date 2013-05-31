@@ -9,12 +9,15 @@ var importBookmark = importBookmark || {};
 		this.childrenCheckbox = $('.children-checkbox');
 		this.btnStartImport = $('#btn-start-import');
 		this.btnCreateGroup = $('#create-groupe-import');
+		this.btnSubmitGroupCreate = $('#btn-submit-group-create');
+		this.selectGroup = $('#select-group-import');
 
 		this.observeShowBookmarks();
 		this.observeParentCheckboxClick();
 		this.observeChildrenCheckboxClick();
 		this.observeBtnStartImport();
 		this.observeCreateGroup();
+		this.observeBtnSubmitGroupCreate();
 	};
 
 	importBookmark.observeShowBookmarks = function()
@@ -69,11 +72,11 @@ var importBookmark = importBookmark || {};
 
 			$.ajax({
 				url: $(this).attr('href'),
-				type: 'POST',
+				type: 'GET',
 				success: function(data)
 				{
 					$('#loader-group-ajax').hide();
-					$("#modal-import-group-create .modal-body").append(data);
+					$("#form-modal-body").html(data);
 				}
 			});
 		});
@@ -85,6 +88,59 @@ var importBookmark = importBookmark || {};
 		{
 			e.preventDefault();
 			alert('start import');
+		});
+	};
+
+	importBookmark.observeBtnSubmitGroupCreate = function()
+	{
+		this.btnSubmitGroupCreate.bind('click', function(e)
+		{
+			e.preventDefault();
+			var form = $('#form-ajax-group-create');
+
+			$('.modal-error-import').remove();
+			var error = false;
+			$.each( form.find('input'), function(e,i)
+			{
+				if( $(this).val() == '' )
+				{
+					$(this).parent().before("<div class='modal-error-import alert alert-error'>Veuillez renseigner ce champs</div>");
+					$(this).focus();
+					error = true;
+					return false;
+				}
+
+				if( $(this).attr('type') == 'number' )
+				{
+					if( !$.isNumeric($(this).val()) || !($(this).val() > 0) )
+					{
+						$(this).parent().before("<div class='modal-error-import alert alert-error'>La valeur de ce champs doit être numérique et supérieure à 0</div>");
+						$(this).focus().val('');
+						error = true;
+						return false;
+					}
+				}
+			});
+
+			if(error)
+				return false;
+
+			$.ajax({
+				url: $(this).attr('href'),
+				type: 'POST',
+				data: form.serialize(),
+				dataType: 'json',
+				success: function(data)
+				{
+					if( data.success )
+					{
+						alertify.log(data.message);
+						importBookmark.selectGroup.append('<option value="'+data.group_id+'" selected="selected">'+data.group_text+'</option>');
+						$('#divider-group-after').before(data.html_navbar);
+						$('#modal-import-group-create').modal('hide');
+					}
+				}
+			});
 		});
 	};
 
