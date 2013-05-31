@@ -50,7 +50,7 @@
 	<div id="groupes-import">
 		<h3>Dans quel groupe ?</h3>
 		<span>Choisissez parmis vos groupes</span><br/>
-		<select>
+		<select id="select-group-import">
 		{% for group in app.user.groups %}
 			<option value="{{ group.id }}">{{ group.title }}</option>
 		{% endfor %}
@@ -67,15 +67,18 @@
 		</div>
 		<div class="modal-body">
 			<div class="alert alert-info">
-				Vous serez automatiquement ajouter dans le groupe, celui-ci serait visible au rafraichissement de la page dans la liste de vos groupe.
+				Le groupe créé sera disponible dans la liste de séléction pour l'import.
 			</div>
 			<div id="loader-group-ajax">
 				<img src="{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}" alt="Chargement" />
 			</div>
+			<div id="form-modal-body">
+
+			</div>
 		</div>
 		<div class="modal-footer">
 			<button data-dismiss="modal" aria-hidden="true" class="btn">Annuler</button>
-			<a href="#" class="btn btn-primary">Créer le groupe</a>
+			<a href="{{ path('ajax_group_create') }}" class="btn btn-primary" id="btn-submit-group-create">Créer le groupe</a>
 		</div>
 	</div>
 </div>
