@@ -1,0 +1,16 @@
+<li class="dropdown-submenu pull-left">
+	<a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="icon-ok"></span>{% endif %}</a>
+	<ul class="dropdown-menu">
+		<li>
+			<a href="{{path('group_membres', {'id' : group.id})}}" title="Liste des membres">Liste des membres</a>
+		</li>
+		<li>
+			<a href="{{path('group_edit', {'id' : group.id})}}" title="Modifier le groupe">Modifier le groupe</a>
+		</li>
+		{% if group.private %}
+			<li>
+				<a href="{{path('group_invite', {'id' : group.id})}}" title="Inviter un utilisateur">Inviter un utilisateur</a>
+			</li>
+		{% endif %}
+	</ul>
+</li>
