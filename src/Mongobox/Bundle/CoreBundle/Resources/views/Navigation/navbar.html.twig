@@ -34,7 +34,7 @@
 					{% for group in app.user.groups %}
 						{% include 'MongoboxGroupBundle:Navigation:groupNavbar.html.twig' with {'group': group} %}
 					{% endfor %}
-					<li class="divider"></li>
+					<li class="divider" id="divider-group-after"></li>
 					<li>
 						<a href="{{ path('user_voir_favoris') }}" title="Modifier vos favoris"><span class="icon-bookmark"></span> Vos favoris</a>
 					</li>
