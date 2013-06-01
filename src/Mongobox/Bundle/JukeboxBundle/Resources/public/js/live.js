@@ -16,6 +16,10 @@ LivePlayer = function()
 
     this.initializeSocket = function()
     {
+        socket.on('synchronize player', function (params) {
+            this.synchronizePlayer(params);
+        }.bind(this));
+
         socket.on('synchronize scores', function (scores) {
             this.updateScores(scores);
         }.bind(this));
@@ -134,6 +138,30 @@ LivePlayer = function()
                     this.updateVolume(volume);
                     socket.emit('volume updated', volume);
                 }.bind(this));
+            break;
+        }
+    },
+
+    this.synchronizePlayer = function(params)
+    {
+        switch (params.status) {
+            case 1:
+                player.seekTo(params.currentTime);
+                player.playVideo();
+            break;
+
+            case 2:
+                player.seekTo(params.currentTime);
+                player.pauseVideo();
+            break;
+
+            case 0:
+                player.loadVideoById({
+                    videoId: params.videoId,
+                    volume: params.videoVolume
+                });
+
+                this.synchronize('volume');
             break;
         }
     }

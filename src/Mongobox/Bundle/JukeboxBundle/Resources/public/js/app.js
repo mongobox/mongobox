@@ -22,6 +22,10 @@ io.sockets.on('connection', function (socket) {
         socket.set('user', userId);
     });
 
+    socket.on('player updated', function (params) {
+        socket.broadcast.emit('synchronize player', params);
+    });
+
     socket.on('scores updated', function (scores) {
         socket.broadcast.emit('synchronize scores', scores);
     });
@@ -35,9 +39,11 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
+
 /*
-    1°) Synchronisation des players
+    1°) Synchronisation des players             => OK
     2°) Votes sur la chanson en cours           => OK
     3°) Augmentation / diminution du volume     => OK
-    4°) Système de putsch
+    4°) Vérification des commandes admin        => TODO
+    4°) Système de putsch                       => TODO
 */

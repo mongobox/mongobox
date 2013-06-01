@@ -111,15 +111,14 @@
                 <script type="text/javascript">
                     function onPlayerStateChange(event)
                     {
+                        var params = new Object();
+
+                        params.status       = event.data;
+                        params.currentTime  = player.getCurrentTime();
+
                         {% if player_mode == "admin" %}
-                            var params = new Object();
-                            params.status = event.data;
-
                             if (event.data != 0) {
-                                params.currentTime = player.getCurrentTime();
-
-                                socket.emit('synchronize player', params);
-                                //livePlayer.sendParameters(params);
+                                socket.emit('player updated', params);
                             } else {
                                 livePlayer.seekNextVideo(params);
                             }
