@@ -44,6 +44,6 @@ io.sockets.on('connection', function (socket) {
     1°) Synchronisation des players             => OK
     2°) Votes sur la chanson en cours           => OK
     3°) Augmentation / diminution du volume     => OK
-    4°) Vérification des commandes admin        => TODO
+    4°) Vérification des commandes admin        => OK
     4°) Système de putsch                       => TODO
 */

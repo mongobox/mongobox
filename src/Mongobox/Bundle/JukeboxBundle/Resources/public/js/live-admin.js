@@ -33,18 +33,6 @@ $(document).ready(function() {
         "bStateSave": true
     });
 
-    livePlayer.synchronizePlayerState = function(params)
-    {
-        if (params.action === 'update_scores') {
-            var scores = JSON.parse(params.scores);
-            this.updatePlaylistScores(scores);
-        }
-
-        if (params.action === 'update_volume') {
-            this.synchronizePlayerVolume();
-        }
-    };
-
     livePlayer.seekNextVideo = function(params)
     {
         $.ajax({
@@ -62,9 +50,8 @@ $(document).ready(function() {
             params.playlistId = data.playlistId;
             params.videoId = data.videoId;
 
-            this.sendParameters(params);
-
-            this.initialize(data.playlistId);
+            socket.emit('player updated', params);
+            this.playlistId = data.playlistId;
         }.bind(this));
     };
 

@@ -3,8 +3,8 @@ LivePlayer = function()
 {
 	this.initialize = function(currentUserId, currentPlaylistId)
 	{
-        this.playlistId = currentPlaylistId;
         this.userId     = currentUserId;
+        this.playlistId = currentPlaylistId;
 
         this.initializeSocket();
 
@@ -157,10 +157,11 @@ LivePlayer = function()
 
             case 0:
                 player.loadVideoById({
-                    videoId: params.videoId,
-                    volume: params.videoVolume
+                    'videoId': params.videoId,
+                    'volume': params.videoVolume
                 });
 
+                this.playlistId = params.videoId;
                 this.synchronize('volume');
             break;
         }
