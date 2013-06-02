@@ -45,10 +45,9 @@ LivePlayer = function()
             if (parseInt(userId) === parseInt(this.userId)) {
                 window.location.reload();
             }
-        });
+        }.bind(this));
 
         socket.on('putsch failed', function(userId) {
-            console.log(parseInt(userId), parseInt(this.userId));
             if (parseInt(userId) === parseInt(this.userId)) {
                 $('#putsch-modal').modal('show');
                 $('.loader').show();
