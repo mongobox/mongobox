@@ -1,4 +1,3 @@
-
 LivePlayer = function()
 {
 	this.initialize = function(currentUserId, currentPlaylistId)
@@ -197,7 +196,6 @@ LivePlayer = function()
                 });
 
                 this.playlistId = params.videoId;
-                this.synchronize('volume');
             break;
         }
     },

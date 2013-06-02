@@ -47,15 +47,19 @@ $(document).ready(function() {
                 videoId: data.videoId
             });
 
+            this.playlistId = data.playlistId;
+
             params.playlistId = data.playlistId;
             params.videoId = data.videoId;
 
             socket.emit('player updated', params);
-            this.playlistId = data.playlistId;
+
+            this.synchronize('scores');
+            this.synchronize('volume');
         }.bind(this));
     };
 
-    livePlayer.updatePlaylistScores = function(scores)
+    livePlayer.updateScores = function(scores)
     {
         $('#up-score').text('(' + scores.upVotes + ')');
         $('#down-score').text('(' + scores.downVotes + ')');
