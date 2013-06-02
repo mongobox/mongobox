@@ -1,0 +1,17 @@
+{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+
+{% block title -%}- Import des favoris{%- endblock title %}
+
+{% block body %}
+
+	<div class="hero-unit">
+	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
+
+	<a href="{{ path('import_favoris_index_action') }}">Retourner à la sélection</a>
+	<h3>Résultat de l'import : {{ nb_import }} vidéo{% if nb_import > 1 %}s{% endif %} importée{% if nb_import > 1 %}s{% endif %}</h3>
+	{% for info in infos %}
+		<div class="alert alert-{{ info.type }}">
+			{{ info.title }} : {{ info.message }}
+		</div>
+	{% endfor %}
+{% endblock body %}

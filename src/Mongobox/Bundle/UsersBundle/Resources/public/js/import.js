@@ -86,11 +86,22 @@ var importBookmark = importBookmark || {};
 	{
 		this.btnStartImport.bind('click', function(e)
 		{
+			e.preventDefault();
 			if( $('.children-checkbox:checked').length == 0 )
 			{
 				alertify.error('Veuillez sélectionner au moins une vidéo à importer');
 				return false;
 			}
+
+			alertify.confirm("Êtes vous sûr de vouloir importer les vidéos dans le groupe "+$('#select-group-import option:selected').text()+' ?', function (response) {
+				if (response)
+				{
+					$('#form-import').submit();
+				} else
+				{
+					return false;
+				}
+			});
 		});
 	};
 

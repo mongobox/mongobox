@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\UsersBundle\Controller;
 
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,6 +41,7 @@ class ImportController extends Controller
 	/**
 	 * Fonction pour traiter l'import
 	 * @Route("/import/traitment", name="import_action")
+	 * @Template()
 	 */
 	public function importAction()
 	{
@@ -50,27 +52,71 @@ class ImportController extends Controller
 		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
 		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
 
+		$infos = array();
+		$nbVideoImport = 0;
+
 		if( $request->isMethod('POST') )
 		{
+			$videos = $request->request->get('videos');
+			$id_group = $request->request->get('group');
+
 			$videosRepository = $manager->getRepository('MongoboxJukeboxBundle:Videos');
 			$videosGroupeRepository = $manager->getRepository('MongoboxJukeboxBundle:VideoGroup');
-			$groupRepository = $manager->getRepository('MongoboxGroupBundle:Group');
-			$infos = array();
-			$videos = $request->request->get('videos');
-            $group = $request->request->get('group');
-			echo '<pre>';
-			var_dump($group);
+
+			$group = $manager->find('MongoboxGroupBundle:Group', $id_group);
+
 			foreach($videos as $id_video)
 			{
-				//$present = $
-				var_dump($id_video);
+				$video = $videosRepository->find($id_video);
+				$present = $videosGroupeRepository->findOneBy(array(
+					"video" => $video,
+					"group" => $group
+				));
+
+				if( !$present )
+				{
+					if( !array_key_exists($id_group, $infos) )
+					{
+						$newVideoGroup = new VideoGroup();
+						$newVideoGroup
+							->setVideo($video)
+							->setGroup($group)
+							->setUser($user)
+							->setDiffusion(0)
+							->setVolume(50)
+							->setVotes(0)
+						;
+						$manager->persist($newVideoGroup);
+
+						$infos[$id_video] = array(
+							"title" => $video->getTitle(),
+							"message" => "Vidéo importée avec succès",
+							"type" => "success"
+						);
+
+						$nbVideoImport++;
+					}
+				} else
+				{
+					if( !array_key_exists($id_group, $infos) )
+					{
+						$infos[$id_video] = array(
+							"title" => $video->getTitle(),
+							"message" => "La vidéo est déjà présente dans le groupe",
+							"type" => "notice"
+						);
+					}
+				}
 			}
-			exit;
+
+			$manager->flush();
 		}
 
 		return array(
 			'nombre_favoris' => $nombre_favoris,
-			'nombre_listes' => $nombre_listes
+			'nombre_listes' => $nombre_listes,
+			'infos' => $infos,
+			'nb_import' => $nbVideoImport
 		);
 	}
 }
