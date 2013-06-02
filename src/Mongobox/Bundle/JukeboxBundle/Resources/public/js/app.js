@@ -34,16 +34,25 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('synchronize volume', volume);
     });
 
+    socket.on('putsch started', function () {
+        socket.get('user', function (err, userId) {
+            socket.broadcast.emit('putsch attempt', userId);
+        });
+    });
+
+    socket.on('putsch noticed', function (userId) {
+        socket.broadcast.emit('putsch acknowledgment', userId);
+    });
+
+    socket.on('putsch accepted', function (userId) {
+        socket.broadcast.emit('putsch done', userId);
+    });
+
+    socket.on('putsch refused', function (userId) {
+        socket.broadcast.emit('putsch failed', userId);
+    });
+
     socket.on('disconnect', function() {
         console.log('disconnect');
     });
 });
-
-
-/*
-    1°) Synchronisation des players             => OK
-    2°) Votes sur la chanson en cours           => OK
-    3°) Augmentation / diminution du volume     => OK
-    4°) Vérification des commandes admin        => OK
-    4°) Système de putsch                       => TODO
-*/

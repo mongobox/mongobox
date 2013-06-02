@@ -27,6 +27,37 @@ LivePlayer = function()
         socket.on('synchronize volume', function (volume) {
             this.updateVolume(volume);
         }.bind(this));
+
+        socket.on('putsch acknowledgment', function (userId) {
+            if (parseInt(userId) === parseInt(this.userId)) {
+                clearInterval(this.putschTimer);
+
+                $('#putsch-modal').modal('show');
+                $('.loader').show();
+                $('#putsch-modal .modal-content').html($('#putsch-request-callback').html());
+                $('.loader').hide();
+
+                return;
+            }
+        }.bind(this));
+
+        socket.on('putsch done', function (userId) {
+            if (parseInt(userId) === parseInt(this.userId)) {
+                window.location.reload();
+            }
+        });
+
+        socket.on('putsch failed', function(userId) {
+            console.log(parseInt(userId), parseInt(this.userId));
+            if (parseInt(userId) === parseInt(this.userId)) {
+                $('#putsch-modal').modal('show');
+                $('.loader').show();
+                $('#putsch-modal .modal-content').html($('#putsch-refuse-callback').html());
+                $('.loader').hide();
+
+                return;
+            }
+        }.bind(this));
     },
 
     this.initializeControls = function()
@@ -53,6 +84,11 @@ LivePlayer = function()
         $('#down-volume').click(function(event) {
             event.preventDefault();
             this.sendUserVote('volume', 'down');
+        }.bind(this));
+
+        $("#putsch-button").click(function(event) {
+            event.preventDefault();
+            this.sendPutschAttempt();
         }.bind(this));
     },
 
@@ -165,5 +201,53 @@ LivePlayer = function()
                 this.synchronize('volume');
             break;
         }
+    },
+
+    this.sendPutschAttempt = function ()
+    {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: putschEligibilityUrl,
+            data: {
+                'user' : this.userId
+            }
+        }).done(function(data) {
+            if (data.result === 'allow') {
+                socket.emit('putsch started');
+                this.waitPutschAcknowledgment();
+            } else {
+                $('#putsch-modal').modal('show');
+                $('.loader').show();
+                $('#putsch-modal .modal-content').html(data.details);
+                $('.loader').hide();
+            }
+        }.bind(this));
+    },
+
+    this.waitPutschAcknowledgment = function()
+    {
+        var maximumWaiting  = 5;
+        var currentWaiting  = 0;
+
+        this.putschTimer = setInterval(function() {
+            currentWaiting++;
+            if (currentWaiting === maximumWaiting) {
+                clearInterval(this.putschTimer);
+
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: adminSwitchUrl,
+                    data: {
+                        'user' : this.userId
+                    }
+                }).done(function(data) {
+                    if (data.status === 'done') {
+                        window.location.reload();
+                    }
+                }.bind(this));
+            }
+        }.bind(this), 1000);
     }
 };

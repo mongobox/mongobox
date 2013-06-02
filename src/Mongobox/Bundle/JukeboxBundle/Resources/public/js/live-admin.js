@@ -86,16 +86,20 @@ $(document).ready(function() {
         });
     }
 
-    livePlayer.receivePutschAttempt = function(params)
+    socket.on('putsch attempt', function (userId) {
+        livePlayer.receivePutschAttempt(userId);
+    }.bind(this));
+
+    livePlayer.receivePutschAttempt = function(userId)
     {
-        this.sendPutschAcknowledgment(params.userId);
+        socket.emit('putsch noticed', userId);
 
         $.ajax({
             type: 'POST',
             dataType: 'html',
             url: putschUrl,
             data: {
-                'user': params.userId
+                'user': userId
             }
         }).done(function(html) {
             if (html !== '') {
@@ -105,15 +109,6 @@ $(document).ready(function() {
                 $('#putsch-modal .loader').hide();
             }
         }.bind(this));
-    };
-
-    livePlayer.sendPutschAcknowledgment = function(userId)
-    {
-        var params = new Object();
-        params.action   = 'putsch_acknowledgment';
-        params.userId   = userId;
-
-        this.sendParameters(params);
     };
 
     livePlayer.acceptPutsch = function(userId)
@@ -130,15 +125,11 @@ $(document).ready(function() {
             }
         }).done(function(data) {
             if (data.status === "done") {
-                var params = new Object();
-                params.action   = "refresh_page";
-                params.userId   = userId;
-
-                livePlayer.sendParameters(params);
+                socket.emit('putsch accepted', userId);
                 window.location.reload();
             }
         }.bind(this));
-    }
+    };
 
     livePlayer.refusePutsch = function(userId)
     {
@@ -155,12 +146,8 @@ $(document).ready(function() {
             }
         }).done(function(data) {
             if (data.status === "done") {
-                var params = new Object();
-                params.action   = "refuse_putsch";
-                params.userId   = userId;
-
-                livePlayer.sendParameters(params);
+                socket.emit('putsch refused', userId);
             }
         }.bind(this));
-    }
+    };
 });
