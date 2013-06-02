@@ -1,20 +1,20 @@
 $(document).ready(function() {
-    $("#play-video-button").click(function() {
+    $('#play-video-button').click(function() {
         player.playVideo();
     });
 
-    $("#pause-video-button").click(function() {
+    $('#pause-video-button').click(function() {
         player.pauseVideo();
     });
 
-    $("#skip-video-button").click(function() {
+    $('#skip-video-button').click(function() {
         var params = new Object();
         params.status = 0;
 
         livePlayer.seekNextVideo(params);
     });
 
-    $("#replace-video-button").click(function() {
+    $('#replace-video-button').click(function() {
         livePlayer.getReplaceForm();
     });
 
@@ -24,13 +24,13 @@ $(document).ready(function() {
     });
 
     $('#list_tags').dataTable({
-        "bPaginate": true,
-        "bLengthChange": true,
-        "bFilter": true,
-        "bSort": false,
-        "bInfo": false,
-        "bAutoWidth": true,
-        "bStateSave": true
+        'bPaginate': true,
+        'bLengthChange': true,
+        'bFilter': true,
+        'bSort': false,
+        'bInfo': false,
+        'bAutoWidth': true,
+        'bStateSave': true
     });
 
     livePlayer.seekNextVideo = function(params)
@@ -118,6 +118,7 @@ $(document).ready(function() {
     livePlayer.acceptPutsch = function(userId)
     {
         $('#putsch-modal').modal('hide');
+        $('#putsch-video-modal .modal-content').html('');
 
         $.ajax({
             type: 'POST',
@@ -128,7 +129,7 @@ $(document).ready(function() {
                 'response': 1
             }
         }).done(function(data) {
-            if (data.status === "done") {
+            if (data.status === 'done') {
                 socket.emit('putsch accepted', userId);
                 window.location.reload();
             }
@@ -149,7 +150,7 @@ $(document).ready(function() {
                 'response': 0
             }
         }).done(function(data) {
-            if (data.status === "done") {
+            if (data.status === 'done') {
                 socket.emit('putsch refused', userId);
             }
         }.bind(this));

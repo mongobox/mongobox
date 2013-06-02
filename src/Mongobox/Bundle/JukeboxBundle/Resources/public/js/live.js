@@ -84,13 +84,13 @@ LivePlayer = function()
             this.sendUserVote('volume', 'down');
         }.bind(this));
 
-        $("#putsch-button").click(function(event) {
+        $('#putsch-button').click(function(event) {
             event.preventDefault();
             this.sendPutschAttempt();
         }.bind(this));
     },
 
-    this.synchronize = function (object)
+    this.synchronize = function(object)
     {
         switch (object) {
             case 'scores':
