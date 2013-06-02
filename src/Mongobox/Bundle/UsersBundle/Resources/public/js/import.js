@@ -86,8 +86,11 @@ var importBookmark = importBookmark || {};
 	{
 		this.btnStartImport.bind('click', function(e)
 		{
-			e.preventDefault();
-			alert('start import');
+			if( $('.children-checkbox:checked').length == 0 )
+			{
+				alertify.error('Veuillez sélectionner au moins une vidéo à importer');
+				return false;
+			}
 		});
 	};
 
@@ -100,7 +103,7 @@ var importBookmark = importBookmark || {};
 
 			$('.modal-error-import').remove();
 			var error = false;
-			$.each( form.find('input'), function(e,i)
+			$.each( form.find('input'), function()
 			{
 				if( $(this).val() == '' )
 				{
