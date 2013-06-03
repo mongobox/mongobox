@@ -37,7 +37,10 @@ class Configurator
         if (is_object($currentVideo)) {
             $currentPlayed = $currentVideo;
         } else {
-            $currentPlayed = $this->get('mongobox_jukebox.live_admin')->initializePlaylist($currentGroup);
+            $currentPlayed = $this->container
+                ->get('mongobox_jukebox.live_admin')
+                ->initializePlaylist($currentGroup)
+            ;
         }
 
         $currentDate	= new \DateTime();
