@@ -26,8 +26,7 @@ class Configurator
      */
     public function initializeJukebox($adminMode = false)
     {
-        $request    = $this->container->get('request');
-        $session    = $this->container->get('session');
+        $session = $this->container->get('session');
 
         $currentGroup = $this->em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
         $currentVideo = $this->em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array(
@@ -92,21 +91,18 @@ class Configurator
 
         $playerEvents = array('onStateChange' => 'onPlayerStateChange');
 
-        $websocketsServer   = $request->getSchemeAndHttpHost();
-        $websocketsPort     = (int) $this->container->getParameter('websockets_port');
-
         return array(
-            'current_video'     => $currentPlayed,
-            'player_mode'       => $playerMode,
-            'player_vars'       => json_encode($playerVars),
-            'player_events'     => json_encode($playerEvents),
-            'player_width'      => $playerWidth,
-            'player_height'     => $playerHeight,
-            'group'		        => $currentGroup,
-            'max_dislikes'      => $maxDislikes,
-            'list_tags'	        => $tagsList,
-            'groupLiveTags'     => $groupLiveTags,
-            'websockets_server'	=> "$websocketsServer:$websocketsPort"
+            'current_video'	=> $currentPlayed,
+            'player_mode'	=> $playerMode,
+            'player_vars'	=> json_encode($playerVars),
+            'player_events'	=> json_encode($playerEvents),
+            'player_width'	=> $playerWidth,
+            'player_height'	=> $playerHeight,
+            'socket_params'	=> "ws://{$_SERVER['HTTP_HOST']}:8001",
+            'group'			=> $currentGroup,
+            'max_dislikes'  => $maxDislikes,
+            'list_tags'		=> $tagsList,
+            'groupLiveTags' => $groupLiveTags
         );
     }
 }

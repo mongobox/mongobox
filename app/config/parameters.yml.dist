@@ -14,8 +14,6 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    websockets_port: 8080
-
     live_max_dislikes: 2
     next_putsch_waiting: 15
 
