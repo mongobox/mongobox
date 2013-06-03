@@ -25,26 +25,37 @@
 			</div>
 			<div class="span9 content-block-import" id="import-content">
 				<div id="choices-import">
-					{% for list in lists %}
-						<div class="list-import" id="list-{{ list.object.id }}">
-							<label class="checkbox">
-								<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left parent-checkbox" />
-								<a class="span-link" data-id-list={{ list.object.id }}>
-									<i class="icon-chevron-right"></i>
-									{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
-								</a>
-							</label>
-							<ul class="no-bullet-please list-favoris-import hide" id="list-bookmarks-{{ list.object.id }}">
-								{% for fav in list.object.favoris %}
-									<li>
-										<label class="checkbox">
-											<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="checkbox-import children-checkbox" /> {{ fav.video.name }}
-										</label>
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
-					{% endfor %}
+					<div id="list-choices">
+						{% for list in lists %}
+							<div class="list-import" id="list-{{ list.object.id }}">
+								<label class="checkbox">
+									<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left parent-checkbox" />
+									<a class="span-link" data-id-list={{ list.object.id }}>
+										<i class="icon-chevron-right"></i>
+										{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
+									</a>
+								</label>
+								<ul class="no-bullet-please list-favoris-import hide" id="list-bookmarks-{{ list.object.id }}">
+									{% for fav in list.object.favoris %}
+										<li>
+											<label class="checkbox">
+												<input type="checkbox" name="videos_list[]" value="{{ fav.video.id }}" class="checkbox-import children-checkbox" /> {{ fav.video.name }}
+											</label>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						{% endfor %}
+					</div>
+					<div id="videos-choices">
+						{% for fav in favoris %}
+							<div class="">
+								<label class="checkbox">
+									<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="pull-left" /> {{ fav.video.title }}
+								</label>
+							</div>
+						{% endfor %}
+					</div>
 				</div>
 			</div>
 		</div>

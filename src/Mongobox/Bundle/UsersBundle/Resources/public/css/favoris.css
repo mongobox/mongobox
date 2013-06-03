@@ -113,3 +113,7 @@
 #modal-import-group-create .modal-body {
 	text-align: center;
 }
+
+#videos-choices {
+	display: none;
+}

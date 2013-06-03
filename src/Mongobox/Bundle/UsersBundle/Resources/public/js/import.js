@@ -20,6 +20,11 @@ var importBookmark = importBookmark || {};
 		this.observeBtnSubmitGroupCreate();
 	};
 
+	importBookmark.initOptionsObserver = function()
+	{
+
+	};
+
 	importBookmark.observeShowBookmarks = function()
 	{
 		this.linkList.bind('click', function(e)
