@@ -95,6 +95,7 @@
 
 .list-import {
 	clear: both;
+	width: 85%;
 }
 
 .content-block-import {
@@ -121,4 +122,9 @@
 .fav-import-dual {
 	float: left;
 	width: 50%;
+}
+
+.div-import-option-content {
+	max-height: 250px;
+	overflow: auto;
 }
