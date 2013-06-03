@@ -19,13 +19,13 @@
 			<div class="span3">
 				<ul class="nav nav-list">
 					<li class="nav-header">Options d'import</li>
-					<li class="active"><a href="#">Par Liste</a></li>
-					<li><a href="#">Par vidéo</a></li>
+					<li class="active"><a href="#list-choices" class="nav-link-import">Par Liste</a></li>
+					<li><a href="#videos-choices" class="nav-link-import">Par vidéo</a></li>
 				</ul>
 			</div>
 			<div class="span9 content-block-import" id="import-content">
 				<div id="choices-import">
-					<div id="list-choices">
+					<div id="list-choices" class="div-import-option-content">
 						{% for list in lists %}
 							<div class="list-import" id="list-{{ list.object.id }}">
 								<label class="checkbox">
@@ -47,11 +47,11 @@
 							</div>
 						{% endfor %}
 					</div>
-					<div id="videos-choices">
+					<div id="videos-choices" class="div-import-option-content">
 						{% for fav in favoris %}
-							<div class="">
+							<div class="fav-import-dual">
 								<label class="checkbox">
-									<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="pull-left" /> {{ fav.video.title }}
+									<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="pull-left checkbox-import-video" /> {{ fav.video.title }}
 								</label>
 							</div>
 						{% endfor %}
@@ -86,6 +86,7 @@
 				</div>
 			</div>
 		</div>#}
+		<input type="hidden" name="type-import-choice" id="type-import-choice" value="list" />
 		<button id="btn-start-import" class="btn btn-primary" tilte="Démarrer l'import des favoris">Importer les favoris</button>
 	</form>
 

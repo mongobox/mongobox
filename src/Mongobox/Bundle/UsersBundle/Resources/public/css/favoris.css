@@ -117,3 +117,8 @@
 #videos-choices {
 	display: none;
 }
+
+.fav-import-dual {
+	float: left;
+	width: 50%;
+}
