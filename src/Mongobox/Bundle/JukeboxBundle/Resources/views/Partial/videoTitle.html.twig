@@ -14,8 +14,11 @@
 		{% set infos = '' %}
 	{% endif %}
 {% endif %}
+
 <a href="{{videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}}{{infos}} - Points : {{videoGroup.votes - videoGroup.diffusion}}"{% if somme_pl is defined and somme_pl <= -2 %} style="color : red;"{% endif %}>{{videoGroup.video.name}}</a>
-{% if alreadyFavorite is not defined or (alreadyFavorite is defined and alreadyFavorite is sameas(false)) %}
-<a href="{{ path('ajax_new_video_favorite', {'id_video': video_en_cours.videoGroup.video.id}) }}" class="btn-favoris-add btn-link jukebox-hidden" title="Ajouter la vidéo aux favoris"><i class="icon-bookmark{% if white is defined and white %} icon-white{% endif %}"></i><span></span></a>
+
+{% if video_en_cours is not null and alreadyFavorite is not defined or (alreadyFavorite is defined and alreadyFavorite is sameas(false)) %}
+    <a href="{{ path('ajax_new_video_favorite', {'id_video': video_en_cours.videoGroup.video.id}) }}" class="btn-favoris-add btn-link jukebox-hidden" title="Ajouter la vidéo aux favoris"><i class="icon-bookmark{% if white is defined and white %} icon-white{% endif %}"></i><span></span></a>
 {% endif %}
+
 <a href="{{url('video_edit_modal', {'id_video' : videoGroup.video.id})}}" class="edit-video btn-link"><span class="icon-edit {% if white is defined and white %} icon-white{% endif %}" title="Modifier"></span></a>
