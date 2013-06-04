@@ -2,8 +2,8 @@
 	<h3>Gestion de la playlist</h3>
 	<table id="list_tags">
 		<thead>
-			<th>Tag</th>
-			<th>Nombre de vidéo</th>
+			<th>Tags</th>
+			<th>Nombre de vidéos</th>
 			<th>Actions</th>
 		</thead>
 		<tbody>
@@ -34,9 +34,9 @@
 
 <script type="text/javascript">
     var nextVideoUrl	    = '{{ path('live_next') }}';
-    var replaceUrl          = "{{ path('live_replace') }}";
-    var putschUrl           = "{{ path('live_putsch') }}";
-    var putschResponseUrl   = "{{ path('live_putsch_response') }}";
+    var replaceUrl          = '{{ path('live_replace') }}';
+    var putschUrl           = '{{ path('live_putsch') }}';
+    var putschResponseUrl   = '{{ path('live_putsch_response') }}';
     var worstScoreAllowed   = -{{ max_dislikes }};
 </script>
 
