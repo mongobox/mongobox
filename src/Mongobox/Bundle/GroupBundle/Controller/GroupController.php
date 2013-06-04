@@ -55,6 +55,9 @@ class GroupController extends Controller
 			$form->bind($request);
 			if($form->isValid())
 			{
+                $secretKey = $this->get('mongobox_jukebox.live_configurator')->generateSecretKey();
+                $group->setSecretKey($secretKey);
+
 				$em->persist($group);
 				$em->flush();
 
@@ -92,6 +95,10 @@ class GroupController extends Controller
 			{
 				$em = $this->getDoctrine()->getManager();
 				$user = $this->getUser();
+
+                $secretKey = $this->get('mongobox_jukebox.live_configurator')->generateSecretKey();
+                $group->setSecretKey($secretKey);
+
 				$em->persist($group);
 				$group->getUsers()->add($user);
 				$em->flush();

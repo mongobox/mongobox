@@ -3,6 +3,7 @@
 {% block title -%}- Live{%- endblock title %}
 
 {% block body %}
+    <script src="{{ websockets_server }}/socket.io/socket.io.js"></script>
     <script src="{{ asset('bundles/mongoboxjukebox/js/live.js') }}" type="text/javascript"></script>
 
     {% if player_mode != "admin" %}
@@ -99,91 +100,79 @@
                     </div>
                 </div>
 
-                    {% if player_mode == "admin" %}
-                        {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-                    {% else %}
-                    <div class="tab-pane" id="playlist_controll">
-                        {% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode, 'groupLiveTags' : groupLiveTags} %}
-                    </div>
-                    {% endif %}
-
-                    <script type="text/javascript">
-                        function onPlayerStateChange(event)
-                        {
-                            if (event.data === -1) {
-                                livePlayer.synchronizePlayerVolume();
-                            }
-
-                            {% if player_mode == "admin" %}
-                                var params = new Object();
-                                params.status = event.data;
-
-                                if (event.data != 0) {
-                                    params.currentTime = player.getCurrentTime();
-                                    livePlayer.sendParameters(params);
-                                } else {
-                                    livePlayer.seekNextVideo(params);
-                                }
-                            {% endif %}
-                        }
-                    </script>
-
-                    <script type="text/javascript">
-                        var tag = document.createElement('script');
-                        tag.src = '//www.youtube.com/iframe_api';
-
-                        var firstScriptTag = document.getElementsByTagName('script')[0];
-                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-                        var voteUrl			        = '{{ path('live_vote') }}';
-                        var scoreUrl		        = '{{ path('live_score') }}';
-                        var volumeUrl               = '{{ path('live_volume') }}';
-                        var putschEligibilityUrl    = '{{ path('live_putsch_eligibility') }}';
-                        var adminSwitchUrl          = '{{ path('live_admin_switch') }}';
-
-                        var playerMode		= '{{ player_mode }}';
-                        var playerVars      = {{ player_vars|raw }}
-                        var defaultVolume   = playerVars.volume;
-
-                        var player;
-                        function onYouTubeIframeAPIReady()
-                        {
-                            $(document).ready(function() {
-                                player = new YT.Player('player', {
-                                    height: '{{ player_height }}',
-                                    width: '{{ player_width }}',
-                                    videoId: '{{ current_video.videoGroup.video.lien }}',
-                                    playerVars: playerVars,
-                                    events: {{ player_events|raw }}
-                                });
-                            });
-                        }
-
-                        var livePlayer = new LivePlayer();
-                        livePlayer.initialize('{{ current_video.id }}', '{{ app.user.id }}');
-
-                        var connection = new WebSocket('{{ socket_params }}');
-                        connection.onmessage = function(e) {
-                            var json = e.data;
-
-                            var params = JSON.parse(json);
-                            params.mode	= '{{ player_mode }}';
-                            params.currentVideo = '{{ current_video.id }}';
-
-                            {% if player_mode == "admin" %}
-                                if (typeof params.action !== 'undefined' && params.action === 'putsch_attempt') {
-                                    livePlayer.receivePutschAttempt(params);
-                                } else {
-                                    livePlayer.synchronizePlayerState(params);
-                                }
-                            {% else %}
-                                livePlayer.synchronizePlayerState(params);
-                            {% endif %}
-                        };
-                    </script>
+                {% if player_mode == "admin" %}
+                    {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
                 {% else %}
-                    Jukebox HS
+                    <div class="tab-pane" id="playlist_controll">
+                        {% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode': player_mode, 'groupLiveTags': groupLiveTags} %}
+                    </div>
                 {% endif %}
-            </div>
+
+                <script type="text/javascript">
+                    function onPlayerStateChange(event)
+                    {
+                        var params = new Object();
+
+                        params.status       = event.data;
+                        params.currentTime  = player.getCurrentTime();
+
+                        {% if player_mode == "admin" %}
+                            if (event.data != 0) {
+                                socket.emit('player updated', params);
+                            } else {
+                                livePlayer.seekNextVideo(params);
+                            }
+                        {% endif %}
+                    }
+                </script>
+
+                <script type="text/javascript">
+                    var tag = document.createElement('script');
+                    tag.src = '//www.youtube.com/iframe_api';
+
+                    var firstScriptTag = document.getElementsByTagName('script')[0];
+                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+                    var voteUrl			        = '{{ path('live_vote') }}';
+                    var scoreUrl		        = '{{ path('live_score') }}';
+                    var volumeUrl               = '{{ path('live_volume') }}';
+                    var putschEligibilityUrl    = '{{ path('live_putsch_eligibility') }}';
+                    var adminSwitchUrl          = '{{ path('live_admin_switch') }}';
+
+                    var playerMode		= '{{ player_mode }}';
+                    var playerVars      = {{ player_vars|raw }}
+                    var defaultVolume   = playerVars.volume;
+
+                    var player;
+                    function onYouTubeIframeAPIReady()
+                    {
+                        $(document).ready(function() {
+                            player = new YT.Player('player', {
+                                height: '{{ player_height }}',
+                                width: '{{ player_width }}',
+                                videoId: '{{ current_video.videoGroup.video.lien }}',
+                                playerVars: playerVars,
+                                events: {{ player_events|raw }}
+                            });
+                        });
+                    }
+
+                    var currentUserId       = '{{ app.user.id }}';
+                    var currentPlaylistId   = '{{ current_video.id }}';
+
+                    var socket = io.connect('{{ websockets_server }}');
+
+                    socket.emit('subscribe', {
+                        'user': currentUserId,
+                        'room': '{{ group.secretKey }}'
+                    });
+
+                    var livePlayer = new LivePlayer();
+                    livePlayer.initialize(currentUserId, currentPlaylistId);
+                </script>
+            {% else %}
+                Jukebox HS
+            {% endif %}
+        </div>
     </div>
 {% endblock body %}

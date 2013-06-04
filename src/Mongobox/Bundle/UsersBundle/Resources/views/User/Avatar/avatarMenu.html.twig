@@ -1,0 +1,14 @@
+{% if user.avatar is not null %}
+	{% set avatar = user.avatarWebPath|apply_filter('avatar_thumbnail')%}
+{% else %}
+	{% if avatarMini is defined %}
+		{% set avatar = user.gravatar(20) %}
+	{% else %}
+		{% set avatar = user.gravatar %}
+	{% endif %}
+{% endif %}
+{% if loginClass is not defined  %}
+	{% set loginClass = '' %}
+{% endif %}
+
+<img src="{{avatar}}" alt="" class="menu-avatar"/>{% if notext is not defined or not notext %} <span class="{{loginClass}}">{{ user.login }}</span>{% endif %}
