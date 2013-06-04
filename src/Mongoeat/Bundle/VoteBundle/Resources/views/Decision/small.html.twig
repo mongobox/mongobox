@@ -1,7 +1,7 @@
 <div class="mongoeat-restaurant">
     <legend>Vote pour ce midi</legend>
     {% if entity.votes|length > 0 %}
-        <p>Pour l'instant, on mange chez <strong>{% for resto, nb in entity.getRestaurentScore|slice(0,1) %}{{ resto }}{% endfor %}</strong>.
+        <p>Pour l'instant, on mange chez <strong>{% for resto, nb in entity.getRestaurentScore|slice(0,1) %}{{ resto }}{% endfor %}</strong> avec <ul>{% for user in entity.getUsers %}<li>{{ user.name }}</li>{% endfor %}</ul>
     {% else %}
         <p>Pour l'instant, personne n'a voter.
     {% endif %}

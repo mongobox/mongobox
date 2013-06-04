@@ -17,9 +17,17 @@
                 <th>Score restaurant</th>
                 <td><ol>
                         {% for resto, nb in entity.getRestaurentScore %}
-                            <li>{{ resto }} : {% transchoice nb %}{0} pas de vote|{1} un vote|]1,INF] %nb% votes{% endtranschoice %}</li>
+                            <li>{{ resto }} : {{ nb }} vote(s)</li>
                         {% endfor %}
                 </ol></td>
+            </tr>
+            <tr>
+                <th>Personnes</th>
+                <td><ul>
+                        {% for user in entity.getUsers %}
+                            <li>{{ user.name }}</li>
+                        {% endfor %}
+                    </ul></td>
             </tr>
         </tbody>
     </table>

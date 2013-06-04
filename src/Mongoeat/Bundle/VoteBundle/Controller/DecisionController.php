@@ -60,7 +60,8 @@ class DecisionController extends Controller
         return array(
             'pagination' => $pagination,
             'entity' => $entity,
-            'hasVoted' => !empty($vote)
+            'hasVoted' => !empty($vote),
+            'user' => $user
         );
     }
 
