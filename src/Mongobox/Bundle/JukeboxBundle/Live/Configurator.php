@@ -112,4 +112,14 @@ class Configurator
             'websockets_server'	=> "$websocketsServer:$websocketsPort"
         );
     }
+
+    /**
+     * Generate a secret key used with the Socket.IO rooms
+     *
+     * @return string
+     */
+    public function generateSecretKey()
+    {
+        return md5(uniqid(rand(), true));
+    }
 }
