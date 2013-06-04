@@ -3,6 +3,7 @@
 namespace Mongoeat\Bundle\VoteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * Decision
@@ -44,6 +45,25 @@ class Decision
         return count($this->group->getUsers());
     }
 
+    public function getVote(User $u)
+    {
+        foreach ($this->votes as $vote) {
+            if ($vote->getUser() == $u) {
+                return $vote;
+            }
+        }
+
+        return;
+    }
+    public function getUsers()
+    {
+        $user = array();
+        foreach ($this->votes as $vote) {
+            $user[] = $vote->getUser();
+        }
+
+        return $user;
+    }
     public function getRestaurentTop($pos)
     {
         $rest = array();

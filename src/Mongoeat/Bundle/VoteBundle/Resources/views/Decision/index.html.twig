@@ -97,9 +97,10 @@
                                 <li>
                                     <a href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
                                 </li>
-                                <li>
-                                    <a href="{{ url('vote_new',{'id':entity.id}) }}">Voir son vote</a>
-                                </li>
+                                {% if entity.getVote(user) != '' %}
+                                <li><a href="{{ url('vote_new',{'id':entity.id}) }}">Voir son vote</a></li>
+                                    {% endif %}
+
                             </ul>
                         </td>
                     </tr>
