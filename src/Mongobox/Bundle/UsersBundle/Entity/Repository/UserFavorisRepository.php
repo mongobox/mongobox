@@ -238,7 +238,7 @@ class UserFavorisRepository extends EntityRepository
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
 		$qb
-			->select('v, uf')
+			->select('v as video, uf as user_favoris')
 			->from('MongoboxUsersBundle:UserFavoris', 'uf')
 			->innerJoin('uf.video', 'v')
 			->where('uf.user = :user')

@@ -23,13 +23,12 @@ L'application s'enrichit désormais de nouvelles fonctionnalités de jour en jou
   * **...**
 
 ## Pré-requis
-  * Node.js & npm
-  * [Forever](https://github.com/nodejitsu/forever) (facultatif)
+  * Serveur dédié (notamment pour l'utilisation du serveur de websockets)
 
 ## Installation & Utilisation
   * [Déploiement classique d'un projet Symfony2](http://symfony.com/doc/master/cookbook/deployment-tools.html)
-  * <code>npm install socket.io</code>
-  * <code>node web/bundles/mongoboxjukebox/js/app.js</code> ou <code>forever start web/bundles/mongoboxjukebox/js/app.js</code>
+  * Lancement manuel du serveur de websockets via la commande suivante : <code>$ php app/console jukebox:socket start</code>
 
 ## Problèmes connus
   * Aucun design actuellement réalisé donc l'intégration se résume à un thème Bootstrap classique... bientôt peut-être !
+  * Le live, à travers le serveur de websockets, ne gère actuellement qu'un seul groupe (une refonte n'est pas à exclure)
