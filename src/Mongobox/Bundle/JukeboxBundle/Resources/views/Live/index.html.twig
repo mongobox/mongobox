@@ -161,7 +161,11 @@
                     var currentPlaylistId   = '{{ current_video.id }}';
 
                     var socket = io.connect('{{ websockets_server }}');
-                    socket.emit('set user', currentUserId);
+
+                    socket.emit('subscribe', {
+                        'user': currentUserId,
+                        'room': '{{ group.secretKey }}'
+                    });
 
                     var livePlayer = new LivePlayer();
                     livePlayer.initialize(currentUserId, currentPlaylistId);

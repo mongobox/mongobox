@@ -54,6 +54,13 @@ class Group
     protected $nextPutschWaiting;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="secret_key", type="string", length=255)
+     */
+    protected $secretKey;
+
+    /**
      * @var integer
      *
      * @ORM\OneToOne(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User")
@@ -223,6 +230,18 @@ class Group
         $this->liveCurrentAdmin = $user;
         return $this;
     }
+
+    public function getSecretKey()
+    {
+        return $this->secretKey;
+    }
+
+    public function setSecretKey($secretKey)
+    {
+        $this->secretKey = $secretKey;
+        return $this;
+    }
+
 
     public function addUser($user)
     {
