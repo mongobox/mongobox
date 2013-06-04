@@ -1,20 +1,20 @@
 $(document).ready(function() {
-    $("#play-video-button").click(function() {
+    $('#play-video-button').click(function() {
         player.playVideo();
     });
 
-    $("#pause-video-button").click(function() {
+    $('#pause-video-button').click(function() {
         player.pauseVideo();
     });
 
-    $("#skip-video-button").click(function() {
+    $('#skip-video-button').click(function() {
         var params = new Object();
         params.status = 0;
 
         livePlayer.seekNextVideo(params);
     });
 
-    $("#replace-video-button").click(function() {
+    $('#replace-video-button').click(function() {
         livePlayer.getReplaceForm();
     });
 
@@ -24,26 +24,14 @@ $(document).ready(function() {
     });
 
     $('#list_tags').dataTable({
-        "bPaginate": true,
-        "bLengthChange": true,
-        "bFilter": true,
-        "bSort": false,
-        "bInfo": false,
-        "bAutoWidth": true,
-        "bStateSave": true
+        'bPaginate': true,
+        'bLengthChange': true,
+        'bFilter': true,
+        'bSort': false,
+        'bInfo': false,
+        'bAutoWidth': true,
+        'bStateSave': true
     });
-
-    livePlayer.synchronizePlayerState = function(params)
-    {
-        if (params.action === 'update_scores') {
-            var scores = JSON.parse(params.scores);
-            this.updatePlaylistScores(scores);
-        }
-
-        if (params.action === 'update_volume') {
-            this.synchronizePlayerVolume();
-        }
-    };
 
     livePlayer.seekNextVideo = function(params)
     {
@@ -59,16 +47,19 @@ $(document).ready(function() {
                 videoId: data.videoId
             });
 
+            this.playlistId = data.playlistId;
+
             params.playlistId = data.playlistId;
             params.videoId = data.videoId;
 
-            this.sendParameters(params);
+            socket.emit('player updated', params);
 
-            this.initialize(data.playlistId);
+            this.synchronize('scores');
+            this.synchronize('volume');
         }.bind(this));
     };
 
-    livePlayer.updatePlaylistScores = function(scores)
+    livePlayer.updateScores = function(scores)
     {
         $('#up-score').text('(' + scores.upVotes + ')');
         $('#down-score').text('(' + scores.downVotes + ')');
@@ -99,16 +90,20 @@ $(document).ready(function() {
         });
     }
 
-    livePlayer.receivePutschAttempt = function(params)
+    socket.on('putsch attempt', function (userId) {
+        livePlayer.receivePutschAttempt(userId);
+    }.bind(this));
+
+    livePlayer.receivePutschAttempt = function(userId)
     {
-        this.sendPutschAcknowledgment(params.userId);
+        socket.emit('putsch noticed', userId);
 
         $.ajax({
             type: 'POST',
             dataType: 'html',
             url: putschUrl,
             data: {
-                'user': params.userId
+                'user': userId
             }
         }).done(function(html) {
             if (html !== '') {
@@ -120,18 +115,10 @@ $(document).ready(function() {
         }.bind(this));
     };
 
-    livePlayer.sendPutschAcknowledgment = function(userId)
-    {
-        var params = new Object();
-        params.action   = 'putsch_acknowledgment';
-        params.userId   = userId;
-
-        this.sendParameters(params);
-    };
-
     livePlayer.acceptPutsch = function(userId)
     {
         $('#putsch-modal').modal('hide');
+        $('#putsch-video-modal .modal-content').html('');
 
         $.ajax({
             type: 'POST',
@@ -142,16 +129,12 @@ $(document).ready(function() {
                 'response': 1
             }
         }).done(function(data) {
-            if (data.status === "done") {
-                var params = new Object();
-                params.action   = "refresh_page";
-                params.userId   = userId;
-
-                livePlayer.sendParameters(params);
+            if (data.status === 'done') {
+                socket.emit('putsch accepted', userId);
                 window.location.reload();
             }
         }.bind(this));
-    }
+    };
 
     livePlayer.refusePutsch = function(userId)
     {
@@ -167,13 +150,9 @@ $(document).ready(function() {
                 'response': 0
             }
         }).done(function(data) {
-            if (data.status === "done") {
-                var params = new Object();
-                params.action   = "refuse_putsch";
-                params.userId   = userId;
-
-                livePlayer.sendParameters(params);
+            if (data.status === 'done') {
+                socket.emit('putsch refused', userId);
             }
         }.bind(this));
-    }
+    };
 });
