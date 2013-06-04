@@ -21,6 +21,14 @@
                         {% endfor %}
                 </ol></td>
             </tr>
+            <tr>
+                <th>Personnes</th>
+                <td><ul>
+                        {% for user in entity.getUsers %}
+                            <li>{{ user.name }}</li>
+                        {% endfor %}
+                    </ul></td>
+            </tr>
         </tbody>
     </table>
 
