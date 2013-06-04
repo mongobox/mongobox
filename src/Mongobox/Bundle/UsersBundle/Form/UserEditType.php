@@ -11,30 +11,30 @@ class UserEditType extends AbstractType
     {
         $builder
             ->add('login', 'text', array(
-            	'label' => 'Login',
-            	'attr' => array('size' => 15),
+                'label' => 'Login',
+                'attr' => array('size' => 15),
             ))
             ->add('firstname', 'text', array(
-            	'label' => 'First name',
-            	'attr' => array('size' => 15),
+                'label' => 'First name',
+                'attr' => array('size' => 15),
             ))
             ->add('lastname', 'text', array(
-            	'label' => 'Last name',
-            	'attr' => array('size' => 15),
+                'label' => 'Last name',
+                'attr' => array('size' => 15),
             ))
             ->add('email', 'text', array(
-            	'label' => 'Email',
-            	'attr' => array('size' => 40, 'placeholder' => 'Email'),
+                'label' => 'Email',
+                'attr' => array('size' => 40, 'placeholder' => 'Email'),
             ))
             ->add('nsfw_mode', 'checkbox', array(
                 'label' => 'Mode NSFW',
                 'required' => false,
             ))
             ->add('avatar', 'file', array(
-				'label' => 'Avatar',
-				'data_class' => null,
-				'required' => false
-			));
+                'label' => 'Avatar',
+                'data_class' => null,
+                'required' => false
+            ));
     }
 
     public function getName()

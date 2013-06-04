@@ -23,8 +23,7 @@ class UserHandler
     {
         //Vérification que l'email n'existe pas déjà si email personnel
         $users = $this->em->getRepository('MongoboxUsersBundle:User')->findByEmail($this->form->get('email')->getData());
-        if($users)
-        {
+        if ($users) {
             $this->form->get('email')->addError(new FormError('This email already exists '));
         }
     }
