@@ -18,41 +18,54 @@ function handler (req, res) {
 }
 
 io.sockets.on('connection', function (socket) {
-    socket.on('set user', function (userId) {
-        socket.set('user', userId);
+    socket.on('subscribe', function (data) {
+        socket.set('user', data.user);
+        socket.set('room', data.room);
+
+        socket.join(data.room);
     });
 
     socket.on('player updated', function (params) {
-        socket.broadcast.emit('synchronize player', params);
+        socket.get('room', function (err, roomId) {
+            socket.in(roomId).broadcast.emit('synchronize player', params);
+        });
     });
 
     socket.on('scores updated', function (scores) {
-        socket.broadcast.emit('synchronize scores', scores);
+        socket.get('room', function (err, roomId) {
+            socket.in(roomId).broadcast.emit('synchronize scores', scores);
+        });
     });
 
     socket.on('volume updated', function (volume) {
-        socket.broadcast.emit('synchronize volume', volume);
+        socket.get('room', function (err, roomId) {
+            socket.in(roomId).broadcast.emit('synchronize volume', volume);
+        });
     });
 
     socket.on('putsch started', function () {
-        socket.get('user', function (err, userId) {
-            socket.broadcast.emit('putsch attempt', userId);
+        socket.get('room', function (err, roomId) {
+            socket.get('user', function (err, userId) {
+                socket.in(roomId).broadcast.emit('putsch attempt', userId);
+            });
         });
     });
 
     socket.on('putsch noticed', function (userId) {
-        socket.broadcast.emit('putsch acknowledgment', userId);
+        socket.get('room', function (err, roomId) {
+            socket.in(roomId).broadcast.emit('putsch acknowledgment', userId);
+        });
     });
 
     socket.on('putsch accepted', function (userId) {
-        socket.broadcast.emit('putsch done', userId);
+        socket.get('room', function (err, roomId) {
+            socket.in(roomId).broadcast.emit('putsch done', userId);
+        });
     });
 
     socket.on('putsch refused', function (userId) {
-        socket.broadcast.emit('putsch failed', userId);
-    });
-
-    socket.on('disconnect', function() {
-        console.log('disconnect');
+        socket.get('room', function (err, roomId) {
+            socket.in(roomId).broadcast.emit('putsch failed', userId);
+        });
     });
 });
