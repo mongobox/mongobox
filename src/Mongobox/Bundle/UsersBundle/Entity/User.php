@@ -848,4 +848,7 @@ class User implements AdvancedUserInterface
 	public function __sleep() {
 		return array('id', 'login', 'email');
 	}
+    public function getName(){
+        return $this->firstname.' '.$this->lastname;
+    }
 }
