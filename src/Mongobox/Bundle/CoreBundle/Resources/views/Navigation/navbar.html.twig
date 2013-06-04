@@ -12,8 +12,13 @@
       <div class="nav-collapse">
 		{% if app.user %}
 		<ul class="nav pull-right">
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {user : app.user, avatarMini : true} %} <b class="caret"></b></a>
+			<li class="dropdown user-avatar">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span>
+                        {% include "MongoboxUsersBundle:User/Avatar:avatarMenu.html.twig" with {user : app.user, avatarMini : true} %}
+                        <i class="caret"></i>
+                    </span>
+                </a>
 				<ul class="dropdown-menu" role="menu">
 					<li>
 						<a href="{{path('group_index')}}" title="Groupes">Liste des Groupes</a>
@@ -42,7 +47,7 @@
 						<a href="{{ path('user_edit')}}" title="Modifier votre compte"><span class="icon-edit"></span> Modifier votre compte</a>
 					</li>
 					<li>
-						<a href="{{ path('_logout')}}" title="Déconnexion"><span class="icon-off"></span> Déconnexion</a>
+						<a href="{{ path('_logout')}}" title="DÃ©connexion"><span class="icon-off"></span> DÃ©connexion</a>
 					</li>
 				</ul>
 			 </li>
@@ -54,7 +59,7 @@
 		<div id="video_en_cours">
 			{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}
 		</div>
-  	    <a href="" class="btn btn-success" id="add-video-button" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
+  	    <a href="" class="btn btn-success" id="add-video-button" title="Ajouter une vidÃ©o"><i class="icon-plus icon-white"></i></a>
       </div><!--/.nav-collapse -->
     </div>
   </div>
@@ -65,7 +70,7 @@
 <div class="modal hide fade" id="action-video-modal">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Action sur une vidéo</h3>
+		<h3>Action sur une vidÃ©o</h3>
 	</div>
 	<div class="modal-body">
 		<div class="loader"></div>

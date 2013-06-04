@@ -7,20 +7,24 @@
                 <span class="icon-bar"></span>
             </a>
 
-            <a class="brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
+            <a class="brand" href="{{ path('wall_index') }}">
                 <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}"
                      style="height : 40px;"
                      alt="{{ project_name }}" title="{{ project_name }} - Homepage"
-                />
+                        />
             </a>
 
             <div class="nav-collapse nav-collapse-top collapse">
                 {% if app.user %}
                     <ul class="nav full pull-right">
-                        <li class="dropdown">
+                        <li class="dropdown user-avatar">
                             <a href="#" class="dropdown-toggle"
-                               data-toggle="dropdown">{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {user : app.user, avatarMini : true} %}
-                                <b class="caret"></b></a>
+                               data-toggle="dropdown">
+                                <span>
+                                    {% include "MongoboxUsersBundle:User/Avatar:avatarMenu.html.twig" with {user : app.user, avatarMini : true} %}
+                                    <i class="caret"></i>
+                                </span>
+                            </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
                                     <a href="{{ path('group_index') }}" title="Groupes">Liste des Groupes</a>
@@ -66,8 +70,8 @@
                                                 class="icon-edit"></span> Modifier votre compte</a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('_logout') }}" title="Déconnexion"><span class="icon-off"></span>
-                                        Déconnexion</a>
+                                    <a href="{{ path('_logout') }}" title="DÃ©connexion"><span class="icon-off"></span>
+                                        DÃ©connexion</a>
                                 </li>
                             </ul>
                         </li>
@@ -75,17 +79,9 @@
                 {% endif %}
 
                 <ul class="nav pull-right">
-                    <li class="active"><a title="Go home" href="#"><i class="icon-home"></i> Home</a></li>
+                    <li class="active"><a title="Go home" href="{{ path('wall_index') }}"><i class="icon-home"></i> Home</a></li>
                     <li><a title="Manage users" href="#"><i class="icon-user"></i> Users</a></li>
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Some link</a></li>
-                            <li><a href="#">One more separated link</a></li>
-                        </ul>
-                    </li>
+
 
 
                 </ul>
