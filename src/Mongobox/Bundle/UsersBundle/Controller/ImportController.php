@@ -57,9 +57,7 @@ class ImportController extends Controller
 
 		if( $request->isMethod('POST') )
 		{
-			$type = $request->request->get('type-import-choice');
-
-			$videos = ($type === "video") ? $request->request->get('videos') : $request->request->get('videos_list');
+			$videos = $request->request->get('videos');
 			$id_group = $request->request->get('group');
 
 			$videosRepository = $manager->getRepository('MongoboxJukeboxBundle:Videos');

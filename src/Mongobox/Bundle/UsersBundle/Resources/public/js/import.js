@@ -11,10 +11,6 @@ var importBookmark = importBookmark || {};
 		this.btnCreateGroup = $('#create-groupe-import');
 		this.btnSubmitGroupCreate = $('#btn-submit-group-create');
 		this.selectGroup = $('#select-group-import');
-		this.linkOptions = $('.nav-link-import');
-		this.typeOption = $('#type-import-choice');
-
-		this.typeOption.val('list');
 
 		this.observeShowBookmarks();
 		this.observeParentCheckboxClick();
@@ -22,29 +18,6 @@ var importBookmark = importBookmark || {};
 		this.observeBtnStartImport();
 		this.observeCreateGroup();
 		this.observeBtnSubmitGroupCreate();
-		this.initOptionsObserver();
-	};
-
-	importBookmark.initOptionsObserver = function()
-	{
-		this.linkOptions.bind('click', function(e)
-		{
-			importBookmark.linkOptions.parent().removeClass('active');
-			$(this).parent().addClass('active');
-			e.preventDefault();
-			var id_target = $(this).attr('href');
-			if( id_target === "#videos-choices" )
-			{
-				$(id_target).show();
-				$('#list-choices').hide();
-				importBookmark.typeOption.val('video');
-			} else if (id_target === "#list-choices")
-			{
-				$(id_target).show();
-				$('#videos-choices').hide();
-				importBookmark.typeOption.val('list');
-			}
-		});
 	};
 
 	importBookmark.observeShowBookmarks = function()
@@ -114,14 +87,13 @@ var importBookmark = importBookmark || {};
 		this.btnStartImport.bind('click', function(e)
 		{
 			e.preventDefault();
-			var checkboxes = ( importBookmark.typeOption.val() == "video" ) ? $('.checkbox-import-video:checked') : $('.children-checkbox:checked');
-			if( checkboxes.length == 0 )
+			if( $('.children-checkbox:checked').length == 0 )
 			{
 				alertify.error('Veuillez sélectionner au moins une vidéo à importer');
 				return false;
 			}
 
-			alertify.confirm('Êtes vous sûr de vouloir importer les vidéos dans le groupe "'+$('#select-group-import option:selected').text()+'" ?', function (response) {
+			alertify.confirm("Êtes vous sûr de vouloir importer les vidéos dans le groupe "+$('#select-group-import option:selected').text()+' ?', function (response) {
 				if (response)
 				{
 					$('#form-import').submit();

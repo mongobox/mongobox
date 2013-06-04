@@ -91,7 +91,16 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ asset('bundles/mongoboxcore/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
-
+	{% if app.user %}
+    <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
+	<script src="{{ asset('bundles/mongoboxtumblr/js/addTumblr.js') }}"></script>
+	<script type="text/javascript">
+		$(function()
+		{
+			addTumblr.init();
+		});
+	</script>
+	{% endif %}
     {% block javascripts %}{% endblock %}
 
   </body>
