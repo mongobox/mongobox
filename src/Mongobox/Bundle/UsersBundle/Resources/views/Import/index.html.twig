@@ -4,100 +4,112 @@
 
 {% block body %}
 
-<div class="hero-unit">
-	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
+	<div class="hero-unit">
+		{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
 
-	<div class="alert alert-info">
-		Vous pouvez choisir d'importer vos favoris :
-		<ul>
-			<li>Par liste en choisissant une liste complète ou des chansons individuellement dans les listes</li>
-			<li>Par favoris en choisissant les vidéos dans tous vos favoris</li>
-		</ul>
-	</div>
-	<form id="form-import" method="POST" action="{{ path('import_action') }}">
-		<div class="row-fluid">
-			<div class="span3">
-				<ul class="nav nav-list">
-					<li class="nav-header">Options d'import</li>
-					<li class="active"><a href="#">Par Liste</a></li>
-					<li><a href="#">Par vidéo</a></li>
-				</ul>
-			</div>
-			<div class="span9 content-block-import" id="import-content">
-				<div id="choices-import">
-					{% for list in lists %}
-						<div class="list-import" id="list-{{ list.object.id }}">
-							<label class="checkbox">
-								<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left parent-checkbox" />
-								<a class="span-link" data-id-list={{ list.object.id }}>
-									<i class="icon-chevron-right"></i>
-									{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
-								</a>
-							</label>
-							<ul class="no-bullet-please list-favoris-import hide" id="list-bookmarks-{{ list.object.id }}">
-								{% for fav in list.object.favoris %}
-									<li>
-										<label class="checkbox">
-											<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="checkbox-import children-checkbox" /> {{ fav.video.name }}
-										</label>
-									</li>
-								{% endfor %}
-							</ul>
+		<div class="alert alert-info">
+			Vous pouvez choisir d'importer vos favoris :
+			<ul>
+				<li>Par liste en choisissant une liste complète ou des chansons individuellement dans les listes</li>
+				<li>Par favoris en choisissant les vidéos dans tous vos favoris</li>
+			</ul>
+		</div>
+		<form id="form-import" method="POST" action="{{ path('import_action') }}">
+			<div class="row-fluid">
+				<div class="span3">
+					<ul class="nav nav-list">
+						<li class="nav-header">Options d'import</li>
+						<li class="active"><a href="#list-choices" class="nav-link-import">Par Liste</a></li>
+						<li><a href="#videos-choices" class="nav-link-import">Par vidéo</a></li>
+					</ul>
+				</div>
+				<div class="span9 content-block-import" id="import-content">
+					<div id="choices-import">
+						<div id="list-choices" class="div-import-option-content">
+							{% for list in lists %}
+								<div class="list-import" id="list-{{ list.object.id }}">
+									<label class="checkbox">
+										<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left parent-checkbox" />
+										<a class="span-link" data-id-list={{ list.object.id }}>
+											<i class="icon-chevron-right"></i>
+											{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
+										</a>
+									</label>
+									<ul class="no-bullet-please list-favoris-import hide" id="list-bookmarks-{{ list.object.id }}">
+										{% for fav in list.object.favoris %}
+											<li>
+												<label class="checkbox">
+													<input type="checkbox" name="videos_list[]" value="{{ fav.video.id }}" class="checkbox-import children-checkbox" /> {{ fav.video.name }}
+												</label>
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							{% endfor %}
 						</div>
-					{% endfor %}
+						<div id="videos-choices" class="div-import-option-content">
+							{% for fav in favoris %}
+								<div class="fav-import-dual">
+									<label class="checkbox">
+										<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="pull-left checkbox-import-video" /> {{ fav.video.title }}
+									</label>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div id="groupes-import">
-			<h3>Dans quel groupe ?</h3>
-			<span>Choisissez parmis vos groupes</span><br/>
-			<select id="select-group-import" name="group">
-			{% for group in app.user.groups %}
-				<option value="{{ group.id }}">{{ group.title }}</option>
-			{% endfor %}
-			</select>
-			<br/><span>Ou bien, <a id="create-groupe-import" href="{{ path('ajax_group_create') }}">créer un autre groupe</a></span>
-		</div>
-		{#<div class="content-block-import">
-			<h4>
-				Vidéos présentes dans le groupe
-				<div class="input-append">
-					<input class="span2" id="searchVideosInList" placeholder="Taper le nom d'un vidéo" type="text">
-					<span class="add-on"><i class="icon-search"></i></span>
+			<div id="groupes-import">
+				<h3>Dans quel groupe ?</h3>
+				<span>Choisissez parmis vos groupes</span><br/>
+				<select id="select-group-import" name="group">
+					{% for group in app.user.groups %}
+						<option value="{{ group.id }}">{{ group.title }}</option>
+					{% endfor %}
+				</select>
+				<br/><span>Ou bien, <a id="create-groupe-import" href="{{ path('ajax_group_create') }}">créer un autre groupe</a></span>
+			</div>
+			{#<div class="content-block-import">
+				<h4>
+					Vidéos présentes dans le groupe
+					<div class="input-append">
+						<input class="span2" id="searchVideosInList" placeholder="Taper le nom d'un vidéo" type="text">
+						<span class="add-on"><i class="icon-search"></i></span>
+					</div>
+				</h4>
+				<div class="content-block-videos-in-list">
+					<div id="loader-group-ajax">
+						<img src="{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}" alt="Chargement" />
+					</div>
+					<div id="videos-in-list">
+						{% include 'MongoboxUsersBundle:Import/Videos:listeVideos.html.twig' %}
+					</div>
 				</div>
-			</h4>
-			<div class="content-block-videos-in-list">
+			</div>#}
+			<input type="hidden" name="type-import-choice" id="type-import-choice" value="list" />
+			<button id="btn-start-import" class="btn btn-primary" tilte="Démarrer l'import des favoris">Importer les favoris</button>
+		</form>
+
+		<div class="modal hide fade" id="modal-import-group-create">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3>Créer un nouveau groupe</h3>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info">
+					Le groupe créé sera disponible dans la liste de séléction pour l'import.
+				</div>
 				<div id="loader-group-ajax">
 					<img src="{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}" alt="Chargement" />
 				</div>
-				<div id="videos-in-list">
-					{% include 'MongoboxUsersBundle:Import/Videos:listeVideos.html.twig' %}
-				</div>
+				<div id="form-modal-body"></div>
 			</div>
-		</div>#}
-		<button id="btn-start-import" class="btn btn-primary" tilte="Démarrer l'import des favoris">Importer les favoris</button>
-	</form>
-
-	<div class="modal hide fade" id="modal-import-group-create">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3>Créer un nouveau groupe</h3>
-		</div>
-		<div class="modal-body">
-			<div class="alert alert-info">
-				Le groupe créé sera disponible dans la liste de séléction pour l'import.
+			<div class="modal-footer">
+				<button data-dismiss="modal" aria-hidden="true" class="btn">Annuler</button>
+				<a href="{{ path('ajax_group_create') }}" class="btn btn-primary" id="btn-submit-group-create">Créer le groupe</a>
 			</div>
-			<div id="loader-group-ajax">
-				<img src="{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}" alt="Chargement" />
-			</div>
-			<div id="form-modal-body"></div>
-		</div>
-		<div class="modal-footer">
-			<button data-dismiss="modal" aria-hidden="true" class="btn">Annuler</button>
-			<a href="{{ path('ajax_group_create') }}" class="btn btn-primary" id="btn-submit-group-create">Créer le groupe</a>
 		</div>
 	</div>
-</div>
 {% endblock body %}
 
 {% block css %}

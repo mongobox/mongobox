@@ -23,12 +23,12 @@ class UserFavorisRepository extends EntityRepository
 			'video' => $this->getEntityManager()->getReference('MongoboxJukeboxBundle:Videos', $id_video)
 		);
 		$query = $this->getEntityManager()->createQueryBuilder()
-				->select('count(uf.id)')
-				->from('MongoboxUsersBundle:UserFavoris', 'uf')
-				->where('uf.user = :user')
-				->andWhere('uf.video = :video')
-				->setParameters($params)
-				->getQuery()
+			->select('count(uf.id)')
+			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->where('uf.user = :user')
+			->andWhere('uf.video = :video')
+			->setParameters($params)
+			->getQuery()
 		;
 
 		// Catch l'exception pour gérer si l'utilisateur n'a pas de contenu
@@ -238,7 +238,7 @@ class UserFavorisRepository extends EntityRepository
 		$em = $this->getEntityManager();
 		$qb = $em->createQueryBuilder();
 		$qb
-			->select('v as video, uf as user_favoris')
+			->select('v, uf')
 			->from('MongoboxUsersBundle:UserFavoris', 'uf')
 			->innerJoin('uf.video', 'v')
 			->where('uf.user = :user')
