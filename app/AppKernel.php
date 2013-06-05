@@ -35,7 +35,8 @@ class AppKernel extends Kernel
             new Mongoeat\Bundle\FoursquareBundle\MongoeatFoursquareBundle(),
             new Mongoeat\Bundle\RestaurantBundle\MongoeatRestaurantBundle(),
             new Mongoeat\Bundle\VoteBundle\MongoeatVoteBundle(),
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle()
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Mongobox\Bundle\BookmarkBundle\MongoboxBookmarkBundle(),
 	);
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

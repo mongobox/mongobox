@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongobox\Bundle\UsersBundle\Controller;
+namespace Mongobox\Bundle\BookmarkBundle\Controller;
 
 use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,11 +24,11 @@ class ImportController extends Controller
 		$manager = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
 
-		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
-		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
+		$nombre_favoris = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getBookmarkNumber($user);
+		$nombre_listes = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getListsNumber($user);
 
-		$lists = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getListsAndVideos($user);
-		$favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getAllUserFavoris($user);
+		$lists = $manager->getRepository('MongoboxBookmarkBundle:ListeFavoris')->getListsAndVideos($user);
+		$favoris = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getAllUserFavoris($user);
 
 		return array(
 			'nombre_favoris' => $nombre_favoris,
@@ -49,8 +49,8 @@ class ImportController extends Controller
 		$manager = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
 
-		$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
-		$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
+		$nombre_favoris = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getBookmarkNumber($user);
+		$nombre_listes = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getListsNumber($user);
 
 		$infos = array();
 		$nbVideoImport = 0;

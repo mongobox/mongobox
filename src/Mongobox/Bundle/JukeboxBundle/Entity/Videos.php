@@ -71,7 +71,7 @@ class Videos
     protected $tags;
 
 	/**
-     * @ORM\OneToMany(targetEntity="Mongobox\Bundle\UsersBundle\Entity\UserFavoris", mappedBy="video", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Mongobox\Bundle\BookmarkBundle\Entity\UserFavoris", mappedBy="video", cascade={"persist"})
      */
 	protected $favoris;
 
