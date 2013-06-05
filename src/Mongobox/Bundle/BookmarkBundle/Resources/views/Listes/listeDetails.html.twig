@@ -1,0 +1,9 @@
+<input type="text" id="list-input-edit-name" value="{{ list.name }}" data-id-list="{{ list.id }}" class="input-submitting-list-name" style="display:none;" /><span class="list-name">{{ list.name }}</span> <button class="btn-edit-list-name btn-link btn-tooltip" title="Modifier le titre de la liste" data-action="editing"><i class="icon-pencil"></i></button><img id="img-loader-edit-name" src="{{ asset('bundles/mongoboxbookmark/img/ajax-loader-list.gif') }}" alt="Chargement" class="hide" />
+<button href="#modal_add_bookmark_list" id="btn-add-bookmark-to-list" class="btn-link btn-tooltip pull-right" data-id-list="{{ list.id }}" title="Ajouter une vidéo à la liste" data-toggle="modal"><i class="icon-plus"></i></button>
+<div class="list-details-bookmarks">
+	{% for bookmark in bookmarks %}
+		{% include 'MongoboxBookmarkBundle:Listes:unFavorisDansListeDetails.html.twig' with { 'video': bookmark.video, 'date': bookmark.date } %}
+	{% else %}
+		Vous n'avez aucune vidéo dans cette liste
+	{% endfor %}
+</div>

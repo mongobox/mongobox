@@ -5,7 +5,7 @@
 {% block body %}
 
 	<div class="hero-unit">
-	{% include 'MongoboxUsersBundle:Favoris:navigation.html.twig' %}
+	{% include 'MongoboxBookmarkBundle:Favoris:navigation.html.twig' %}
 
 	<a href="{{ path('import_favoris_index_action') }}">Retourner à la sélection</a>
 	<h3>Résultat de l'import : {{ nb_import }} vidéo{% if nb_import > 1 %}s{% endif %} importée{% if nb_import > 1 %}s{% endif %}</h3>
