@@ -103,7 +103,7 @@ class User implements AdvancedUserInterface
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\TumblrBundle\Entity\TumblrVote", mappedBy="user")
      */
 	protected $tumblr_vote;
-	
+
 	/**
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="user")
 	 **/
@@ -125,12 +125,12 @@ class User implements AdvancedUserInterface
     protected $groups_invitations;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="UserFavoris", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\BookmarkBundle\Entity\UserFavoris", mappedBy="user")
 	 */
 	protected $favoris;
 
 	/**
-	 * @ORM\OneToMany(targetEntity="ListeFavoris", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\BookmarkBundle\Entity\ListeFavoris", mappedBy="user")
 	 */
 	protected $listes_favoris;
 
@@ -464,7 +464,7 @@ class User implements AdvancedUserInterface
     public function addVideosGroup(\Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup $videos_group)
     {
         $this->videos_group[] = $videos_group;
-    
+
         return $this;
     }
 
@@ -844,7 +844,7 @@ class User implements AdvancedUserInterface
 	public function getListesFavoris() {
 		return $this->listes_favoris;
 	}
-	
+
 	public function __sleep() {
 		return array('id', 'login', 'email');
 	}

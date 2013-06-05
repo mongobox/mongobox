@@ -1,13 +1,13 @@
 <?php
 
-namespace Mongobox\Bundle\UsersBundle\Entity;
+namespace Mongobox\Bundle\BookmarkBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Mongobox\Bundle\UsersBundle\Entity\ListeFavoris
+ * Mongobox\Bundle\BookmarkBundle\Entity\ListeFavoris
  *
- * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\ListeFavorisRepository")
+ * @ORM\Entity(repositoryClass="Mongobox\Bundle\BookmarkBundle\Entity\Repository\ListeFavorisRepository")
  * @ORM\Table(name="listes_favoris")
  */
 class ListeFavoris
@@ -20,7 +20,7 @@ class ListeFavoris
 	protected $id;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="listes_favoris")
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="listes_favoris")
      * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      */
 	protected $user;
