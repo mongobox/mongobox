@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongobox\Bundle\UsersBundle\Controller;
+namespace Mongobox\Bundle\BookmarkBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,8 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use Mongobox\Bundle\UsersBundle\Entity\ListeFavoris;
-use Mongobox\Bundle\UsersBundle\Entity\UserFavoris;
+use Mongobox\Bundle\BookmarkBundle\Entity\ListeFavoris;
+use Mongobox\Bundle\BookmarkBundle\Entity\UserFavoris;
 
 
 class FavorisController extends Controller
@@ -26,7 +26,7 @@ class FavorisController extends Controller
 	{
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
-		$isAlreadyFavorite = $em->getRepository('MongoboxUsersBundle:UserFavoris')->checkUserFavorite($id_video, $user);
+		$isAlreadyFavorite = $em->getRepository('MongoboxBookmarkBundle:UserFavoris')->checkUserFavorite($id_video, $user);
 
 		$result = array(
 			'add' =>  false,
@@ -68,7 +68,7 @@ class FavorisController extends Controller
 			$page = $request->request->get('page');
 
 		// On récupère les favoris
-		$videos_user = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getUniqueFavorisUser($user, $page, self::_limitation_favoris);
+		$videos_user = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getUniqueFavorisUser($user, $page, self::_limitation_favoris);
 
 		// On définit s'il y a une page après celle courante
 		$nextPage = false;
@@ -81,12 +81,12 @@ class FavorisController extends Controller
 		// On traite les vidéos pour avoir les infos directement dedans
 		foreach($videos_user as &$video)
 		{
-			$array_date_first_ajout = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getDateAddToFavorite($user, $video['id']);
+			$array_date_first_ajout = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getDateAddToFavorite($user, $video['id']);
 			$video = array_merge($video, $array_date_first_ajout);
-			$video['listes'] = $manager->getRepository('MongoboxUsersBundle:ListeFavoris')->getListesUserForOneVideo($user, $video['id']);
+			$video['listes'] = $manager->getRepository('MongoboxBookmarkBundle:ListeFavoris')->getListesUserForOneVideo($user, $video['id']);
 			foreach($video['listes'] as &$liste)
 			{
-				$array_date_ajout = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getDateAddToList($user, $video['id'], $liste['id']);
+				$array_date_ajout = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getDateAddToList($user, $video['id'], $liste['id']);
 				$liste = array_merge($liste, $array_date_ajout);
 			}
 		}
@@ -94,7 +94,7 @@ class FavorisController extends Controller
 		// Si c'est une requête ajax, on renvoie le tableau json avec le html et la page
 		if( $request->isXmlHttpRequest() )
 		{
-			$html = $this->render('MongoboxUsersBundle:Favoris/Listes:listeFavoris.html.twig', array('favoris' => $videos_user))->getContent();
+			$html = $this->render('MongoboxBookmarkBundle:Favoris/Listes:listeFavoris.html.twig', array('favoris' => $videos_user))->getContent();
 			return new JsonResponse(array(
 				"html" => $html,
 				"nextPage" => $nextPage,
@@ -102,8 +102,8 @@ class FavorisController extends Controller
 			));
 		} else
 		{
-			$nombre_favoris = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getBookmarkNumber($user);
-			$nombre_listes = $manager->getRepository('MongoboxUsersBundle:UserFavoris')->getListsNumber($user);
+			$nombre_favoris = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getBookmarkNumber($user);
+			$nombre_listes = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getListsNumber($user);
 		}
 
 		return array(
@@ -124,7 +124,7 @@ class FavorisController extends Controller
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
 
-		$is_removed = $em->getRepository("MongoboxUsersBundle:UserFavoris")->removeVideoFromBookmark($user, $id_video);
+		$is_removed = $em->getRepository("MongoboxBookmarkBundle:UserFavoris")->removeVideoFromBookmark($user, $id_video);
 
 		$retour = array(
 			'success' => $is_removed,
@@ -144,10 +144,10 @@ class FavorisController extends Controller
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
 
-		$fav = $em->getRepository("MongoboxUsersBundle:UserFavoris")->findOneBy(array(
+		$fav = $em->getRepository("MongoboxBookmarkBundle:UserFavoris")->findOneBy(array(
 			"user" => $user,
 			"video" => $em->find("MongoboxJukeboxBundle:Videos", $id_video),
-			"liste" => $em->find("MongoboxUsersBundle:ListeFavoris", $id_liste)
+			"liste" => $em->find("MongoboxBookmarkBundle:ListeFavoris", $id_liste)
 		));
 
 		if( is_object($fav) )
@@ -180,7 +180,7 @@ class FavorisController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
 
-		$bookmarks = $em->getRepository('MongoboxUsersBundle:UserFavoris')->findBookmark($user, $value);
+		$bookmarks = $em->getRepository('MongoboxBookmarkBundle:UserFavoris')->findBookmark($user, $value);
 
 		$json = array();
 		foreach ($bookmarks as $bookmark)

@@ -1,9 +1,9 @@
 <?php
 
-namespace Mongobox\Bundle\UsersBundle\Entity\Repository;
+namespace Mongobox\Bundle\BookmarkBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Mongobox\Bundle\UsersBundle\Entity\ListeFavoris;
+use Mongobox\Bundle\BookmarkBundle\Entity\ListeFavoris;
 use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
@@ -24,7 +24,7 @@ class UserFavorisRepository extends EntityRepository
 		);
 		$query = $this->getEntityManager()->createQueryBuilder()
 			->select('count(uf.id)')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->from('MongoboxBookmarkBundle:UserFavoris', 'uf')
 			->where('uf.user = :user')
 			->andWhere('uf.video = :video')
 			->setParameters($params)
@@ -83,14 +83,14 @@ class UserFavorisRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
 			->select('uf.date_favoris')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->from('MongoboxBookmarkBundle:UserFavoris', 'uf')
 			->where('uf.user = :user')
 			->andWhere('uf.liste = :liste')
 			->andWhere('uf.video = :video')
 			->setParameters(array(
 				'user' => $user,
 				'video' => $this->getEntityManager()->getReference('MongoboxJukeboxBundle:Videos', $id_video),
-				'liste' => $this->getEntityManager()->getReference('MongoboxUsersBundle:ListeFavoris', $id_liste)
+				'liste' => $this->getEntityManager()->getReference('MongoboxBookmarkBundle:ListeFavoris', $id_liste)
 			))
 		;
 		return $qb->getQuery()->getSingleResult();
@@ -106,7 +106,7 @@ class UserFavorisRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
 			->select('uf.date_favoris')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->from('MongoboxBookmarkBundle:UserFavoris', 'uf')
 			->where('uf.user = :user')
 			->andWhere('uf.liste IS NULL')
 			->andWhere('uf.video = :video')
@@ -150,7 +150,7 @@ class UserFavorisRepository extends EntityRepository
 		$qb = $em->createQueryBuilder();
 		$qb
 			->select('COUNT(DISTINCT uf.video )')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->from('MongoboxBookmarkBundle:UserFavoris', 'uf')
 			->where('uf.user = :user')
 			->setParameters(array(
 				"user" => $user
@@ -170,7 +170,7 @@ class UserFavorisRepository extends EntityRepository
 		$qb = $em->createQueryBuilder();
 		$qb
 			->select('COUNT(DISTINCT l.id )')
-			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->from('MongoboxBookmarkBundle:ListeFavoris', 'l')
 			->where('l.user = :user')
 			->setParameters(array(
 				"user" => $user
@@ -190,7 +190,7 @@ class UserFavorisRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
 			->delete()
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->from('MongoboxBookmarkBundle:UserFavoris', 'uf')
 			->where('uf.liste = :list')
 			->andWhere('uf.user = :user')
 			->setParameters(array(
@@ -239,7 +239,7 @@ class UserFavorisRepository extends EntityRepository
 		$qb = $em->createQueryBuilder();
 		$qb
 			->select('v, uf')
-			->from('MongoboxUsersBundle:UserFavoris', 'uf')
+			->from('MongoboxBookmarkBundle:UserFavoris', 'uf')
 			->innerJoin('uf.video', 'v')
 			->where('uf.user = :user')
 			->groupBy("uf.video")

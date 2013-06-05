@@ -1,9 +1,9 @@
 <?php
 
-namespace Mongobox\Bundle\UsersBundle\Entity\Repository;
+namespace Mongobox\Bundle\BookmarkBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Mongobox\Bundle\UsersBundle\Entity\ListeFavoris;
+use Mongobox\Bundle\BookmarkBundle\Entity\ListeFavoris;
 use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
@@ -23,7 +23,7 @@ class ListeFavorisRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
 			->select('l')
-			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->from('MongoboxBookmarkBundle:ListeFavoris', 'l')
 			->innerJoin('l.favoris', 'uf')
 			->where('l.user = :user')
 			->andWhere('uf.video = :video')
@@ -46,7 +46,7 @@ class ListeFavorisRepository extends EntityRepository
 		$qb = $em->createQueryBuilder();
 
 		$qb->select('l')
-			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->from('MongoboxBookmarkBundle:ListeFavoris', 'l')
 			->where("l.name LIKE :value")
 			->andWhere('l.user = :user')
 			->orderBy('l.name', 'ASC')
@@ -93,7 +93,7 @@ class ListeFavorisRepository extends EntityRepository
 		$qb = $this->getEntityManager()->createQueryBuilder();
 		$qb
 			->select('l as object, f as user_favoris, v as video')
-			->from('MongoboxUsersBundle:ListeFavoris', 'l')
+			->from('MongoboxBookmarkBundle:ListeFavoris', 'l')
 			->innerJoin('l.favoris', 'f')
 			->innerJoin('f.video', 'v')
 			->where('l.user = :user')

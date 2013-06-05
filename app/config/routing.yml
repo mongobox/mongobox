@@ -1,3 +1,7 @@
+mongobox_bookmark:
+    resource: "@MongoboxBookmarkBundle/Controller/"
+    prefix:   /
+
 mongoeat_vote:
     resource: "@MongoeatVoteBundle/Controller/"
     type:     annotation
