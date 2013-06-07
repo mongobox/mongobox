@@ -79,6 +79,9 @@ avalanche_imagine:
     driver:         gd
     filters:
         #Si renommage ou ajout de filters, penser Ã  modifier les lignes de suppression de cache dans User->upload()
+        avatar_menu:
+            type:    thumbnail
+            options: { size: [32, 32], mode: inbox }
         avatar_thumbnail:
             type:    thumbnail
             options: { size: [80, 80], mode: inbox }
