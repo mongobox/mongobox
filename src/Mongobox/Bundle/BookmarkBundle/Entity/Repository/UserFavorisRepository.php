@@ -31,45 +31,44 @@ class UserFavorisRepository extends EntityRepository
 			->getQuery()
 		;
 
-		// Catch l'exception pour gérer si l'utilisateur n'a pas de contenu
-		try
-		{
-			$result = ( $query->getSingleScalarResult() > 0 ) ? true: false;
-		}catch( \Doctrine\Orm\NoResultException $e )
-		{
-			$result = false;
-		}
-		return $result;
-	}
+        // Catch l'exception pour gérer si l'utilisateur n'a pas de contenu
+        try {
+            $result = ( $query->getSingleScalarResult() > 0 ) ? true: false;
+        } catch ( \Doctrine\Orm\NoResultException $e ) {
+            $result = false;
+        }
 
-	/**
-	 * Fonction pour récupérer un tableau des vidéos favorites de l'utilisateur
-	 * @param User $user
-	 * @param int $page
-	 * @return array
-	 */
-	public function getUniqueFavorisUser($user, $page, $limitation)
-	{
-		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb
-			->select('v')
-			->from('MongoboxJukeboxBundle:Videos', 'v')
-			->innerJoin('v.favoris', 'uf')
-			->where('uf.user = :user')
-			->setParameters(array(
-				'user' => $user
-			))
-			->orderBy('uf.date_favoris', 'DESC')
-			->groupBy('v.id')
-			->setMaxResults($limitation+1)
-		;
+        return $result;
+    }
 
-		if( $page > 1)
-		{
-			$qb->setFirstResult( ($page-1) * $limitation);
-		}
-		return $qb->getQuery()->getArrayResult();
-	}
+    /**
+     * Fonction pour récupérer un tableau des vidéos favorites de l'utilisateur
+     * @param  User  $user
+     * @param  int   $page
+     * @return array
+     */
+    public function getUniqueFavorisUser($user, $page, $limitation)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('v')
+            ->from('MongoboxJukeboxBundle:Videos', 'v')
+            ->innerJoin('v.favoris', 'uf')
+            ->where('uf.user = :user')
+            ->setParameters(array(
+                'user' => $user
+            ))
+            ->orderBy('uf.date_favoris', 'DESC')
+            ->groupBy('v.id')
+            ->setMaxResults($limitation+1)
+        ;
+
+        if ($page > 1) {
+            $qb->setFirstResult( ($page-1) * $limitation);
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
 
 	/**
 	 * Fonction pour récupérer la date d'ajout en favoris d'une vidéo à une liste
@@ -93,6 +92,7 @@ class UserFavorisRepository extends EntityRepository
 				'liste' => $this->getEntityManager()->getReference('MongoboxBookmarkBundle:ListeFavoris', $id_liste)
 			))
 		;
+
 		return $qb->getQuery()->getSingleResult();
 	}
 
@@ -115,6 +115,7 @@ class UserFavorisRepository extends EntityRepository
 				'video' => $this->getEntityManager()->getReference('MongoboxJukeboxBundle:Videos', $id_video),
 			))
 		;
+
 		return $qb->getQuery()->getSingleResult();
 	}
 
@@ -251,4 +252,3 @@ class UserFavorisRepository extends EntityRepository
 	}
 }
 
-?>

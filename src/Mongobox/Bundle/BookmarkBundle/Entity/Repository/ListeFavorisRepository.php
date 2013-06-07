@@ -32,6 +32,7 @@ class ListeFavorisRepository extends EntityRepository
 				'video' => $this->getEntityManager()->getReference('MongoboxJukeboxBundle:Videos', $id_video)
 			))
 		;
+
 		return $qb->getQuery()->getArrayResult();
 	}
 
@@ -57,6 +58,7 @@ class ListeFavorisRepository extends EntityRepository
 			));
 
 		$query = $qb->getQuery();
+
 		return $query->getResult();
 	}
 
@@ -81,6 +83,7 @@ class ListeFavorisRepository extends EntityRepository
 				'user' => $user
 			))
 		;
+
 		return $qb->getQuery()->getResult();
 	}
 
@@ -105,5 +108,3 @@ class ListeFavorisRepository extends EntityRepository
 		return $qb->getQuery()->getResult();
 	}
 }
-
-?>
