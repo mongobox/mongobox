@@ -16,53 +16,52 @@ use Mongobox\Bundle\BookmarkBundle\Entity\UserFavoris;
 
 class ListesController extends Controller
 {
-	const _limitation_listes = 5;
+    const _limitation_listes = 5;
 
-	/**
-	 * Fonction pour voir les listes de favoris de l'utilisateur
-	 * @Route("/profil/listes", name="user_voir_listes")
-	 * @Template()
-	 */
-	public function voirListeFavorisAction()
-	{
-		$manager = $this->getDoctrine()->getManager();
-		$user = $this->getUser();
+    /**
+     * Fonction pour voir les listes de favoris de l'utilisateur
+     * @Route("/profil/listes", name="user_voir_listes")
+     * @Template()
+     */
+    public function voirListeFavorisAction()
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
 		$nombre_favoris = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getBookmarkNumber($user);
 		$nombre_listes = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getListsNumber($user);
 
-		$listes = $user->getListesFavoris();
+        $listes = $user->getListesFavoris();
 
-		return array(
-			'nombre_favoris' => $nombre_favoris,
-			'nombre_listes' => $nombre_listes,
-			'listes' => $listes
-		);
-	}
+        return array(
+            'nombre_favoris' => $nombre_favoris,
+            'nombre_listes' => $nombre_listes,
+            'listes' => $listes
+        );
+    }
 
-	/**
-	 * Fonction permettant de récupérer via JSON la liste des listes de favoris de l'utilisateur
-	 * @Route("/ajax_list_search", name="ajax_list_search")
-	 */
-	public function ajaxListSearchAction(Request $request)
-	{
-		$value = $request->get('term');
-		$em = $this->getDoctrine()->getManager();
-		$user = $this->getUser();
+    /**
+     * Fonction permettant de récupérer via JSON la liste des listes de favoris de l'utilisateur
+     * @Route("/ajax_list_search", name="ajax_list_search")
+     */
+    public function ajaxListSearchAction(Request $request)
+    {
+        $value = $request->get('term');
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
 		$lists = $em->getRepository('MongoboxBookmarkBundle:ListeFavoris')->findList($user, $value);
 
-		$json = array();
-		foreach ($lists as $list)
-		{
-			$json[] = array(
-				'label' => $list->getName(),
-				'value' => $list->getId()
-			);
-		}
+        $json = array();
+        foreach ($lists as $list) {
+            $json[] = array(
+                'label' => $list->getName(),
+                'value' => $list->getId()
+            );
+        }
 
-		return new JsonResponse($json);
-	}
+        return new JsonResponse($json);
+    }
 
 	/**
 	 * Fonction pour ajouter un favoris à une liste
@@ -82,25 +81,24 @@ class ListesController extends Controller
 			'liste' => $liste
 		));
 
-		$date = new \DateTime;
-		$message = 'La vidéo existe déjà dans la liste "'.$liste->getName().'"';
-		$result = false;
+        $date = new \DateTime;
+        $message = 'La vidéo existe déjà dans la liste "'.$liste->getName().'"';
+        $result = false;
 
-		if( is_null($alreadyExist) )
-		{
-			$new_fav_list = new UserFavoris();
-			$new_fav_list
-				->setUser($user)
-				->setListe($liste)
-				->setVideo($video)
-				->setDateFavoris($date)
-			;
-			$em->persist($new_fav_list);
-			$em->flush();
+        if ( is_null($alreadyExist) ) {
+            $new_fav_list = new UserFavoris();
+            $new_fav_list
+                ->setUser($user)
+                ->setListe($liste)
+                ->setVideo($video)
+                ->setDateFavoris($date)
+            ;
+            $em->persist($new_fav_list);
+            $em->flush();
 
-			$message = 'Vidéo ajoutée avec succès dans la liste "'.$liste->getName().'"';
-			$result = true;
-		}
+            $message = 'Vidéo ajoutée avec succès dans la liste "'.$liste->getName().'"';
+            $result = true;
+        }
 
 		$html = '';
 		if( $result )
@@ -112,42 +110,41 @@ class ListesController extends Controller
 				$html = $this->renderView('MongoboxBookmarkBundle:Favoris/Listes:uneListeFavoris.html.twig', array('liste' => $liste, 'ajax' => true, 'date' => $date ,'video' => $video));
 		}
 
-		return new JsonResponse(array(
-			"message" => $message,
-			"result" => $result,
-			"html" => $html
-		));
-	}
+        return new JsonResponse(array(
+            "message" => $message,
+            "result" => $result,
+            "html" => $html
+        ));
+    }
 
-	/**
-	 * Fonction pour créer une nouvelle liste en ajax
-	 * @Route("/ajax/create/list", name="add_new_list")
-	 */
-	public function createNewListAction()
-	{
-		try
-		{
-			$em = $this->getDoctrine()->getManager();
-			$request = $this->getRequest();
-			$user = $this->getUser();
-			$currentRoute = $request->request->get('routeName');
-			$listName = $request->request->get('listName');
+    /**
+     * Fonction pour créer une nouvelle liste en ajax
+     * @Route("/ajax/create/list", name="add_new_list")
+     */
+    public function createNewListAction()
+    {
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $request = $this->getRequest();
+            $user = $this->getUser();
+            $currentRoute = $request->request->get('routeName');
+            $listName = $request->request->get('listName');
 
-			$newList = new ListeFavoris();
-			$newList
-				->setUser($user)
-				->setName($listName)
-				->setDate_creation(new \DateTime)
-			;
+            $newList = new ListeFavoris();
+            $newList
+                ->setUser($user)
+                ->setName($listName)
+                ->setDate_creation(new \DateTime)
+            ;
 
-			$em->persist($newList);
-			$em->flush();
+            $em->persist($newList);
+            $em->flush();
 
-			$json = array(
-				'success' => true,
-				'listName' => $listName,
-				'currentRoute' => false
-			);
+            $json = array(
+                'success' => true,
+                'listName' => $listName,
+                'currentRoute' => false
+            );
 
 			$json['listNumber'] = $em->getRepository('MongoboxBookmarkBundle:UserFavoris')->getListsNumber($user);
 			if( $currentRoute === 'user_voir_listes' )
@@ -161,8 +158,8 @@ class ListesController extends Controller
 			$json = array('success' => false);
 		}
 
-		return new JsonResponse($json);
-	}
+        return new JsonResponse($json);
+    }
 
 	/**
 	 * Fonction pour supprimer une liste de favoris
@@ -183,13 +180,12 @@ class ListesController extends Controller
 			$em->flush();
 			$json['listNumber'] = $em->getRepository('MongoboxBookmarkBundle:UserFavoris')->getListsNumber($user);
 
-		} catch( \Exception $e )
-		{
-			$json['success'] = false;
-		}
+        } catch ( \Exception $e ) {
+            $json['success'] = false;
+        }
 
-		return new JsonResponse($json);
-	}
+        return new JsonResponse($json);
+    }
 
 	/**
 	 * Fonction pour récupérer les détails d'une liste
@@ -212,8 +208,8 @@ class ListesController extends Controller
 			$json['error'] = 'Le chargement de la liste a échoué';
 		}
 
-		return new JsonResponse($json);
-	}
+        return new JsonResponse($json);
+    }
 
 	/**
 	 * Fonction pour supprimer une vidéo d'une liste de favoris
@@ -229,20 +225,19 @@ class ListesController extends Controller
 			"video" => $manager->find("MongoboxJukeboxBundle:Videos", $id_video)
 		));
 
-		$json = array(
-			"success" => false,
-			"message" => "Une erreur est survenue pendant la suppression de la vidéo"
-		);
-		if( $uf )
-		{
-			$manager->remove($uf);
-			$manager->flush();
-			$json["success"] = true;
-			$json["message"] = "La vidéo a bien été supprimée de la liste";
-		}
+        $json = array(
+            "success" => false,
+            "message" => "Une erreur est survenue pendant la suppression de la vidéo"
+        );
+        if ($uf) {
+            $manager->remove($uf);
+            $manager->flush();
+            $json["success"] = true;
+            $json["message"] = "La vidéo a bien été supprimée de la liste";
+        }
 
-		return new JsonResponse($json);
-	}
+        return new JsonResponse($json);
+    }
 
 	/**
 	 * Fonction pour mettre à jour le titre d'une liste
@@ -253,20 +248,19 @@ class ListesController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$list = $em->find("MongoboxBookmarkBundle:ListeFavoris", $id_list);
 
-		$json = array(
-			"success" => false,
-			"message" => "Une erreur est survenue lors de la mise à jour de la liste"
-		);
-		if( $list )
-		{
-			$newName = $this->getRequest()->request->get('name');
-			$list->setName($newName);
-			$em->flush();
-			$json["success"] = true;
-			$json["message"] = "La liste a bien été mise à jour";
-			$json["newName"] = $newName;
-		}
+        $json = array(
+            "success" => false,
+            "message" => "Une erreur est survenue lors de la mise à jour de la liste"
+        );
+        if ($list) {
+            $newName = $this->getRequest()->request->get('name');
+            $list->setName($newName);
+            $em->flush();
+            $json["success"] = true;
+            $json["message"] = "La liste a bien été mise à jour";
+            $json["newName"] = $newName;
+        }
 
-		return new JsonResponse($json);
-	}
+        return new JsonResponse($json);
+    }
 }

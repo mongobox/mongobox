@@ -5,18 +5,15 @@ namespace Mongobox\Bundle\BookmarkBundle\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use Mongobox\Bundle\BookmarkBundle\Entity\ListeFavoris;
 use Mongobox\Bundle\BookmarkBundle\Entity\UserFavoris;
 
-
 class FavorisController extends Controller
 {
-	const _limitation_favoris = 5;
+    const _limitation_favoris = 5;
 
 	/**
 	 * Fonction pour ajouter une vidéo à la liste des vidéos favorites
@@ -28,55 +25,53 @@ class FavorisController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$isAlreadyFavorite = $em->getRepository('MongoboxBookmarkBundle:UserFavoris')->checkUserFavorite($id_video, $user);
 
-		$result = array(
-			'add' =>  false,
-			'already' => true
-		);
+        $result = array(
+            'add' =>  false,
+            'already' => true
+        );
 
-		if(!$isAlreadyFavorite)
-		{
-			$newFavoris = new UserFavoris();
-			$newFavoris
-					->setUser($user)
-					->setVideo($em->find('MongoboxJukeboxBundle:Videos', $id_video))
-					->setDateFavoris(new \DateTime)
-			;
+        if (!$isAlreadyFavorite) {
+            $newFavoris = new UserFavoris();
+            $newFavoris
+                    ->setUser($user)
+                    ->setVideo($em->find('MongoboxJukeboxBundle:Videos', $id_video))
+                    ->setDateFavoris(new \DateTime)
+            ;
 
-			$em->persist($newFavoris);
-			$em->flush();
+            $em->persist($newFavoris);
+            $em->flush();
 
-			$result['add'] = true;
-			$result['already'] = false;
-		}
+            $result['add'] = true;
+            $result['already'] = false;
+        }
 
-		return new JsonResponse($result);
-	}
+        return new JsonResponse($result);
+    }
 
-	/**
-	 * Fonction pour voir les favoris de l'utilisateur
-	 * @Route("/profil/favoris/{page}", name="user_voir_favoris", requirements={"page" = "\d+"}, defaults={"page" = 1})
-	 * @Route("/profil/favoris/plus", name="user_voir_plus_favoris", defaults={"page" = 2})
-	 * @Template()
-	 */
-	public function voirFavorisAction($page)
-	{
-		$request = $this->getRequest();
-		$manager = $this->getDoctrine()->getManager();
-		$user = $this->getUser();
+    /**
+     * Fonction pour voir les favoris de l'utilisateur
+     * @Route("/profil/favoris/{page}", name="user_voir_favoris", requirements={"page" = "\d+"}, defaults={"page" = 1})
+     * @Route("/profil/favoris/plus", name="user_voir_plus_favoris", defaults={"page" = 2})
+     * @Template()
+     */
+    public function voirFavorisAction($page)
+    {
+        $request = $this->getRequest();
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
-		if( $request->isXmlHttpRequest() )
-			$page = $request->request->get('page');
+        if( $request->isXmlHttpRequest() )
+            $page = $request->request->get('page');
 
 		// On récupère les favoris
 		$videos_user = $manager->getRepository('MongoboxBookmarkBundle:UserFavoris')->getUniqueFavorisUser($user, $page, self::_limitation_favoris);
 
-		// On définit s'il y a une page après celle courante
-		$nextPage = false;
-		if(count($videos_user) > self::_limitation_favoris)
-		{
-			unset($videos_user[self::_limitation_favoris]);
-			$nextPage = true;
-		}
+        // On définit s'il y a une page après celle courante
+        $nextPage = false;
+        if (count($videos_user) > self::_limitation_favoris) {
+            unset($videos_user[self::_limitation_favoris]);
+            $nextPage = true;
+        }
 
 		// On traite les vidéos pour avoir les infos directement dedans
 		foreach($videos_user as &$video)
