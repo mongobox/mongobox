@@ -72,7 +72,7 @@ class SecureController extends Controller
         //on verifie si on est pas deja connecte
         $securityContext = $this->get('security.context');
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('wall_index'));
         }
 
         $em = $this->getDoctrine()->getManager();
