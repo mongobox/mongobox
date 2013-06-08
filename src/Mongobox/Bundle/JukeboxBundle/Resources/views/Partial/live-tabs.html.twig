@@ -1,0 +1,60 @@
+<ul id="live-tab" class="nav nav-tabs">
+    <li class="active">
+        <a href="#vote" data-toggle="tab">Votes</a>
+    </li>
+    <li>
+        <a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="vote">
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="video-rating">
+                    <h3>Vote</h3>
+                    <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
+                        <i class="icon-thumbs-up icon-white"></i>
+                    </a>
+                    <span id="up-score"></span>
+
+                    <a href="#" class="btn btn-danger" id="down-vote" role="button" data-toggle="modal" title="Bof...">
+                        <i class="icon-thumbs-down icon-white"></i>
+                    </a>
+                    <span id="down-score"></span>
+
+                    <br />
+
+                    <span id="video-score"></span>
+                </div>
+            </div>
+
+            <div class="span6">
+                <div class="volume-control">
+                    <h3>Volume</h3>
+                    <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
+                        <i class="icon-volume-up icon-white"></i>
+                    </a>
+                    <span id="volume-up-votes"></span>
+
+                    <a href="#" class="btn btn-danger" id="down-volume" role="button" data-toggle="modal" title="Bof...">
+                        <i class="icon-volume-down icon-white"></i>
+                    </a>
+                    <span id="volume-down-votes"></span>
+
+                    <br />
+
+                    <span id="video-volume"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if player_mode == "admin" %}
+        {% include 'MongoboxJukeboxBundle:Partial:live-admin.html.twig' %}
+    {% else %}
+        <div class="tab-pane" id="playlist_controll">
+            {% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode': player_mode, 'groupLiveTags': groupLiveTags} %}
+        </div>
+    {% endif %}
+</div>
