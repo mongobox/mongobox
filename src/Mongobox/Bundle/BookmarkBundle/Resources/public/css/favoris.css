@@ -124,7 +124,8 @@
 }
 
 .div-import-option-content {
-	max-height: 250px;
+	min-height: 200px;
+	max-height: 200px;
 	overflow: auto;
 }
 
@@ -138,6 +139,7 @@
 
 #videos-in-list {
 	display: none;
-	max-height: 250px;
+	min-height: 200px;
+	max-height: 200px;
 	overflow: auto;
 }
