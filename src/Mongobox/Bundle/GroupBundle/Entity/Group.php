@@ -61,9 +61,9 @@ class Group
     protected $secretKey;
 
     /**
-     * @var integer
+     * @var \Mongobox\Bundle\UsersBundle\Entity\User
      *
-     * @ORM\OneToOne(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Mongobox\Bundle\UsersBundle\Entity\User")
      * @ORM\JoinColumn(name="live_current_admin", referencedColumnName="id")
      */
     protected $liveCurrentAdmin;
