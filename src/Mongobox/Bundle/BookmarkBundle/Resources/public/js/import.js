@@ -15,8 +15,11 @@ var importBookmark = importBookmark || {};
 		this.typeOption = $('#type-import-choice');
 		this.btnChecking = $('.videos-check');
 		this.searchFieldVideos = $('#input-video-search-import');
+		this.searchFieldVideosGroup = $('#searchVideosInList');
 		this.typeOption.val('list');
 		this.btnClearSearch = $('#clear-video-search');
+		this.divLoaderGroupVideos = $('#loader-group-ajax');
+		this.divGroupVideos = $('#videos-in-list');
 
 		this.observeShowBookmarks();
 		this.observeParentCheckboxClick();
@@ -27,7 +30,10 @@ var importBookmark = importBookmark || {};
 		this.initOptionsObserver();
 		this.observeCheckUncheckVideo();
 		this.observeResearchVideosOption();
+		this.observeResearchVideosGroup();
 		this.observeRemoveSearchText();
+		this.loadGroupVideo();
+		this.observeGroupSelect();
 	};
 
 	importBookmark.initOptionsObserver = function()
@@ -207,7 +213,7 @@ var importBookmark = importBookmark || {};
 		{
 			e.preventDefault();
 			importBookmark.searchFieldVideos.val('');
-			$('.fav-import-dual').show();
+			$('#videos-choices').find('.fav-import-dual').show();
 		});
 	};
 
@@ -215,18 +221,54 @@ var importBookmark = importBookmark || {};
 	{
 		this.searchFieldVideos.bind('keyup', function(e)
 		{
-			var searchText = $(this).val();
-			if(e.which == 13 ) return false;
-			else if (searchText == '') $('.fav-import-dual').show();
-			else
+			importBookmark.toggleVideoSearch(e, "videos-choices", $(this).val());
+		});
+	};
+
+	importBookmark.toggleVideoSearch = function(event, div_id, searchText)
+	{
+		if(event.which == 13 ) return false;
+		else if (searchText == '') $('#'+div_id).find('.fav-import-dual').show();
+		else
+		{
+			$('#'+div_id).find('.fav-import-dual').filter(function()
 			{
-				$(".fav-import-dual").filter(function()
-				{
-					var fav_text = $(this).find('.video-text-import').text();
-					var checkContains = fav_text.toLowerCase().search(searchText.toLowerCase()) == -1;
-					if( !checkContains ) $(this).show();
-					return checkContains;
-				}).hide();
+				var fav_text = $(this).find('.video-text-import').text();
+				var checkContains = fav_text.toLowerCase().search(searchText.toLowerCase()) == -1;
+				if( !checkContains ) $(this).show();
+				return checkContains;
+			}).hide();
+		}
+	};
+
+	importBookmark.observeGroupSelect = function()
+	{
+		this.selectGroup.bind('change', function()
+		{
+			importBookmark.loadGroupVideo();
+		});
+	};
+
+	importBookmark.observeResearchVideosGroup = function()
+	{
+		this.searchFieldVideosGroup.bind('keyup', function(e)
+		{
+			importBookmark.toggleVideoSearch(e, "videos-in-list", $(this).val());
+		});
+	};
+
+	importBookmark.loadGroupVideo = function()
+	{
+		importBookmark.divLoaderGroupVideos.show();
+		importBookmark.divGroupVideos.hide();
+		var group_id = $('#select-group-import option:selected').val();
+		$.ajax({
+			url: basepath+"import/group/"+group_id+"/load/videos",
+			type: "POST",
+			success: function(html)
+			{
+				importBookmark.divLoaderGroupVideos.hide();
+				importBookmark.divGroupVideos.html(html).show();
 			}
 		});
 	};
