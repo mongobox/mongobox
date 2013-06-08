@@ -6,173 +6,101 @@
     <script src="{{ websockets_server }}/socket.io/socket.io.js"></script>
     <script src="{{ asset('bundles/mongoboxjukebox/js/live.js') }}" type="text/javascript"></script>
 
-    {% if player_mode != "admin" %}
-        <div id="live-admin-data">
-            <a href="#" id="putsch-button" class="btn btn-primary" role="button">Devenir l'administrateur</a>
-            {% if current_admin is not null %}
-                <p>
-                    Actuellement : <b>{{ current_admin.firstname }} {{ current_admin.lastname }}</b> (<i>{{ current_admin.login }})</i>
-                </p>
-            {% endif %}
-        </div>
+    {% include 'MongoboxJukeboxBundle:Partial:live-modals-contents.html.twig' %}
 
-        <div id="putsch-request-callback" style="display: none">
-            <div style="text-align: center">
-                <p>
-                    <b>Votre demande a bien été envoyée à l'administrateur actuel du live.</b><br />
-                    <i>Vous devez maintenant attendre sa réponse ou une minute.</i>
-                </p>
-            </div>
-        </div>
-
-        <div id="putsch-refuse-callback" style="display: none">
-            <div style="text-align: center">
-                <p>
-                    <img src="{{ asset('bundles/mongoboxjukebox/img/at-least-you-tried.jpg') }}" alt="nice try" title="Dommage !" />
-                </p>
-                <p>
-                    <b>Votre demande vient d'être rejetée par l'administrateur actuel !</b><br />
-                    <i>Réessayez un peu plus tard...</i>
-                </p>
-            </div>
-        </div>
-    {% endif %}
-
-    <div id="putsch-modal" class="modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Tentative de putsch</h3>
-        </div>
-        <div class="modal-body">
-            <div class="loader"></div>
-            <div class="modal-content"></div>
-        </div>
+    <div class="marketing">
+        <h1>
+            <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" />
+        </h1>
     </div>
 
-	<div class="marketing">
-		<h1>{{ page_title }}</h1>
-		{% if current_video is not null %}
-			<div id="player"></div>
+    <div class="row-fluid hero-unit">
+        <div class="span9 text-center">
+            <div id="player"></div>
             {% if player_mode == "admin" %}
                 {% include 'MongoboxJukeboxBundle:Partial:live-admin-control.html.twig' %}
-			{% endif %}
-
-            <ul id="live-tab" class="nav nav-tabs">
-                <li class="active"><a href="#vote" data-toggle="tab">Votes</a></li>
-                <li><a href="#playlist_controll" data-toggle="tab">Gestion de la playlist</a></li>
-                {% if player_mode == "admin" %}
-                    <li><a href="#playlist" data-toggle="tab">Playlist</a></li>
-                {% endif %}
-            </ul>
-
-            <div class="tab-content">
-                <div class="tab-pane active" id="vote">
-                    <div class="video-rating">
-                        <h3>Vote</h3>
-                        <a href="#" class="btn btn-success" id="up-vote" role="button" data-toggle="modal" title="Yeah !">
-                            <i class="icon-thumbs-up icon-white"></i>
-                        </a>
-                        <span id="up-score"></span>
-
-                        <a href="#" class="btn btn-danger" id="down-vote" role="button" data-toggle="modal" title="Bof...">
-                            <i class="icon-thumbs-down icon-white"></i>
-                        </a>
-                        <span id="down-score"></span>
-
-                        <br />
-
-                        <span id="video-score"></span>
-                    </div>
-
-                    <div class="volume-control">
-                        <h3>Volume</h3>
-                        <a href="#" class="btn btn-success" id="up-volume" role="button" data-toggle="modal" title="Yeah !">
-                            <i class="icon-volume-up icon-white"></i>
-                        </a>
-                        <span id="volume-up-votes"></span>
-
-                        <a href="#" class="btn btn-danger" id="down-volume" role="button" data-toggle="modal" title="Bof...">
-                            <i class="icon-volume-down icon-white"></i>
-                        </a>
-                        <span id="volume-down-votes"></span>
-
-                        <span id="video-volume"></span>
-                    </div>
-                </div>
-
-                {% if player_mode == "admin" %}
-                    {% include 'MongoboxJukeboxBundle:Live:admin.html.twig' %}
-                {% else %}
-                    <div class="tab-pane" id="playlist_controll">
-                        {% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode': player_mode, 'groupLiveTags': groupLiveTags} %}
-                    </div>
-                {% endif %}
-
-                <script type="text/javascript">
-                    function onPlayerStateChange(event)
-                    {
-                        var params = new Object();
-
-                        params.status       = event.data;
-                        params.currentTime  = player.getCurrentTime();
-
-                        {% if player_mode == "admin" %}
-                            if (event.data != 0) {
-                                socket.emit('player updated', params);
-                            } else {
-                                livePlayer.seekNextVideo(params);
-                            }
-                        {% endif %}
-                    }
-                </script>
-
-                <script type="text/javascript">
-                    var tag = document.createElement('script');
-                    tag.src = '//www.youtube.com/iframe_api';
-
-                    var firstScriptTag = document.getElementsByTagName('script')[0];
-                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-                    var voteUrl			        = '{{ path('live_vote') }}';
-                    var scoreUrl		        = '{{ path('live_score') }}';
-                    var volumeUrl               = '{{ path('live_volume') }}';
-                    var putschEligibilityUrl    = '{{ path('live_putsch_eligibility') }}';
-                    var adminSwitchUrl          = '{{ path('live_admin_switch') }}';
-
-                    var playerMode		= '{{ player_mode }}';
-                    var playerVars      = {{ player_vars|raw }}
-                    var defaultVolume   = playerVars.volume;
-
-                    var player;
-                    function onYouTubeIframeAPIReady()
-                    {
-                        $(document).ready(function() {
-                            player = new YT.Player('player', {
-                                height: '{{ player_height }}',
-                                width: '{{ player_width }}',
-                                videoId: '{{ current_video.videoGroup.video.lien }}',
-                                playerVars: playerVars,
-                                events: {{ player_events|raw }}
-                            });
-                        });
-                    }
-
-                    var currentUserId       = '{{ app.user.id }}';
-                    var currentPlaylistId   = '{{ current_video.id }}';
-
-                    var socket = io.connect('{{ websockets_server }}');
-
-                    socket.emit('subscribe', {
-                        'user': currentUserId,
-                        'room': '{{ group.secretKey }}'
-                    });
-
-                    var livePlayer = new LivePlayer();
-                    livePlayer.initialize(currentUserId, currentPlaylistId);
-                </script>
-            {% else %}
-                Jukebox HS
             {% endif %}
+
+            {% include 'MongoboxJukeboxBundle:Partial:live-tabs.html.twig' %}
         </div>
+
+        <div class="span3">
+            <ul id="live-users" class="unstyled clearfix">
+                <h4>Utilisateurs présents</h4>
+                {% include 'MongoboxJukeboxBundle:Partial:live-user-block.html.twig' %}
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            function onPlayerStateChange(event)
+            {
+                var params = {
+                    status: event.data,
+                    currentTime: player.getCurrentTime()
+                };
+
+                {% if player_mode == "admin" %}
+                    if (event.data != 0) {
+                        socket.emit('player updated', params);
+                    } else {
+                        livePlayer.seekNextVideo(params);
+                    }
+                {% endif %}
+            }
+
+            var tag = document.createElement('script');
+            tag.src = '//www.youtube.com/iframe_api';
+
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            var voteUrl			        = '{{ path('live_vote') }}';
+            var scoreUrl		        = '{{ path('live_score') }}';
+            var volumeUrl               = '{{ path('live_volume') }}';
+            var putschEligibilityUrl    = '{{ path('live_putsch_eligibility') }}';
+            var adminSwitchUrl          = '{{ path('live_admin_switch') }}';
+
+            var playerMode		= '{{ player_mode }}';
+            var playerVars      = {{ player_vars|raw }}
+            var defaultVolume   = playerVars.volume;
+
+            var player;
+            function onYouTubeIframeAPIReady()
+            {
+                $(document).ready(function() {
+                    player = new YT.Player('player', {
+                        height: '{{ player_height }}',
+                        width: '{{ player_width }}',
+                        videoId: '{{ current_video.videoGroup.video.lien }}',
+                        playerVars: playerVars,
+                        events: {{ player_events|raw }}
+                    });
+                });
+            }
+
+            var currentUserId       = '{{ app.user.id }}';
+            var currentPlaylistId   = '{{ current_video.id }}';
+
+            var socket = io.connect('{{ websockets_server }}');
+
+            socket.emit('subscribe', {
+                user: {
+                    id: '{{ app.user.id }}',
+                    block: $('#user-' + {{ app.user.id }} + '-block').prop('outerHTML')
+                },
+                room: '{{ group.secretKey }}'
+            });
+
+            socket.on('user subscription', function(newUser) {
+                $('#live-users').append(newUser.block);
+            });
+
+            socket.on('user unsubscription', function(oldUser) {
+                $('#user-' + oldUser.id + '-block').remove();
+            });
+
+            var livePlayer = new LivePlayer();
+            livePlayer.initialize(currentUserId, currentPlaylistId);
+        </script>
     </div>
 {% endblock body %}
