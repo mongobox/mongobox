@@ -65,33 +65,35 @@
 					</div>
 				</div>
 			</div>
-			<div id="groupes-import">
-				<h3>Dans quel groupe ?</h3>
-				<span>Choisissez parmis vos groupes</span><br/>
-				<select id="select-group-import" name="group">
-					{% for group in app.user.groups %}
-						<option value="{{ group.id }}">{{ group.title }}</option>
-					{% endfor %}
-				</select>
-				<br/><span>Ou bien, <a id="create-groupe-import" href="{{ path('ajax_group_create') }}">créer un autre groupe</a></span>
-			</div>
-			{#<div class="content-block-import">
-				<h4>
-					Vidéos présentes dans le groupe
-					<div class="input-append">
-						<input class="span2" id="searchVideosInList" placeholder="Taper le nom d'un vidéo" type="text">
-						<span class="add-on"><i class="icon-search"></i></span>
-					</div>
-				</h4>
-				<div class="content-block-videos-in-list">
-					<div id="loader-group-ajax">
-						<img src="{{ asset('bundles/mongoboxusers/img/ajax-loader-list.gif') }}" alt="Chargement" />
-					</div>
-					<div id="videos-in-list">
-						{% include 'MongoboxUsersBundle:Import/Videos:listeVideos.html.twig' %}
+			<hr>
+			<div id="groupes-import" class="row-fluid">
+				<div class="span3">
+					<span class="nav-header">Dans quel groupe ?</span>
+					<span>Choisissez parmis vos groupes</span><br/>
+					<select id="select-group-import" name="group">
+						{% for group in app.user.groups %}
+							<option value="{{ group.id }}">{{ group.title }}</option>
+						{% endfor %}
+					</select>
+					<br/><span>Ou bien, <a id="create-groupe-import" href="{{ path('ajax_group_create') }}">créer un autre groupe</a></span>
+				</div>
+				<div class="span9 content-block-import">
+					<h4>
+						Vidéos présentes dans le groupe
+						<div class="input-append">
+							<input id="searchVideosInList" placeholder="Rechercher une vidéo du groupe" title="Filtrer les vidéos du groupe avec ce champs" type="text" autocomplete="false">
+							<span class="add-on"><i class="icon-search"></i></span>
+						</div>
+					</h4>
+					<div class="content-block-videos-in-list">
+						<div id="loader-group-ajax">
+							<img src="{{ asset('bundles/mongoboxbookmark/img/ajax-loader-list.gif') }}" alt="Chargement des vidéos du groupe" />
+						</div>
+						<div id="videos-in-list"></div>
 					</div>
 				</div>
-			</div>#}
+			</div>
+			{##}
 			<input type="hidden" name="type-import-choice" id="type-import-choice" value="list" />
 			<button id="btn-start-import" class="btn btn-primary" tilte="Démarrer l'import des favoris">Importer les favoris</button>
 		</form>
