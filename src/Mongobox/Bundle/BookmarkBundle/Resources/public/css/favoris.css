@@ -128,3 +128,11 @@
 	max-height: 250px;
 	overflow: auto;
 }
+
+.div-import-videos-head {
+	margin-bottom: 10px;
+}
+
+.div-import-videos-head > input {
+	margin: 0;
+}

@@ -13,8 +13,10 @@ var importBookmark = importBookmark || {};
 		this.selectGroup = $('#select-group-import');
 		this.linkOptions = $('.nav-link-import');
 		this.typeOption = $('#type-import-choice');
-
+		this.btnChecking = $('.videos-check');
+		this.searchFieldVideos = $('#input-video-search-import');
 		this.typeOption.val('list');
+		this.btnClearSearch = $('#clear-video-search');
 
 		this.observeShowBookmarks();
 		this.observeParentCheckboxClick();
@@ -23,6 +25,9 @@ var importBookmark = importBookmark || {};
 		this.observeCreateGroup();
 		this.observeBtnSubmitGroupCreate();
 		this.initOptionsObserver();
+		this.observeCheckUncheckVideo();
+		this.observeResearchVideosOption();
+		this.observeRemoveSearchText();
 	};
 
 	importBookmark.initOptionsObserver = function()
@@ -183,6 +188,46 @@ var importBookmark = importBookmark || {};
 					}
 				}
 			});
+		});
+	};
+
+	importBookmark.observeCheckUncheckVideo = function()
+	{
+		this.btnChecking.bind('click', function(e)
+		{
+			e.preventDefault();
+			var checkboxState = ( $(this).attr('data-check') == "true" ) ? true: false;
+			$(".checkbox-import-video").prop("checked", checkboxState);
+		});
+	};
+
+	importBookmark.observeRemoveSearchText = function()
+	{
+		this.btnClearSearch.bind('click', function(e)
+		{
+			e.preventDefault();
+			importBookmark.searchFieldVideos.val('');
+			$('.fav-import-dual').show();
+		});
+	};
+
+	importBookmark.observeResearchVideosOption = function()
+	{
+		this.searchFieldVideos.bind('keyup', function(e)
+		{
+			var searchText = $(this).val();
+			if(e.which == 13 ) return false;
+			else if (searchText == '') $('.fav-import-dual').show();
+			else
+			{
+				$(".fav-import-dual").filter(function()
+				{
+					var fav_text = $(this).find('.video-text-import').text();
+					var checkContains = fav_text.toLowerCase().search(searchText.toLowerCase()) == -1;
+					if( !checkContains ) $(this).show();
+					return checkContains;
+				}).hide();
+			}
 		});
 	};
 

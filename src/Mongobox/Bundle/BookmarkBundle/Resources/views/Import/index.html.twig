@@ -48,10 +48,16 @@
 							{% endfor %}
 						</div>
 						<div id="videos-choices" class="div-import-option-content">
+							<div class="div-import-videos-head input-append">
+								<input type="text" placeholder="Rechercher une vidéo" id="input-video-search-import" title="Filtrer les vidéos avec ce champs" autocomplete="off" />
+								<button class="btn" id="clear-video-search" title="Vider la recherche"><i class="icon-remove"></i></button>
+								<button class="btn videos-check" title="Sélectionner toutes les vidéos" data-check="true">Tout sélectionner</button>
+								<button class="btn videos-check" title="Désectionner toutes les vidéos" data-check="false">Tout retirer</button>
+							</div>
 							{% for fav in favoris %}
 								<div class="fav-import-dual">
 									<label class="checkbox">
-										<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="pull-left checkbox-import-video" /> {{ fav.video.title }}
+										<input type="checkbox" name="videos[]" value="{{ fav.video.id }}" class="pull-left checkbox-import-video" /> <span class="video-text-import">{{ fav.video.title }}</span>
 									</label>
 								</div>
 							{% endfor %}
