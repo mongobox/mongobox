@@ -1,9 +1,5 @@
-<table class="table">
-	<tr>
-		<td>Test</td>
-		<td>Test</td>
-		<td>Test</td>
-		<td>Test</td>
-		<td>Test</td>
-	</tr>
-</table>
+{% for video in videos %}
+	<div class="fav-import-dual" data-first-letter="{{ video.title|lower|slice(0, 1) }}"><span class="video-text-import">{{ video.title }}</span></div>
+{% else %}
+	Aucune vidéo dans ce groupe
+{% endfor %}

@@ -38,7 +38,7 @@ class VideoGroupRepository extends EntityRepository
 
         $date = new \Datetime();
         $day = $date->format('w');
-		
+
 		//Tag a avoir obligatoirement
 		$qb->select('glt')
 		->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
@@ -63,7 +63,7 @@ class VideoGroupRepository extends EntityRepository
 		$query = $qb->getQuery();
 		$p_u = $query->getResult();
 		$playlist = array();
-		foreach($p_u as $u) $playlist[] = $u->getVideoGroup();		
+		foreach($p_u as $u) $playlist[] = $u->getVideoGroup();
 
 		//Tag à ne pas remonter obligatoirement
 		$qb = $em->createQueryBuilder();
@@ -111,7 +111,7 @@ class VideoGroupRepository extends EntityRepository
 		->where("vg.group = :group")
 		->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")
 		->groupBy('vg.id');
-		
+
 		if(count($playlist) > 0)
 		{
 			$qb->andWhere("vg.id NOT IN (:playlist)");
@@ -126,11 +126,11 @@ class VideoGroupRepository extends EntityRepository
 
 		$qb->setParameters( $parameters );
 
-		
+
 
 		/* TODO */
 		//$qb->andWhere('(DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL')
-		
+
 		$query = $qb->getQuery();
 		$results = $query->getResult();
 
@@ -199,4 +199,21 @@ class VideoGroupRepository extends EntityRepository
             }
         }
     }
+
+	/**
+	 * Function to get videos names in gorup
+	 * @param int $group_id
+	 */
+	public function getVideoNameInGroup($group_id)
+	{
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		$qb
+			->select('v.title')
+			->from('MongoboxJukeboxBundle:Videos', 'v')
+			->innerJoin('v.video_groups', 'g')
+			->where('g.group = :group')
+			->setParameter('group', $group_id)
+		;
+		return $qb->getQuery()->getArrayResult();
+	}
 }
