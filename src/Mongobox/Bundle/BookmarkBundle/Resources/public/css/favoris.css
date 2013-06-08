@@ -107,7 +107,6 @@
 }
 
 #groupes-import {
-	text-align: center;
 	margin-bottom: 20px;
 }
 
@@ -125,6 +124,22 @@
 }
 
 .div-import-option-content {
-	max-height: 250px;
+	min-height: 200px;
+	max-height: 200px;
+	overflow: auto;
+}
+
+.div-import-videos-head {
+	margin-bottom: 10px;
+}
+
+.div-import-videos-head > input {
+	margin: 0;
+}
+
+#videos-in-list {
+	display: none;
+	min-height: 200px;
+	max-height: 200px;
 	overflow: auto;
 }
