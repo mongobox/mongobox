@@ -92,11 +92,13 @@
             });
 
             socket.on('user subscription', function(newUser) {
-                $('#live-users').append(newUser.block);
+                $(newUser.block).hide().appendTo("#live-users").fadeIn('fast');
             });
 
             socket.on('user unsubscription', function(oldUser) {
-                $('#user-' + oldUser.id + '-block').remove();
+                $('#user-' + oldUser.id + '-block').fadeOut('fast', function() {
+                    this.remove();
+                });
             });
 
             var livePlayer = new LivePlayer();
