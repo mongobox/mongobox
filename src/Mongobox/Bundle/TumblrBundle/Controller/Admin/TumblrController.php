@@ -112,7 +112,7 @@ class TumblrController extends Controller
 
         $groups =$this->get('security.context')->getToken()->getUser()->getGroups();
         $editForm = $this->createForm(new TumblrType($groups), $entity);
-        $editForm->bind($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
 
@@ -162,7 +162,7 @@ class TumblrController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $form->bind($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

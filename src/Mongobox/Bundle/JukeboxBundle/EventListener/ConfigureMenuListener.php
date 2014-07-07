@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\JukeboxBundle\EventListener;
 
 use Mongobox\Bundle\CoreBundle\Event\ConfigureMenuEvent;
+use Knp\Menu\Util\MenuManipulator;
 
 class ConfigureMenuListener
 {
@@ -13,8 +14,12 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menu->addChild('Liste des vidéos', array('route' => 'videos'))->moveToFirstPosition();
-        $menu->addChild('Live', array('route' => 'live'))->moveToLastPosition();
+        $menuItemVideo = $menu->addChild('Liste des vidéos', array('route' => 'videos'));
+        $menuItemLive = $menu->addChild('Live', array('route' => 'live'));
+
+        $menuManipulator = new MenuManipulator();
+        $menuManipulator->moveToFirstPosition($menuItemVideo);
+        $menuManipulator->moveToLastPosition($menuItemLive);
     }
 
     /**
@@ -24,10 +29,20 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $jukeboxMenu = $menu->addChild('Jukebox', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown'), 'label' => 'Jukebox <b class="caret"></b>', 'extras' => array('safe_label' => true)));
+        $jukeboxMenu = $menu->addChild(
+            'Jukebox',
+            array(
+                'route' => 'homepage',
+                'attributes' => array('class' => 'dropdown'),
+                'label' => 'Jukebox <b class="caret"></b>',
+                'extras' => array('safe_label' => true)
+            )
+        );
         $jukeboxMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $jukeboxMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
-        $jukeboxMenu->moveToPosition(10);
+
+        $menuManipulator = new MenuManipulator();
+        $menuManipulator->moveToPosition($jukeboxMenu, 10);
 
         $jukeboxMenu->addChild('Nouvelle vidéo', array('route' => 'homepage'));
         $jukeboxMenu->addChild('Gestion des vidéos', array('route' => 'videos'));

@@ -37,7 +37,7 @@ class VoteController extends Controller
         }
 
         $form = $this->createForm(new VoteType($decision->getGroup()->getCity()), $entity);
-        $form->bind($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $user = $this->get('security.context')->getToken()->getUser();
@@ -177,7 +177,7 @@ class VoteController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new VoteType($entity->getDecision()->getGroup()->getCity()), $entity);
-        $editForm->bind($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
 
@@ -208,7 +208,7 @@ class VoteController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $form->bind($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
