@@ -52,7 +52,7 @@ class GroupController extends Controller
 
 		if('POST' === $request->getMethod())
 		{
-			$form->bind($request);
+			$form->submit($request);
 			if($form->isValid())
 			{
                 $secretKey = $this->get('mongobox_jukebox.live_configurator')->generateSecretKey();
@@ -90,7 +90,7 @@ class GroupController extends Controller
 
 		if( $request->isMethod('POST') )
 		{
-			$form->bind($request);
+			$form->submit($request);
 			if( $form->isValid() )
 			{
 				$em = $this->getDoctrine()->getManager();
@@ -137,7 +137,7 @@ class GroupController extends Controller
 
 			if('POST' === $request->getMethod())
 			{
-				$form->bind($request);
+				$form->submit($request);
 				if($form->isValid())
 				{
 					$em->flush();
@@ -227,7 +227,7 @@ class GroupController extends Controller
 
 				if('POST' === $request->getMethod())
 				{
-					$form->bind($request);
+					$form->submit($request);
 					if($form->isValid())
 					{
 						$user = $form->get('user')->getData();
