@@ -38,7 +38,7 @@ class SecureController extends Controller
 
         if ('POST' === $request->getMethod()) {
             $em = $this->getDoctrine()->getManager();
-            $form->bind($request);
+            $form->submit($request);
             $formHandler = new UserHandler($form, $this->get('request'), $this->getDoctrine()->getManager());
             if($formHandler->process()) return true;
             if ($form->isValid()) {

@@ -80,7 +80,7 @@ class UserController extends Controller
         if ('POST' === $request->getMethod()) {
             //Validation pour l'utilisateur
             if ($request->request->has('utilisateur_edition')) {
-                $form->bind($request);
+                $form->submit($request);
                 if ($form->isValid()) {
                     $factory = $this->get('security.encoder_factory');
 
@@ -100,7 +100,7 @@ class UserController extends Controller
             }
             //Validation pour le mot de passe
             elseif ($request->request->has('utilisateur_edition_mot_de_passe')) {
-                $form_password->bind($request);
+                $form_password->submit($request);
                 if ($form_password->isValid()) {
                     $factory = $this->get('security.encoder_factory');
                     $encoder = $factory->getEncoder($user);

@@ -37,7 +37,7 @@ class UserOldController extends Controller
         }
 
         $form = $this->createForm(new UserOldType(), $entity);
-        $form->bind($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
 

@@ -3,6 +3,7 @@
 namespace Mongoeat\Bundle\VoteBundle\EventListener;
 
 use Mongobox\Bundle\CoreBundle\Event\ConfigureMenuEvent;
+use Knp\Menu\Util\MenuManipulator;
 
 class ConfigureMenuListener
 {
@@ -13,8 +14,15 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menu->addChild('MongoEat', array('route' => 'decision'))->moveToFirstPosition();
-        $menu->addChild('Retour a la mongobox', array('route' => 'wall_index', 'attributes' => array('class' => 'pull-right')))->moveToLastPosition();
+        $menuItemMongoEat = $menu->addChild('MongoEat', array('route' => 'decision'));
+        $menuItemBack = $menu->addChild(
+            'Retour a la mongobox',
+            array('route' => 'wall_index', 'attributes' => array('class' => 'pull-right'))
+        );
+
+        $menuManipulator = new MenuManipulator();
+        $menuManipulator->moveToFirstPosition($menuItemMongoEat);
+        $menuManipulator->moveToLastPosition($menuItemBack);
     }
 
     /**
@@ -26,5 +34,4 @@ class ConfigureMenuListener
 
         $menu->addChild('MongoEat', array('route' => 'decision'));
     }
-
 }

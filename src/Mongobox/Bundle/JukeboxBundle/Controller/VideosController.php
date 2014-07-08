@@ -49,7 +49,7 @@ class VideosController extends Controller
 
         $criteria = array();
          if (  'POST' === $request->getMethod() ) {
-             $formSearchVideos->bind($request);
+             $formSearchVideos->submit($request);
              $criteria = array('title' => $formSearchVideos->get('search')->getData());
          }
 
@@ -163,7 +163,7 @@ class VideosController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new VideosType(), $entity);
-        $editForm->bind($request);
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
@@ -188,7 +188,7 @@ class VideosController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $form->bind($request);
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -343,7 +343,7 @@ class VideosController extends Controller
 		$form_search = $this->createForm(new VideoSearchType(), $video);
 		if ( 'POST' === $request->getMethod() )
 		{
-			$form_video->bindRequest($request);
+			$form_video->submit($request);
 			if ( $form_video->isValid() )
 			{
 				$video->setLien(Videos::parse_url_detail($video->getLien()));
@@ -438,7 +438,7 @@ class VideosController extends Controller
         // Process the form on POST
         if ($request->isMethod('POST'))
 		{
-            $editForm->bind($request);
+            $editForm->submit($request);
             if ( $editForm->isValid() )
 			{
 				//On supprime les anciens tags de la vidéo
@@ -515,7 +515,7 @@ class VideosController extends Controller
 		$mongobox_video = array();
 		if ( 'POST' === $request->getMethod() )
 		{
-			$form_search->bindRequest($request);
+			$form_search->submit($request);
 			$keyword = $form_search->get('search')->getData();
 
 			//Récupération des infos de Youtube

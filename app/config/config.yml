@@ -13,7 +13,7 @@ framework:
     templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
     default_locale:   %locale%
     session:
-        lifetime:    36000
+        gc_maxlifetime:    36000
 
 # Sensio FrameworkExtraBundle
 sensio_framework_extra:

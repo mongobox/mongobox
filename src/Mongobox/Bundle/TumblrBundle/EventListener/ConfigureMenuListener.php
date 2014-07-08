@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\TumblrBundle\EventListener;
 
 use Mongobox\Bundle\CoreBundle\Event\ConfigureMenuEvent;
+use Knp\Menu\Util\MenuManipulator;
 
 class ConfigureMenuListener
 {
@@ -13,7 +14,15 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $tumblrMenu = $menu->addChild('Tumblr', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown'), 'label' => 'Tumblr <b class="caret"></b>', 'extras' => array('safe_label' => true)));
+        $tumblrMenu = $menu->addChild(
+            'Tumblr',
+            array(
+                'route'      => 'homepage',
+                'attributes' => array('class' => 'dropdown'),
+                'label'      => 'Tumblr <b class="caret"></b>',
+                'extras'     => array('safe_label' => true)
+            )
+        );
         $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
 
@@ -21,7 +30,8 @@ class ConfigureMenuListener
         $tumblrMenu->addChild('Listing', array('route' => 'tumblr'));
         $tumblrMenu->addChild('Classement', array('route' => 'tumblr_top'));
 
-        $tumblrMenu->moveToPosition(20);
+        $menuManipulator = new MenuManipulator();
+        $menuManipulator->moveToPosition($tumblrMenu, 20);
     }
 
     /**
@@ -31,7 +41,15 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $tumblrMenu = $menu->addChild('Tumblr', array('route' => 'homepage', 'attributes' => array('class' => 'dropdown'), 'label' => 'Tumblr <b class="caret"></b>', 'extras' => array('safe_label' => true)));
+        $tumblrMenu = $menu->addChild(
+            'Tumblr',
+            array(
+                'route'      => 'homepage',
+                'attributes' => array('class' => 'dropdown'),
+                'label'      => 'Tumblr <b class="caret"></b>',
+                'extras'     => array('safe_label' => true)
+            )
+        );
         $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
 
@@ -41,6 +59,7 @@ class ConfigureMenuListener
         $tumblrMenu->addChild('Classement', array('route' => 'tumblr_top'));
         $tumblrMenu->addChild('Statistiques', array('route' => 'tumblr_stats'));
 
-        $tumblrMenu->moveToPosition(20);
+        $menuManipulator = new MenuManipulator();
+        $menuManipulator->moveToPosition($tumblrMenu, 20);
     }
 }

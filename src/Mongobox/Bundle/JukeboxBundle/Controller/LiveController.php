@@ -199,7 +199,7 @@ class LiveController extends Controller
             $newVideo = new Videos();
 
             $editForm = $this->createForm(new ReplaceVideo(), $newVideo);
-            $editForm->bind($request);
+            $editForm->submit($request);
 
             $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($newVideo->getId());
             if ($editForm->isValid() === true && $video !== null) {
