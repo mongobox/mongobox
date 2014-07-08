@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\StatisticsBundle\EventListener;
 
 use Mongobox\Bundle\CoreBundle\Event\ConfigureMenuEvent;
+use Knp\Menu\Util\MenuManipulator;
 
 class ConfigureMenuListener
 {
@@ -26,7 +27,9 @@ class ConfigureMenuListener
 
         $statsMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
         $statsMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
-        $statsMenu->moveToPosition(2);
+
+        $menuManipulator = new MenuManipulator();
+        $menuManipulator->moveToPosition($statsMenu,2);
 
         $statsMenu->addChild('Jukebox', array('route' => 'jukebox_stats'));
         $statsMenu->addChild('Tumblr', array('route' => 'tumblr_stats'));

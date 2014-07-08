@@ -75,7 +75,7 @@ class TumblrController extends Controller
 
         if ( $request->isMethod('POST') || $request->isXmlHttpRequest() )
 		{
-            $form->bind($request);
+            $form->submit($request);
             if ( $form->isValid() )
 			{
                 $tumblr->setDate(new \Datetime());
