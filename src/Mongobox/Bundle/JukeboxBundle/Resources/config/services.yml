@@ -1,3 +1,7 @@
+parameters:
+    google_client.application_name: "%google_app_name%"
+    google_client.developer_key: "%google_developer_key%"
+
 services:
     mongobox_jukebox.configure_menu_listener:
         class: Mongobox\Bundle\JukeboxBundle\EventListener\ConfigureMenuListener
