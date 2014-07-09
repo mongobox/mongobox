@@ -26,7 +26,8 @@
         "knplabs/knp-menu": "2.0.*@dev,>=2.0.0-beta1",
         "knplabs/knp-menu-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "2.4.*@dev",
-		"guzzle/guzzle": "~3.1.1"
+		"guzzle/guzzle": "~3.1.1",
+        "bitgandtter/google-api": "1.0.*@dev"
     },
     "scripts": {
         "post-install-cmd": [
