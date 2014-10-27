@@ -120,7 +120,7 @@ class TumblrController extends Controller
 					return new Response(json_encode($datas));
 				} else
 				{
-					$this->get('session')->setFlash('success', 'Tumblr posté avec succès');
+					$this->get('session')->getFlashBag()->add('success', 'Tumblr posté avec succès');
 					return $this->redirect($this->generateUrl('tumblr'));
 				}
             }

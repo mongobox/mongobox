@@ -66,7 +66,7 @@ class GroupController extends Controller
 
 				$em->flush();
 
-				$this->get('session')->setFlash('success', 'Groupe créé avec succès');
+				$this->get('session')->getFlashBag()->add('success', 'Groupe créé avec succès');
 
 				return $this->redirect($this->generateUrl('homepage'));
 			}
@@ -142,7 +142,7 @@ class GroupController extends Controller
 				{
 					$em->flush();
 
-					$this->get('session')->setFlash('success', 'Groupe édité avec succès');
+					$this->get('session')->getFlashBag()->add('success', 'Groupe édité avec succès');
 
 					return $this->redirect($this->generateUrl('homepage'));
 				}
@@ -155,7 +155,7 @@ class GroupController extends Controller
 		}
 		else
 		{
-			$this->get('session')->setFlash('notice', 'Vous n\'avez pas le droit de modifier ce groupe');
+			$this->get('session')->getFlashBag()->add('notice', 'Vous n\'avez pas le droit de modifier ce groupe');
 			return $this->redirect($this->generateUrl('homepage'));
 		}
 	}
@@ -177,7 +177,7 @@ class GroupController extends Controller
 		}
 		else
 		{
-			$this->get('session')->setFlash('notice', 'Vous n\'avez pas le visualiser ce groupe');
+			$this->get('session')->getFlashBag()->add('notice', 'Vous n\'avez pas le visualiser ce groupe');
 			return $this->redirect($this->generateUrl('homepage'));
 		}
 	}
@@ -198,11 +198,11 @@ class GroupController extends Controller
 
 			$em->flush();
 
-			$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+			$this->get('session')->getFlashBag()->add('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
 		}
 		else
 		{
-			$this->get('session')->setFlash('notice', 'Vous ne pouvez pas vous inscrire à un groupe privé.');
+			$this->get('session')->getFlashBag()->add('notice', 'Vous ne pouvez pas vous inscrire à un groupe privé.');
 		}
 
 		return $this->redirect($this->generateUrl('homepage'));
@@ -236,7 +236,7 @@ class GroupController extends Controller
 							$group->getUsersInvitations()->add($user);
 							$em->flush();
 
-							$this->get('session')->setFlash('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
+							$this->get('session')->getFlashBag()->add('success', 'Invitation à l\'utilisateur "'.$user->getLogin().'" bien envoyée.');
 							return $this->redirect($this->generateUrl('homepage'));
 						}
 					}
@@ -265,7 +265,7 @@ class GroupController extends Controller
 		$group->getUsers()->add($user);
 		$em->flush();
 
-		$this->get('session')->setFlash('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
+		$this->get('session')->getFlashBag()->add('success', 'Inscription au groupe "'.$group->getTitle().'" réussie.');
 		return $this->redirect($this->generateUrl('homepage'));
 	}
 

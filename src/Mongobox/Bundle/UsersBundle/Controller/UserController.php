@@ -95,7 +95,8 @@ class UserController extends Controller
 
                     $user->setDateUpdate(new \DateTime());
                     $em->flush();
-                    $this->get('session')->setFlash('success', 'Profil modifié avec succès');
+
+                    $this->get('session')->getFlashBag()->add('success', 'E-mail modifié avec succès');
                 }
             }
             //Validation pour le mot de passe
@@ -110,7 +111,7 @@ class UserController extends Controller
                         $user->encodePassword($encoder);
                         $user->setDateUpdate(new \DateTime());
                         $em->flush();
-                        $this->get('session')->setFlash('success', 'Votre mot de passe a été modifié avec succès');
+                        $this->get('session')->getFlashBag()->add('success', 'Votre mot de passe a été modifié avec succès');
                     }
                 }
             }

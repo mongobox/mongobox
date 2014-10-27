@@ -2,16 +2,17 @@
 
 namespace Mongobox\Bundle\UsersBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Security\Core\SecurityContext;
 
 use Mongobox\Bundle\UsersBundle\Form\UserType;
-use Mongobox\Bundle\UsersBundle\Form\UserHandler;
 use Mongobox\Bundle\UsersBundle\Entity\User;
 
 class SecureController extends Controller
@@ -39,23 +40,21 @@ class SecureController extends Controller
         if ('POST' === $request->getMethod()) {
             $em = $this->getDoctrine()->getManager();
             $form->submit($request);
-            $formHandler = new UserHandler($form, $this->get('request'), $this->getDoctrine()->getManager());
-            if($formHandler->process()) return true;
+
             if ($form->isValid()) {
                 $user->setActif($status);
 
                 //On encode le mot de passe
                 $factory = $this->get('security.encoder_factory');
-                $userPassword = $user->getPassword();
                 $encoder = $factory->getEncoder($user);
                 $user->encodePassword($encoder);
 
                 $em->persist($user);
                 $em->flush();
 
-                $this->get('session')->setFlash('success', 'Your account as been created with success');
+                $request->getSession()->getFlashBag()->add('success', 'Your account as been created with success');
 
-                return $this->redirect($this->generateUrl('homepage'));
+                return $this->redirect($this->generateUrl('wall_index'));
             }
         }
 
