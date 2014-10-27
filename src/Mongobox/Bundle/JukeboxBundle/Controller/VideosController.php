@@ -226,7 +226,7 @@ class VideosController extends Controller
         $em->persist($playlist_add);
         $em->flush();
 
-		$this->get('session')->setFlash('success', 'Vidéo ajoutée à la playlist');
+        $this->get('session')->getFlashBag()->add('success', 'Vidéo ajoutée à la playlist');
 
         return $this->redirect($this->generateUrl('videos'));
     }
@@ -364,7 +364,7 @@ class VideosController extends Controller
 					$em->flush();
 					$video_new = $video;
 
-					$this->get('session')->setFlash('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
+					$this->get('session')->getFlashBag()->add('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
 				}
 				//On vérifie qu'elle n'existe pas pour ce groupe
 				$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));

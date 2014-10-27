@@ -18,7 +18,7 @@ class UserType extends AbstractType
                 'label' => 'Last name',
                 'attr' => array('size' => 15, 'placeholder' => 'Last name'),
             ))
-            ->add('email', 'email', array(
+           ->add('email', 'text', array(
                 'label' => 'Email',
                 'attr' => array('size' => 40, 'placeholder' => 'Email')
             ))

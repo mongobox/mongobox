@@ -17,6 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="users")
  * @UniqueEntity(fields="login", message="Login already in use.")
+ * @UniqueEntity(fields="email", message="Email already in use.")
  */
 class User implements AdvancedUserInterface
 {
@@ -30,6 +31,7 @@ class User implements AdvancedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Email()
      */
     protected $email;
 
