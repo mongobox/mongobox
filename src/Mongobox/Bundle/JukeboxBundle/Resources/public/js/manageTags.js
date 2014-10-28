@@ -47,7 +47,7 @@ var videoTags = videoTags || {};
 			// Check tag choices
 			if( $('#video_tags_list div.tag-item'). length === 0 )
 			{
-				$('#video_tags_list').parents('.span4:first').append('<div class="alert alert-error error-add-video">A tag must be added.</div>')
+				$('#video_tags_list').parents('.span4:first').append('<div class="alert alert-danger error-add-video">A tag must be added.</div>')
 				return false;
 			}
 
@@ -93,7 +93,7 @@ var videoTags = videoTags || {};
             var newTagItem = prototype.replace(/__name__/g, tag.name);
             newTagItem = newTagItem.replace(/__id__/g, tag.id);
 
-            var $newFormLi = $('<span class="tag-item alert alert-info"></span>').append(newTagItem);
+            var $newFormLi = $('<span class="tag-item label label-primary"></span>').append(newTagItem);
             videoTags.collectionHolder.append( $newFormLi );
 
             // increase the index with one for the next item

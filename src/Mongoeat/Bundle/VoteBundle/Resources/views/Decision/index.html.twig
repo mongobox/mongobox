@@ -2,11 +2,11 @@
 
 {% block body -%}
     {% if not hasVoted %}
-        <p style="float: right" ><a class="btn btn-success btn-large" href="{{ url('vote_new',{'id':entity.id}) }}">Voter pour un restaurant</a></p>
+        <p style="float: right" ><a class="btn btn-success btn-lg" href="{{ url('vote_new',{'id':entity.id}) }}">Voter pour un restaurant</a></p>
     {% endif %}
     <h1>Ou manger ce midi ?</h1>
-    <div class="row-fluid">
-        <div class="span8">
+    <div class="row">
+        <div class="col-md-8">
             <h3>Vote pour ce midi</h3>
             <table class="table">
                 <thead>
@@ -50,7 +50,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="span4">
+        <div class="col-md-4">
             <h3>Restaurants</h3>
             <ul>
                 <li><a href="{{ path('restaurant') }}">Voir les restaurants</a></li>
@@ -63,8 +63,8 @@
             </ul>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span12">
+    <div class="row">
+        <div class="col-md-12">
             <h3>Historique</h3>
             <table class="table">
                 <thead>

@@ -1,34 +1,35 @@
 {% extends "MongoboxUsersBundle:Secure:layout.html.twig" %}
 
-
 {% block body %}
-<div class="hero-unit">
-	<h1>{{project_name}}</h1>
-</div>
-<div class="content-block">
-	<h1>Formulaire de connexion</h1>
-{% if error %}
-	<div class="alert alert-error">{{ error.message|trans([], 'validators') }}</div>
-{% endif %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>{{project_name}}</h1>
+    </div>
+    <div class="content-block">
+        <h1>Formulaire de connexion</h1>
+    {% if error %}
+        <div class="alert alert-danger">{{ error.message|trans([], 'validators') }}</div>
+    {% endif %}
 
-	<form action="{{ path('_login_check') }}" method="post">
-		<div class="controls">
-			<div class="input-prepend">
-				<span class="add-on"><i class="icon-user"></i></span>
-				<input type="text" id="login" name="_username" value="{{ last_username }}" placeholder="Login" />
-			</div>
-		</div>
+        <form action="{{ path('_login_check') }}" method="post">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                    <input class="form-control" type="text" id="login" name="_username" value="{{ last_username }}" placeholder="Login" />
+                </div>
+            </div>
 
-		<div class="controls">
-			<div class="input-prepend">
-				<span class="add-on"><i class="icon-lock"></i></span>
-			    <input type="password" id="password" name="_password" placeholder="Mot de passe" /><br />
-			</div>
-		</div>
-        <input type="submit" class="btn btn-primary" value="Connexion">
-	</form>
-	<p>
-		Si vous n'avez pas de compte, vous pouvez vous <a href="{{ path('registration') }}" title="Inscription">inscrire</a>.
-	</p>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input class="form-control" type="password" id="password" name="_password" placeholder="Mot de passe" />
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Connexion">
+        </form>
+        <p>
+            Si vous n'avez pas de compte, vous pouvez vous <a href="{{ path('registration') }}" title="Inscription">inscrire</a>.
+        </p>
+    </div>
 </div>
 {% endblock body %}

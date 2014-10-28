@@ -12,7 +12,7 @@ class SearchVideosType extends AbstractType
         $builder
             ->add('search', 'text',array(
                 'label' => 'Lien Youtube ou Id de la vidéo',
-                'attr' => array('size' => 15,'class'=> 'span2 search-query'))
+                'attr' => array('size' => 15,'class'=> 'col-md-2 form-control search-query'))
             )
         ;
     }

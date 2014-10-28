@@ -21,14 +21,17 @@
 	{% include 'MongoboxJukeboxBundle:Partial:live-list-tag.html.twig' with {'player_mode' : player_mode, 'groupLiveTags' : groupLiveTags} %}
 </div>
 
-<div id="replace-video-modal" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Remplacement d'une vidéo</h3>
-    </div>
-    <div class="modal-body">
-        <div class="loader"></div>
-        <div class="modal-content"></div>
+<div id="replace-video-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Remplacement d'une vidéo</h3>
+            </div>
+            <div class="modal-body">
+                <div class="loader"></div>
+            </div>
+        </div>
     </div>
 </div>
 

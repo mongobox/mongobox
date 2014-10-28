@@ -3,11 +3,11 @@
 {% block title -%}- Listes favoris{%- endblock title %}
 
 {% block body %}
-<div class="hero-unit">
+<div class="jumbotron">
 	{% include 'MongoboxBookmarkBundle:Favoris:navigation.html.twig' %}
 
-	<div class="row-fluid">
-		<div class="span6">
+	<div class="row">
+		<div class="col-md-6">
 			<ul class="listes-content">
 			{% for liste in listes %}
 				{% include 'MongoboxBookmarkBundle:Listes:uneListe.html.twig' %}
@@ -19,7 +19,7 @@
 		<div class="hide ajax-loader-div-hidden">
 			<img alt="Chargement" src='{{ asset('bundles/mongoboxjukebox/img/ajax-loader-tumblr-add.gif') }}' />
 		</div>
-		<div class="span6" id="details-liste">
+		<div class="col-md-6" id="details-liste">
 			Veuillez séléctionner une liste pour afficher les vidéos
 		</div>
 	</div>
@@ -31,14 +31,14 @@
 		<h3>Ajout d'un favoris à la liste</h3>
 	</div>
 	<div class="modal-body">
-		<div class="input-prepend">
-			<span class="add-on"><i class="icon-pencil"></i></span>
-			<input class="span2" id="add-bookmark-name" type="text" placeholder="Le titre de la vidéo">
+		<div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+			<input class="col-md-2" id="add-bookmark-name" type="text" placeholder="Le titre de la vidéo">
 			<input type="hidden" id="hid-bookmark-id" />
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
+		<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Annuler</button>
 		<a id="btn-submit-bookmark" class="btn btn-primary" data-loading-text="<img src='{{ asset('bundles/mongoboxbookmark/img/ajax-loader-list.gif') }}' alt='Chargement' />">Confirmer</a>
 	</div>
 </div>

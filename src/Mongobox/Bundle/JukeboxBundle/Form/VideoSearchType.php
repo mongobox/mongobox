@@ -12,7 +12,11 @@ class VideoSearchType extends AbstractType
         $builder
             ->add('search', 'text', array(
                 'label' => 'Rechercher une vidéo dans la Mongobox ou sur Youtube',
-                'attr' => array('size' => 15, 'placeholder' => 'Rechercher une vidéo dans la Mongobox ou sur Youtube'),
+                'attr' => array(
+                    'size' => 15,
+                    'placeholder' => 'Rechercher une vidéo dans la Mongobox ou sur Youtube',
+                    'class' => 'form-control'
+                ),
 				'mapped' => false
             ))
         ;

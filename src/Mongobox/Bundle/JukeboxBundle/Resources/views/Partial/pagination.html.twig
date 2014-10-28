@@ -1,7 +1,7 @@
 {# Pagination #}
 {% if  pagination.page_total > 1 %}
-<div class="pagination pagination-centered">
-    <ul>
+<nav class="text-center">
+    <ul class="pagination">
         {% if pagination.page != 1 %}
                 {% set parameter = parameter|merge({'page': pagination.page - 1}) %}
                 <li><a href="{{path(route, parameter)}}">«</a></li>
@@ -33,5 +33,5 @@
                 <li class="disabled"><a href="#">»</a></li>
         {% endif %}
     </ul>
-</div>
+</nav>
 {% endif %}

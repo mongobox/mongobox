@@ -68,7 +68,7 @@ $(document).ready(function()
 
 		$('.loader').show();
 		$('#action-video-modal').modal('show');
-		$('#action-video-modal .modal-content').html('');
+		//$('#action-video-modal .modal-content').html('');
 		$.ajax({
 			type: "GET",
 			dataType: "json",
@@ -117,7 +117,7 @@ $(document).ready(function()
 			if(infos.type == 'new')
 			{
 				$('.loader').hide();
-				$('#youtube_add').append('Artiste : <input type="text" name="artist" value="' + infos.artist + '" /><br />Vidéo : <input type="text" name="songName" value="' + infos.songName + '" /><br /><a class="btn" id="btnSubmitVideo">Valider</a>');
+				$('#youtube_add').append('Artiste : <input type="text" class="form-control" name="artist" value="' + infos.artist + '" /><br />Vidéo : <input type="text" class="form-control" name="songName" value="' + infos.songName + '" /><br /><a class="btn btn-primary" id="btnSubmitVideo">Valider</a>');
 				$('#btnSubmitVideo').bind('click', function(e)
 				{
 					$('.loader').show();

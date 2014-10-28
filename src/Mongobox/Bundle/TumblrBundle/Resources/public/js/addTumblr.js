@@ -24,7 +24,7 @@ var addTumblr = addTumblr || {};
 	{
 		this.shown = true;
 		this.divFormAdd.slideDown('fast');
-		this.boutonShowForm.find('i').addClass('icon-chevron-up').removeClass('icon-chevron-down');
+		this.boutonShowForm.find('i').addClass('glyphicon glyphicon-chevron-up').removeClass('glyphicon glyphicon-chevron-down');
 	};
 
 	addTumblr.hideForm = function()
@@ -41,7 +41,7 @@ var addTumblr = addTumblr || {};
 				addTumblr.ajaxLoader.hide();
 			}
 		});
-		this.boutonShowForm.find('i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+		this.boutonShowForm.find('i').removeClass('glyphicon glyphicon-chevron-up').addClass('glyphicon glyphicon-chevron-down');
 	};
 
 	addTumblr.observeShowForm = function()
@@ -75,13 +75,13 @@ var addTumblr = addTumblr || {};
 			// Check tag choices
 			if( $('#tumblr_tags div.tag-item'). length === 0 )
 			{
-				$('#tumblr_tags').parents('.span4:first').append('<div class="alert alert-error error-add-tumblr">A tag must be added.</div>')
+				$('#tumblr_tags').parents('.span4:first').append('<div class="alert alert-danger error-add-tumblr">A tag must be added.</div>')
 				return false;
 			}
 			// Check group choices
 			if( $('#tumblr_groups input[type=checkbox]:checked').length === 0 )
 			{
-				$('#tumblr_groups').parents('.span4:first').append('<div class="alert alert-error error-add-tumblr">A group must be selected.</div>')
+				$('#tumblr_groups').parents('.span4:first').append('<div class="alert alert-danger error-add-tumblr">A group must be selected.</div>')
 				return false;
 			}
 
@@ -126,7 +126,7 @@ var addTumblr = addTumblr || {};
 					}
 				} else
 				{
-					addTumblr.slider.before('<div class="alert alert-error error-add-tumblr">Vous avez ajouté un tumblr sans groupe, veuillez l\'éditer pour qu\'elle apparaisse sur le wall.</div>');
+					addTumblr.slider.before('<div class="alert alert-danger error-add-tumblr">Vous avez ajouté un tumblr sans groupe, veuillez l\'éditer pour qu\'elle apparaisse sur le wall.</div>');
 				}
 			}
 		});

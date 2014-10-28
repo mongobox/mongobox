@@ -9,14 +9,14 @@
 		<h1><img src="{{ asset('bundles/mongoboxcore/img/mongobox.png') }}" title="{{project_name}}" /></h1>
 		<h2>{{video_group.video.title}}</h2>
 	</div>
-	<div class="hero-unit">
+	<div class="jumbotron">
 		<object id="video" width="1090" height="700" data="http://www.youtube.com/v/{{video_group.video.lien}}?enablejsapi=1&autoplay=1&iv_load_policy=3" type="application/x-shockwave-flash">
 			<param value="http://www.youtube.com/embed/{{video_group.video.lien}}"></param>
 			<param name="allowFullScreen" value="true"></param>
 			<param value="always"></param>
 		</object>
 		<br />
-		<!-- <a href="{{path('delete_video', {'id_video' : video_group.id})}}" class="btn">Delete</a> -->
+		<!-- <a href="{{path('delete_video', {'id_video' : video_group.id})}}" class="btn btn-default">Delete</a> -->
 		<input type="hidden" id="id_video" value="{{video_group.id}}" /><br />
 		{% if video_group.user is not empty %}
 		<div class="user-box">

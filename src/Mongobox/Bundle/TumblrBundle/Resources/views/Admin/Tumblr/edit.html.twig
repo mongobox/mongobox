@@ -8,7 +8,7 @@
 
 {% block body %} 
 	{{ parent() }}
-        <div class="span8">
+        <div class="col-md-8">
 
             <form action="{{ path('admin_tumblr_delete', { 'id': entity.id }) }}" method="post">
                 {{ form_widget(delete_form) }}
@@ -21,7 +21,7 @@
                 <label class="control-label">
                    Image
                 </label>
-                <div class="control-group clearfix">
+                <div class="form-group clearfix">
                     <div class="controls">
 
                         {% if entity.localPath is null %}
@@ -37,11 +37,11 @@
 
                 {{form_row(edit_form.text)}}
 
-                <div class="control-group">
+                <div class="form-group">
                     <label class="control-label" for="tumblr_addtags">{{ form_label(edit_form.addtags)  }}</label>
                     <div class="controls manage-tags-container">
-                        <div class="input-append manage-tags">
-                            {{ form_widget(edit_form.addtags)  }}<button id="tumblr-button-add-tag" class="btn" type="button" title="Cliquez ici pour ajouter le tag"><i class="icon-plus"></i></button>
+                        <div class="input-group manage-tags">
+                            {{ form_widget(edit_form.addtags)  }}<button id="tumblr-button-add-tag" class="btn btn-default" type="button" title="Cliquez ici pour ajouter le tag"><i class="glyphicon glyphicon-plus"></i></button>
                         </div>
 
                         {% set tagDataPrototype = '<span>__name__</span><button class="close" >&times;</button><input type="hidden" name="tumblr[tags][]" value="__id__" />' %}
@@ -63,11 +63,11 @@
                 {{form_row(edit_form._token)}}
 
                 <div class="form-actions">
-                    <a class="btn btn-link" href="{{ path('admin_tumblr') }}">
-                        <i class="icon-arrow-left"></i> Retour
+                    <a class="btn btn-default btn-link" href="{{ path('admin_tumblr') }}">
+                        <i class="glyphicon glyphicon-arrow-left"></i> Retour
                     </a>
 
-                    <button class="btn btn-primary pull-right" type="submit">Enregistrer</button>
+                    <button class="btn btn-default btn-primary pull-right" type="submit">Enregistrer</button>
                 </div>
             </form>
 

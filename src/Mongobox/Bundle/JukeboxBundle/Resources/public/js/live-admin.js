@@ -75,16 +75,17 @@ $(document).ready(function() {
 
     livePlayer.getReplaceForm = function()
     {
-        $('#replace-video-modal').on('show', function () {
+        console.log('getReplaceForm',replaceUrl);
+        $('#replace-video-modal').on('show.bs.modal ', function () {
             $('.loader').show();
-            $('#replace-video-modal .modal-content').html('');
+            $('#replace-video-modal .modal-body').html('');
 
             $.ajax({
                 type: 'GET',
                 dataType: 'html',
                 url: replaceUrl
             }).done(function(html) {
-                $('#replace-video-modal .modal-content').html(html);
+                $('#replace-video-modal .modal-body').html(html);
                 $('.loader').hide();
             });
         });

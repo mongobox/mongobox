@@ -4,7 +4,7 @@
 
 {% block body %}
 
-	<div class="hero-unit">
+	<div class="jumbotron">
 		{% include 'MongoboxBookmarkBundle:Favoris:navigation.html.twig' %}
 
 		<div class="alert alert-info">
@@ -15,15 +15,15 @@
 			</ul>
 		</div>
 		<form id="form-import" method="POST" action="{{ path('import_action') }}">
-			<div class="row-fluid">
-				<div class="span3">
+			<div class="row">
+				<div class="col-md-3">
 					<ul class="nav nav-list">
 						<li class="nav-header">Options d'import</li>
 						<li class="active"><a href="#list-choices" class="nav-link-import">Par Liste</a></li>
 						<li><a href="#videos-choices" class="nav-link-import">Par vidéo</a></li>
 					</ul>
 				</div>
-				<div class="span9 content-block-import" id="import-content">
+				<div class="col-md-9 content-block-import" id="import-content">
 					<div id="choices-import">
 						<div id="list-choices" class="div-import-option-content">
 							{% for list in lists %}
@@ -31,7 +31,7 @@
 									<label class="checkbox">
 										<input type="checkbox" name="lists[]" value="{{ list.object.id }}" class="checkbox-import pull-left parent-checkbox" />
 										<a class="span-link" data-id-list={{ list.object.id }}>
-											<i class="icon-chevron-right"></i>
+											<i class="glyphicon glyphicon-chevron-right"></i>
 											{{ list.object.name }} ({{ list.object.favoris|length }} vidéos)
 										</a>
 									</label>
@@ -48,11 +48,11 @@
 							{% endfor %}
 						</div>
 						<div id="videos-choices" class="div-import-option-content">
-							<div class="div-import-videos-head input-append">
+							<div class="div-import-videos-head input-group">
 								<input type="text" placeholder="Rechercher une vidéo" id="input-video-search-import" title="Filtrer les vidéos avec ce champs" autocomplete="off" />
-								<button class="btn" id="clear-video-search" title="Vider la recherche"><i class="icon-remove"></i></button>
-								<button class="btn videos-check" title="Sélectionner toutes les vidéos" data-check="true">Tout sélectionner</button>
-								<button class="btn videos-check" title="Désectionner toutes les vidéos" data-check="false">Tout retirer</button>
+								<button class="btn btn-default" id="clear-video-search" title="Vider la recherche"><i class="glyphicon glyphicon-remove"></i></button>
+								<button class="btn btn-default videos-check" title="Sélectionner toutes les vidéos" data-check="true">Tout sélectionner</button>
+								<button class="btn btn-default videos-check" title="Désectionner toutes les vidéos" data-check="false">Tout retirer</button>
 							</div>
 							{% for fav in favoris %}
 								<div class="fav-import-dual">
@@ -66,8 +66,8 @@
 				</div>
 			</div>
 			<hr>
-			<div id="groupes-import" class="row-fluid">
-				<div class="span3">
+			<div id="groupes-import" class="row">
+				<div class="col-md-3">
 					<span class="nav-header">Dans quel groupe ?</span>
 					<span>Choisissez parmis vos groupes</span><br/>
 					<select id="select-group-import" name="group">
@@ -77,12 +77,12 @@
 					</select>
 					<br/><span>Ou bien, <a id="create-groupe-import" href="{{ path('ajax_group_create') }}">créer un autre groupe</a></span>
 				</div>
-				<div class="span9 content-block-import">
+				<div class="col-md-9 content-block-import">
 					<h4>
 						Vidéos présentes dans le groupe
-						<div class="input-append">
+						<div class="input-group">
 							<input id="searchVideosInList" placeholder="Rechercher une vidéo du groupe" title="Filtrer les vidéos du groupe avec ce champs" type="text" autocomplete="false">
-							<span class="add-on"><i class="icon-search"></i></span>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
 						</div>
 					</h4>
 					<div class="content-block-videos-in-list">
@@ -113,7 +113,7 @@
 				<div id="form-modal-body"></div>
 			</div>
 			<div class="modal-footer">
-				<button data-dismiss="modal" aria-hidden="true" class="btn">Annuler</button>
+				<button data-dismiss="modal" aria-hidden="true" class="btn btn-default">Annuler</button>
 				<a href="{{ path('ajax_group_create') }}" class="btn btn-primary" id="btn-submit-group-create">Créer le groupe</a>
 			</div>
 		</div>

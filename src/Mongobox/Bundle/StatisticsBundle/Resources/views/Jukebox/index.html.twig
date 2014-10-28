@@ -11,7 +11,8 @@
         <h2>Statistiques du Jukebox</h2>
     </div>
 
-    <div class="hero-unit">
+<div class="container">
+    <div class="jumbotron">
         {% if statistics.timeline != false %}
             <div class="row" style="margin: 0;">
                 {% include 'MongoboxStatisticsBundle:Jukebox:timeline.html.twig' with {'timeline': statistics.timeline} %}
@@ -34,4 +35,5 @@
             </div>
         {% endif %}
     </div>
+</div>
 {% endblock body %}

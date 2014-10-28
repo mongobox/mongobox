@@ -68,12 +68,12 @@ var importBookmark = importBookmark || {};
 			if( div_bookmarks.is(':visible') )
 			{
 				div_bookmarks.hide();
-				$(this).find('i').removeClass('icon-chevron-down').addClass('icon-chevron-right');
+				$(this).find('i').removeClass('glyphicon glyphicon-chevron-down').addClass('glyphicon glyphicon-chevron-right');
 			}
 			else
 			{
 				div_bookmarks.show();
-				$(this).find('i').addClass('icon-chevron-down').removeClass('icon-chevron-right');
+				$(this).find('i').addClass('glyphicon glyphicon-chevron-down').removeClass('glyphicon glyphicon-chevron-right');
 			}
 			return false;
 		});
@@ -157,7 +157,7 @@ var importBookmark = importBookmark || {};
 			{
 				if( $(this).val() == '' )
 				{
-					$(this).parent().before("<div class='modal-error-import alert alert-error'>Veuillez renseigner ce champs</div>");
+					$(this).parent().before("<div class='modal-error-import alert alert-danger'>Veuillez renseigner ce champs</div>");
 					$(this).focus();
 					error = true;
 					return false;
@@ -167,7 +167,7 @@ var importBookmark = importBookmark || {};
 				{
 					if( !$.isNumeric($(this).val()) || !($(this).val() > 0) )
 					{
-						$(this).parent().before("<div class='modal-error-import alert alert-error'>La valeur de ce champs doit être numérique et supérieure à 0</div>");
+						$(this).parent().before("<div class='modal-error-import alert alert-danger'>La valeur de ce champs doit être numérique et supérieure à 0</div>");
 						$(this).focus().val('');
 						error = true;
 						return false;

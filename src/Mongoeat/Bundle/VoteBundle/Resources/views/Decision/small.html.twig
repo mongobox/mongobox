@@ -1,18 +1,22 @@
 <div class="mongoeat-restaurant">
-    <legend>Vote pour ce midi</legend>
-    {% if entity.votes|length > 0 %}
-        <p>Pour l'instant, on mange chez <strong>{% for resto, nb in entity.getRestaurentScore|slice(0,1) %}{{ resto }}{% endfor %}</strong> avec <ul>{% for user in entity.getUsers %}<li>{{ user.name }}</li>{% endfor %}</ul>
-    {% else %}
-        <p>Pour l'instant, personne n'a voter.
-    {% endif %}
-        <br>
-    {% if not hasVoted %}
-        Vous n'avez pas encore voter pour ce midi.<br>
-        <a class="btn btn-small btn-primary" href="{{ url('vote_new',{'id':entity.id}) }}">Voter pour un restaurant</a>
-    {% else %}
-        <a class="btn btn-small btn-primary" href="{{ url('vote_new',{'id':entity.id}) }}">Voir ou modifier son vote</a>
-    {% endif %}
-        <a class="btn btn-small" href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
-        <a class="btn btn-small" href="{{ path('decision') }}">Mongoeat</a>
-    </p>
+    <div class="panel panel-default">
+		<div class="panel-heading">Vote pour ce midi</div>
+		<div class="panel-body">
+			{% if entity.votes|length > 0 %}
+				<p>Pour l'instant, on mange chez <strong>{% for resto, nb in entity.getRestaurentScore|slice(0,1) %}{{ resto }}{% endfor %}</strong> avec <ul>{% for user in entity.getUsers %}<li>{{ user.name }}</li>{% endfor %}</ul>
+			{% else %}
+				<p>Pour l'instant, personne n'a voter.
+			{% endif %}
+				<br>
+			{% if not hasVoted %}
+				Vous n'avez pas encore voter pour ce midi.<br>
+				<a class="btn btn-sm btn-primary" href="{{ url('vote_new',{'id':entity.id}) }}">Voter pour un restaurant</a>
+			{% else %}
+				<a class="btn btn-sm btn-primary" href="{{ url('vote_new',{'id':entity.id}) }}">Voir ou modifier son vote</a>
+			{% endif %}
+				<a class="btn btn-default btn-sm" href="{{ path('decision_show', { 'id': entity.id }) }}">Voir en détail</a>
+				<a class="btn btn-default btn-sm" href="{{ path('decision') }}">Mongoeat</a>
+			</p>
+		</div>
+	</div>
 </div>

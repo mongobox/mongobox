@@ -3,8 +3,8 @@
 		{{ liste.name }} | depuis le {% if ajax is defined and ajax is sameas(true) %}{{ date|date('d/m/Y à H:i') }}{% else %}{{ liste.date_favoris|date('d/m/Y à H:i') }}{% endif %}
 	</td>
 	<td>
-		<a href="{{ path('remove_video_liste', {'id_video': video.id, 'id_liste': liste.id}) }}" class="btn btn-link btn-actions-list-remove" title="Supprimer la vidéo de cette liste">
-			<i class="icon-trash"></i>
+		<a href="{{ path('remove_video_liste', {'id_video': video.id, 'id_liste': liste.id}) }}" class="btn btn-default btn-link btn-actions-list-remove" title="Supprimer la vidéo de cette liste">
+			<i class="glyphicon glyphicon-trash"></i>
 		</a>
 	</td>
 </tr>

@@ -1,16 +1,18 @@
+{% form_theme form_video_info 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+
 <form id="form_video_info" method="post" action="{{url('video_edit_modal', {'id_video' : video.id})}}">
 	{{ form_widget(form_video_info) }}
-	{{form_rest(form_video_info)}}
+	{{ form_rest(form_video_info) }}
 	{{ form_widget(form_video_info.tag) }}
-	<span class="btn" id="video-button-add-tag"><span class="icon-plus"></span> Ajouter</span>
+	<span class="btn btn-default" id="video-button-add-tag"><span class="glyphicon glyphicon-plus"></span> Ajouter</span>
 	<div id="container-selected-tags">
 		<ul>
 		{% for tag in list_tags %}
-			<span class="tag-item alert alert-info"><span>{{tag.name}}</span><button class="close" >&times;</button><input type="hidden" name="video_info[tags][]" value="{{tag.id}}" /></span>
+			<span class="tag-item label label-primary"><span>{{tag.name}}</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="{{tag.id}}" /></span>
 		{% endfor %}
 		</ul>
 	</div>
-	{% set tagDataPrototype = '<span>__name__</span><button class="close" >&times;</button><input type="hidden" name="video_info[tags][]" value="__id__" />' %}
+	{% set tagDataPrototype = '<span>__name__</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="__id__" />' %}
 	<div id="video_tags_list" class="tags manage-tags" data-prototype="{{ tagDataPrototype }}">
 	</div>
 	<input type="hidden" name="id_video" value="{{video.id}}" />

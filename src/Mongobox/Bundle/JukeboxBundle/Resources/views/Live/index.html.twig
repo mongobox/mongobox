@@ -3,32 +3,38 @@
 {% block title -%}- Live{%- endblock title %}
 
 {% block body %}
-    <script src="{{ websockets_server }}/socket.io/socket.io.js"></script>
-    <script src="{{ asset('bundles/mongoboxjukebox/js/live.js') }}" type="text/javascript"></script>
+<script src="{{ websockets_server }}/socket.io/socket.io.js"></script>
+<script src="{{ asset('bundles/mongoboxjukebox/js/live.js') }}" type="text/javascript"></script>
 
-    {% include 'MongoboxJukeboxBundle:Partial:live-modals-contents.html.twig' %}
+{% include 'MongoboxJukeboxBundle:Partial:live-modals-contents.html.twig' %}
 
-    <div class="marketing">
-        <h1>
-            <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" />
-        </h1>
-    </div>
+<div class="marketing">
+    <h1>
+        <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" />
+    </h1>
+</div>
 
-    <div class="row-fluid hero-unit">
-        <div class="span9 text-center">
-            <div id="player"></div>
-            {% if player_mode == "admin" %}
-                {% include 'MongoboxJukeboxBundle:Partial:live-admin-control.html.twig' %}
-            {% endif %}
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-9 text-center">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <div id="player"></div>
+                </div>
+                {% if player_mode == "admin" %}
+                    {% include 'MongoboxJukeboxBundle:Partial:live-admin-control.html.twig' %}
+                {% endif %}
+            </div>
 
-            {% include 'MongoboxJukeboxBundle:Partial:live-tabs.html.twig' %}
+            <div class="col-md-3">
+                <ul id="live-users" class="list-unstyled clearfix">
+                    <h4>Utilisateurs présents</h4>
+                    {% include 'MongoboxJukeboxBundle:Partial:live-user-block.html.twig' %}
+                </ul>
+            </div>
         </div>
-
-        <div class="span3">
-            <ul id="live-users" class="unstyled clearfix">
-                <h4>Utilisateurs présents</h4>
-                {% include 'MongoboxJukeboxBundle:Partial:live-user-block.html.twig' %}
-            </ul>
+        <div class="row">
+            {% include 'MongoboxJukeboxBundle:Partial:live-tabs.html.twig' %}
         </div>
 
         <script type="text/javascript">
@@ -104,5 +110,7 @@
             var livePlayer = new LivePlayer();
             livePlayer.initialize(currentUserId, currentPlaylistId);
         </script>
+
     </div>
+</div>
 {% endblock body %}
