@@ -1,0 +1,131 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app.php [QSA,L]
+</IfModule>
+
+# ##############################################################################
+# # MEDIA TYPES AND CHARACTER ENCODINGS                                        #
+# ##############################################################################
+
+# ------------------------------------------------------------------------------
+# | Media types                                                                |
+# ------------------------------------------------------------------------------
+
+# Serve resources with the proper media types (formerly known as MIME types).
+# http://www.iana.org/assignments/media-types/media-types.xhtml
+
+<IfModule mod_mime.c>
+  # Data interchange
+    AddType application/json                            json map topojson
+
+  # JavaScript
+    # Normalize to standard type.
+    # http://tools.ietf.org/html/rfc4329#section-7.2
+    AddType application/javascript                      js
+
+  # Video
+    AddType video/mp4                                   f4v f4p m4v mp4
+    AddType video/ogg                                   ogv
+    AddType video/webm                                  webm
+    AddType video/x-flv                                 flv
+
+  # Web fonts
+    AddType application/font-woff                       woff
+    AddType application/font-woff2                      woff2
+    AddType application/vnd.ms-fontobject               eot
+
+    # Browsers usually ignore the font media types and simply sniff
+    # the bytes to figure out the font type.
+    # http://mimesniff.spec.whatwg.org/#matching-a-font-type-pattern
+
+    # Chrome however, shows a warning if any other media types are used
+    # for the following two font types.
+
+    AddType application/x-font-ttf                      ttc ttf
+    AddType font/opentype                               otf
+
+    AddType image/svg+xml                               svg svgz
+
+  # Other
+    AddType application/xml                             atom rdf rss xml
+    AddType image/x-icon                                cur ico
+
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# | Reducing MIME type security risks                                          |
+# ------------------------------------------------------------------------------
+
+# Prevent some browsers from MIME-sniffing the response.
+
+# This reduces exposure to drive-by download attacks and cross-origin data
+# leaks, and should be left uncommented, especially if the web server is
+# serving user-uploaded content or content that could potentially be treated
+# as executable by the browser.
+
+# http://www.slideshare.net/hasegawayosuke/owasp-hasegawa
+# http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-v-comprehensive-protection.aspx
+# http://msdn.microsoft.com/en-us/library/ie/gg622941.aspx
+# http://mimesniff.spec.whatwg.org/
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# | ETags                                                                      |
+# ------------------------------------------------------------------------------
+
+# Remove `ETags` as resources are sent with far-future expires headers.
+# https://developer.yahoo.com/performance/rules.html#etags
+
+# `FileETag None` doesn't work in all cases.
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+
+FileETag None
+
+# ------------------------------------------------------------------------------
+# | Expires headers                                                            |
+# ------------------------------------------------------------------------------
+
+# Serve resources with far-future expires headers.
+
+# IMPORTANT: If you don't control versioning with filename-based cache
+# busting, consider lowering the cache times to something like one week.
+
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresDefault                                      "access plus 1 month"
+
+  # CSS
+    ExpiresByType text/css                              "access plus 1 year"
+
+  # Data interchange
+    ExpiresByType application/json                      "access plus 0 seconds"
+    ExpiresByType application/xml                       "access plus 0 seconds"
+    ExpiresByType text/xml                              "access plus 0 seconds"
+
+  # Favicon (cannot be renamed!) and cursor images
+    ExpiresByType image/x-icon                          "access plus 1 week"
+
+  # HTML
+    ExpiresByType text/html                             "access plus 0 seconds"
+
+  # JavaScript
+    ExpiresByType application/javascript                "access plus 1 year"
+
+  # Media
+    ExpiresByType image/gif                             "access plus 1 month"
+    ExpiresByType image/jpeg                            "access plus 1 month"
+    ExpiresByType image/png                             "access plus 1 month"
+    ExpiresByType video/mp4                             "access plus 1 month"
+    ExpiresByType video/ogg                             "access plus 1 month"
+    ExpiresByType video/webm                            "access plus 1 month"
+
+  # Web feeds
+    ExpiresByType application/atom+xml                  "access plus 1 hour"
+    ExpiresByType application/rss+xml                   "access plus 1 hour"
+</IfModule>
