@@ -21,3 +21,7 @@ parameters:
 
     foursquare_id:
     foursquare_secret:
+
+    # Google API
+    google_app_name:
+    google_developer_key:
