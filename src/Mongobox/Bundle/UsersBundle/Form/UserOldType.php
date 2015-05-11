@@ -11,7 +11,10 @@ class UserOldType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
+            ->add('email', 'text', array(
+                'label' => 'Email',
+                'attr' => array('size' => 40, 'placeholder' => 'Email')
+            ))
         ;
     }
 
