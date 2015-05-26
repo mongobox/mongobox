@@ -1,39 +1,31 @@
-<form id="form_video" method="post">
-	<div id="youtube_add">
-		<label>Ajouter une vidéo venant de Youtube</label>
-		{{ form_widget(form_video.lien) }}
-		<span class="btn" id="search-btn-video">Ajouter</span>
-		 {{form_rest(form_video)}}<br />
-	</div>
-	<hr />
-	<div id="video_search">
-		{{ form_rest(form_search) }}
-		<div id="search">
-			<div id="mongobox_search">
-			</div>
-			<div id="youtube_search">
-			</div>
-		</div>
-	</div>
+{% form_theme form_video 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+{% form_theme form_search 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+
+
+<form id="form_video" method="post" class="form-inline">
+    <div id="youtube_add" class="form-group">
+        <label>Ajouter une vidéo venant de Youtube</label>
+        <br/>
+        {{ form_widget(form_video.lien) }}
+        <span class="btn btn-default" id="search-btn-video">Ajouter</span>
+        {{form_rest(form_video)}}<br />
+    </div>
+    <hr />
+    <div id="video_search" class="form-group">
+
+        {{ form_label(form_search.search) }}
+        <br/>
+        {{ form_widget(form_search.search) }}
+        {{ form_rest(form_search) }}
+        <div id="search">
+            <div id="mongobox_search">
+            </div>
+            <div id="youtube_search">
+            </div>
+        </div>
+    </div>
 </form>
 
-{#
-	<h2>Ajout de tags</h2>
-	<form id="form_tags" method="post" action="{{url('post_video_tags')}}">
-		{{ form_widget(form_tags.tag) }}
-		<span class="btn" id="video-button-add-tag">Ajouter</span>
-		<div id="container-selected-tags">
-			{% for tag in list_tags %}
-				<li class="tag-item alert alert-info"><span>{{tag.name}}</span><button class="close" >&times;</button><input type="hidden" name="video_tags[tags][]" value="{{tag.id}}" /></li>
-			{% endfor %}
-		</div>
-		{% set tagDataPrototype = '<span>__name__</span><button class="close" >&times;</button><input type="hidden" name="video_tags[tags][]" value="__id__" />' %}
-		<div id="video_tags_list" class="tags manage-tags" data-prototype="{{ tagDataPrototype }}"></div>
-		<input type="hidden" name="id_video" value="{{id_video}}" />
-		{{form_row(form_tags._token)}}
-		<input class="btn btn-primary" type="submit" id="submit-form-video-tags-add" value="Envoyer" />
-	</form>
-#}
 
 {% block javascripts %}
 	{{ form_javascript(form_video) }}

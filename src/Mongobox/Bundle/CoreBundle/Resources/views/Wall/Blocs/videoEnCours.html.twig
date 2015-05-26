@@ -5,28 +5,26 @@
 
 	<div id="video_infos" class="pull-left show-edit-video">
 		<div class="title">
-			{% if video_en_cours.videoGroup.diffusion == 0 %}<i class="icon-star icon-white"></i>{% endif %}
+			{% if video_en_cours.videoGroup.diffusion == 0 %}<i class="glyphicon glyphicon-star hidden-xs hidden-sm"></i>{% endif %}
 			{% include 'MongoboxJukeboxBundle:Partial:videoTitle.html.twig' with {'videoGroup' : video_en_cours.videoGroup, 'white' : true} %}
 
 			{% if video_en_cours.videoGroup.user is not empty %}
-			<div class="user-box">
-				{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {user : video_en_cours.videoGroup.user, avatarMini : true, loginClass : 'navbar-text'} %}
+			<div class="user-box hidden-xs hidden-sm">
+				{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {user : video_en_cours.videoGroup.user, avatarMini : true} %}
 			</div>
 			{% endif %}
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<div class="vote">
-				<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-up icon-white"></i></a>
-				<a href="{{path('vote', {'sens' : 0, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote">/</a> <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="icon-thumbs-down icon-white"></i></a>
-				<span class="navbar-text">- Vote : <span id="nb_vote_video_en_cours">{{somme}}</span></span>
+				<a href="{{path('vote', {'sens' : 1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="glyphicon glyphicon-thumbs-up glyphicon glyphicon-white"></i></a>
+				<a href="{{path('vote', {'sens' : 0, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote">/</a> <a href="{{path('vote', {'sens' : -1, 'id' : video_en_cours.id})}}" rel="nb_vote_video_en_cours" class="btn-vote"><i class="glyphicon glyphicon-thumbs-down glyphicon glyphicon-white"></i></a>
+				<span class="badge alert-info"><span id="nb_vote_video_en_cours">{{somme}}</span></span>
 			</div>
 		</div>
 
 		<div id="container_progress-bar">
-			<span class="pull-left navbar-text">{{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U'))|niceTime}}</span>
 			<div class="progress pull-left">
-				<div class="bar" style="width: {{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U')) / video_en_cours.videoGroup.video.duration * 100}}%;"></div>
+				<div class="progress-bar" style="width: {{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U')) / video_en_cours.videoGroup.video.duration * 100}}%;">{{(date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U'))|niceTime}} / {{video_en_cours.videoGroup.video.duration|niceTime}}</div>
 			</div>
-			<span class="pull-left navbar-text">{{video_en_cours.videoGroup.video.duration|niceTime}}</span>
 		</div>
 
     </div>

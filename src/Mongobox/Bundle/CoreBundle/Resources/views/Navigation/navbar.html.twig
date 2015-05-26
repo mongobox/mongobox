@@ -1,17 +1,18 @@
-<div class="navbar navbar-fixed-top navbar-inverse">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
+      </button>
+      <a class="navbar-brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
 		<img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" />
 	  </a>
-      <div class="nav-collapse">
+	</div>
+	<div class="collapse navbar-collapse">
 		{% if app.user %}
-		<ul class="nav pull-right">
+		<ul class="nav navbar-nav navbar-right">
 			<li class="dropdown user-avatar">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <span>
@@ -53,27 +54,27 @@
 			 </li>
 		 </ul>
 		{% endif %}
-
-        {{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build', {'allow_safe_labels': true}) }}
-
-		<div id="video_en_cours">
-			{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}
+		{{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build', {'allow_safe_labels': true}) }}
+		<div class="nav">
+			<div id="video_en_cours">
+				{% render controller("MongoboxCoreBundle:Wall:videoEnCours") %}
+			</div>
+			<a href="" class="btn btn-success" id="add-video-button" title="Ajouter une vidéo"><i class="glyphicon glyphicon-plus icon-white"></i></a>
 		</div>
-  	    <a href="" class="btn btn-success" id="add-video-button" title="Ajouter une vidéo"><i class="icon-plus icon-white"></i></a>
-      </div><!--/.nav-collapse -->
     </div>
   </div>
-</div>
+</nav>
 
-{% include 'MongoboxCoreBundle:Navigation:tumblrForm.html.twig' %}
-
-<div class="modal hide fade" id="action-video-modal">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Action sur une vidéo</h3>
-	</div>
-	<div class="modal-body">
-		<div class="loader"></div>
-		<div class="modal-content"></div>
+<div class="modal fade" id="action-video-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Action sur une vidéo</h3>
+            </div>
+            <div class="modal-body">
+                <div class="loader"></div>
+            </div>
+        </div>
     </div>
 </div>

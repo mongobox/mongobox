@@ -8,7 +8,7 @@
     <form class="form-horizontal" action="{{ path('vote_create',{'id':entity.decision.id}) }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
 
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <button type="submit" class="btn btn-primary">Voter</button>
             </div>
@@ -16,7 +16,7 @@
     </form>
 
     <p>
-        <a class="btn" href="{{ path('wall_index') }}">
+        <a class="btn btn-default" href="{{ path('wall_index') }}">
             <i class="icon-repeat" style="margin-right: 5px"></i>Revenir à Mongobox
         </a>
     </p>

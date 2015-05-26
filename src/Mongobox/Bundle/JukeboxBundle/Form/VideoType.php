@@ -12,7 +12,7 @@ class VideoType extends AbstractType
         $builder
             ->add('lien', 'text', array(
                 'label' => 'Lien Youtube ou Id de la vidéo',
-                'attr' => array('size' => 15, 'placeholder' => 'Lien vers la vidéo Youtube')
+                'attr' => array('size' => 15, 'placeholder' => 'Lien vers la vidéo Youtube','class' => 'form-control')
             ))
         ;
     }

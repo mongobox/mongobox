@@ -3,15 +3,17 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<div class="hero-unit" style="text-align:center;">
-		{% include 'MongoboxTumblrBundle:Slider:index.html.twig'
-			with {
-				'top': true,
-				'slider_title': ['Top des 7 derniers jours','Top des 30 derniers jours','Top de tous les temps'],
-				'top7': top7,
-				'top30': top30,
-				'topTumblr': topTumblr,
-			}
-		%}
+<div class="container">
+    <div class="jumbotron text-center">
+            {% include 'MongoboxTumblrBundle:Slider:index.html.twig'
+                with {
+                    'top': true,
+                    'slider_title': ['Top des 7 derniers jours','Top des 30 derniers jours','Top de tous les temps'],
+                    'top7': top7,
+                    'top30': top30,
+                    'topTumblr': topTumblr,
+                }
+            %}
+    </div>
 </div>
 {% endblock body %}

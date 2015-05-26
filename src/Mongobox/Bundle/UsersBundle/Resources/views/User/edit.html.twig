@@ -1,35 +1,38 @@
 {% extends "MongoboxUsersBundle:User:layout.html.twig" %}
 
 {% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+{% form_theme form_password 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% block title %} - Modification de mon compte{% endblock title %}
 
 {% block body %}
-<div class="hero-unit">
-    <div class="row-fluid">
-        <div class="span4">
-             <div class="content-block clearfix">
-                <h2>Modification du compte</h2>
-                <form action="{{path('user_edit')}}" class="form-inline" method="POST" {{ form_enctype(form) }} novalidate>
-                    {{ form_widget(form) }}
-					<label>Avatar Actuel :</label>
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-10">
+                 <div class="content-block clearfix">
+                    <h2>Modification du compte</h2>
+                    <form action="{{path('user_edit')}}" method="POST" {{ form_enctype(form) }} novalidate>
+                        {{ form_widget(form) }}
+                        <label>Avatar Actuel :</label>
 
-					<div class="controls">
-						{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : app.user, 'notext' : true} %}
-					</div>
-					<div class="container-btn clearfix">
-                        <input type="submit" class="btn btn-large btn-primary pull-right" value="Enregistrer">
-                    </div>
-                </form>
-            </div>
-            <div class="content-block clearfix">
-                <h2>Modification du mot de passe</h2>
-                <form action="{{ path('user_edit') }}" method="POST" {{ form_enctype(form_password) }} novalidate>
-                    {{ form_widget(form_password) }}
-                    <div class="container-btn clearfix">
-                        <input type="submit" class="btn btn-large btn-primary pull-right" value="Modifier mon mot de passe">
-                    </div>
-                </form>
+                        <div class="controls">
+                            {% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : app.user, 'notext' : true} %}
+                        </div>
+                        <div class="container-btn clearfix">
+                            <input type="submit" class="btn btn-lg btn-primary pull-right" value="Enregistrer">
+                        </div>
+                    </form>
+                </div>
+                <div class="content-block clearfix">
+                    <h2>Modification du mot de passe</h2>
+                    <form action="{{ path('user_edit') }}" method="POST" {{ form_enctype(form_password) }} novalidate>
+                        {{ form_widget(form_password) }}
+                        <div class="container-btn clearfix">
+                            <input type="submit" class="btn btn-lg btn-primary pull-right" value="Modifier mon mot de passe">
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

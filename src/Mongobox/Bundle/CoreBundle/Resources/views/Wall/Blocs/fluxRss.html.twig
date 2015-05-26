@@ -1,16 +1,19 @@
 {% for flux in flux_rss %}
-
-<legend>{{flux.title}}</legend>
-	<ul class="unstyled fluxrss">
-				{% for entity in flux.items %}
-					<li>
-						{% if flux.link %}<a href="{{ entity.link }}">{{ entity.title }}</a>{% endif %}
-                        {% if flux.description %}
-						<p>
-							{{ entity.description|raw }}
-						</p>
-                        {% endif %}
-					</li>
-				{% endfor %}
-	</ul>
+<div class="panel panel-default">
+	<div class="panel-heading">{{flux.title}}</div>
+	<div class="panel-body">
+		<ul class="list-unstyled fluxrss">
+					{% for entity in flux.items %}
+						<li>
+							{% if flux.link %}<a href="{{ entity.link }}">{{ entity.title }}</a>{% endif %}
+							{% if flux.description %}
+							<p>
+								{{ entity.description|raw }}
+							</p>
+							{% endif %}
+						</li>
+					{% endfor %}
+		</ul>
+	</div>
+</div>
 {% endfor %}

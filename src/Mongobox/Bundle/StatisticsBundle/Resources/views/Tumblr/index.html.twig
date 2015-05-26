@@ -10,8 +10,8 @@
         </h1>
         <h2>Statistiques du Tumblr</h2>
     </div>
-
-    <div class="hero-unit">
+<div class="container">
+    <div class="jumbotron">
         {% if statistics.timeline != false %}
             <div class="row" style="margin: 0;">
                 {% include 'MongoboxStatisticsBundle:Tumblr:timeline.html.twig' with {'timeline': statistics.timeline} %}
@@ -26,4 +26,5 @@
             </div>
         {% endif %}
     </div>
+</div>
 {% endblock body %}

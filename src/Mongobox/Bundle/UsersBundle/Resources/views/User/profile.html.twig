@@ -3,16 +3,18 @@
 {% block title %}- Profil de {{user.firstName}} {{user.lastName}}{% endblock title %}
 
 {% block body %}
-<div class="hero-unit">
-    <div class="row-fluid">
-        <div class="span12">
-             <div class="content-block clearfix">
-                <h2>{% include "MongoboxUsersBundle:User/Avatar:avatarBig.html.twig" %} - Profil</h2>
-				<ul class="unstyled">
-					<li><strong>Date d'inscription :</strong> {{user.dateCreate|date("d-m-Y")}}</li>
-					<li><strong>Nombre de votes sur un tumblr :</strong> {{user.tumblrVote|length}}</li>
-					<li><strong>Nombre de vidéos ajoutés :</strong> {{user.videosGroup|length}}</li>
-				</ul>
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-12">
+                 <div class="content-block clearfix">
+                    <h2>{% include "MongoboxUsersBundle:User/Avatar:avatarBig.html.twig" %} - Profil</h2>
+                    <ul class="list-unstyled">
+                        <li><strong>Date d'inscription :</strong> {{user.dateCreate|date("d-m-Y")}}</li>
+                        <li><strong>Nombre de votes sur un tumblr :</strong> {{user.tumblrVote|length}}</li>
+                        <li><strong>Nombre de vidéos ajoutés :</strong> {{user.videosGroup|length}}</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

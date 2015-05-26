@@ -3,16 +3,17 @@
 {% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% block body %}
-<div class="hero-unit">
-	<h1>{{project_name}}</h1>
-</div>
+<div class="container">
+    <div class="jumbotron">
+        <h1>{{project_name}}</h1>
+    </div>
 	<h1>Registration</h1>
-	<form action="{{ path('registration') }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
+	<form action="{{ path('registration') }}" class="content-block" method="POST" {{ form_enctype(form) }} novalidate>
 		{{ form_widget(form) }}
-
 		<hr />
 		<div>
 			<input type="submit" class="btn btn-primary pull-right" value="Register">
 		</div>
 	</form>
+</div>
 {% endblock body %}

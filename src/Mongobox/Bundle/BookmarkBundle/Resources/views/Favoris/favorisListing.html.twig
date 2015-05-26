@@ -4,7 +4,7 @@
 		<a href="{{ path('videos_show', {'id': video.id}) }}">{{ video.title }}</a>
 	</div>
 	<div class="hide actions-content">
-		<a class="btn btn-link btn-actions-bookmark btn-lists-bookmark" title="Vos listes attribuées à cette vidéo"><i class="icon-tags"></i></a>
+		<a class="btn btn-default btn-link btn-actions-bookmark btn-lists-bookmark" title="Vos listes attribuées à cette vidéo"><i class="glyphicon glyphicon-tags"></i></a>
 		<div class="content-block-hidden-div-bookmark content-lists-bookmark">
 			<table id="table-list-bookmark-{{ video.id }}">
 				{% if video.listes|length == 0 %}
@@ -16,7 +16,7 @@
 				{% endif %}
 			</table>
 		</div>
-		<a class="btn btn-link btn-actions-bookmark btn-lists-add" title="Ajouter la vidéo à une de vos listes"><i class="icon-plus"></i></a>
+		<a class="btn btn-default btn-link btn-actions-bookmark btn-lists-add" title="Ajouter la vidéo à une de vos listes"><i class="glyphicon glyphicon-plus"></i></a>
 		<div class="content-block-hidden-div-bookmark content-add-bookmark-liste">
 			<table>
 				<tr>
@@ -27,12 +27,12 @@
 				</tr>
 				<tr>
 					<td>
-						<a href="{{ path('ajax_liste_favoris_add', {'id_video': video.id}) }}" class="btn btn-add-bookmark-to-list" data-loading-text ="<img src='{{ asset('bundles/mongoboxcore/img/ajax-loader.gif') }}' title='Loading' />">Ajouter la vidéo à la liste</a>
+						<a href="{{ path('ajax_liste_favoris_add', {'id_video': video.id}) }}" class="btn btn-default btn-add-bookmark-to-list" data-loading-text ="<img src='{{ asset('bundles/mongoboxcore/img/ajax-loader.gif') }}' title='Loading' />">Ajouter la vidéo à la liste</a>
 					</td>
 				</tr>
 			</table>
 		</div>
-		<a href="{{ path('remove_video_bookmark', {'id_video': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris"><i class="icon-remove"></i></a>
-		<a href="{{ path('videos_add_to_playlist', {'id': video.id}) }}" class="btn btn-link btn-actions-bookmark btn-add-to-playlist" title="Ajouter à la playlist"><i class="icon-arrow-up"></i></a>
+		<a href="{{ path('remove_video_bookmark', {'id_video': video.id}) }}" class="btn btn-default btn-link btn-actions-bookmark btn-remove-bookmark" title="Supprimer la vidéo de vos favoris"><i class="glyphicon glyphicon-remove"></i></a>
+		<a href="{{ path('videos_add_to_playlist', {'id': video.id}) }}" class="btn btn-default btn-link btn-actions-bookmark btn-add-to-playlist" title="Ajouter à la playlist"><i class="glyphicon glyphicon-arrow-up"></i></a>
 	</div>
 </td>

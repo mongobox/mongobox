@@ -34,7 +34,7 @@ legend
     margin: 40px 0 10px;
 }
 
-.hero-unit
+.jumbotron
 {
 	padding : 40px;
 	font-size : 14px;
@@ -97,7 +97,9 @@ Video en cours
 	color : #999;
 	line-height : 20px;
 }
-
+.navbar{
+    color : #999;
+}
 #add-video-button
 {
 	margin-top : 13px;
@@ -222,10 +224,20 @@ Playlist
 #container-selected-tags span, #video_tags_list span
 {
 	float : left;
-	list-style-type: none;
 	margin-left: 5px;
 }
+#container-selected-tags span span, #video_tags_list span span{
+    padding: 7px 0 0 2px;
+}
 
+#container-selected-tags span button, #video_tags_list span button {
+    margin: 0 0 0 2px;
+    width: 20px;
+}
+
+#form_video_info .total-clear-fix input.btn{
+    margin: 10px 0 0;
+}
 /* ----------------------------------
  Search Video
 ------------------------------------ */
@@ -246,8 +258,9 @@ Playlist
 
 #search ul li a
 {
-	width : 25px;
-	float: left;
+    height: 18px;
+    padding: 0;
+    width: 32px;
 }
 
 .liste-video-tag
@@ -258,7 +271,6 @@ Playlist
 .liste-video-tag > span
 {
 	margin-right: 5px;
-	padding-right: 14px;
 }
 
 #live-admin-data
@@ -267,4 +279,8 @@ Playlist
     margin-top: 15px;
     position: absolute;
     text-align: center;
+}
+
+#admin-control {
+    margin: 5px 0px 0px 0px;
 }

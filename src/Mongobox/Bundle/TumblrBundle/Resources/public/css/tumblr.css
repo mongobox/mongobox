@@ -33,6 +33,18 @@
     margin: 0 3px;
 }
 
+#tumblr_tags .tag-item span
+{
+    float: left;
+    font-size: 13px;
+    padding: 4px 0 0 2px;
+}
+
+#tumblr_tags .tag-item button {
+    margin: 0 0 0 2px;
+    width: 20px;
+}
+
 .manage-tags-container .manage-tags{
 
     display: inline-block;

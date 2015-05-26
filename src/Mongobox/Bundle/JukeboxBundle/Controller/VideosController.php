@@ -333,7 +333,7 @@ class VideosController extends Controller
      */
 	public function postVideoAction(Request $request)
 	{
-		$em = $this->getDoctrine()->getEntityManager();
+		$em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.context')->getToken()->getUser();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));

@@ -8,8 +8,10 @@
 	<h1><img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
 	<h2>Tumblr</h2>
 </div>
-<div class="vote"></div>
-<div class="hero-unit" style="text-align:center;">
+    <div class="vote"></div>
+<div class="container">
+    <div class="jumbotron text-center">
+
 	{% for entity in tumblr %}
 		<div class="row {% if entity.hasTag('nsfw') and app.user.nsfwmode %}nswf-elt{% endif %}">
 			{% if loop.index > 1 %}
@@ -41,6 +43,7 @@
             {% endif %}
 		</div>
 	{% endfor %}
+    </div>
 </div>
 
 {# Pagination #}

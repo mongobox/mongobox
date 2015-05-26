@@ -1,3 +1,5 @@
+{% form_theme edit_form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
+
 {% if message is null %}
     <form id="form_replace_video">
         {{ form_widget(edit_form) }}
@@ -15,7 +17,7 @@
                 data: $('#form_replace_video').serialize()
             }).done(function(response) {
                 $('.loader').hide();
-                $('#replace-video-modal .modal-content').html(response);
+                $('#replace-video-modal .modal-body').html(response);
             });
         });
     </script>

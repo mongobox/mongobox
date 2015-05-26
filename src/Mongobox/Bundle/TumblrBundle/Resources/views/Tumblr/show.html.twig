@@ -6,50 +6,50 @@
 
 {% block body %}
 <div class="marketing">
-
     <h1><img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
     <h2>Tumblr</h2>
 </div>
 <div class="vote"></div>
-<div class="hero-unit" style="text-align:center;">
-    <div class="row tumblr-row-page">
+<div class="container">
+    <div class="jumbotron text-center">
+        <div class="row tumblr-row-page">
 
-        <h2>{{entity.text}}</h2>
-        {% include 'MongoboxTumblrBundle:Slider:vote.html.twig' with { 'tumblr': entity } %}
+            <h2>{{entity.text}}</h2>
+            {% include 'MongoboxTumblrBundle:Slider:vote.html.twig' with { 'tumblr': entity } %}
 
-            <span class="tumblr-img-bloc">
-                {% if entity.hasTag('nsfw') and app.user.nsfwmode %}
-                <span class="nsfw-mask active" title="Cliquer pour afficher l'image"></span>
-                {% endif %}
-                {% if entity.localPath is null %}
-                    <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
-                {% else %}
-                    <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
-                {% endif %}
-            </span>
+                <span class="tumblr-img-bloc">
+                    {% if entity.hasTag('nsfw') and app.user.nsfwmode %}
+                    <span class="nsfw-mask active" title="Cliquer pour afficher l'image"></span>
+                    {% endif %}
+                    {% if entity.localPath is null %}
+                        <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+                    {% else %}
+                        <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+                    {% endif %}
+                </span>
 
-        {# Tags list #}
-        {% if entity.tags is not empty %}
-            <div class="tags">
-                Tags:
-                {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('tumblr',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
-            </div>
-        {% endif %}
+            {# Tags list #}
+            {% if entity.tags is not empty %}
+                <div class="tags">
+                    Tags:
+                    {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('tumblr',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
+                </div>
+            {% endif %}
 
-        {% if entityPrev %}
-            <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="Précédent : '{{ entityPrev.text }}'" data-slide="prev">‹</a>
-        {% else %}
-            <a class="left carousel-control" href="#first" data-slide="prev">‹</a>
-        {% endif %}
+            {% if entityPrev %}
+                <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="Précédent : '{{ entityPrev.text }}'" data-slide="prev">‹</a>
+            {% else %}
+                <a class="left carousel-control" href="#first" data-slide="prev">‹</a>
+            {% endif %}
 
-        {% if entityNext %}
-            <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="Suivant : '{{ entityNext.text }}'" data-slide="next">›</a>
-        {% else %}
-            <a class="right carousel-control" href="#last" data-slide="next">›</a>
-        {% endif %}
+            {% if entityNext %}
+                <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="Suivant : '{{ entityNext.text }}'" data-slide="next">›</a>
+            {% else %}
+                <a class="right carousel-control" href="#last" data-slide="next">›</a>
+            {% endif %}
+        </div>
     </div>
 </div>
-
 {% endblock body %}
 
 {% block javascripts %}
