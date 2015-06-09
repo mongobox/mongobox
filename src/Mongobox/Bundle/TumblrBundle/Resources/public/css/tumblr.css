@@ -13,6 +13,8 @@
 #tumblr { text-align: center; }
 .img-tumblr-big, .note-globale, .moyenne-globale { text-align: center; }
 
+.tumblr-img-bloc, .tumblr-img-bloc img { max-width: 100%; }
+
 .groups-diffusion
 {
 	text-align: center;
