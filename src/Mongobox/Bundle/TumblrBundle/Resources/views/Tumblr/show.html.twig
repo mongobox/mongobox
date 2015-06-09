@@ -37,15 +37,27 @@
             {% endif %}
 
             {% if entityPrev %}
-                <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="Précédent : '{{ entityPrev.text }}'" data-slide="prev">‹</a>
+                <a class="left carousel-control" href="{{ path('tumblr_show', { 'id': entityPrev.id_tumblr }) }}" title="Précédent : '{{ entityPrev.text }}'" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
             {% else %}
-                <a class="left carousel-control" href="#first" data-slide="prev">‹</a>
+                <a class="left carousel-control" href="#first" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
             {% endif %}
 
             {% if entityNext %}
-                <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="Suivant : '{{ entityNext.text }}'" data-slide="next">›</a>
+                <a class="right carousel-control" href="{{ path('tumblr_show', { 'id': entityNext.id_tumblr }) }}" title="Suivant : '{{ entityNext.text }}'" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             {% else %}
-                <a class="right carousel-control" href="#last" data-slide="next">›</a>
+                <a class="right carousel-control" href="#last" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             {% endif %}
         </div>
     </div>
