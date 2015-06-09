@@ -139,6 +139,9 @@ Flux Rss
 {
 	line-height: 20px;
 }
+#flux_rss ul li img{
+    max-width: 100%;
+}
 
 /* ----------------------------------
 

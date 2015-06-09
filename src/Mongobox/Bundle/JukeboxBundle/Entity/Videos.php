@@ -1,8 +1,13 @@
 <?php
 
 namespace Mongobox\Bundle\JukeboxBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use \Doctrine\Common\Collections\ArrayCollection;
+
+// Google API
+use Google_Client;
+use Google_Service_YouTube;
 
 /**
  * Mongobox\Bundle\JukeboxBundle\Entity\Videos
@@ -63,19 +68,19 @@ class Videos
      * @ORM\OneToMany(targetEntity="VideoGroup", mappedBy="video", cascade={"persist"})
      * @ORM\JoinColumn(name="id_video", referencedColumnName="id")
      */
-	protected $video_groups;
+    protected $video_groups;
 
     /**
      * @ORM\ManyToMany(targetEntity="VideoTag", mappedBy="videos", cascade={"persist"})
      */
     protected $tags;
 
-	/**
+    /**
      * @ORM\OneToMany(targetEntity="Mongobox\Bundle\BookmarkBundle\Entity\UserFavoris", mappedBy="video", cascade={"persist"})
      */
-	protected $favoris;
+    protected $favoris;
 
-	/**
+    /**
      * Constructor
      */
     public function __construct()
@@ -83,7 +88,7 @@ class Videos
         $this->playlist = new ArrayCollection();
     }
 
-	public function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -98,7 +103,8 @@ class Videos
     /**
      * Set the value of lien.
      *
-     * @param  string                                  $lien
+     * @param  string $lien
+     *
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\Videos
      */
     public function setLien($lien)
@@ -121,7 +127,8 @@ class Videos
     /**
      * Set the value of date.
      *
-     * @param  string                                  $date
+     * @param  string $date
+     *
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\Videos
      */
     public function setDate($date)
@@ -177,7 +184,7 @@ class Videos
         return $this;
     }
 
-	public function getThumbnail()
+    public function getThumbnail()
     {
         return $this->thumbnail;
     }
@@ -213,64 +220,48 @@ class Videos
         return $this;
     }
 
-    public function getTitleFromYoutube()
-    {
-        $feed = 'http://gdata.youtube.com/feeds/api/videos/'.$this->getLien();
-        $xml = simplexml_load_file($feed);
-
-        return (string) $xml->title;
-    }
-
-    static function getDataFromYoutube($YoutubeId)
-    {
-        $feed = 'http://gdata.youtube.com/feeds/api/videos/'. $YoutubeId . '?v=2&alt=jsonc';
-
-        $json = file_get_contents($feed);
-        $data = json_decode($json);
-
-        return $data->data;
-    }
-
     public function getYoutubeUrl()
     {
-        return 'http://www.youtube.com/watch?v='.$this->getLien();
+        return 'https://www.youtube.com/watch?v=' . $this->getLien();
     }
 
-	public function guessVideoInfos()
-	{
-		$infos = array('artist' => '', 'songName' => '');
-		$split = explode('-', $this->title);
-		if(count($split) > 1)
-		{
-			$infos['artist'] = trim($split[0]);
-			$infos['songName'] = trim($split[1]);
-		}
-		return $infos;
-	}
+    public function guessVideoInfos()
+    {
+        $infos = array('artist' => '', 'songName' => '');
+        $split = explode('-', $this->title);
+        if (count($split) > 1) {
+            $infos['artist'] = trim($split[0]);
+            $infos['songName'] = trim($split[1]);
+        }
+
+        return $infos;
+    }
 
     /**
      * Split a given URL into its components.
      * Uses parse_url() followed by parse_str() on the query string.
      *
      * @param  string $url The string to decode.
+     *
      * @return array  Associative array containing the different components.
      */
     public static function parse_url_detail($url)
     {
         $parts = parse_url($url);
-
         if (isset($parts['query'])) {
             parse_str(urldecode($parts['query']), $parts['query']);
 
             return $parts['query']['v'];
-        } else return $url;
-
+        } else {
+            return $url;
+        }
     }
 
     /**
      * Add playlist
      *
      * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist
+     *
      * @return Videos
      */
     public function addPlaylist(\Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist)
@@ -304,15 +295,17 @@ class Videos
      *
      * @param TumblrTag $tag
      */
-    public function addTag($tag) {
-        // var_dump( $tag);exit;
+    public function addTag($tag)
+    {
         $tag->addVideo($this);
         $this->tags[] = $tag;
+
         return $this;
     }
 
     /**
      * Fonction to delete tag
+     *
      * @param Discussion $discussion
      */
     public function removeTag($tag)
@@ -323,21 +316,27 @@ class Videos
     /**
      * @return the $tags
      */
-    public function getTags() {
+    public function getTags()
+    {
         return $this->tags;
     }
 
     /**
      * @return the $tags
      */
-    public function setTags(ArrayCollection $tags) {
+    public function setTags(ArrayCollection $tags)
+    {
         $this->tags = $tags;
+
         return $this;
     }
 
-	public function getName()
-	{
-		if($this->getSongName() != '') return $this->getArtist().' - '.$this->getSongName ();
-		else return $this->getTitle();
-	}
+    public function getName()
+    {
+        if ($this->getSongName() != '') {
+            return $this->getArtist() . ' - ' . $this->getSongName();
+        } else {
+            return $this->getTitle();
+        }
+    }
 }
