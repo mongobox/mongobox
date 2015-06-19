@@ -233,4 +233,10 @@ class Tumblr
 
         return false;
     }
+
+
+    public function __toString()
+    {
+        return $this->text ? : 'New Post';
+    }
 }

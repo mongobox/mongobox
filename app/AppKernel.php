@@ -22,10 +22,13 @@ class AppKernel extends Kernel
             new DMS\Bundle\FilterBundle\DMSFilterBundle(),
 			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\BlockBundle\SonataBlockBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
 			// Mongobox
-			//new Emakina\Bundle\LdapBundle\EmakinaLdapBundle(),
-            //new Emk\Bundle\AuthenticationBundle\EmkAuthenticationBundle(),
             new Mongobox\Bundle\TumblrBundle\MongoboxTumblrBundle(),
         	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),
 			new Mongobox\Bundle\UsersBundle\MongoboxUsersBundle(),
@@ -35,7 +38,6 @@ class AppKernel extends Kernel
             new Mongoeat\Bundle\FoursquareBundle\MongoeatFoursquareBundle(),
             new Mongoeat\Bundle\RestaurantBundle\MongoeatRestaurantBundle(),
             new Mongoeat\Bundle\VoteBundle\MongoeatVoteBundle(),
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Mongobox\Bundle\BookmarkBundle\MongoboxBookmarkBundle()
 	);
 

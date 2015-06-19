@@ -141,6 +141,9 @@ class VideoTag
 		return strtolower($string);
 	}
 
-
+    public function __toString()
+    {
+        return $this->name ? : 'New Tag';
+    }
 
 }

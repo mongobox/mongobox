@@ -1,0 +1,23 @@
+# Mongobox/Bundle/TumblrBundle/Resources/config/admin.yml
+services:
+    sonata.admin.tumblr.post:
+        class: Mongobox\Bundle\TumblrBundle\Admin\PostsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Tumblr", label: "Posts" }
+        arguments:
+            - ~
+            - Mongobox\Bundle\TumblrBundle\Entity\Tumblr
+            - ~
+        calls:
+            - [ setTranslationDomain, [MongoboxTumblrBundle]]
+
+    sonata.admin.tumblr.tags:
+            class: Mongobox\Bundle\TumblrBundle\Admin\TagsAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "Tumblr", label: "Tags" }
+            arguments:
+                - ~
+                - Mongobox\Bundle\TumblrBundle\Entity\TumblrTag
+                - ~
+            calls:
+                - [ setTranslationDomain, [MongoboxTumblrBundle]]
