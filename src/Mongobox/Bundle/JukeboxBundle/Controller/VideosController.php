@@ -23,6 +23,10 @@ use Mongobox\Bundle\JukeboxBundle\Form\VideoInfoType;
 use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
 use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
 
+// Google API
+use Google_Client;
+use Google_Service_YouTube;
+
 /**
  * Videos controller.
  *
@@ -331,98 +335,143 @@ class VideosController extends Controller
     /**
      * @Route( "/post_video", name="post_video")
      */
-	public function postVideoAction(Request $request)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+    public function postVideoAction(Request $request)
+    {
+        $youtubeService = $this->get('mongobox_jukebox.api_youtube');
 
-		$video = new Videos();
-		$form_video = $this->createForm(new VideoType(), $video);
-		$form_search = $this->createForm(new VideoSearchType(), $video);
-		if ( 'POST' === $request->getMethod() )
-		{
-			$form_video->submit($request);
-			if ( $form_video->isValid() )
-			{
-				$video->setLien(Videos::parse_url_detail($video->getLien()));
-				//On vérifie qu'elle n'existe pas déjà
-				$video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $video->getLien()));
-				if (!is_object($video_new))
-				{
-					$dataYt = Videos::getDataFromYoutube($video->getLien());
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $session = $request->getSession();
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-					$video->setDate(new \Datetime())
-							->setTitle( $dataYt->title )
-							->setDuration($dataYt->duration)
-							->setThumbnail( $dataYt->thumbnail->hqDefault )
-							->setThumbnailHq( $dataYt->thumbnail->sqDefault )
-							->setArtist($request->request->get('artist'))
-							->setSongName($request->request->get('songName'));
-					$em->persist($video);
-					$em->flush();
-					$video_new = $video;
+        $video = new Videos();
+        $form_video = $this->createForm(new VideoType(), $video);
+        $form_search = $this->createForm(new VideoSearchType(), $video);
 
-					$this->get('session')->getFlashBag()->add('success', 'Vidéo "'.$dataYt->title .'" postée avec succès');
-				}
-				//On vérifie qu'elle n'existe pas pour ce groupe
-				$video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(array('video' => $video_new, 'group' => $group));
-				if(!is_object($video_group))
-				{
-					$video_group = new VideoGroup();
-					$video_group->setVideo($video_new)
-								->setGroup($group)
-								->setUser($user)
-								->setDiffusion(0)
-								->setVolume(50)
-								->setVotes(0);
-					$em->persist($video_group);
-					$em->flush();
-				}
-				//On l'ajoute à la playlist
-				$playlist_add = new Playlist();
-				$playlist_add->setVideoGroup($video_group)
-								->setGroup($group)
-								->setDate(new \Datetime())
-								->setRandom(0)
-								->setCurrent(0);
-				$em->persist($playlist_add);
+        if ('POST' === $request->getMethod()) {
+            $form_video->submit($request);
+            if ($form_video->isValid()) {
+                $video->setLien(Videos::parse_url_detail($video->getLien()));
 
-				$em->flush();
-				$form_video_info = $this->createForm(new VideoInfoType(), $video_new);
+                // Check if video already exist
+                $video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(
+                    array('lien' => $video->getLien())
+                );
+                if (!is_object($video_new)) {
+                    $dataYt = $youtubeService->getYoutubeApi()->videos->listVideos(
+                        "id,snippet,status,contentDetails",
+                        array('id' => $video->getLien())
+                    );
 
-				//On récupère tous les tags de cette vidéo
-				$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video_new);
+                    foreach ($dataYt->getItems() as $youtubeVideo) {
+                        $snippet = $youtubeVideo->getSnippet();
 
-				$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(
-								'form_video_info' => $form_video_info->createView(),
-								'video' => $video_new,
-								'list_tags' => $list_tags
-							))->getContent();
-				$title = 'Informations de la vidéo : '.$video_new->getName();
+                        // Duration
+                        $duration = $youtubeVideo->getContentDetails()->getDuration();
+                        $interval = new \DateInterval($duration);
+                        $duration = $this->toSeconds($interval);
 
-				$return = array(
-					'content' => $content,
-					'title' => $title
-				);
-				return new Response(json_encode($return));
-			}
-		}
+                        // Thumbnails
+                        $thumbnails = $snippet->getThumbnails();
 
-		$content = $this->render("MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig", array(
-						'form_video' => $form_video->createView(),
-						'form_search' => $form_search->createView()
-					))->getContent();
-		$title = 'Ajout d\'une vidéo';
+                        $video
+                            ->setDate(new \Datetime())
+                            ->setTitle($snippet->getTitle())
+                            ->setDuration($duration)
+                            ->setThumbnail($thumbnails->getDefault()->getUrl())
+                            ->setThumbnailHq($thumbnails->getHigh()->getUrl());
 
-		$return = array(
-			'content' => $content,
-			'title' => $title
-		);
+                        $artist = $request->request->get('artist');
+                        $songName = $request->request->get('songName');
+                        if( empty($artist) && empty($songName) ) {
+                            $infos = $video->guessVideoInfos();
+                            $artist = $infos['artist'];
+                            $songName = $infos['songName'];
+                        }
 
-		return new Response(json_encode($return));
-	}
+                        $video
+                            ->setArtist($artist)
+                            ->setSongName($songName);
+
+                        $em->persist($video);
+                        $em->flush();
+
+                        $video_new = $video;
+
+                        $this->get('session')->getFlashBag()->add(
+                            'success',
+                            'Vidéo "' . $snippet->getTitle() . '" postée avec succès'
+                        );
+                    }
+                }
+
+                // Check if video already exist in this group
+                $video_group = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneby(
+                    array('video' => $video_new, 'group' => $group)
+                );
+                if (!is_object($video_group)) {
+                    $video_group = new VideoGroup();
+                    $video_group->setVideo($video_new)
+                        ->setGroup($group)
+                        ->setUser($user)
+                        ->setDiffusion(0)
+                        ->setVolume(50)
+                        ->setVotes(0);
+                    $em->persist($video_group);
+                    $em->flush();
+                }
+
+                // Add video into playlist
+                $playlist_add = new Playlist();
+                $playlist_add->setVideoGroup($video_group)
+                    ->setGroup($group)
+                    ->setDate(new \Datetime())
+                    ->setRandom(0)
+                    ->setCurrent(0);
+                $em->persist($playlist_add);
+
+                $em->flush();
+
+                $form_video_info = $this->createForm(new VideoInfoType(), $video_new);
+
+                // Get video tags
+                $list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video_new);
+
+                $content = $this->render(
+                    'MongoboxJukeboxBundle:Partial:edit-modal.html.twig',
+                    array(
+                        'form_video_info' => $form_video_info->createView(),
+                        'video'           => $video_new,
+                        'list_tags'       => $list_tags
+                    )
+                )->getContent();
+                $title = 'Informations de la vidéo : ' . $video_new->getName();
+
+                $return = array(
+                    'content' => $content,
+                    'title'   => $title
+                );
+
+                return new Response(json_encode($return));
+            }
+        }
+
+        $content = $this->render(
+            "MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig",
+            array(
+                'form_video' => $form_video->createView(),
+                'form_search' => $form_search->createView()
+            )
+        )->getContent();
+        $title = 'Ajout d\'une vidéo';
+
+        $return = array(
+            'content' => $content,
+            'title'   => $title
+        );
+
+        return new Response(json_encode($return));
+    }
 
     /**
      * Action to edit a video from a modal
@@ -506,6 +555,8 @@ class VideosController extends Controller
      */
     public function ajaxSearchKeywordAction(Request $request)
     {
+        $youtubeService = $this->get('mongobox_jukebox.api_youtube');
+
         $em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
@@ -513,19 +564,18 @@ class VideosController extends Controller
 		$form_search = $this->createForm(new VideoSearchType(), $video);
 		$youtube_video = array();
 		$mongobox_video = array();
+
 		if ( 'POST' === $request->getMethod() )
 		{
 			$form_search->submit($request);
 			$keyword = $form_search->get('search')->getData();
 
-			//Récupération des infos de Youtube
-			$url = 'http://gdata.youtube.com/feeds/api/videos?q='.$keyword.'&max-results=10';
-			$videos = @simplexml_load_file( $url );
-			foreach($videos->entry as $video)
+            $response = $youtubeService->getYoutubeApi()->search->listSearch("id,snippet", array('q' => $keyword,'maxResults'=>10));
+			foreach($response->getItems() as $video)
 			{
-				$att = 'href';
-				$url = $video->link[0]->attributes()->$att;
-				$youtube_video[] = array('title' => strip_tags($video->title->asXML()), 'url' => $url);
+                $snippet = $video->getSnippet();
+                $url = "https://www.youtube.com/watch?v={$video->getId()->getVideoId()}";
+                $youtube_video[] = array('title' => $snippet->getTitle(), 'url' => $url);
 			}
 
 			//Récupération des infos Mongobox
@@ -547,5 +597,64 @@ class VideosController extends Controller
 						'title' => 'Mongobox'
 					))->getContent()
 			)));
+    }
+
+    /**
+     * Convert Date Interval into total seconds
+     *
+     * @param \DateInterval $delta
+     *
+     * @return int
+     */
+    private function toSeconds(\DateInterval $delta)
+    {
+        $seconds = ($delta->s)
+            + ($delta->i * 60)
+            + ($delta->h * 60 * 60)
+            + ($delta->d * 60 * 60 * 24)
+            + ($delta->m * 60 * 60 * 24 * 30)
+            + ($delta->y * 60 * 60 * 24 * 365);
+
+        return (int) $seconds;
+    }
+
+    /**
+     * @Route( "/get_info_video", name="get_info_video")
+     */
+    public function getInfoVideoAction(Request $request)
+    {
+        $youtubeService = $this->get('mongobox_jukebox.api_youtube');
+        $em = $this->getDoctrine()->getManager();
+
+        $lien = Videos::parse_url_detail($request->request->get('lien'));
+
+        $video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $lien));
+        //Si la vidéo existe déjà, on dit au JS que tu zappe tout, on la rajoute à la playlist
+        if (is_object($video_new)) {
+            $response = array('video' => $video_new->getId(), 'type' => 'old');
+        } //Sinon, on va chercher les infos YT
+        else {
+            $dataYt = $youtubeService->getYoutubeApi()->videos->listVideos(
+                "id,snippet,status,contentDetails",
+                array('id' => $lien)
+            );
+
+            foreach ($dataYt->getItems() as $youtubeVideo) {
+                $snippet = $youtubeVideo->getSnippet();
+
+                $video = new Videos();
+                $video
+                    ->setLien($lien)
+                    ->setTitle($snippet->getTitle())
+                ;
+
+                //On fait un bête split pour chopper artist et songName pour le moment
+                $response = $video->guessVideoInfos();
+            }
+
+            $response['type'] = 'new';
+        }
+
+        return new Response(json_encode($response));
     }
 }

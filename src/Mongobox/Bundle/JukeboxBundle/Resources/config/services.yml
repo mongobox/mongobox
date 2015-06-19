@@ -20,3 +20,8 @@ services:
         arguments:
             - @service_container
             - @doctrine.orm.entity_manager
+
+    mongobox_jukebox.api_youtube:
+         class: Mongobox\Bundle\JukeboxBundle\Api\Youtube
+         arguments:
+            - @service_container

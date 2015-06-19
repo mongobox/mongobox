@@ -109,7 +109,7 @@ $(document).ready(function()
 		$.ajax({
 			type: "POST",
 			dataType: "json",
-			url: basepath + 'get_info_video',
+			url: basepath + 'videos/get_info_video',
 			data: {'lien' : $(this).val()}
 		}).done(
 		function( infos )
