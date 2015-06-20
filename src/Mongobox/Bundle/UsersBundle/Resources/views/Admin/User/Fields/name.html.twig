@@ -1,0 +1,14 @@
+{% block field%}
+    <td>
+        {% if object.firstname is empty and object.lastname is empty %}
+            {{ object.username }}
+        {% else  %}
+            {% if object.firstname is not empty %}
+                {{ object.firstname }}
+            {% endif %}
+            {% if object.lastname is not empty %}
+                {{ object.lastname }}
+            {% endif %}
+        {% endif  %}
+    </td>
+{% endblock %}

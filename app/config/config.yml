@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: @MongoboxJukeboxBundle/Resources/config/admin.yml }
     - { resource: @MongoboxTumblrBundle/Resources/config/admin.yml }
+    - { resource: @MongoboxUsersBundle/Resources/config/admin.yml }
 
 framework:
     #esi:             ~

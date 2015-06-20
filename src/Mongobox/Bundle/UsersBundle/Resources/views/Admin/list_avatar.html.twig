@@ -1,0 +1,18 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field%}
+    {% if object.avatar is not null %}
+        {% set avatar = object.avatarWebPath|apply_filter('avatar_thumbnail')%}
+    {% else %}
+        {% if avatarMini is defined %}
+            {% set avatar = object.gravatar(20) %}
+        {% else %}
+            {% set avatar = object.gravatar %}
+        {% endif %}
+    {% endif %}
+    {% if loginClass is not defined  %}
+        {% set loginClass = '' %}
+    {% endif %}
+
+    <img src="{{avatar}}" class="menu-avatar" alt="{{ object.login }}"/>
+{% endblock %}

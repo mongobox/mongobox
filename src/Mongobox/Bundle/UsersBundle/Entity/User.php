@@ -77,7 +77,9 @@ class User implements AdvancedUserInterface
     protected $avatar;
 
     /**
-     * @ORM\Column(type="integer", length=1)
+     * @var boolean $actif
+     *
+     * @ORM\Column(type="boolean")
      */
     protected $actif;
 
