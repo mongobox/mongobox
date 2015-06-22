@@ -4,6 +4,7 @@ imports:
     - { resource: @MongoboxJukeboxBundle/Resources/config/admin.yml }
     - { resource: @MongoboxTumblrBundle/Resources/config/admin.yml }
     - { resource: @MongoboxUsersBundle/Resources/config/admin.yml }
+    - { resource: @MongoboxGroupBundle/Resources/config/admin.yml }
 
 framework:
     #esi:             ~
@@ -124,6 +125,9 @@ sonata_block:
 
 sonata_admin:
     title:      Mongobox
+    templates:
+        # default global templates
+        layout:  MongoboxCoreBundle:Admin:standard_layout.html.twig
     dashboard:
         blocks:
             - { position: right, type: sonata.admin.block.admin_list }

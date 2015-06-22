@@ -16,7 +16,9 @@ class TagsAdmin extends Admin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-
+        $datagridMapper
+            ->add('name')
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -34,7 +36,6 @@ class TagsAdmin extends Admin
      */
     public function getTemplate($name)
     {
-        //var_dump( $name );
         if (isset($this->templates[$name])) {
             return $this->templates[$name];
         }

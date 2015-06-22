@@ -339,4 +339,9 @@ class Videos
             return $this->getTitle();
         }
     }
+
+    public function __toString()
+    {
+        return $this->getName() ? : 'New video';
+    }
 }

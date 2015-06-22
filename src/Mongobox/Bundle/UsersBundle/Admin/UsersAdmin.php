@@ -13,14 +13,14 @@ class UsersAdmin extends Admin
         '_sort_order' => 'DESC',
         '_sort_by' => 'id'
     );
-    
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
             ->with('General')
-                ->add('username')
+                ->add('login')
                 ->add('email')
-                ->add('plainPassword', 'text', array('required' => false))
+                //->add('plainPassword', 'text', array('required' => false))
             ->end()
             ->with('Profile')
           //  ->add('civilite')
@@ -30,10 +30,6 @@ class UsersAdmin extends Admin
                 ->add('lastname','text', array(
                     'required' => false,
                 ))
-               /* ->add('enabled','checkbox', array(
-                    'label'=> 'Actif',
-                    'required' => false,
-                ))*/
             ->end()
 
          //if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
@@ -46,7 +42,7 @@ class UsersAdmin extends Admin
                  ))*/
                //  ->add('locked', null, array('required' => false))
                //  ->add('expired', null, array('required' => false))
-                 ->add('enabled', null, array('required' => false))
+                 ->add('actif', null, array('required' => false))
                //  ->add('credentialsExpired', null, array('required' => false))
                  ->end()
             // ;
@@ -72,9 +68,8 @@ class UsersAdmin extends Admin
             ->addIdentifier('email')
             ->add('login')
             ->add('name','string', array('template' => 'MongoboxUsersBundle::Admin/User/Fields/name.html.twig'))
+            ->add('groups')
             ->add('actif')
-            //->add('locked')
-            //->add('enabled')
 
         ;
     }

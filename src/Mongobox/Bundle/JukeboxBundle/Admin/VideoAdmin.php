@@ -21,6 +21,8 @@ class VideoAdmin extends Admin
             ->with('General')
                 ->add('title', 'text')
                 ->add('lien', 'text')
+                ->add('duration', 'text')
+
                 /*->add('url', 'text',array(
                     'required' => false,
                     'data_class' => '\Aml\Bundle\UrlRewriteBundle\Entity\UrlArticle',

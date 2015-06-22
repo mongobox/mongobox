@@ -865,4 +865,9 @@ class User implements AdvancedUserInterface
     {
         return $this->firstname.' '.$this->lastname;
     }
+
+    public function __toString()
+    {
+        return $this->getName() . ' (' . $this->getEmail() .')' ? : 'New member';
+    }
 }

@@ -12,7 +12,7 @@ class PostsAdmin extends Admin
     // setup the default sort column and order
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
-        '_sort_by' => 'id'
+        '_sort_by' => 'id_tumblr'
     );
 
     protected function configureFormFields(FormMapper $formMapper)
