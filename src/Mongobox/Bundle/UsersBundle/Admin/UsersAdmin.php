@@ -16,6 +16,22 @@ class UsersAdmin extends Admin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $user = $this->getSubject();
+
+        // use $thumbnailFieldOptions so we can add other options to the field
+        $avatarFieldOptions = array('required' => false,'data_class' => null);
+        if ($user) {
+            $avatar = $user->getAvatar();
+            if( empty($avatar) ){
+                $avatar = $user->getGravatar();
+            }
+            else{
+                $avatar = '/' . $user->getAvatarWebPath();
+            }
+            // add a 'help' option containing the preview's img tag
+            $avatarFieldOptions['help'] = '<img src="'.$avatar.'" class="admin-preview" />';
+        }
+
         $formMapper
             ->with('General')
                 ->add('login')
@@ -23,18 +39,25 @@ class UsersAdmin extends Admin
                 //->add('plainPassword', 'text', array('required' => false))
             ->end()
             ->with('Profile')
-          //  ->add('civilite')
+                ->add('avatar','file',$avatarFieldOptions)
                 ->add('firstname','text', array(
                     'required' => false,
                 ))
                 ->add('lastname','text', array(
                     'required' => false,
                 ))
+                ->add('nsfw_mode', null, array('required' => false))
             ->end()
 
          //if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
              //$formMapper
                  ->with('Management')
+                    ->add('groups', 'sonata_type_model', array(
+                        'required' => false,
+                        'expanded' => true,
+                        'multiple' => true,
+                        'by_reference' => false
+                    ))
                  /*->add('realRoles', 'sonata_security_roles', array(
                      'expanded' => true,
                      'multiple' => true,
@@ -48,7 +71,6 @@ class UsersAdmin extends Admin
             // ;
          //}
             //->add('adresse')
-           // ->add('avatar')
         ;
     }
 

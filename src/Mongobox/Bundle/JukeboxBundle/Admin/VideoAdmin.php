@@ -17,17 +17,37 @@ class VideoAdmin extends Admin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
+        // get the current Post instance
+        $video = $this->getSubject();
+
+        // use $thumbnailFieldOptions so we can add other options to the field
+        $thumbnailFieldOptions = array('required' => false,'read_only' => true);
+        if ($video && $thumbnail = $video->getThumbnail()) {
+            // add a 'help' option containing the preview's img tag
+            $thumbnailFieldOptions['help'] = '<img src="'.$thumbnail.'" class="admin-preview" />';
+        }
+
+        // use $thumbnailFieldOptions so we can add other options to the field
+        $lienFieldOptions = array('required' => true);
+        if ($video && $lien = $video->getLien()) {
+            // add a 'help' option containing the preview's img tag
+            $urlVideo = "https://www.youtube.com/embed/{$lien}";
+            $lienFieldOptions['help'] = '<iframe width="300" height="169"
+src="'.$urlVideo.'" frameborder="0" allowfullscreen></iframe>';
+        }
+
         $formMapper
             ->with('General')
                 ->add('title', 'text')
-                ->add('lien', 'text')
+                ->add('lien', 'text',$lienFieldOptions)
                 ->add('duration', 'text')
-
-                /*->add('url', 'text',array(
-                    'required' => false,
-                    'data_class' => '\Aml\Bundle\UrlRewriteBundle\Entity\UrlArticle',
-                    'read_only' => true
-                ))*/
+                ->add('thumbnail','text',$thumbnailFieldOptions)
+            ->add('artist', 'text', array(
+                'label' => 'Artiste'
+            ))
+            ->add('songName', 'text', array(
+                'label' => 'Nom de la vidéo'
+            ))
             ->end()
             ->with('Tags')
                 ->add('tags', 'sonata_type_model', array(

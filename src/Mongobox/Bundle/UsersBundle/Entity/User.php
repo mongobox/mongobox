@@ -6,15 +6,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+
 /**
  * Mongobox\Bundle\UsersBundle\Entity\User
  *
  * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="users")
  * @UniqueEntity(fields="login", message="Login already in use.")
  * @UniqueEntity(fields="email", message="Email already in use.")
@@ -512,6 +515,16 @@ class User implements AdvancedUserInterface
         return $this;
     }
 
+    /**
+     * Fonction to delete tag
+     * @param Discussion $discussion
+     */
+    public function removeGroup($group)
+    {
+        $this->groups->removeElement($group);
+        //$tag->deleteArticle($this);
+    }
+
     public function getGroupsInvitations()
     {
         return $this->groups_invitations;
@@ -672,7 +685,7 @@ class User implements AdvancedUserInterface
      */
     public function getAvatarWebPath()
     {
-        return $this->getUploadDir().'/'.$this->avatar;
+        return null === $this->avatar ? null : $this->getUploadDir().'/'.$this->avatar;
     }
 
     /**
@@ -706,7 +719,7 @@ class User implements AdvancedUserInterface
         //Nom du fichier
         $file = $this->id.'.'.$this->avatar->guessExtension();
         // move takes the target directory and then the target filename to move to
-        $this->avatar->move($this->getUploadRootDir(), $file);
+        $this->avatar->move($this->getUploadRootDir(), $this->avatar);
         //Suppression des thumbnail déjà  en cache
         @unlink(__DIR__.'/../../../../../web/imagine/avatar_thumbnail/avatars/'.$file);
         @unlink(__DIR__.'/../../../../../web/imagine/avatar_moyen/avatars/'.$file);

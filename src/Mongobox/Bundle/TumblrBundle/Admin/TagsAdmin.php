@@ -11,7 +11,12 @@ class TagsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name');
+            ->add('name','text')
+            ->add('system_name','text',array(
+                'required' => false,
+                'read_only' => true
+            ))
+        ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -24,23 +29,8 @@ class TagsAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
             ->addIdentifier('system_name')
             ->add('name');
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return null|string
-     */
-    public function getTemplate($name)
-    {
-        if (isset($this->templates[$name])) {
-            return $this->templates[$name];
-        }
-
-        return null;
     }
 
 }
