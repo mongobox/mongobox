@@ -17,8 +17,8 @@ class Admin
      */
     public function __construct(ContainerInterface $container, EntityManager $entityManager)
     {
-        $this->container    = $container;
-        $this->em           = $entityManager;
+        $this->container = $container;
+        $this->em = $entityManager;
     }
 
     /**
@@ -29,17 +29,17 @@ class Admin
      */
     public function isCurrentAdmin()
     {
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $currentUser = $securityContext->getToken()->getUser();
+            $currentUser = $this->container->get('security.token_storage')->getToken()->getUser();
         } else {
             return false;
         }
 
         $session = $this->container->get('session');
 
-        $groupRepository    = $this->em->getRepository('MongoboxGroupBundle:Group');
-        $groupEntity        = $groupRepository->find($session->get('id_group'));
+        $groupRepository = $this->em->getRepository('MongoboxGroupBundle:Group');
+        $groupEntity = $groupRepository->find($session->get('id_group'));
 
         if ($groupEntity->getLiveCurrentAdmin() === null) {
             $groupEntity->setLiveCurrentAdmin($currentUser);
@@ -58,8 +58,8 @@ class Admin
     {
         $session = $this->container->get('session');
 
-        $groupRepository    = $this->em->getRepository('MongoboxGroupBundle:Group');
-        $groupEntity        = $groupRepository->find($session->get('id_group'));
+        $groupRepository = $this->em->getRepository('MongoboxGroupBundle:Group');
+        $groupEntity = $groupRepository->find($session->get('id_group'));
 
         return $groupEntity->getLiveCurrentAdmin();
     }
@@ -68,16 +68,19 @@ class Admin
      * Initialize the jukebox playlist
      *
      * @param Group $group
+     *
      * @return Playlist object
      */
     public function initializePlaylist(Group $group)
     {
         $this->em->getRepository('MongoboxJukeboxBundle:Playlist')->generate($group);
 
-        $currentPlaylist = $this->em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array(
-            'group'     => $group->getId(),
-            'current'   => 1
-        ));
+        $currentPlaylist = $this->em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(
+            array(
+                'group'   => $group->getId(),
+                'current' => 1
+            )
+        );
 
         if (!is_null($currentPlaylist)) {
             $votes = $this->em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($currentPlaylist);
@@ -107,6 +110,7 @@ class Admin
      *
      * @param integer $userId
      * @param boolean $status
+     *
      * @return boolean
      */
     public function switchAdmin($userId, $status)
@@ -130,9 +134,9 @@ class Admin
             }
 
             $conditions = array(
-                'group'     => $groupEntity,
-                'user'      => $userEntity,
-                'response'  => null
+                'group'    => $groupEntity,
+                'user'     => $userEntity,
+                'response' => null
             );
 
             $putschRepository = $this->em->getRepository('MongoboxJukeboxBundle:Putsch');

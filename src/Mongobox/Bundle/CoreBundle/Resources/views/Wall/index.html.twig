@@ -4,7 +4,7 @@
 
 {% block body %}
 <div id="tumblr" class="container">
-    {% render controller("MongoboxTumblrBundle:Tumblr:slider") %}
+    {{ render(controller("MongoboxTumblrBundle:Tumblr:slider")) }}
 </div>
 
 <div class="container">
@@ -16,7 +16,7 @@
                 </div>
                 <div id="propose-votes">
                 </div>
-                {% render controller("MongoeatVoteBundle:Decision:small") %}
+                {{ render(controller("MongoeatVoteBundle:Decision:small")) }}
             </div>
             <div class="col-md-6">
                 <div id="flux_rss">

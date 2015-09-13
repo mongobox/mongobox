@@ -13,6 +13,7 @@ class UserActivityListener
      * Constructor
      *
      * @param ContainerInterface $container
+     *
      * @return void
      */
     public function __construct(ContainerInterface $container)
@@ -27,9 +28,9 @@ class UserActivityListener
      */
     protected function getCurrentUser()
     {
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $securityContext->getToken()->getUser();
+            return $this->container->get('security.token_storage')->getToken()->getUser();
         }
 
         return false;
@@ -39,6 +40,7 @@ class UserActivityListener
      * Update the date of last activity for the current user
      *
      * @param PostResponseEvent $event
+     *
      * @return void
      */
     public function onKernelTerminate(PostResponseEvent $event)
