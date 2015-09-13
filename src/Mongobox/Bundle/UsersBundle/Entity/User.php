@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+use Mongobox\Bundle\GroupBundle\Entity\Group;
 
 /**
  * Mongobox\Bundle\UsersBundle\Entity\User
@@ -117,7 +118,7 @@ class User implements AdvancedUserInterface
 	protected $videos_group;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"all"})
      */
     protected $groups;
 
@@ -496,9 +497,13 @@ class User implements AdvancedUserInterface
         return $this->videos_group;
     }
 
-    public function addGroup($group)
+    /* -------------------- Manage groups ------------------------- */
+    public function addGroup(Group $group)
     {
-        $this->groups[] = $group;
+        if (!$this->groups->contains($group)) {
+            $group->addUser($this);
+            $this->groups[] = $group;
+        }
 
         return $this;
     }
@@ -508,7 +513,7 @@ class User implements AdvancedUserInterface
         return $this->groups;
     }
 
-    public function setGroups($groups)
+    public function setGroups(ArrayCollection $groups)
     {
         $this->groups = $groups;
 
@@ -516,15 +521,17 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * Fonction to delete tag
-     * @param Discussion $discussion
+     * Function to delete group
+     *
+     * @param Group $group
      */
-    public function removeGroup($group)
+    public function removeGroup(Group $group)
     {
+        //$group->removeUser($this);
         $this->groups->removeElement($group);
-        //$tag->deleteArticle($this);
     }
 
+    /* -------------------- Manage groups invitations ------------------------- */
     public function getGroupsInvitations()
     {
         return $this->groups_invitations;

@@ -4,8 +4,9 @@ namespace Mongobox\Bundle\GroupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Symfony\Component\Validator\Constraints as Assert;
+
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * Mongobox\Bundle\GroupBundle\Entity\Group
@@ -242,24 +243,41 @@ class Group
         return $this;
     }
 
-
-    public function addUser($user)
+    /* -------------------- Manage users ------------------------- */
+    public function addUser(User $user)
     {
-    	$this->users[] = $user;
-    	return $this;
+        if (!$this->users->contains($user)) {
+            $user->addGroup($this);
+            $this->users[] = $user;
+        }
+
+        return $this;
     }
 
     public function getUsers()
     {
-    	return $this->users;
+        return $this->users;
     }
 
-    public function setUsers($users)
+    public function setUsers(ArrayCollection $users)
     {
-    	$this->users = $users;
-    	return $this;
+        $this->users = $users;
+
+        return $this;
     }
 
+    /**
+     * Remove users
+     *
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $users
+     */
+    public function removeUser(User $user)
+    {
+        //$user->removeGroup($this);
+        $this->users->removeElement($user);
+    }
+
+    /* -------------------- Manage tumblrs ------------------------- */
     public function getTumblrs()
     {
     	return $this->tumblrs;
@@ -285,16 +303,6 @@ class Group
     {
     	$this->users_invitations = $users_invitations;
     	return $this;
-    }
-
-    /**
-     * Remove users
-     *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $users
-     */
-    public function removeUser(\Mongobox\Bundle\UsersBundle\Entity\User $users)
-    {
-        $this->users->removeElement($users);
     }
 
     /**
