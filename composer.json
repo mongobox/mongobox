@@ -23,11 +23,12 @@
 		"dms/dms-filter-bundle": "dev-master",
 		"avalanche123/imagine-bundle": "dev-master",
         "genemu/form-bundle": "2.2.*",
-        "knplabs/knp-menu": "2.0.*@dev,>=2.0.0-beta1",
-        "knplabs/knp-menu-bundle": "dev-master",
+        "knplabs/knp-menu-bundle": "2.0.*",
         "knplabs/knp-paginator-bundle": "2.4.*@dev",
 		"guzzle/guzzle": "~3.1.1",
-        "google/apiclient": "1.1.*@dev"
+        "google/apiclient": "1.1.*@dev",
+        "sonata-project/admin-bundle": "^2.4@dev",
+        "sonata-project/doctrine-orm-admin-bundle": "^2.4@dev"
     },
     "scripts": {
         "post-install-cmd": [

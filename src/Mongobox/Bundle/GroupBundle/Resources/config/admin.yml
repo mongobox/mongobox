@@ -1,0 +1,13 @@
+# Mongobox/Bundle/GroupBundle/Resources/config/admin.yml
+services:
+    sonata.admin.users.group:
+        class: Mongobox\Bundle\GroupBundle\Admin\GroupAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Administration", label: "Groupes" }
+        arguments:
+            - ~
+            - Mongobox\Bundle\GroupBundle\Entity\Group
+            - ~
+        calls:
+            - [ setTranslationDomain, [MongoboxGroupBundle]]
+

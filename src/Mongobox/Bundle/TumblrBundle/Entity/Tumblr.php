@@ -153,7 +153,7 @@ class Tumblr
     }
 
     public function addGroup($group) {
-		if (!$this->groups->contains($tag)) {
+		if (!$this->groups->contains($group)) {
 			$this->groups[] = $group;
 		}
     	return $this;
@@ -232,5 +232,15 @@ class Tumblr
         }
 
         return false;
+    }
+
+    public function getTitle()
+    {
+        return $this->text;
+    }
+
+    public function __toString()
+    {
+        return $this->text ? : 'New Post';
     }
 }

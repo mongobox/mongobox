@@ -142,5 +142,9 @@ class TumblrTag
 	}
 
 
+    public function __toString()
+    {
+        return $this->name ? : 'New Tag';
+    }
 
 }

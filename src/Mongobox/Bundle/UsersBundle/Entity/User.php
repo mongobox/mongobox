@@ -6,15 +6,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+use Mongobox\Bundle\GroupBundle\Entity\Group;
+
 /**
  * Mongobox\Bundle\UsersBundle\Entity\User
  *
  * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="users")
  * @UniqueEntity(fields="login", message="Login already in use.")
  * @UniqueEntity(fields="email", message="Email already in use.")
@@ -77,7 +81,9 @@ class User implements AdvancedUserInterface
     protected $avatar;
 
     /**
-     * @ORM\Column(type="integer", length=1)
+     * @var boolean $actif
+     *
+     * @ORM\Column(type="boolean")
      */
     protected $actif;
 
@@ -112,7 +118,7 @@ class User implements AdvancedUserInterface
 	protected $videos_group;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"all"})
      */
     protected $groups;
 
@@ -491,9 +497,13 @@ class User implements AdvancedUserInterface
         return $this->videos_group;
     }
 
-    public function addGroup($group)
+    /* -------------------- Manage groups ------------------------- */
+    public function addGroup(Group $group)
     {
-        $this->groups[] = $group;
+        if (!$this->groups->contains($group)) {
+            $group->addUser($this);
+            $this->groups[] = $group;
+        }
 
         return $this;
     }
@@ -503,13 +513,25 @@ class User implements AdvancedUserInterface
         return $this->groups;
     }
 
-    public function setGroups($groups)
+    public function setGroups(ArrayCollection $groups)
     {
         $this->groups = $groups;
 
         return $this;
     }
 
+    /**
+     * Function to delete group
+     *
+     * @param Group $group
+     */
+    public function removeGroup(Group $group)
+    {
+        //$group->removeUser($this);
+        $this->groups->removeElement($group);
+    }
+
+    /* -------------------- Manage groups invitations ------------------------- */
     public function getGroupsInvitations()
     {
         return $this->groups_invitations;
@@ -670,7 +692,7 @@ class User implements AdvancedUserInterface
      */
     public function getAvatarWebPath()
     {
-        return $this->getUploadDir().'/'.$this->avatar;
+        return null === $this->avatar ? null : $this->getUploadDir().'/'.$this->avatar;
     }
 
     /**
@@ -704,7 +726,7 @@ class User implements AdvancedUserInterface
         //Nom du fichier
         $file = $this->id.'.'.$this->avatar->guessExtension();
         // move takes the target directory and then the target filename to move to
-        $this->avatar->move($this->getUploadRootDir(), $file);
+        $this->avatar->move($this->getUploadRootDir(), $this->avatar);
         //Suppression des thumbnail déjà  en cache
         @unlink(__DIR__.'/../../../../../web/imagine/avatar_thumbnail/avatars/'.$file);
         @unlink(__DIR__.'/../../../../../web/imagine/avatar_moyen/avatars/'.$file);
@@ -862,5 +884,10 @@ class User implements AdvancedUserInterface
     public function getName()
     {
         return $this->firstname.' '.$this->lastname;
+    }
+
+    public function __toString()
+    {
+        return $this->getName() . ' (' . $this->getEmail() .')' ? : 'New member';
     }
 }

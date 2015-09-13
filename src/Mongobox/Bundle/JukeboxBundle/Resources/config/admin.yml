@@ -1,0 +1,23 @@
+# Mongobox/Bundle/JukeboxBundle/Resources/config/admin.yml
+services:
+    sonata.admin.jukebox.video:
+        class: Mongobox\Bundle\JukeboxBundle\Admin\VideoAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Jukebox", label: "Vidéos" }
+        arguments:
+            - ~
+            - Mongobox\Bundle\JukeboxBundle\Entity\Videos
+            - ~
+        calls:
+            - [ setTranslationDomain, [MongoboxJukeboxBundle]]
+
+    sonata.admin.jukebox.tags:
+            class: Mongobox\Bundle\JukeboxBundle\Admin\TagsAdmin
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: "Jukebox", label: "Tags" }
+            arguments:
+                - ~
+                - Mongobox\Bundle\JukeboxBundle\Entity\VideoTag
+                - ~
+            calls:
+                - [ setTranslationDomain, [MongoboxJukeboxBundle]]

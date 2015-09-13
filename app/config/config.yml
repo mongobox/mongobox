@@ -1,6 +1,10 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: @MongoboxJukeboxBundle/Resources/config/admin.yml }
+    - { resource: @MongoboxTumblrBundle/Resources/config/admin.yml }
+    - { resource: @MongoboxUsersBundle/Resources/config/admin.yml }
+    - { resource: @MongoboxGroupBundle/Resources/config/admin.yml }
 
 framework:
     #esi:             ~
@@ -108,3 +112,55 @@ knp_paginator:
         distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig     # sliding pagination controls template
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.stats:
+            contexts:   [admin]
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+        # Your other blocks
+        sonata.admin.block.search_result:
+        sonata.block.service.text:
+
+sonata_admin:
+    title:      Mongobox
+    #title_logo: /bundles/mongoboxcore/img/logo/mongo-logo-black-little.jpg
+    templates:
+        # default global templates
+        layout:  MongoboxCoreBundle:Admin:standard_layout.html.twig
+    dashboard:
+        blocks:
+            - { position: right, type: sonata.admin.block.admin_list }
+            - { position: left, type: sonata.block.service.text, settings: { content: '<div class="box"><div class="box-header with-border"><h2>Bienvenue !</h2></div><div class="box-body">Bienvenue dans la partie administrable du site.</div></div>'} }
+            -
+               class:    col-lg-4 col-xs-6
+               position: top
+               type:     sonata.admin.block.stats
+               settings:
+                   code: sonata.admin.jukebox.video
+                   icon: fa-film
+                   text: Videos
+                   color: bg-red
+            -
+               class:    col-lg-4 col-xs-6
+               position: top
+               type:     sonata.admin.block.stats
+               settings:
+                   code: sonata.admin.tumblr.post
+                   icon: fa-pencil-square-o
+                   text: Tumblr
+
+            -
+               class:    col-lg-4 col-xs-6
+               position: top
+               type:     sonata.admin.block.stats
+               settings:
+                   code: sonata.admin.users
+                   icon: fa-users
+                   text: Users
+                   color: bg-green
+
+
