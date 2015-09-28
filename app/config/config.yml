@@ -29,23 +29,13 @@ sensio_framework_extra:
 # Twig Configuration
 twig:
     exception_controller:  twig.controller.exception:showAction
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
 
     globals:
       project_name: MongoBox
       team_name:    Mongo Application
       version:      "1.6"
-
-    autoescape:                ~
-
-    autoescape_service:        ~ # Example: @my_service
-    autoescape_service_method: ~ # use in combination with autoescape_service option
-    #base_template_class:       ~ # Example: Twig_Template
-    cache:                     "%kernel.cache_dir%/twig"
-    charset:                   "%kernel.charset%"
-    debug:                     "%kernel.debug%"
-    strict_variables:          ~
-    auto_reload:               ~
-    #optimizations:             ~
 
 # Service Configuration
 services:
@@ -61,6 +51,7 @@ services:
         class: Mongobox\Bundle\JukeboxBundle\Twig\NiceTimeExtension
         tags:
           - { name: twig.extension }
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
