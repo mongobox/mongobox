@@ -98,9 +98,11 @@ class TumblrController extends Controller
                 }
 
                 // Set Tags
-                foreach ($tags as $tag_id) {
-                    $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tag_id);
-                    $entityTag->getTumblrs()->add($tumblr);
+                if(!empty($tags)) {
+                    foreach ($tags as $tagId) {
+                        $entityTag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($tagId);
+                        $entityTag->getTumblrs()->add($tumblr);
+                    }
                 }
 
                 foreach ($form->get('groups')->getData() as $group_id) {
@@ -402,9 +404,12 @@ class TumblrController extends Controller
      */
     public function getReferrerRouteName()
     {
-        $referer = $this->getRequest()->headers->get('referer');
-        $lastPath = substr($referer, strpos($referer, $this->getRequest()->getBaseUrl()));
-        $lastPath = str_replace($this->getRequest()->getBaseUrl(), '', $lastPath);
+        $request = $this->get('request');
+        $baseUrl = $request->getBaseUrl();
+
+        $referer = $request->headers->get('referer');
+        $lastPath = substr($referer, strpos($referer, $baseUrl));
+        $lastPath = str_replace($baseUrl, '', $lastPath);
 
         $matcher = $this->get('router')->getMatcher();
         $parameters = $matcher->match($lastPath);

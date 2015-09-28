@@ -71,7 +71,8 @@ class ListesController extends Controller
 	{
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
-		$id_liste = $this->getRequest()->request->get('id_liste');
+        $request = $this->get('request');
+		$id_liste = $request->request->get('id_liste');
 		$liste = $em->getRepository('MongoboxBookmarkBundle:ListeFavoris')->find($id_liste);
 		$video = $em->find('MongoboxJukeboxBundle:Videos', $id_video);
 
@@ -103,7 +104,7 @@ class ListesController extends Controller
 		$html = '';
 		if( $result )
 		{
-			$paramList = $this->getRequest()->request->get('liste');
+			$paramList = $request->request->get('liste');
 			if( !is_null($paramList) )
 				$html = $this->renderView('MongoboxBookmarkBundle:Listes:unFavorisDansListeDetails.html.twig', array('video' => $video, 'date' => $date, 'list' => $liste));
 			else
@@ -125,7 +126,7 @@ class ListesController extends Controller
     {
         try {
             $em = $this->getDoctrine()->getManager();
-            $request = $this->getRequest();
+            $request = $this->get('request');
             $user = $this->getUser();
             $currentRoute = $request->request->get('routeName');
             $listName = $request->request->get('listName');
@@ -248,12 +249,14 @@ class ListesController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$list = $em->find("MongoboxBookmarkBundle:ListeFavoris", $id_list);
 
+        $request = $this->get('request');
+
         $json = array(
             "success" => false,
             "message" => "Une erreur est survenue lors de la mise à jour de la liste"
         );
         if ($list) {
-            $newName = $this->getRequest()->request->get('name');
+            $newName = $request->request->get('name');
             $list->setName($newName);
             $em->flush();
             $json["success"] = true;

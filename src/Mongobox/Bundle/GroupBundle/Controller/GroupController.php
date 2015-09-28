@@ -83,7 +83,7 @@ class GroupController extends Controller
 	 */
 	public function ajaxCreateGroupeAction()
 	{
-		$request = $this->getRequest();
+		$request = $this->get('request');
 
 		$group = new Group();
 		$form = $this->createForm(new GroupType(), $group);
@@ -129,7 +129,7 @@ class GroupController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.token_storage')->getToken()->getUser();
-		$session = $request->getSession();
+
 		if($user->isMemberFrom($group->getId()))
 		{
 			//On créer le formulaire en utilisant un utilisateur vide
@@ -167,7 +167,6 @@ class GroupController extends Controller
      */
     public function groupMembresAction(Request $request, Group $group)
     {
-        $em = $this->getDoctrine()->getManager();
 		$user = $this->get('security.token_storage')->getToken()->getUser();
 		if($user->isMemberFrom($group->getId()))
 		{
@@ -261,6 +260,7 @@ class GroupController extends Controller
 
 		//Suppression de l'invitation
 		$group->getUsersInvitations()->removeElement($user);
+
 		//Ajout au groupe
 		$group->getUsers()->add($user);
 		$em->flush();

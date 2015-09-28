@@ -45,7 +45,7 @@ class ImportController extends Controller
      */
     public function importAction()
     {
-        $request = $this->getRequest();
+        $request = $this->get('request');
         $manager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 

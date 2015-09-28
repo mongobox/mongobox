@@ -45,7 +45,7 @@ class UserActivityListener
      */
     public function onKernelTerminate(PostResponseEvent $event)
     {
-        $request = $event->getRequest();
+        $request = $this->get('request');
         if ($request->isXmlHttpRequest()) {
             return;
         }
