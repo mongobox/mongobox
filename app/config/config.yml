@@ -167,3 +167,5 @@ sonata_admin:
                    color: bg-green
 
 
+genemu_form:
+    autocomplete: ~

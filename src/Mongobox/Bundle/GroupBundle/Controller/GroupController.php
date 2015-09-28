@@ -44,7 +44,7 @@ class GroupController extends Controller
     public function groupCreateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
+		$user = $this->get('security.token_storage')->getToken()->getUser();
 
 		//On créer le formulaire en utilisant un utilisateur vide
 		$group = new Group();
@@ -128,7 +128,7 @@ class GroupController extends Controller
     public function groupEditAction(Request $request, Group $group)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
+		$user = $this->get('security.token_storage')->getToken()->getUser();
 		$session = $request->getSession();
 		if($user->isMemberFrom($group->getId()))
 		{
@@ -168,7 +168,7 @@ class GroupController extends Controller
     public function groupMembresAction(Request $request, Group $group)
     {
         $em = $this->getDoctrine()->getManager();
-		$user = $this->get('security.context')->getToken()->getUser();
+		$user = $this->get('security.token_storage')->getToken()->getUser();
 		if($user->isMemberFrom($group->getId()))
 		{
 			return array(
@@ -192,7 +192,7 @@ class GroupController extends Controller
 		if(!$group->getPrivate())
 		{
 			$em = $this->getDoctrine()->getManager();
-			$user = $this->get('security.context')->getToken()->getUser();
+			$user = $this->get('security.token_storage')->getToken()->getUser();
 
 			$group->getUsers()->add($user);
 
@@ -217,7 +217,7 @@ class GroupController extends Controller
     {
 		if($group->getPrivate())
 		{
-			$user = $this->get('security.context')->getToken()->getUser();
+			$user = $this->get('security.token_storage')->getToken()->getUser();
 			if($user->isMemberFrom($group->getId()))
 			{
 				$em = $this->getDoctrine()->getManager();
@@ -277,7 +277,7 @@ class GroupController extends Controller
 	 */
 	public function changeGroupAction(Request $request, $id_group)
 	{
-		$user = $this->get('security.context')->getToken()->getUser();
+		$user = $this->get('security.token_storage')->getToken()->getUser();
 		if($user->isMemberFrom($id_group))
 		{
 			$session = $request->getSession();

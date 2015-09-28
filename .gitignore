@@ -7,6 +7,8 @@
 # Parameters
 /app/config/parameters.yml
 /app/config/parameters.ini
+app/SymfonyRequirements.php
+app/check.php
 
 # Managed by Composer
 /app/bootstrap.php.cache

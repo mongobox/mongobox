@@ -10,7 +10,7 @@ class NiceTimeExtension extends Twig_Extension
         return array
         (
             'niceTime' => new \Twig_SimpleFilter(
-                'niceTimeFilter',
+                'niceTime',
                 array($this, 'niceTimeFilter'),
                 array('is_safe' => array('html'))
             )

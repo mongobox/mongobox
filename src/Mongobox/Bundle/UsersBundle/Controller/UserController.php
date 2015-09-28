@@ -68,7 +68,7 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $request = $this->container->get('request');
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
         $old_user = clone $user;
 

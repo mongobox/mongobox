@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongobox\Bundle\TumblrBundle\Form;
+namespace Mongobox\Bundle\TumblrBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
@@ -49,7 +49,7 @@ class TumblrType extends AbstractType
                 ),
 				'required' => true
             ))
-            ->add('addtags', 'genemu_jqueryautocompleter_entity', array(
+            ->add('addtags', 'genemu_jqueryautocomplete_entity', array(
                 'route_name' => 'tumblr_tags_ajax_autocomplete',
                 'class' => 'Mongobox\Bundle\TumblrBundle\Entity\TumblrTag',
                 'property' => 'name',

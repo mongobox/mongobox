@@ -133,7 +133,7 @@ class LiveController extends Controller
     	$em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-		$user = $this->get('security.context')->getToken()->getUser();
+		$user = $this->get('security.token_storage')->getToken()->getUser();
 
     	$playlistId		= $request->get('playlist');
     	$voteType		= $request->get('vote');
@@ -253,7 +253,7 @@ class LiveController extends Controller
         $session    = $request->getSession();
 
         $currentGroup   = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-        $currentUser    = $this->get('security.context')->getToken()->getUser();
+        $currentUser    = $this->get('security.token_storage')->getToken()->getUser();
 
         if ($currentGroup->getNextPutschWaiting() !== null) {
             $putschWaiting = $currentGroup->getNextPutschWaiting();
@@ -389,7 +389,7 @@ class LiveController extends Controller
 
         $session    = $request->getSession();
         $group      = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-        $user       = $this->get('security.context')->getToken()->getUser();
+        $user       = $this->get('security.token_storage')->getToken()->getUser();
 
         $playlistId		= $request->get('playlist');
         $voteType		= $request->get('vote');

@@ -340,7 +340,7 @@ class VideosController extends Controller
         $youtubeService = $this->get('mongobox_jukebox.api_youtube');
 
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $session = $request->getSession();
         $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 

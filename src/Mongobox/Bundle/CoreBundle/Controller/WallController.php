@@ -66,7 +66,7 @@ class WallController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $user->getGroups();
 
         //Si l'utilisateur a au moins un groupe
@@ -183,7 +183,7 @@ class WallController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
         //Wipe de son ancien vote
         $old_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')
@@ -296,7 +296,7 @@ class WallController extends Controller
     public function statistiquesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $session = $request->getSession();
         $user->getGroups();
 
