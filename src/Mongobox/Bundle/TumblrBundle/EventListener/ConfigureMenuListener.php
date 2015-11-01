@@ -17,14 +17,13 @@ class ConfigureMenuListener
         $tumblrMenu = $menu->addChild(
             'Tumblr',
             array(
-                'route'      => 'homepage',
-                'attributes' => array('class' => 'dropdown'),
-                'label'      => 'Tumblr <b class="caret"></b>',
-                'extras'     => array('safe_label' => true)
+                'uri'    => '#',
+                'label'  => '<i class="fa fa-file-image-o fa-fw"></i> Tumblr <span class="fa arrow"></span>',
+                'extras' => array('safe_label' => true)
             )
         );
-        $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
-        $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
+
+        $tumblrMenu->setChildrenAttributes(array('class' => 'nav nav-second-level collapse'));
 
         $tumblrMenu->addChild('Nouvelle image', array('route' => 'tumblr_add'));
         $tumblrMenu->addChild('Listing', array('route' => 'tumblr'));
@@ -44,14 +43,13 @@ class ConfigureMenuListener
         $tumblrMenu = $menu->addChild(
             'Tumblr',
             array(
-                'route'      => 'homepage',
-                'attributes' => array('class' => 'dropdown'),
-                'label'      => 'Tumblr <b class="caret"></b>',
-                'extras'     => array('safe_label' => true)
+                'uri'    => '#',
+                'label'  => '<i class="fa fa-file-image-o fa-fw"></i> Tumblr <span class="fa arrow"></span>',
+                'extras' => array('safe_label' => true)
             )
         );
-        $tumblrMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
-        $tumblrMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
+
+        $tumblrMenu->setChildrenAttributes(array('class' => 'nav nav-second-level collapse'));
 
         $tumblrMenu->addChild('Nouvelle image', array('route' => 'tumblr_add'));
         $tumblrMenu->addChild('Gestion des images', array('route' => 'admin_tumblr'));

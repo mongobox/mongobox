@@ -40,10 +40,10 @@ class SecureController extends Controller
         $form = $this->createForm(new UserType(), $user);
 
         if ('POST' === $request->getMethod()) {
-            $em = $this->getDoctrine()->getManager();
             $form->submit($request);
 
             if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
                 $user->setActif($status);
 
                 //On encode le mot de passe
@@ -54,7 +54,7 @@ class SecureController extends Controller
                 $em->persist($user);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add('success', 'Your account as been created with success');
+                $request->getSession()->getFlashBag()->add('success', 'Your account has been created with success');
 
                 return $this->redirect($this->generateUrl('wall_index'));
             }

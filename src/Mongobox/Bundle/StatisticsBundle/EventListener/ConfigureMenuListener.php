@@ -14,19 +14,16 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-
         $statsMenu = $menu->addChild(
             'Jukebox',
             array(
-                'route'         => 'homepage',
-                'attributes'    => array('class' => 'dropdown'),
-                'label'         => 'Stats <b class="caret"></b>',
-                'extras'        => array('safe_label' => true)
+                'uri'    => '#',
+                'label'  => '<i class="fa fa-pie-chart fa-fw"></i> Stats <span class="fa arrow"></span>',
+                'extras' => array('safe_label' => true)
             )
         );
 
-        $statsMenu->setLinkAttributes(array('class' => 'dropdown-toggle', 'data-toggle' => 'dropdown'));
-        $statsMenu->setChildrenAttributes(array('class' => 'dropdown-menu'));
+        $statsMenu->setChildrenAttributes(array('class' => 'nav nav-second-level collapse'));
 
         $menuManipulator = new MenuManipulator();
         $menuManipulator->moveToPosition($statsMenu,2);

@@ -14,8 +14,23 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menuItemVideo = $menu->addChild('Liste des vidéos', array('route' => 'videos'));
-        $menuItemLive = $menu->addChild('Live', array('route' => 'live'));
+        $menuItemVideo = $menu->addChild(
+            'Liste des vidéos',
+            array(
+                'route'  => 'videos',
+                'label'  => '<i class="fa fa-video-camera fa-fw"></i> Liste des vidéos',
+                'extras' => array('safe_label' => true)
+            )
+        );
+
+        $menuItemLive = $menu->addChild(
+            'Live',
+            array(
+                'route'  => 'live',
+                'label'  => '<i class="fa fa-television fa-fw"></i> Live',
+                'extras' => array('safe_label' => true)
+            )
+        );
 
         $menuManipulator = new MenuManipulator();
         $menuManipulator->moveToFirstPosition($menuItemVideo);

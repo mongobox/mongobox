@@ -267,7 +267,7 @@ class TumblrController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 5);
+        $tumblr = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findLast($user->getGroupsIds(), 6);
 
         $ajax_request = $request->isXmlHttpRequest();
 
@@ -286,7 +286,6 @@ class TumblrController extends Controller
      */
     public function topAction(Request $request)
     {
-
         $em = $this->getDoctrine()->getManager();
         $tumblrRepository = $em->getRepository('MongoboxTumblrBundle:TumblrVote');
         $user = $this->get('security.token_storage')->getToken()->getUser();

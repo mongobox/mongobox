@@ -3,16 +3,13 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<div class="container">
-    <div class="jumbotron">
-        <div class="groups">
-            {% for group in groups %}
-                <div class="well">
-                    {{group.title}} <a href="{{path('group_inscription', {'id' : group.id})}}">S'inscrire</a>
-                </div>
-            {% endfor %}
+<h1>Liste des groupes</h1>
+<div class="groups">
+    {% for group in groups %}
+        <div class="well">
+            {{group.title}} <a href="{{path('group_inscription', {'id' : group.id})}}">S'inscrire</a>
         </div>
-        <a href="{{path('group_create')}}" class="btn btn-success btn-lg">Créer un groupe</a>
-    </div>
+    {% endfor %}
 </div>
+<a href="{{path('group_create')}}" class="btn btn-success btn-lg">Créer un groupe</a>
 {% endblock body %}

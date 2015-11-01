@@ -1,117 +1,116 @@
 {% extends "MongoboxJukeboxBundle:Videos:layout.html.twig" %}
 
 {% block body %}
-<div class="container">
 <h1>Liste des vidéos</h1>
 
 <form class="form-search form-inline" id="" action="{{ path('videos') }}" method="POST" {{ form_enctype(searchVideosForm) }}>
-	<div class="input-group">
-	    {{ form_widget(searchVideosForm.search) }}
+    <div class="input-group">
+        {{ form_widget(searchVideosForm.search) }}
         <span class="input-group-btn">
             <button type="submit" class="btn btn-default">Search</button>
         </span>
- 	</div>
+    </div>
 </form>
 
 {# Pagination #}
 {% set parameter = {} %}
 {% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'videos', 'parameter' : parameter, 'pagination' : pagination } %}
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>
-                {# Filter on ID #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'v.id',
-                    'label':'ID'
-                } %}
-            </th>
-            <th>
-                {# Filter on Titre #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'v.title',
-                    'label':'Vidéo'
-                } %}
-            </th>
-            <th>
-                {# Filter on Duration #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'v.duration',
-                    'label':'Durée'
-                } %}
-            </th>
-            <th>
-                {# Filter on Dernière diffusion #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.lastBroadcast',
-                    'label':'Dernière diffusion'
-                } %}
-            </th>
-            <th>
-                {# Filter on Nb Diffusions #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.diffusion',
-                    'label':'Diffusions'
-                } %}
-            </th>
-            <th>
-                {# Filter on Nb Votes #}
-                {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
-                    'route':'videos',
-                    'property':'vg.votes',
-                    'label':'Votes'
-                } %}
-            </th>
-            <th>Posteur</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for entity in entities %}
-        <tr class="show-edit-video show-tag-video">
-            <td><a href="{{ path('videos_show', { 'id': entity.video.id }) }}">{{ entity.video.id }}</a></td>
-            <td>
-				<div class="liste-video-title">
-					<img src="{{ entity.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ entity.video.thumbnailHq }}' />" data-html="true" />
-					{{ entity.video.name }}
-				</div>
-				<div class="liste-video-tag">
-					{% for tag in entity.video.tags %}
-						<span class="label label-primary">
-							<span>{{tag.name}}</span>
-						</span>
-					{% endfor %}
-				</div>
-			</td>
-            <td>{{entity.video.duration|niceTime}}</td>
-            <td>{% if entity.lastBroadcast %}{{ entity.lastBroadcast|date('d-m-Y H:i:s') }}{% endif %}</td>
-			<td>{{entity.diffusion}}</td>
-			<td>{{ entity.votes }}</td>
-			<td>
-			{% if entity.user is not empty %}
-				{% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : entity.user, avatarMini : true} %}
-			{% endif %}
-			</td>
-            <td>
-            	<a href="{{ path('videos_add_to_playlist_vg', { 'id': entity.id }) }}" class="btn btn-default" title="Ajouter à la playlist"><i class="glyphicon glyphicon-arrow-up"></i></a>
-				<a href="{{ path('ajax_new_video_favorite', {'id_video': entity.video.id}) }}" class="btn-favoris-add btn btn-default" title="Ajouter la vidéo aux favoris"><i class="glyphicon glyphicon-bookmark"></i> <span></span></a>
-				<a href="{{url('video_edit_modal', {'id_video' : entity.video.id})}}" class="edit-video btn btn-default" title="Modifier la vidéo" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="glyphicon glyphicon-edit"></span></a>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    {# Filter on ID #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'videos',
+                        'property':'v.id',
+                        'label':'ID'
+                    } %}
+                </th>
+                <th>
+                    {# Filter on Titre #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'videos',
+                        'property':'v.title',
+                        'label':'Vidéo'
+                    } %}
+                </th>
+                <th>
+                    {# Filter on Duration #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'videos',
+                        'property':'v.duration',
+                        'label':'Durée'
+                    } %}
+                </th>
+                <th>
+                    {# Filter on Dernière diffusion #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'videos',
+                        'property':'vg.lastBroadcast',
+                        'label':'Dernière diffusion'
+                    } %}
+                </th>
+                <th>
+                    {# Filter on Nb Diffusions #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'videos',
+                        'property':'vg.diffusion',
+                        'label':'Diffusions'
+                    } %}
+                </th>
+                <th>
+                    {# Filter on Nb Votes #}
+                    {% include ('MongoboxJukeboxBundle:Partial:tableFilter.html.twig') with {
+                        'route':'videos',
+                        'property':'vg.votes',
+                        'label':'Votes'
+                    } %}
+                </th>
+                <th>Posteur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr class="show-edit-video show-tag-video">
+                <td><a href="{{ path('videos_show', { 'id': entity.video.id }) }}">{{ entity.video.id }}</a></td>
+                <td>
+                    <div class="liste-video-title">
+                        <img src="{{ entity.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ entity.video.thumbnailHq }}' />" data-html="true" />
+                        {{ entity.video.name }}
+                    </div>
+                    <div class="liste-video-tag">
+                        {% for tag in entity.video.tags %}
+                            <span class="label label-primary">
+                                <span>{{tag.name}}</span>
+                            </span>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>{{entity.video.duration|niceTime}}</td>
+                <td>{% if entity.lastBroadcast %}{{ entity.lastBroadcast|date('d-m-Y H:i:s') }}{% endif %}</td>
+                <td>{{entity.diffusion}}</td>
+                <td>{{ entity.votes }}</td>
+                <td>
+                {% if entity.user is not empty %}
+                    {% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : entity.user, avatarMini : true} %}
+                {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('videos_add_to_playlist_vg', { 'id': entity.id }) }}" class="btn btn-default" title="Ajouter à la playlist"><i class="glyphicon glyphicon-arrow-up"></i></a>
+                    <a href="{{ path('ajax_new_video_favorite', {'id_video': entity.video.id}) }}" class="btn-favoris-add btn btn-default" title="Ajouter la vidéo aux favoris"><i class="glyphicon glyphicon-bookmark"></i> <span></span></a>
+                    <a href="{{url('video_edit_modal', {'id_video' : entity.video.id})}}" class="edit-video btn btn-default" title="Modifier la vidéo" data-target="#edit-video-modal" data-toggle="modal" role="button"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {# Pagination #}
 {% include ('MongoboxJukeboxBundle:Partial:pagination.html.twig') with {'route':'videos', 'parameter' : parameter, 'pagination' : pagination } %}
-
-</div>
 
 
 {% endblock body %}

@@ -8,9 +8,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 class ConfigureMenuEvent extends Event
 {
-    const MAIN_MENU     = 'mongobox_core.main_menu_configure';
-    const ADMIN_MENU    = 'mongobox_core.admin_menu_configure';
-    const EAT_MENU    = 'mongobox_core.eat_menu_configure';
+    const MAIN_MENU = 'mongobox_core.main_menu_configure';
+    const ADMIN_MENU = 'mongobox_core.admin_menu_configure';
+    const EAT_MENU = 'mongobox_core.eat_menu_configure';
 
     private $factory;
     private $menu;
@@ -21,8 +21,8 @@ class ConfigureMenuEvent extends Event
      */
     public function __construct(FactoryInterface $factory, ItemInterface $menu)
     {
-        $this->factory  = $factory;
-        $this->menu     = $menu;
+        $this->factory = $factory;
+        $this->menu = $menu;
     }
 
     /**

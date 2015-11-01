@@ -1,69 +1,105 @@
-<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
-  <div class="container-fluid">
+<!-- Navigation -->
+<nav style="margin-bottom: 0" role="navigation" class="navbar navbar-default navbar-static-top navbar-inverse">
     <div class="navbar-header">
-      <button type="button" class="btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="{{ path('wall_index') }}" style="padding : 0.3em;">
-		<img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}" style="height : 40px;" alt="{{project_name}}" title="{{project_name}}" />
-	  </a>
-	</div>
-	<div class="collapse navbar-collapse">
-		{% if app.user %}
-		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown user-avatar">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span>
-                        {% include "MongoboxUsersBundle:User/Avatar:avatarMenu.html.twig" with {user : app.user, avatarMini : true} %}
-                        <i class="caret"></i>
-                    </span>
-                </a>
-				<ul class="dropdown-menu" role="menu">
-					<li>
-						<a href="{{path('group_index')}}" title="Groupes">Liste des Groupes</a>
-					</li>
-					{% if app.user.groupsInvitations|length > 0 %}
-					<li class="dropdown-submenu pull-left">
-						<a href="" title="Invitations">{{app.user.groupsInvitations|length}} invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}</a>
-						<ul class="dropdown-menu">
-							{% for invitation in app.user.groupsInvitations %}
-								<li>
-									<a href="{{path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
-								</li>
-							{% endfor %}
-						</ul>
-					</li>
-					{% endif %}
-					<li class="divider"></li>
-					{% for group in app.user.groups %}
-						{% include 'MongoboxGroupBundle:Navigation:groupNavbar.html.twig' with {'group': group} %}
-					{% endfor %}
-					<li class="divider" id="divider-group-after"></li>
-					<li>
-						<a href="{{ path('user_voir_favoris') }}" title="Modifier vos favoris"><span class="icon-bookmark"></span> Vos favoris</a>
-					</li>
-					<li>
-						<a href="{{ path('user_edit')}}" title="Modifier votre compte"><span class="icon-edit"></span> Modifier votre compte</a>
-					</li>
-					<li>
-						<a href="{{ path('_logout')}}" title="Déconnexion"><span class="icon-off"></span> Déconnexion</a>
-					</li>
-				</ul>
-			 </li>
-		 </ul>
-		{% endif %}
-		{{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build', {'allow_safe_labels': true}) }}
-		<div class="nav">
-			<div id="video_en_cours">
-				{{ render(controller("MongoboxCoreBundle:Wall:videoEnCours")) }}
-			</div>
-			<a href="" class="btn btn-success" id="add-video-button" title="Ajouter une vidéo"><i class="glyphicon glyphicon-plus icon-white"></i></a>
-		</div>
+        <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ path('wall_index') }}">
+            <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-header.png') }}" style="height : 30px;"
+                 alt="{{ project_name }}" title="{{ project_name }}"/>
+        </a>
     </div>
-  </div>
+    <!-- /.navbar-header -->
+
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown user-avatar">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <span>
+                    {% include "MongoboxUsersBundle:User/Avatar:avatarMenu.html.twig" with {user : app.user, avatarMini : true} %}
+                    <i class="caret"></i>
+                </span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="{{path('group_index')}}" title="Groupes"><i class="fa fa-users"></i> Liste des Groupes</a>
+                </li>
+                {% if app.user.groupsInvitations|length > 0 %}
+                    <li class="dropdown-submenu">
+                        <a href="" title="Invitations">{{app.user.groupsInvitations|length}} invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}</a>
+                        <ul class="dropdown-menu">
+                            {% for invitation in app.user.groupsInvitations %}
+                                <li>
+                                    <a href="{{path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+                {% if app.user.groups|length %}
+                    <li class="divider"></li>
+                    {% for group in app.user.groups %}
+                        {% include 'MongoboxGroupBundle:Navigation:groupNavbar.html.twig' with {'group': group} %}
+                    {% endfor %}
+                {% endif %}
+                <li class="divider" id="divider-group-after"></li>
+                <li>
+                    <a href="{{ path('user_voir_favoris') }}" title="Modifier vos favoris"><i class="fa fa-bookmark fa-fw"></i> Vos favoris</a>
+                </li>
+                <li>
+                    <a href="{{ path('user_edit')}}" title="Modifier votre compte"><i class="fa fa-user fa-fw"></i> Modifier votre compte</a>
+                </li>
+                <li>
+                    <a href="{{ path('_logout')}}" title="Déconnexion"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!-- /.navbar-top-links -->
+
+    <div role="navigation" class="navbar-default sidebar navbar-inverse">
+        <div class="sidebar-nav navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+            <form action="{{ path('videos') }}" method="POST">
+                <ul class="nav in">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form">
+                            <input type="text" id="Mongobox_bundle_jukeboxbundle_search_videos_type_search"
+                                   name="Mongobox_bundle_jukeboxbundle_search_videos_type[search]"
+                                   placeholder="Search..."
+                                   required="required" size="15" class="form-control">
+
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+
+            <ul class="nav in">
+                <li class="current first">
+                    <a href="" id="add-video-button" title="Ajouter une vidéo">
+                        <i class="fa fa-plus fa-fw"></i> Add a video
+                    </a>
+                </li>
+            </ul>
+
+
+            {{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build', {'allow_safe_labels': true}) }}
+
+            {{ render(controller("MongoboxCoreBundle:Wall:videoEnCours")) }}
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+    <!-- /.navbar-static-side -->
 </nav>
+
+
+
 
 <div class="modal fade" id="action-video-modal">
     <div class="modal-dialog">

@@ -1,17 +1,16 @@
 {% extends "MongoboxUsersBundle:Secure:layout.html.twig" %}
 
 {% block body %}
-<div class="container">
-    <div class="jumbotron">
-        <h1>{{project_name}}</h1>
-    </div>
-    <div class="content-block">
-        <h1>Formulaire de connexion</h1>
-    {% if error %}
-        <div class="alert alert-danger">{{ error.message|trans([], 'validators') }}</div>
-    {% endif %}
+<div class="container mb40">
+    <h1 class="text-center">{{project_name}}</h1>
+    <div class="card card-container">
+        <form class="form-signin" action="{{ path('_login_check') }}" method="post">
+            <h2>Connexion</h2>
 
-        <form action="{{ path('_login_check') }}" method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.message|trans([], 'validators') }}</div>
+            {% endif %}
+
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
@@ -25,11 +24,93 @@
                     <input class="form-control" type="password" id="password" name="_password" placeholder="Mot de passe" />
                 </div>
             </div>
-            <input type="submit" class="btn btn-primary" value="Connexion">
-        </form>
-        <p>
-            Si vous n'avez pas de compte, vous pouvez vous <a href="{{ path('registration') }}" title="Inscription">inscrire</a>.
+
+            <!--
+            <span id="reauth-email" class="reauth-email"></span>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            -->
+
+            <!--<div id="remember" class="checkbox">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>-->
+
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Connexion</button>
+        </form><!-- /form -->
+
+        <!--<a href="#" class="forgot-password">
+            Forgot the password?
+        </a>-->
+
+        <p class="text-center mt30 mb0">
+            <a href="{{ path('registration') }}" title="Inscription">Inscription</a>
         </p>
-    </div>
-</div>
+    </div><!-- /card-container -->
+</div><!-- /container -->
 {% endblock body %}
+
+{% block css %}
+<style>
+    body {
+        background: #D6D4D4;
+    }
+
+    .card-container.card {
+        width: 350px;
+        padding: 40px 40px;
+    }
+
+    .btn {
+        font-weight: 700;
+        height: 36px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /*
+    * Card component
+    */
+    .card {
+        background-color: #F7F7F7;
+        /* just in case there no content*/
+        padding: 20px 25px 30px;
+        margin: 0 auto 25px;
+        margin-top: 50px;
+        /* shadows and rounded borders */
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-signin .form-control:focus {
+        border-color: rgb(104, 145, 162);
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+    }
+
+    .btn-signin {
+        background-color: rgb(104, 145, 162);
+        padding: 0px;
+        font-weight: 700;
+        font-size: 14px;
+        height: 36px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        border: none;
+        -o-transition: all 0.218s;
+        -moz-transition: all 0.218s;
+        -webkit-transition: all 0.218s;
+        transition: all 0.218s;
+        cursor: pointer;
+    }
+</style>
+{% endblock css %}
