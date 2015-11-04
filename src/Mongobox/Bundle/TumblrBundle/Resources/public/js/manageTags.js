@@ -114,39 +114,4 @@ var tags = tags || {};
 
 
 
-    // clic sur la fleche pour ajouter un mot clé
-//	$('#bouton_ajouter_mot_cle').bind('click', function(e)
-//	{
-//		e.preventDefault();
-//		var id = $('#id_discussion').val();
-//		// récupération du mot clé et vérification qu'il ne soit pas vide et contient plus de 3 char
-//		var input_motcle = $('#autocompleter_mots_cles_ajout_motcle');
-//		var motcle = input_motcle.val();
-//		if(motcle != '' || motcle.length > 3)
-//		{
-//			// si le mot clé n'appartient pas aux mots clés ajoutés précédemment, on génère "l'ajout"
-//			if(jQuery.inArray(motcle, mots_cles) == -1)
-//			{
-//				mots_cles.push(motcle);
-//				$.get(basepath+'contenus/'+id+'/ajouter_mot_cle/'+motcle);
-//				var ajout = '<span>'+motcle+'</span><button class="close" >&times;</button>';
-//				var hidden = '<input type="hidden" name="motscles[]" value="'+motcle+'" />';
-//				$('<div class="info-box" id="'+motcle+'"/>').html(ajout+hidden).prependTo('#mots_cles_choisis');
-//				input_motcle.val('');
-//			}
-//		}
-//	});
-//
-//	// lorsqu'un clic arrive pour supprimer un mot clé libre
-//	$("#mots_cles_choisis").on("click", ".motcle button.close", function()
-//	{
-//		var motcle = $(this).parent().children('span').text();
-//		mots_cles.splice( $.inArray(motcle, mots_cles), 1 );
-//		$(this).parent().remove();
-//	});
-//
-
-//
-
-
 })(jQuery);

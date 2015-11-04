@@ -176,6 +176,21 @@ class TumblrController extends Controller
         return new Response(json_encode($keywords));
     }
 
+
+    /**
+     * Action to search tags for autocomplete field
+     *
+     * @Route("/tags-ajax-get-tag/{id_tag}", name="tumblr_tags_get_tag")
+     * @Template()
+     */
+    public function getTagAction($id_tag)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($id_tag);
+
+        return new Response($tag->getName());
+    }
+
     /**
      * Action to load tag or create it if not exist
      *

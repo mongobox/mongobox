@@ -1,19 +1,18 @@
 # Cache and logs (Symfony2)
 /app/cache/*
-/app/logs/*
 !app/cache/.gitkeep
+/app/logs/*
 !app/logs/.gitkeep
 
 # Parameters
 /app/config/parameters.yml
 /app/config/parameters.ini
-app/SymfonyRequirements.php
-app/check.php
+/app/SymfonyRequirements.php
+/app/check.php
 
 # Managed by Composer
 /app/bootstrap.php.cache
-/var/bootstrap.php.cache
-/bin/*
+/bin/
 !bin/console
 !bin/symfony_requirements
 /vendor/
@@ -22,4 +21,9 @@ app/check.php
 /composer.phar
 
 /web/bundles/
+/web/imagine/
 /composer.lock
+
+/app/phpunit.xml
+
+

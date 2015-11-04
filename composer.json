@@ -24,7 +24,6 @@
         "kriswallsmith/assetic": "1.1.*@dev",
         "dms/dms-filter-bundle": "dev-master",
         "avalanche123/imagine-bundle": "dev-master",
-        "genemu/form-bundle": "2.2.*",
         "sonata-project/intl-bundle": "dev-master",
         "sonata-project/cache-bundle": "dev-master",
         "sonata-project/exporter": "1.*",
@@ -36,7 +35,8 @@
         "knplabs/knp-menu-bundle": "2.0.*",
         "knplabs/knp-paginator-bundle": "2.4.*@dev",
 		"guzzle/guzzle": "~3.1.1",
-        "google/apiclient": "1.1.*@dev"
+        "google/apiclient": "1.1.*@dev",
+        "pugx/autocompleter-bundle": "^1.3@dev"
     },
 
     "scripts": {
