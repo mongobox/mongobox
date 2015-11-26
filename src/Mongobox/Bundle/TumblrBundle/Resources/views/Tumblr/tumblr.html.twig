@@ -5,7 +5,7 @@
 
 <ul style="list-style:none;">
     {% for t in tumblr %}
-    	{% if top is defined and top is sameas(true) %}{% set t = t.tumblr %}{% endif %}
+    	{% if top is defined and top is same as(true) %}{% set t = t.tumblr %}{% endif %}
         <li style="display:inline;">
             <img src="{% if t.localPath is null %}{{ t.image }}{% else %}{{ t.localPath }}{% endif %}" alt="{{ t.text }}" title="{{ t.text }}" class="{{ tumblr_class }} {{ tumblr_id_model }}-{{ t.id }}" style="width:110px;height: 90px">
         </li>

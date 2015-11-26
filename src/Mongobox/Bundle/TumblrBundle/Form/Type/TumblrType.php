@@ -9,6 +9,10 @@ use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormError;
 
+/**
+ * Class TumblrType
+ * @package Mongobox\Bundle\TumblrBundle\Form\Type
+ */
 class TumblrType extends AbstractType
 {
 	public function __construct($groups = array())

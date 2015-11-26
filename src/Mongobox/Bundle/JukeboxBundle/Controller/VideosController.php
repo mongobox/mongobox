@@ -16,12 +16,12 @@ use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 
 // Forms
-use Mongobox\Bundle\JukeboxBundle\Form\VideosType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoSearchType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoInfoType;
-use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoSearchType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoInfoType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\SearchVideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoTagsType;
 
 // Google API
 use Google_Client;

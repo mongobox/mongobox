@@ -1,4 +1,4 @@
-{% if next_page is defined and next_page is sameas(true) %}
+{% if next_page is defined and next_page is same as(true) %}
 	<a href="{{ path('user_voir_plus_favoris') }}" id="bouton-afficher-plus-favoris" title="Afficher plus de favoris" data-loading-text="<img alt='Loading' src='{{ asset('bundles/mongoboxjukebox/img/ajax-loader-tumblr-add.gif') }}'/>">
 		Afficher plus de favoris
 	</a>

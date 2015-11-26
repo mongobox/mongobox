@@ -7,8 +7,8 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\GroupBundle\Entity\Group;
 use Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag;
-use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\ReplaceVideo;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoTagsType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

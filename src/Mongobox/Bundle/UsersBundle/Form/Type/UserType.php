@@ -1,10 +1,15 @@
 <?php
 
-namespace Mongobox\Bundle\UsersBundle\Form;
+namespace Mongobox\Bundle\UsersBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class UserType
+ * @package Mongobox\Bundle\UsersBundle\Form
+ */
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -41,5 +46,12 @@ class UserType extends AbstractType
     public function getName()
     {
         return 'registration';
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'intention' => $this->getName(),
+        ));
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 
-use Mongobox\Bundle\UsersBundle\Form\UserType;
+use Mongobox\Bundle\UsersBundle\Form\Type\UserType;
 use Mongobox\Bundle\UsersBundle\Entity\User;
 
 class SecureController extends Controller

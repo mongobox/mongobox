@@ -3,7 +3,7 @@
 {% block body %}
         
 	<h1>Invitation d'un utilisateur</h1>
-	<form action="{{ path('group_invite', {'id' : group.id}) }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
+	<form action="{{ path('group_invite', {'id' : group.id}) }}" class="content-block form-inline" method="POST" {{ form_start(form) }} novalidate>
 		{{ form_widget(form) }}
 
 		<hr />

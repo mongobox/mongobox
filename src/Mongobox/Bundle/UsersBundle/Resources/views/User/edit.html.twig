@@ -10,7 +10,7 @@
         <div class="col-md-6 col-sm-12 mt20">
             <fieldset>
                 <legend>Modification du compte</legend>
-                <form action="{{path('user_edit')}}" method="POST" {{ form_enctype(form) }} novalidate class="mt10">
+                <form action="{{path('user_edit')}}" method="POST" {{ form_start(form) }} novalidate class="mt10">
                     {{ form_widget(form) }}
 
                     <label>Avatar Actuel :</label>
@@ -27,7 +27,7 @@
         <div class="col-md-6 col-sm-12 mt20">
             <fieldset>
                 <legend>Modification du mot de passe</legend>
-                <form action="{{ path('user_edit') }}" method="POST" {{ form_enctype(form_password) }} novalidate class="mt10">
+                <form action="{{ path('user_edit') }}" method="POST" {{ form_start(form_password) }} novalidate class="mt10">
                     {{ form_widget(form_password) }}
 
                     <div class="text-center">

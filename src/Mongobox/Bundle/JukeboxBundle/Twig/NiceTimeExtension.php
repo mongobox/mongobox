@@ -2,6 +2,7 @@
 namespace Mongobox\Bundle\JukeboxBundle\Twig;
 
 use Twig_Extension;
+use Twig_SimpleFilter;
 
 class NiceTimeExtension extends Twig_Extension
 {
@@ -9,7 +10,7 @@ class NiceTimeExtension extends Twig_Extension
     {
         return array
         (
-            'niceTime' => new \Twig_SimpleFilter(
+            new Twig_SimpleFilter(
                 'niceTime',
                 array($this, 'niceTimeFilter'),
                 array('is_safe' => array('html'))

@@ -1,13 +1,34 @@
 imports:
     - { resource: config.yml }
 
+doctrine:
+    orm:
+        auto_mapping: true
+        query_cache_driver:    apc
+        metadata_cache_driver: apc
+        result_cache_driver: apc
+
 monolog:
     handlers:
         main:
-            type:         fingers_crossed
-            action_level: error
-            handler:      nested
-        nested:
-            type:  stream
-            path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: debug
+            type:               fingers_crossed
+            action_level:       error
+            handler:            grouped
+        grouped:
+            type:               group
+            members:            [streamed, swift]
+        streamed:
+            type:               stream
+            path:               "%kernel.logs_dir%/%kernel.environment%.log"
+            level:              debug
+#        swift:
+#            type:               swift_mailer
+#            from_email:         "%admin_email%"
+#            to_email:           "%mailer_user%"
+#            subject:            "%project_name% - OOps"
+#            level:              debug
+        login:
+            type:               stream
+            path:               "%kernel.logs_dir%/auth.log"
+            level:              info
+            channels:           security

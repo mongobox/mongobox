@@ -10,8 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-use Mongobox\Bundle\UsersBundle\Form\UserEditType;
-use Mongobox\Bundle\UsersBundle\Form\UserEditPasswordType;
+use Mongobox\Bundle\UsersBundle\Form\Type\UserEditType;
+use Mongobox\Bundle\UsersBundle\Form\Type\UserEditPasswordType;
 
 use Mongobox\Bundle\UsersBundle\Entity\User;
 

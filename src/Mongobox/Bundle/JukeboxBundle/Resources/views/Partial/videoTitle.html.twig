@@ -22,7 +22,7 @@
 </div>
 
 <div class="col-md-12">
-    {% if video_en_cours is not null and alreadyFavorite is not defined or (alreadyFavorite is defined and alreadyFavorite is sameas(false)) %}
+    {% if video_en_cours is not null and alreadyFavorite is not defined or (alreadyFavorite is defined and alreadyFavorite is same as(false)) %}
         <a href="{{ path('ajax_new_video_favorite', {'id_video': video_en_cours.videoGroup.video.id}) }}" class="btn-favoris-add btn-link jukebox-hidden" title="Ajouter la vidéo aux favoris"><i class="glyphicon glyphicon-bookmark{% if white is defined and white %} icon-white{% endif %}"></i><span></span></a>
     {% endif %}
 

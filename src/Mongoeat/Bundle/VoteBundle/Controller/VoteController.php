@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mongoeat\Bundle\VoteBundle\Entity\Vote;
-use Mongoeat\Bundle\VoteBundle\Form\VoteType;
+use Mongoeat\Bundle\VoteBundle\Form\Type\VoteType;
 
 /**
  * Vote controller.

@@ -48,7 +48,7 @@ MongoboxStatisticsBundle:
 
 _login_check:
     path: /login_check
-    requirements: {_method : POST }
+    methods : [POST]
 
 _logout:
     path: /logout

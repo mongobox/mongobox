@@ -7,7 +7,7 @@
     <h1 class="text-center">{{project_name}}</h1>
     <div class="card card-container">
         <h1>Registration</h1>
-        <form action="{{ path('registration') }}" class="content-block" method="POST" {{ form_enctype(form) }}>
+        <form action="{{ path('registration') }}" class="content-block" method="POST" {{ form_start(form) }}>
             <div class="row">
                 <div class="col-md-6">
                     {{ form_row(form.firstname) }}

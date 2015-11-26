@@ -1,14 +1,14 @@
-{% if top is defined and top is sameas(true) %}
+{% if top is defined and top is same as(true) %}
 	{% set array_list_tumblr = [top7, top30, topTumblr]  %}
 {% else %}
 	{% set array_list_tumblr = [tumblr] %}
 {% endif %}
 
 {% for list_tumblr in array_list_tumblr %}
-	{% if top is defined and top is sameas(true) %}<h2>{{ slider_title[loop.index0] }}</h2>{% endif %}
+	{% if top is defined and top is same as(true) %}<h2>{{ slider_title[loop.index0] }}</h2>{% endif %}
 
     {% for mongo in list_tumblr %}
-        {% if top is defined and top is sameas(true) %}{% set mongo = mongo[0].tumblr %}{% endif %}
+        {% if top is defined and top is same as(true) %}{% set mongo = mongo[0].tumblr %}{% endif %}
         {% include 'MongoboxTumblrBundle:Slider:unTumblrSlider.html.twig' %}
     {% endfor %}
 
@@ -18,7 +18,7 @@
 <script>
     $(function()
     {
-    	{% if ajax_request is not defined or ajax_request is sameas(false) %}
+    	{% if ajax_request is not defined or ajax_request is same as(false) %}
 	        // Giving class to parameter to initialize popover
 	        tumblr.init("tumblr-popover", "tumblr-img-id", "note-tumblr", "note-user-tumblr");
 	        tumblr.pathToImg = "{{ asset('bundles/mongoboxtumblr/img/') }}";

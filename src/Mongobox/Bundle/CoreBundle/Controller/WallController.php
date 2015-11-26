@@ -13,7 +13,7 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Videos;
 use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoType;
 
 /**
  * Class WallController
