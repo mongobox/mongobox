@@ -3,6 +3,8 @@
 !app/cache/.gitkeep
 /app/logs/*
 !app/logs/.gitkeep
+/app/sessions/*
+!app/sessions/.gitkeep
 
 # Parameters
 /app/config/parameters.yml
