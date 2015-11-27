@@ -176,7 +176,6 @@ class TumblrController extends Controller
         return new Response(json_encode($keywords));
     }
 
-
     /**
      * Action to search tags for autocomplete field
      *

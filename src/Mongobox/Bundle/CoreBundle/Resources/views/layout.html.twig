@@ -8,18 +8,42 @@
         <meta name="author" content="">
 
         <!-- Le styles -->
-        <link href="{{ asset('bundles/mongoboxcore/css/bootstrap.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxcore/css/styles.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxjukebox/css/jukebox.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxcore/css/fancymoves.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxtumblr/css/tumblr.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxcore/css/alertify/alertify.core.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxcore/css/alertify/alertify.bootstrap.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxcore/css/datatables/jquery.dataTables.css') }}" rel="stylesheet">
-        <link href="{{ asset('bundles/mongoboxcore/css/font-awesome.min.css') }}" rel="stylesheet">
-        <!--<link href="{{ asset('bundles/mongoboxcore/css/metisMenu.min.css') }}" rel="stylesheet">-->
-        <link href="{{ asset('bundles/mongoboxcore/css/sb-admin-2.css') }}" rel="stylesheet">
-        <!--<link href="{{ asset('bundles/mongoboxcore/css/jquery.mmenu.css') }}" rel="stylesheet">-->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+        <!-- CORE BUNDLE -->
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/styles.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/fancymoves.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/alertify/alertify.core.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/alertify/alertify.bootstrap.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/datatables/jquery.dataTables.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/font-awesome.min.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+        {% stylesheets '@MongoboxCoreBundle/Resources/public/css/sb-admin-2.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+
+        <!-- Tumblr BUNDLE -->
+        {% stylesheets '@MongoboxTumblrBundle/Resources/public/css/tumblr.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+
+        <!-- Jukebox BUNDLE -->
+        {% stylesheets '@MongoboxJukeboxBundle/Resources/public/css/jukebox.css' filter='?yui_css' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+
 
         {% block css %}{% endblock %}
         {% block stylesheets %}{% endblock %}
@@ -40,14 +64,32 @@
         <link rel="apple-touch-icon-precomposed"
               href="{{ asset('bundles/mongoboxcore/ico/apple-touch-icon-57-precomposed.png') }}">
 
-        <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.1.9.1.min.js') }}"></script>
-        <script src="{{ asset('bundles/mongoboxcore/js/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery-ui-1.10.0.min.js') }}"></script>
-        <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.easing.js') }}"></script>
+
+        <!-- Core BUNDLE -->
+        {% javascripts '@MongoboxCoreBundle/Resources/public/js/vendor/jquery/jquery.1.9.1.min.js' filter='?yui_js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+
+        {% javascripts '@MongoboxCoreBundle/Resources/public/js/vendor/jquery/jquery-ui-1.10.0.min.js' filter='?yui_js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+
+        {% javascripts '@MongoboxCoreBundle/Resources/public/js/vendor/jquery/jquery.easing.js' filter='?yui_js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+
+        {% javascripts '@MongoboxCoreBundle/Resources/public/js/vendor/datatables/jquery.dataTables.min.js' filter='?yui_js' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+
+        {% block headerJs %}{% endblock %}
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+
         <script>
             var basepath = "{{ path('wall_index') }}";
         </script>
-        {% block headerJs %}{% endblock %}
     </head>
 
     <body {% if app.user %}class="navbar-inverse"{% endif %}>
@@ -95,8 +137,12 @@
         <!-- Le javascript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="{{ asset('bundles/mongoboxcore/js/vendor/bootstrap/bootstrap.min.js') }}"></script>
+
+
+        <!-- Latest compiled and minified JavaScript -->
+
         {% if app.user %}
+            <script src="{{ asset('bundles/pugxautocompleter/js/autocompleter-jqueryui.js') }}" type="text/javascript"></script>
             <script src="{{ asset('bundles/mongoboxcore/js/vendor/jquery/jquery.raty.js') }}"></script>
             <script src="{{ asset('bundles/mongoboxcore/js/vendor/alertify.min.js') }}"></script>
             <script src="{{ asset('bundles/mongoboxjukebox/js/jukebox.js') }}"></script>
@@ -110,11 +156,10 @@
 
             <script type="text/javascript">
                 $(function () {
-                    addTumblr.init();
                     favorisManager.init();
                 });
-                videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
-                videoTags.init();
+                //videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
+                //videoTags.init();
 
                 $(function() {
                     $('#side-menu').metisMenu();

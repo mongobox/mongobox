@@ -57,7 +57,7 @@ class TumblrType extends AbstractType
                 'class' => 'MongoboxTumblrBundle:TumblrTag',
                 'label' => 'Tags',
                 'attr' => array(
-                    'placeholder' => 'Ajouter des tags',
+                    'placeholder' => 'Ajouter des tags'
                 ),
                 'required' => false,
                 'mapped' => false

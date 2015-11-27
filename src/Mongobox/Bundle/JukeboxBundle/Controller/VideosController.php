@@ -295,6 +295,20 @@ class VideosController extends Controller
     }
 
     /**
+     * Action to search tags for autocomplete field
+     *
+     * @Route("/video-ajax-get-tag/{id_tag}", name="video_tags_get_tag")
+     * @Template()
+     */
+    public function getTagAction($id_tag)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($id_tag);
+
+        return new Response($tag->getName());
+    }
+
+    /**
      * Action to load tag or create it if not exist
      *
      * @Route("/video-tags-load-item", name="video_tags_load_item")
