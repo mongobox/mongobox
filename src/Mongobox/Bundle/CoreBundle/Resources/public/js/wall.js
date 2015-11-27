@@ -20,20 +20,20 @@ var loadProposeVotes = function()
 function loadStatistiques()
 {
 	$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: basepath + 'statistiques?json'
-		}).done(
-		function( json )
-		{
-			refreshStatistiquesFail = 0;
-			$('#statistiques').html(json.render);
-		}).fail(
-		function()
-		{
-			refreshStatistiquesFail++;
-			if(refreshStatistiquesFail >= 3) clearInterval(refreshStatistiques);
-		});
+		type: "GET",
+		dataType: "json",
+		url: basepath + 'statistiques?json'
+	}).done(
+	function( json )
+	{
+		refreshStatistiquesFail = 0;
+		$('#statistiques').html(json.render);
+	}).fail(
+	function()
+	{
+		refreshStatistiquesFail++;
+		if(refreshStatistiquesFail >= 3) clearInterval(refreshStatistiques);
+	});
 }
 
 $(document).ready(function()

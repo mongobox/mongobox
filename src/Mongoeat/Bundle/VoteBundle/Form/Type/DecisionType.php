@@ -1,11 +1,15 @@
 <?php
 
-namespace Mongoeat\Bundle\VoteBundle\Form;
+namespace Mongoeat\Bundle\VoteBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class DecisionType
+ * @package Mongoeat\Bundle\VoteBundle\Form\Type
+ */
 class DecisionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -16,10 +20,11 @@ class DecisionType extends AbstractType
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Mongoeat\Bundle\VoteBundle\Entity\Decision'
+            'data_class' => 'Mongoeat\Bundle\VoteBundle\Entity\Decision',
+            'intention' => $this->getName()
         ));
     }
 

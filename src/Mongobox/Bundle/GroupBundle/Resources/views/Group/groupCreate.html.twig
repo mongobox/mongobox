@@ -3,14 +3,18 @@
 {% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% block body %}
-        
-	<h1>Création d'un groupe</h1>
-	<form action="{{ path('group_create') }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
-		{{ form_widget(form) }}
+<h1>Création d'un groupe</h1>
+<form action="{{ path('group_create') }}" class="content-block" method="POST" {{ form_start(form) }} novalidate>
 
-		<hr />
-		<div>
-			<input type="submit" class="btn btn-primary pull-right" value="Créer">
-		</div>
-	</form>
+    {{ form_row(form.title) }}
+    {{ form_row(form.city) }}
+    {{ form_row(form.private) }}
+    {{ form_row(form.liveMaxDislikes) }}
+    {{ form_row(form.nextPutschWaiting) }}
+
+	<hr />
+	<div>
+		<input type="submit" class="btn btn-primary pull-right" value="Créer">
+	</div>
+{{ form_rest(form) }}
 {% endblock body %}

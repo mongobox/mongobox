@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongobox\Bundle\TumblrBundle\Form;
+namespace Mongobox\Bundle\TumblrBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
@@ -9,6 +9,10 @@ use Symfony\Component\Form\CallbackValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormError;
 
+/**
+ * Class TumblrType
+ * @package Mongobox\Bundle\TumblrBundle\Form\Type
+ */
 class TumblrType extends AbstractType
 {
 	public function __construct($groups = array())
@@ -49,13 +53,11 @@ class TumblrType extends AbstractType
                 ),
 				'required' => true
             ))
-            ->add('addtags', 'genemu_jqueryautocompleter_entity', array(
-                'route_name' => 'tumblr_tags_ajax_autocomplete',
-                'class' => 'Mongobox\Bundle\TumblrBundle\Entity\TumblrTag',
-                'property' => 'name',
+            ->add('addtags', 'autocomplete', array(
+                'class' => 'MongoboxTumblrBundle:TumblrTag',
                 'label' => 'Tags',
                 'attr' => array(
-                    'placeholder' => 'Ajouter des tags',
+                    'placeholder' => 'Ajouter des tags'
                 ),
                 'required' => false,
                 'mapped' => false

@@ -4,20 +4,15 @@ GENERAL
 
 -------------------------------------------------------- */
 
-body {
-    padding-top: 40px;
-    position: relative;
-}
-
 legend
 {
 	margin-bottom : 5px;
 }
 
 .footer {
-    background-color: #F5F5F5;
-    border-top: 1px solid #E5E5E5;
-    margin-top: 70px;
+    /*background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;*/
+	color: #999999;
     padding: 70px 0;
 }
 
@@ -73,10 +68,6 @@ Video en cours
 	margin-left:0.2em;
 }
 
-.navbar .nav > li > a {
-	padding: 1.2em 10px 11px;
-}
-
 #container_progress-bar span{
  margin-left : 0.2em;
 }
@@ -93,17 +84,13 @@ Video en cours
 #video_en_cours .vote, #video_en_cours .fav-div {
 	display : inline;
 }
-.navbar .navbar-text {
+/*.navbar .navbar-text {
 	color : #999;
 	line-height : 20px;
 }
 .navbar{
     color : #999;
-}
-#add-video-button
-{
-	margin-top : 13px;
-}
+}*/
 
 .loader
 {

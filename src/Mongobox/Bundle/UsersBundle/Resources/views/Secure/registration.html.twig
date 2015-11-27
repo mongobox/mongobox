@@ -3,17 +3,94 @@
 {% form_theme form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% block body %}
-<div class="container">
-    <div class="jumbotron">
-        <h1>{{project_name}}</h1>
-    </div>
-	<h1>Registration</h1>
-	<form action="{{ path('registration') }}" class="content-block" method="POST" {{ form_enctype(form) }} novalidate>
-		{{ form_widget(form) }}
-		<hr />
-		<div>
-			<input type="submit" class="btn btn-primary pull-right" value="Register">
-		</div>
-	</form>
-</div>
+<div class="container mb40">
+    <h1 class="text-center">{{project_name}}</h1>
+    <div class="card card-container">
+        <h1>Registration</h1>
+        <form action="{{ path('registration') }}" class="content-block" method="POST" {{ form_start(form) }}>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.firstname) }}
+                    {{ form_row(form.lastname) }}
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.login) }}
+                    {{ form_row(form.password.password, { 'attr': {'class': 'form-control', 'placeholder': 'Password' } }) }}
+                    {{ form_row(form.password.confirmation, { 'attr': {'class': 'form-control', 'placeholder': 'Confirmation' } }) }}
+                </div>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Register</button>
+        {{ form_rest(form) }}
+
+        <p class="text-center mt30 mb0">
+            <a href="{{ path('login') }}" title="Connexion">Connexion</a>
+        </p>
+    </div><!-- /card-container -->
+</div><!-- /container -->
 {% endblock body %}
+
+{% block css %}
+	<style>
+		body {
+			background: #D6D4D4;
+		}
+
+		.card-container.card {
+			max-width: 600px;
+			padding: 40px 40px;
+		}
+
+		.btn {
+			font-weight: 700;
+			height: 36px;
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			user-select: none;
+			cursor: default;
+		}
+
+		/*
+        * Card component
+        */
+		.card {
+			background-color: #F7F7F7;
+			/* just in case there no content*/
+			padding: 20px 25px 30px;
+			margin: 0 auto 25px;
+			margin-top: 50px;
+			/* shadows and rounded borders */
+			-moz-border-radius: 2px;
+			-webkit-border-radius: 2px;
+			border-radius: 2px;
+			-moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+			-webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+			box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+		}
+
+		.form-signin .form-control:focus {
+			border-color: rgb(104, 145, 162);
+			outline: 0;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+		}
+
+		.btn-signin {
+			background-color: rgb(104, 145, 162);
+			padding: 0px;
+			font-weight: 700;
+			font-size: 14px;
+			height: 36px;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			border: none;
+			-o-transition: all 0.218s;
+			-moz-transition: all 0.218s;
+			-webkit-transition: all 0.218s;
+			transition: all 0.218s;
+			cursor: pointer;
+		}
+	</style>
+{% endblock css %}

@@ -36,8 +36,9 @@ class TumblrTagRepository extends EntityRepository
 		$json = array();
 		foreach ($tags as $mot) {
 			$json[] = array(
+					'id' => $mot->getId(),
 					'label' => $mot->getName(),
-					'value' => $mot->getId()
+					'value' => $mot->getName()
 			);
 		}
 	

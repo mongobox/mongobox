@@ -22,8 +22,13 @@
 </form>
 
 {% block javascripts %}
-	{{ form_javascript(form_video_info) }}
 	<script type="text/javascript">
-		videoTags.clear();
+		$('#video_info_tag').autocompleter({
+			url_list: '{{ url('video_tags_ajax_autocomplete') }}',
+			url_get: 'video-ajax-get-tag/'
+		});
+
+		videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
+		videoTags.init();
 	</script>
 {% endblock javascripts %}

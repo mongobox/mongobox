@@ -3,26 +3,22 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<div id="tumblr" class="container">
-    {% render controller("MongoboxTumblrBundle:Tumblr:slider") %}
+<div class="row mt30 mb30">
+    {{ render(controller("MongoboxTumblrBundle:Tumblr:slider")) }}
 </div>
 
-<div class="container">
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-md-6">
-                <div id="statistiques">
-                    {% include "MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig" %}
-                </div>
-                <div id="propose-votes">
-                </div>
-                {% render controller("MongoeatVoteBundle:Decision:small") %}
-            </div>
-            <div class="col-md-6">
-                <div id="flux_rss">
-                    {#% render controller("MongoboxCoreBundle:Wall:fluxRss") %#}
-                </div>
-            </div>
+<div class="row">
+    <div class="col-md-6">
+        <div id="statistiques">
+            {% include "MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig" %}
+        </div>
+        <div id="propose-votes">
+        </div>
+        {{ render(controller("MongoeatVoteBundle:Decision:small")) }}
+    </div>
+    <div class="col-md-6">
+        <div id="flux_rss">
+            {#% render controller("MongoboxCoreBundle:Wall:fluxRss") %#}
         </div>
     </div>
 </div>

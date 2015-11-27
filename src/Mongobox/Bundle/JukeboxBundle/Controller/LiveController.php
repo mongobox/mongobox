@@ -7,8 +7,8 @@ use Mongobox\Bundle\JukeboxBundle\Entity\Volume;
 use Mongobox\Bundle\JukeboxBundle\Entity\Vote;
 use Mongobox\Bundle\GroupBundle\Entity\Group;
 use Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag;
-use Mongobox\Bundle\JukeboxBundle\Form\ReplaceVideo;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\ReplaceVideo;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoTagsType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -133,7 +133,7 @@ class LiveController extends Controller
     	$em = $this->getDoctrine()->getManager();
 		$session = $request->getSession();
 		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-		$user = $this->get('security.context')->getToken()->getUser();
+		$user = $this->get('security.token_storage')->getToken()->getUser();
 
     	$playlistId		= $request->get('playlist');
     	$voteType		= $request->get('vote');
@@ -253,7 +253,7 @@ class LiveController extends Controller
         $session    = $request->getSession();
 
         $currentGroup   = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-        $currentUser    = $this->get('security.context')->getToken()->getUser();
+        $currentUser    = $this->get('security.token_storage')->getToken()->getUser();
 
         if ($currentGroup->getNextPutschWaiting() !== null) {
             $putschWaiting = $currentGroup->getNextPutschWaiting();
@@ -389,7 +389,7 @@ class LiveController extends Controller
 
         $session    = $request->getSession();
         $group      = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-        $user       = $this->get('security.context')->getToken()->getUser();
+        $user       = $this->get('security.token_storage')->getToken()->getUser();
 
         $playlistId		= $request->get('playlist');
         $voteType		= $request->get('vote');

@@ -6,35 +6,35 @@
 {% block title %} - Modification de mon compte{% endblock title %}
 
 {% block body %}
-<div class="container">
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-md-10">
-                 <div class="content-block clearfix">
-                    <h2>Modification du compte</h2>
-                    <form action="{{path('user_edit')}}" method="POST" {{ form_enctype(form) }} novalidate>
-                        {{ form_widget(form) }}
-                        <label>Avatar Actuel :</label>
+    <div class="row">
+        <div class="col-md-6 col-sm-12 mt20">
+            <fieldset>
+                <legend>Modification du compte</legend>
+                <form action="{{path('user_edit')}}" method="POST" {{ form_start(form) }} novalidate class="mt10">
+                    {{ form_widget(form) }}
 
-                        <div class="controls">
-                            {% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : app.user, 'notext' : true} %}
-                        </div>
-                        <div class="container-btn clearfix">
-                            <input type="submit" class="btn btn-lg btn-primary pull-right" value="Enregistrer">
-                        </div>
-                    </form>
-                </div>
-                <div class="content-block clearfix">
-                    <h2>Modification du mot de passe</h2>
-                    <form action="{{ path('user_edit') }}" method="POST" {{ form_enctype(form_password) }} novalidate>
-                        {{ form_widget(form_password) }}
-                        <div class="container-btn clearfix">
-                            <input type="submit" class="btn btn-lg btn-primary pull-right" value="Modifier mon mot de passe">
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    <label>Avatar Actuel :</label>
+                    <div class="controls">
+                        {% include "MongoboxUsersBundle:User/Avatar:avatar.html.twig" with {'user' : app.user, 'notext' : true} %}
+                    </div>
+
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-primary" value="Enregistrer">
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+        <div class="col-md-6 col-sm-12 mt20">
+            <fieldset>
+                <legend>Modification du mot de passe</legend>
+                <form action="{{ path('user_edit') }}" method="POST" {{ form_start(form_password) }} novalidate class="mt10">
+                    {{ form_widget(form_password) }}
+
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-primary" value="Modifier mon mot de passe">
+                    </div>
+                </form>
+            </fieldset>
         </div>
     </div>
-</div>
 {% endblock body %}

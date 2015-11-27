@@ -54,7 +54,7 @@ class DecisionController extends Controller
             7/*limit per page*/
         );
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findBy(array('user'=>$user->getId(),'decision'=>$entity->getId()));
 
         return array(
@@ -88,7 +88,7 @@ class DecisionController extends Controller
             $em->flush();
         }
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findBy(array('user'=>$user->getId(),'decision'=>$entity->getId()));
 
         return array(

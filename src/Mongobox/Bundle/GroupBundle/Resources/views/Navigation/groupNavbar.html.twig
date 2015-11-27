@@ -1,5 +1,12 @@
-<li class="dropdown-submenu pull-left">
-	<a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">{{group.title}} {% if group.id == app.session.get('id_group') %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</a>
+<li class="dropdown-submenu">
+    <a href="{{path('group_change', {'id_group' : group.id})}}" title="Groupes">
+        {% if group.id == app.session.get('id_group') %}
+            <i class="fa fa-check-square-o fa-fw"></i>
+        {% else %}
+            <i class="fa fa-square-o fa-fw"></i>
+        {% endif %}
+        {{group.title}}
+    </a>
 	<ul class="dropdown-menu">
 		<li>
 			<a href="{{path('group_membres', {'id' : group.id})}}" title="Liste des membres">Liste des membres</a>

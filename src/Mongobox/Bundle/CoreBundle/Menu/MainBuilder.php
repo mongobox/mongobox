@@ -15,7 +15,13 @@ class MainBuilder extends ContainerAware
     public function build(FactoryInterface $factory)
     {
         $menu = $factory->createItem('root');
-        $menu->setChildrenAttributes(array('class' => 'nav navbar-nav'));
+
+        $menu->setChildrenAttributes(
+            array(
+                'class' => 'nav in',
+                'id'    => 'side-menu'
+            )
+        );
 
         $this->container
             ->get('event_dispatcher')

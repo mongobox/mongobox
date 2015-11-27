@@ -5,7 +5,7 @@
 {% block body %}
         
 	<h1>Edition d'un groupe</h1>
-	<form action="{{ path('group_edit', {'id' : group.id}) }}" class="content-block form-inline" method="POST" {{ form_enctype(form) }} novalidate>
+	<form action="{{ path('group_edit', {'id' : group.id}) }}" class="content-block form-inline" method="POST" {{ form_start(form) }} novalidate>
 		{{ form_widget(form) }}
 
 		<hr />

@@ -5,45 +5,47 @@
 {% block body %}
 
 <div class="marketing">
-	<h1><img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" /></h1>
-	<h2>Tumblr</h2>
+	<!--<h1>
+        <img src="{{ asset('bundles/mongoboxcore/img/logo/mongo-logo-large.png') }}" alt="{{project_name}}" title="{{project_name}}" />
+    </h1>-->
+	<h1>Tumblr</h1>
 </div>
-    <div class="vote"></div>
-<div class="container">
-    <div class="jumbotron text-center">
 
-	{% for entity in tumblr %}
-		<div class="row {% if entity.hasTag('nsfw') and app.user.nsfwmode %}nswf-elt{% endif %}">
-			{% if loop.index > 1 %}
-				<hr />
+<div class="vote"></div>
+
+<div class="jumbotron text-center">
+
+{% for entity in tumblr %}
+	<div class="row {% if entity.hasTag('nsfw') and app.user.nsfwmode %}nswf-elt{% endif %}">
+		{% if loop.index > 1 %}
+			<hr />
+		{% endif %}
+
+		<h2><a href="{{ path('tumblr_show', { 'id': entity.id }) }}" title="Voir : {{entity.text}}">{{entity.text}}</a></h2>
+		<br/>
+
+		{% include 'MongoboxTumblrBundle:Slider:vote.html.twig' with { 'tumblr': entity } %}
+
+		<span class="tumblr-img-bloc">
+			{% if entity.hasTag('nsfw') and app.user.nsfwmode %}
+			<span class="nsfw-mask active" title="Cliquer pour afficher l'image"></span>
 			{% endif %}
+			{% if entity.localPath is null %}
+				<img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+			{% else %}
+				<img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
+			{% endif %}
+		</span>
 
-			<h2><a href="{{ path('tumblr_show', { 'id': entity.id }) }}" title="Voir : {{entity.text}}">{{entity.text}}</a></h2>
-            <br/>
-
-			{% include 'MongoboxTumblrBundle:Slider:vote.html.twig' with { 'tumblr': entity } %}
-
-            <span class="tumblr-img-bloc">
-                {% if entity.hasTag('nsfw') and app.user.nsfwmode %}
-                <span class="nsfw-mask active" title="Cliquer pour afficher l'image"></span>
-                {% endif %}
-                {% if entity.localPath is null %}
-                    <img src="{{ entity.image }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
-                {% else %}
-                    <img src="{{ entity.localPath }}" title="{{ entity.text }}" alt="{{ entity.text }}" />
-                {% endif %}
-            </span>
-
-            {# Tags list #}
-            {% if entity.tags is not empty %}
-                <div class="tags">
-                    Tags:
-                    {% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('tumblr',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
-                </div>
-            {% endif %}
-		</div>
-	{% endfor %}
-    </div>
+		{# Tags list #}
+		{% if entity.tags is not empty %}
+			<div class="tags">
+				Tags:
+				{% for tag in entity.tags %}{% if loop.index > 1 %}, {% endif %}<a href="{{ path('tumblr',{'tag' : tag.systemName}) }}">{{ tag.name }}</a>{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endfor %}
 </div>
 
 {# Pagination #}

@@ -1,11 +1,15 @@
 <?php
 
-namespace Mongoeat\Bundle\RestaurantBundle\Form;
+namespace Mongoeat\Bundle\RestaurantBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class RestaurantType
+ * @package Mongoeat\Bundle\RestaurantBundle\Form\Type
+ */
 class RestaurantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -21,10 +25,11 @@ class RestaurantType extends AbstractType
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant'
+            'data_class' => 'Mongoeat\Bundle\RestaurantBundle\Entity\Restaurant',
+            'intention' => $this->getName()
         ));
     }
 

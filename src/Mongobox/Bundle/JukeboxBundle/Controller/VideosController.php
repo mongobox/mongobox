@@ -16,12 +16,12 @@ use Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup;
 use Mongobox\Bundle\JukeboxBundle\Entity\Playlist;
 
 // Forms
-use Mongobox\Bundle\JukeboxBundle\Form\VideosType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoSearchType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoInfoType;
-use Mongobox\Bundle\JukeboxBundle\Form\SearchVideosType;
-use Mongobox\Bundle\JukeboxBundle\Form\VideoTagsType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoSearchType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoInfoType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\SearchVideosType;
+use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoTagsType;
 
 // Google API
 use Google_Client;
@@ -295,6 +295,20 @@ class VideosController extends Controller
     }
 
     /**
+     * Action to search tags for autocomplete field
+     *
+     * @Route("/video-ajax-get-tag/{id_tag}", name="video_tags_get_tag")
+     * @Template()
+     */
+    public function getTagAction($id_tag)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tag = $em->getRepository('MongoboxTumblrBundle:TumblrTag')->find($id_tag);
+
+        return new Response($tag->getName());
+    }
+
+    /**
      * Action to load tag or create it if not exist
      *
      * @Route("/video-tags-load-item", name="video_tags_load_item")
@@ -340,7 +354,7 @@ class VideosController extends Controller
         $youtubeService = $this->get('mongobox_jukebox.api_youtube');
 
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $session = $request->getSession();
         $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 

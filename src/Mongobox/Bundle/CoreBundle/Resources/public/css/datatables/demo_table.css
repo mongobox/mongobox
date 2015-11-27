@@ -104,25 +104,25 @@
 }
 
 .paginate_disabled_previous {
-	background: url('../img/datatables/sback_disabled.png') no-repeat top left;
+	background: url('../bundles/mongoboxcore/img/datatables/sback_disabled.png') no-repeat top left;
 }
 
 .paginate_enabled_previous {
-	background: url('../img/datatables/back_enabled.png') no-repeat top left;
+	background: url('../bundles/mongoboxcore/img/datatables/back_enabled.png') no-repeat top left;
 }
 .paginate_enabled_previous:hover {
-	background: url('../img/datatables/back_enabled_hover.png') no-repeat top left;
+	background: url('../bundles/mongoboxcore/img/datatables/back_enabled_hover.png') no-repeat top left;
 }
 
 .paginate_disabled_next {
-	background: url('../img/datatables/forward_disabled.png') no-repeat top right;
+	background: url('../bundles/mongoboxcore/img/datatables/forward_disabled.png') no-repeat top right;
 }
 
 .paginate_enabled_next {
-	background: url('../img/datatables/forward_enabled.png') no-repeat top right;
+	background: url('../bundles/mongoboxcore/img/datatables/forward_enabled.png') no-repeat top right;
 }
 .paginate_enabled_next:hover {
-	background: url('../img/datatables/forward_enabled_hover.png') no-repeat top right;
+	background: url('../bundles/mongoboxcore/img/datatables/forward_enabled_hover.png') no-repeat top right;
 }
 
 

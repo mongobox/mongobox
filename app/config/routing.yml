@@ -18,7 +18,7 @@ MongoboxTumblrBundle:
     prefix:   /
 
 homepage:
-    pattern:  /
+    path:  /
     defaults: { _controller: MongoboxCoreBundle:Wall:index }
 
 MongoboxJukeboxBundle:
@@ -47,11 +47,11 @@ MongoboxStatisticsBundle:
     prefix:   /
 
 _login_check:
-    pattern: /login_check
-    requirements: {_method : POST }
+    path: /login_check
+    methods : [POST]
 
 _logout:
-    pattern: /logout
+    path: /logout
 
 # Internal routing configuration to handle ESI
 #_internal:

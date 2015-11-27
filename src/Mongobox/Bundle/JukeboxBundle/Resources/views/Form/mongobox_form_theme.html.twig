@@ -8,7 +8,7 @@
 {% block field_row %}
 {% spaceless %}
         {{ form_label(form, label|default(null)) }}
-        {% if radio is defined and radio is sameas(true) %}
+        {% if radio is defined and radio is same as(true) %}
             {{ form_errors(form) }}
         {% else %}
             <div class="form-group clearfix{{ errors|length > 0 ? ' error' : '' }}">
@@ -39,7 +39,7 @@
     {% if label is empty %}
         {% set label = name|humanize %}
     {% endif %}
-    {% if radio is defined and radio is sameas(true) %}
+    {% if radio is defined and radio is same as(true) %}
         <label class="radio">
             {{ form_widget(bouton) }}
             {{ label|trans({}, translation_domain)|raw }}

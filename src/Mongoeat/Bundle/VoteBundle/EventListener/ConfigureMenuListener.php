@@ -32,6 +32,13 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menu->addChild('MongoEat', array('route' => 'decision'));
+        $menu->addChild(
+            'MongoEat',
+            array(
+                'route'  => 'decision',
+                'label'  => '<i class="fa fa-cutlery fa-fw"></i> MongoEat',
+                'extras' => array('safe_label' => true)
+            )
+        );
     }
 }

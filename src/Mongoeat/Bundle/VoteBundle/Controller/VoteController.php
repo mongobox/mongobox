@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mongoeat\Bundle\VoteBundle\Entity\Vote;
-use Mongoeat\Bundle\VoteBundle\Form\VoteType;
+use Mongoeat\Bundle\VoteBundle\Form\Type\VoteType;
 
 /**
  * Vote controller.
@@ -40,7 +40,7 @@ class VoteController extends Controller
         $form->submit($request);
 
         if ($form->isValid()) {
-            $user = $this->get('security.context')->getToken()->getUser();
+            $user = $this->get('security.token_storage')->getToken()->getUser();
             $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findOneBy(array('user'=>$user->getId(),'decision'=>$id));
 
             if (!empty($vote)) {
@@ -77,7 +77,7 @@ class VoteController extends Controller
     public function newAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $vote = $em->getRepository('MongoeatVoteBundle:Vote')->findOneBy(array('user'=>$user->getId(),'decision'=>$id));
         if (!empty($vote)) {
             return $this->redirect($this->generateUrl('vote_show',array('id'=>$vote->getId())));

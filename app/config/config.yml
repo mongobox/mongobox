@@ -18,6 +18,7 @@ framework:
     default_locale:   %locale%
     session:
         gc_maxlifetime:    36000
+        save_path: "%kernel.root_dir%/sessions"
 
 # Sensio FrameworkExtraBundle
 sensio_framework_extra:
@@ -28,12 +29,18 @@ sensio_framework_extra:
 
 # Twig Configuration
 twig:
+    exception_controller:  twig.controller.exception:showAction
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+
     globals:
       project_name: MongoBox
       team_name:    Mongo Application
       version:      "1.6"
+
+    form:
+      resources:
+        - 'bootstrap_3_layout.html.twig'
 
 # Service Configuration
 services:
@@ -49,6 +56,7 @@ services:
         class: Mongobox\Bundle\JukeboxBundle\Twig\NiceTimeExtension
         tags:
           - { name: twig.extension }
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
@@ -60,6 +68,10 @@ assetic:
         #     jar: %kernel.root_dir%/java/compiler.jar
         # yui_css:
         #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
+        yui_css:
+            jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+        yui_js:
+            jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
 
 # Doctrine Configuration
 doctrine:
@@ -162,5 +174,3 @@ sonata_admin:
                    icon: fa-users
                    text: Users
                    color: bg-green
-
-

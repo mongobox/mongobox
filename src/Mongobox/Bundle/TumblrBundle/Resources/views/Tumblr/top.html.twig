@@ -3,8 +3,7 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<div class="container">
-    <div class="jumbotron text-center">
+    <div class="text-center">
             {% include 'MongoboxTumblrBundle:Slider:index.html.twig'
                 with {
                     'top': true,
@@ -15,5 +14,4 @@
                 }
             %}
     </div>
-</div>
 {% endblock body %}
