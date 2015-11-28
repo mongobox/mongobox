@@ -13,6 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class VideoTag
 {
+    const VIDEO_TAG_REPLACE = 'a_remplacer';
+
 	/**
 	 * @var integer $id
 	 *
@@ -21,7 +23,6 @@ class VideoTag
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	private $id;
-
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="Videos", inversedBy="tags")
