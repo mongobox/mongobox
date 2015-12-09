@@ -297,8 +297,10 @@ class Videos
      */
     public function addTag($tag)
     {
-        $tag->addVideo($this);
-        $this->tags[] = $tag;
+        if (!$this->tags->contains($tag)) {
+            $tag->addVideo($this);
+            $this->tags[] = $tag;
+        }
 
         return $this;
     }

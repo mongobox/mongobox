@@ -19,9 +19,7 @@
     {% if videoGroup.video is defined and videoGroup.video is not null %}
     <a href="{{videoGroup.video.youtubeUrl}}" title="Posté par {{userLogin}}{{infos}} - Points : {{videoGroup.votes - videoGroup.diffusion}}"{% if somme_pl is defined and somme_pl <= -2 %} style="color : red;"{% endif %}>{{videoGroup.video.name}}</a>
     {% endif %}
-</div>
 
-<div class="col-md-12">
     {% if video_en_cours is not null and alreadyFavorite is not defined or (alreadyFavorite is defined and alreadyFavorite is same as(false)) %}
         <a href="{{ path('ajax_new_video_favorite', {'id_video': video_en_cours.videoGroup.video.id}) }}" class="btn-favoris-add btn-link jukebox-hidden" title="Ajouter la vidéo aux favoris"><i class="glyphicon glyphicon-bookmark{% if white is defined and white %} icon-white{% endif %}"></i><span></span></a>
     {% endif %}

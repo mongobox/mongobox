@@ -17,6 +17,9 @@ use Mongobox\Bundle\JukeboxBundle\Command\Monolog\Handler\CliHandler;
 // Google API
 use Google_Client;
 use Google_Service_YouTube;
+use Symfony\Component\Security\Acl\Exception\Exception;
+
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoTag;
 
 /**
  * Class UpdateYoutubeDataCommand
@@ -29,9 +32,20 @@ class UpdateYoutubeDataCommand extends ContainerAwareCommand
     const YOUTUBE_STATUS_PUBLIC = 'public';
     const YOUTUBE_STATUS_UNLISTED = 'unlisted';
 
+    const UPDATE_LIMIT = 50;
+
     protected $debug;
 
     private $em;
+
+    private $videos;
+    private $nbVideos;
+    private $updatedVideos = 0;
+    private $updatedVideosStatus = 0;
+    private $tagReplace;
+
+    private $client;
+    private $youtube;
 
     /**
      * {@inheritDoc}
@@ -77,86 +91,132 @@ class UpdateYoutubeDataCommand extends ContainerAwareCommand
         $this->em = $this->getContainer()->get('doctrine')->getManager('default');
     }
 
+    private function getVideos()
+    {
+
+        $this->videos = $this->em->getRepository('MongoboxJukeboxBundle:Videos')->findAll();
+        $this->nbVideos = count($this->videos);
+
+        $this->output->writeln('Get videos list: ' . $this->nbVideos);
+
+        $this->tagReplace = $this->em->getRepository('MongoboxJukeboxBundle:VideoTag')
+            ->findOneBy(array('system_name' => VideoTag::VIDEO_TAG_REPLACE));
+    }
+
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<bg=cyan;fg=red>Start traitement </>');
+        $this->output->writeln('<bg=cyan;fg=red>Start traitement </>');
 
-        $client = new Google_Client();
-        $client->setApplicationName($this->googleAppName);
-        $client->setDeveloperKey($this->googleDeveloperKey);
+        $this->getVideos();
 
-        $youtube = new Google_Service_YouTube($client);
+        $this->client = new Google_Client();
+        $this->client->setApplicationName($this->googleAppName);
+        $this->client->setDeveloperKey($this->googleDeveloperKey);
 
-        $em = $this->getContainer()->get('doctrine')->getManager('default');
-        $videos = $em->getRepository('MongoboxJukeboxBundle:Videos')->findAll();
+        $this->youtube = new Google_Service_YouTube($this->client);
 
-        $compteurVideo = $compteurDelatedVideo = 0;
-        foreach ($videos as $key => $video) {
+        while ($this->updatedVideos < $this->nbVideos) {
 
-            try {
-                $response =
-                    $youtube->videos->listVideos("snippet,status,contentDetails", array('id' => $video->getLien()));
-
-                $items = $response->getItems();
-                if (empty($items)) {
-
-                    $output->writeln('Error on video : <fg=red>' . $video->getLien() . '</>');
-
-                    $this->deleteVideo($video);
-
-                    $this->output->writeln('Delete video: ' . $video->getLien());
-                    $compteurDelatedVideo++;
-
-                    continue;
-                }
-
-                foreach ($response->getItems() as $youtubeVideo) {
-
-                    $output->writeln('Youtube ID: ' . $youtubeVideo->getId());
-
-                    switch ($youtubeVideo->getStatus()->getPrivacyStatus()) {
-                        case self::YOUTUBE_STATUS_PUBLIC:
-                        case self::YOUTUBE_STATUS_UNLISTED:
-
-                            $snippet = $youtubeVideo->getSnippet();
-
-                            // Duration
-                            $duration = $youtubeVideo->getContentDetails()->getDuration();
-                            $interval = new \DateInterval($duration);
-                            $duration = $this->toSeconds($interval);
-
-                            // Thumbnails
-                            $thumbnails = $snippet->getThumbnails();
-
-                            $video
-                                ->setTitle($snippet->getTitle())
-                                ->setDuration($duration)
-                                ->setThumbnail($thumbnails->getDefault()->getUrl())
-                                ->setThumbnailHq($thumbnails->getHigh()->getUrl());
-                            $em->persist($video);
-                            $em->flush();
-
-                            $output->writeln(
-                                'Update Video: <fg=green>(id=' . $video->getId() . ') ' . $snippet->getTitle() . '</>'
-                            );
-                            $compteurVideo++;
-                            break;
-                        default:
-                            $output->writeln('<bg=red;fg=white>############# New case #############</>');
-                            $output->writeln($youtubeVideo);
-                            break;
-                    }
-                }
-            } catch (Exception $e) {
-                $output->writeln('<bg=red;fg=white>Error: ' . $e->getMessage() . '</>');
-                continue;
-            }
+            $start = $this->updatedVideos;
+            $end = $start + self::UPDATE_LIMIT;
+            $this->output->writeln("Videos $start to $end");
+            $videos = array_slice($this->videos, $this->updatedVideos, self::UPDATE_LIMIT);
+            $this->updateVideos($videos);
         }
 
-        $this->logger->addInfo("Updated videos: {$compteurVideo}");
-        $this->logger->addInfo("Delated videos: {$compteurDelatedVideo}");
+        $this->logger->addInfo("Updated videos: {$this->updatedVideos}");
+        $this->logger->addInfo("Updated videos status: {$this->updatedVideosStatus}");
 
         $output->writeln('<bg=cyan;fg=red>Fin du traitement</>');
+    }
+
+    private function updateVideos($listVideos = array())
+    {
+        $ids = array();
+
+        foreach ($listVideos as $video) {
+            $ids[] = $video->getLien();
+        }
+
+        $youtubeData = $this->getYoutubeData($ids);
+
+        foreach ($listVideos as $video) {
+
+            $youtubeVideo = $youtubeData[$video->getLien()];
+
+            if (empty($youtubeVideo)) {
+                $video->addTag($this->tagReplace);
+
+                $this->output->writeln(
+                    'Update Video to replace: <fg=yellow>(id=' . $video->getId() . ') ' . $video->getTitle() . '</>'
+                );
+
+                $this->updatedVideosStatus++;
+            } else {
+                $video
+                    ->setTitle($youtubeVideo['title'])
+                    ->setDuration($youtubeVideo['duration'])
+                    ->setThumbnail($youtubeVideo['thumbnail'])
+                    ->setThumbnailHq($youtubeVideo['thumbnailHq']);
+
+                $this->output->writeln(
+                    'Update Video: <fg=green>(id=' . $video->getId() . ') ' . $video->getTitle() . '</>'
+                );
+            }
+
+            $this->em->persist($video);
+
+            $this->updatedVideos++;
+        }
+
+        $this->em->flush();
+    }
+
+    private function getYoutubeData($videoIds)
+    {
+        $videosYoutube = array_fill_keys($videoIds, null);
+
+        $videoIds = implode(',', $videoIds);
+
+        try {
+            $response = $this->youtube->videos->listVideos("snippet,status,contentDetails", array('id' => $videoIds));
+            $items = $response->getItems();
+
+            foreach ($items as $youtubeVideo) {
+
+                switch ($youtubeVideo->getStatus()->getPrivacyStatus()) {
+                    case self::YOUTUBE_STATUS_PUBLIC:
+                    case self::YOUTUBE_STATUS_UNLISTED:
+
+                        $snippet = $youtubeVideo->getSnippet();
+
+                        // Duration
+                        $duration = $youtubeVideo->getContentDetails()->getDuration();
+                        $interval = new \DateInterval($duration);
+                        $duration = $this->toSeconds($interval);
+
+                        // Thumbnails
+                        $thumbnails = $snippet->getThumbnails();
+
+                        $videosYoutube[$youtubeVideo->getId()] = array(
+                            'title'       => $snippet->getTitle(),
+                            'duration'    => $duration,
+                            'thumbnail'   => $thumbnails->getDefault()->getUrl(),
+                            'thumbnailHq' => $thumbnails->getHigh()->getUrl()
+                        );
+
+                        break;
+                    default:
+                        $this->output->writeln($youtubeVideo);
+                        break;
+                }
+            }
+        } catch (Exception $e) {
+            $this->output->writeln('<bg=red;fg=white>Error: ' . $e->getMessage() . '</>');
+        }
+
+        return $videosYoutube;
     }
 
     /**
@@ -176,48 +236,5 @@ class UpdateYoutubeDataCommand extends ContainerAwareCommand
             + ($delta->y * 60 * 60 * 24 * 365);
 
         return (int) $seconds;
-    }
-
-    /**
-     * Delete video
-     *
-     * @param \Mongobox\Bundle\JukeboxBundle\Entity\Videos $video
-     */
-    private function deleteVideo(\Mongobox\Bundle\JukeboxBundle\Entity\Videos $video)
-    {
-
-        #### Videos Group
-        $videosGroup = $this->em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findBy(
-            array('video' => $video)
-        );
-
-        foreach ($videosGroup as $videoGr) {
-
-            #### Playlist
-            $videosPlaylist = $this->em->getRepository('MongoboxJukeboxBundle:Playlist')->findBy(
-                array('video_group' => $videoGr)
-            );
-
-            foreach ($videosPlaylist as $videoPlaylist) {
-                $this->em->remove($videoPlaylist);
-            }
-
-            $this->em->remove($videoGr);
-        }
-
-
-        #### Users Favoris
-        $usersFavorites = $this->em->getRepository('MongoboxBookmarkBundle:UserFavoris')->findBy(
-            array('video' => $video)
-        );
-
-        foreach ($usersFavorites as $videoFavorite) {
-            $this->em->remove($videoFavorite);
-        }
-
-        #### Video
-        $this->em->remove($video);
-
-        $this->em->flush();
     }
 }

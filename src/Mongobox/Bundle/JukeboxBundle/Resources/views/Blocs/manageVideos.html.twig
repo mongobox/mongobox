@@ -1,0 +1,37 @@
+{% if videos %}
+    <div class="panel panel-default block-manage-videos">
+        <div class="panel-heading">Vidéos à remplacer</div>
+        <ul class="list-group">
+            {% for videoDisabled in videos %}
+                <li class="clearfix show-edit-video over-highlight list-group-item">
+                    <small>
+                    <span class="playlist-thumbnail">
+                        <img src="{{ videoDisabled.video.thumbnail }}" alt=""
+                             class="photo-small video-thumbnail" rel="tooltip"
+                             title="<img src='{{ videoDisabled.video.thumbnailHq }}'/>"
+                             data-html="true"/>
+                    </span>
+                    <span class="playlist-title">
+                        <div class="col-md-12">
+                            {% if videoDisabled.video is defined and videoDisabled.video is not null %}
+                                <a href="{{ videoDisabled.video.youtubeUrl }}"
+                                   title="Points : {{ videoDisabled.votes - videoDisabled.diffusion }}"{% if somme_pl is defined and somme_pl <= -2 %} style="color : red;"{% endif %}>{{ videoDisabled.video.name }}</a>
+
+                                <a href="{{ url('live_replace', {'id_video' : videoDisabled.video.id}) }}"
+                                   class="replace-video btn-link" role="button">
+                                    <span class="glyphicon glyphicon-edit {% if white is defined and white %} icon-white{% endif %}"
+                                          title="Modifier"></span>
+                                </a>
+
+                            {% endif %}
+                        </div>
+                    </span>
+                        <span class="playlist-time label label-primary">{{ videoDisabled.video.duration|niceTime }}</span>
+                    </small>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% include 'MongoboxJukeboxBundle:Partial:replaceVideo.html.twig' %}
+{% endif %}
