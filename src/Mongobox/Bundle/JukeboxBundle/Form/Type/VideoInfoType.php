@@ -31,23 +31,26 @@ class VideoInfoType extends AbstractType
                     'attr'  => array('size' => 40)
                 )
             )
-            ->add('tag', 'autocomplete', array(
-                'class' => 'Mongobox\Bundle\JukeboxBundle\Entity\VideoTag',
-                'label' => 'Tags',
-                'attr' => array(
-                    'placeholder' => 'Ajouter des tags',
-                    'class' => "form-control"
-                ),
-                'required' => false,
-                'mapped' => false
-            ))
+            ->add(
+                'tag',
+                'autocomplete',
+                array(
+                    'class'    => 'Mongobox\Bundle\JukeboxBundle\Entity\VideoTag',
+                    'label'    => 'Tags',
+                    'attr'     => array(
+                        'placeholder' => 'Ajouter des tags'
+                    ),
+                    'required' => false,
+                    'mapped'   => false
+                )
+            )
             ->add(
                 'tags',
                 'hidden',
                 array(
                     'mapped' => false
                 )
-            );;
+            );
     }
 
     public function getName()
@@ -57,8 +60,10 @@ class VideoInfoType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'intention' => $this->getName(),
-        ));
+        $resolver->setDefaults(
+            array(
+                'intention' => $this->getName(),
+            )
+        );
     }
 }

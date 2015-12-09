@@ -194,6 +194,7 @@ class LiveController extends Controller
     public function replaceAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $repoVideos = $em->getRepository('MongoboxJukeboxBundle:Videos');
 
         if ($request->getMethod() === 'POST') {
             $newVideo = new Videos();
@@ -201,13 +202,27 @@ class LiveController extends Controller
             $editForm = $this->createForm(new ReplaceVideo(), $newVideo);
             $editForm->submit($request);
 
-            $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($newVideo->getId());
+            $video = $repoVideos->find($newVideo->getId());
             if ($editForm->isValid() === true && $video !== null) {
                 try {
+                    //On supprime les anciens tags de la vidéo
+                    $repoVideos->wipeTags($video);
+
                     $video->setTitle($newVideo->getTitle());
                     $video->setLien($newVideo->getLien());
                     $video->setArtist($newVideo->getArtist());
                     $video->setSongName($newVideo->getSongName());
+
+                    //On rajoute les tags
+                    $tags = $editForm->get('tags')->getData();
+                    if(is_array($tags))
+                    {
+                        foreach($tags as $tag_id)
+                        {
+                            $entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
+                            $video->addTag($entityTag);
+                        }
+                    }
 
                     $em->persist($video);
                     $em->flush();
@@ -221,25 +236,40 @@ class LiveController extends Controller
                 $editForm->addError(new FormError('Les données du formulaire ne sont pas valides.'));
             }
         } else {
-            $session = $request->getSession();
+            $idVideo = $request->query->get('id_video');
+            if (!empty($idVideo)) {
+                $video = $repoVideos->find($idVideo);
 
-            $currentGroup       = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-            $currentPlaylist    = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(array(
-                'group'     => $currentGroup->getId(),
-                'current'   => 1
-            ));
-
-            if ($currentVideo = $currentPlaylist->getVideoGroup()->getVideo()) {
-                $editForm = $this->createForm(new ReplaceVideo(), $currentVideo);
+                if (!$video) {
+                    $editForm = $this->createForm(new ReplaceVideo());
+                    $editForm->addError(new FormError('Unable to find Videos entity.'));
+                } else {
+                    $editForm = $this->createForm(new ReplaceVideo(), $video);
+                }
             } else {
-                $editForm = $this->createForm(new ReplaceVideo());
-                $editForm->addError(new FormError('Impossible de récupérer la vidéo courante dans la playlist.'));
+                $session = $request->getSession();
+
+                $currentGroup = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+                $currentPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(
+                    array(
+                        'group'   => $currentGroup->getId(),
+                        'current' => 1
+                    )
+                );
+
+                if ($video = $currentPlaylist->getVideoGroup()->getVideo()) {
+                    $editForm = $this->createForm(new ReplaceVideo(), $video);
+                } else {
+                    $editForm = $this->createForm(new ReplaceVideo());
+                    $editForm->addError(new FormError('Impossible de récupérer la vidéo courante dans la playlist.'));
+                }
             }
         }
 
         return array(
             'message'  => isset($message) ? $message : null,
-            'edit_form' => $editForm->createView()
+            'edit_form' => $editForm->createView(),
+            'list_tags' => $video->getTags()
         );
     }
 
@@ -351,7 +381,7 @@ class LiveController extends Controller
      * @param \Mongobox\Bundle\JukeboxBundle\Entity\Playlist $playlist
      * @return array
      */
-    protected function _getPlaylistVolume($playlist)
+    protected function getPlaylistVolume($playlist)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -426,7 +456,7 @@ class LiveController extends Controller
             $em->flush();
         }
 
-        $data       = $this->_getPlaylistVolume($currentPlaylist);
+        $data       = $this->getPlaylistVolume($currentPlaylist);
         $response   = new Response(json_encode($data));
 
         return $response;

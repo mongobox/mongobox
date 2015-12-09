@@ -52,13 +52,35 @@ class ReplaceVideo extends AbstractType
                     'label' => 'Id de la vidéo',
                     'attr'  => array('size' => 15)
                 )
+            )
+            ->add(
+                'tag',
+                'autocomplete',
+                array(
+                    'class'    => 'Mongobox\Bundle\JukeboxBundle\Entity\VideoTag',
+                    'label'    => 'Tags',
+                    'attr'     => array(
+                        'placeholder' => 'Ajouter des tags',
+                    ),
+                    'required' => false,
+                    'mapped'   => false
+                )
+            )
+            ->add(
+                'tags',
+                'hidden',
+                array(
+                    'mapped' => false
+                )
             );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'intention' => $this->getName(),
-        ));
+        $resolver->setDefaults(
+            array(
+                'intention' => $this->getName(),
+            )
+        );
     }
 }

@@ -1,14 +1,38 @@
 {% form_theme edit_form 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
 {% if message is null %}
+    <div class="loader"></div>
     <form id="form_replace_video">
         {{ form_widget(edit_form) }}
-        <span class="btn btn-success" id="submit-replace-btn">Remplacer</span>
+        {{ form_widget(edit_form.tag) }}
+        <span class="btn btn-default" id="video-button-add-tag"><span class="glyphicon glyphicon-plus"></span> Ajouter</span>
+        <div id="container-selected-tags">
+            <ul>
+                {% for tag in list_tags %}
+                    <span class="tag-item label label-primary"><span>{{tag.name}}</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="{{tag.id}}" /></span>
+                {% endfor %}
+            </ul>
+        </div>
+        {% set tagDataPrototype = '<span>__name__</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="__id__" />' %}
+        <div id="video_tags_list" class="tags manage-tags" data-prototype="{{ tagDataPrototype }}">
+        </div>
+        <div class="total-clear-fix">
+            <input type="submit" value="Remplacer" class="btn btn-success" id="submit-replace-btn" />
+        </div>
         {{ form_rest(edit_form) }}
     </form>
 
     <script type="text/javascript">
+        $('#Mongobox_bundle_jukeboxbundle_live_replace_video_tag').autocompleter({
+            url_list: '{{ url('video_tags_ajax_autocomplete') }}',
+            url_get: 'video-ajax-get-tag/'
+        });
+
+        videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
+        videoTags.init();
+
         $("#submit-replace-btn").click(function() {
+            var replaceUrl          = '{{ path('live_replace') }}';
             $('.loader').show();
 
             $.ajax({

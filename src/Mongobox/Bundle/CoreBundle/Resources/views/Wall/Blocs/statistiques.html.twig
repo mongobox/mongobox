@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default block-playlist">
 	<div class="panel-heading">Playlist</div>
     <ul class="list-group" id="playlist">
     {% if video_en_cours is defined and video_en_cours is not null %}
@@ -44,13 +44,12 @@
     </ul>
 </div>
 
-<div class="panel panel-default">
+<div class="panel panel-default block-playlist-historical">
 	<div class="panel-heading">Historique</div>
     <ul class="list-group">
     {% for video_hist in videos_historique %}
         <li class="clearfix show-edit-video over-highlight list-group-item">
             <small>
-                <span class="playlist-icon">&nbsp;</span>
                 <span class="playlist-thumbnail"><img src="{{ video_hist.video.thumbnail }}" alt="" class="photo-small video-thumbnail" rel="tooltip" title="<img src='{{ video_hist.video.thumbnailHq }}' />" data-html="true" /></span>
                 <span class="playlist-title">
                     {% include 'MongoboxJukeboxBundle:Partial:videoTitle.html.twig' with {'videoGroup' : video_hist, 'infos' : '- Passée le : ' ~ video_hist.lastBroadCast|date('d-m-Y H:i:s')} %}

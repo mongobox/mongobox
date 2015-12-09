@@ -24,15 +24,18 @@
             </a>
             <ul class="dropdown-menu" role="menu">
                 <li>
-                    <a href="{{path('group_index')}}" title="Groupes"><i class="fa fa-users"></i> Liste des Groupes</a>
+                    <a href="{{ path('group_index') }}" title="Groupes"><i class="fa fa-users"></i> Liste des
+                        Groupes</a>
                 </li>
                 {% if app.user.groupsInvitations|length > 0 %}
                     <li class="dropdown-submenu">
-                        <a href="" title="Invitations">{{app.user.groupsInvitations|length}} invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}</a>
+                        <a href="" title="Invitations">{{ app.user.groupsInvitations|length }}
+                            invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}</a>
                         <ul class="dropdown-menu">
                             {% for invitation in app.user.groupsInvitations %}
                                 <li>
-                                    <a href="{{path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id})}}" title="Accepter l'invitation dans le groupe '{{invitation.title}}'">{{invitation.title}}</a>
+                                    <a href="{{ path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id}) }}"
+                                       title="Accepter l'invitation dans le groupe '{{ invitation.title }}'">{{ invitation.title }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -46,13 +49,15 @@
                 {% endif %}
                 <li class="divider" id="divider-group-after"></li>
                 <li>
-                    <a href="{{ path('user_voir_favoris') }}" title="Modifier vos favoris"><i class="fa fa-bookmark fa-fw"></i> Vos favoris</a>
+                    <a href="{{ path('user_voir_favoris') }}" title="Modifier vos favoris"><i
+                                class="fa fa-bookmark fa-fw"></i> Vos favoris</a>
                 </li>
                 <li>
-                    <a href="{{ path('user_edit')}}" title="Modifier votre compte"><i class="fa fa-user fa-fw"></i> Modifier votre compte</a>
+                    <a href="{{ path('user_edit') }}" title="Modifier votre compte"><i class="fa fa-user fa-fw"></i>
+                        Modifier votre compte</a>
                 </li>
                 <li>
-                    <a href="{{ path('_logout')}}" title="Déconnexion"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
+                    <a href="{{ path('_logout') }}" title="Déconnexion"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
                 </li>
             </ul>
         </li>
@@ -82,16 +87,17 @@
 
             <ul class="nav in">
                 <li class="current first">
-                    <a href="" id="add-video-button" title="Ajouter une vidéo">
+                    <a href="" id="add-video-button" title="Ajouter une vidéo" role="button">
                         <i class="fa fa-plus fa-fw"></i> Add a video
                     </a>
                 </li>
             </ul>
 
-
             {{ knp_menu_render('MongoboxCoreBundle:MainBuilder:build', {'allow_safe_labels': true}) }}
 
-            {{ render(controller("MongoboxCoreBundle:Wall:videoEnCours")) }}
+            <div id="video_en_cours">
+                {{ render(controller("MongoboxCoreBundle:Wall:videoEnCours")) }}
+            </div>
         </div>
         <!-- /.sidebar-collapse -->
     </div>
@@ -99,13 +105,12 @@
 </nav>
 
 
-
-
 <div class="modal fade" id="action-video-modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                 <h3 class="modal-title">Action sur une vidéo</h3>
             </div>
             <div class="modal-body">

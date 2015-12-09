@@ -5,6 +5,8 @@ namespace Mongobox\Bundle\JukeboxBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 
+use Mongobox\Bundle\JukeboxBundle\Entity\VideoTag;
+
 /**
  * VideoGroupRepository
  *
@@ -13,150 +15,162 @@ use Doctrine\ORM\Query\ResultSetMapping;
  */
 class VideoGroupRepository extends EntityRepository
 {
-	public function findLast($maxResults, $group)
-	{
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
+    public function findLast($maxResults, $group)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
 
-		$qb->select('vg')
-		->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
-		->where("vg.group = :group")
-		->orderBy('vg.lastBroadcast', 'DESC')
-		->setMaxResults($maxResults)
-		->setParameters( array(
-				'group' => $group
-		));
+        $qb->select('vg')
+            ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+            ->where("vg.group = :group")
+            ->orderBy('vg.lastBroadcast', 'DESC')
+            ->setMaxResults($maxResults)
+            ->setParameters(
+                array(
+                    'group' => $group
+                )
+            );
 
-		$query = $qb->getQuery();
-		return $query->getResult();
-	}
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 
     public function random($group)
     {
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
 
         $date = new \Datetime();
         $day = $date->format('w');
 
-		//Tag a avoir obligatoirement
-		$qb->select('glt')
-		->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
-		->where("glt.group = :group")
-		->andWhere("glt.selected = 1")
-		->setParameters( array(
-				'group' => $group
-		));
-		$query = $qb->getQuery();
-		$glt_s = $query->getResult();
-		$glts = array();
-		foreach($glt_s as $s) $glts[] = $s->getVideoTag();
+        // Tag a avoir obligatoirement
+        $qb->select('glt')
+            ->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
+            ->where("glt.group = :group")
+            ->andWhere("glt.selected = 1")
+            ->setParameters(
+                array(
+                    'group' => $group
+                )
+            );
+        $query = $qb->getQuery();
+        $glt_s = $query->getResult();
+        $glts = array();
+        foreach ($glt_s as $s) {
+            $glts[] = $s->getVideoTag();
+        }
 
-		//Ne pas prendre la playlist
-		$qb = $em->createQueryBuilder();
-		$qb->select('p')
-		->from('MongoboxJukeboxBundle:Playlist', 'p')
-		->where("p.group = :group")
-		->setParameters( array(
-				'group' => $group
-		));
-		$query = $qb->getQuery();
-		$p_u = $query->getResult();
-		$playlist = array();
-		foreach($p_u as $u) $playlist[] = $u->getVideoGroup();
+        // Ne pas prendre la playlist
+        $qb = $em->createQueryBuilder();
+        $qb->select('p')
+            ->from('MongoboxJukeboxBundle:Playlist', 'p')
+            ->where("p.group = :group")
+            ->setParameters(
+                array(
+                    'group' => $group
+                )
+            );
+        $query = $qb->getQuery();
+        $p_u = $query->getResult();
+        $playlist = array();
+        foreach ($p_u as $u) {
+            $playlist[] = $u->getVideoGroup();
+        }
 
-		//Tag à ne pas remonter obligatoirement
-		$qb = $em->createQueryBuilder();
-		$qb->select('glt')
-		->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
-		->where("glt.group = :group")
-		->andWhere("glt.selected = 0")
-		->setParameters( array(
-				'group' => $group
-		));
-		$query = $qb->getQuery();
-		$glt_u = $query->getResult();
-		$gltu = array();
-		foreach($glt_u as $u) $gltu[] = $u->getVideoTag();
+        // Tag à ne pas remonter obligatoirement
+        $qb = $em->createQueryBuilder();
+        $qb->select('glt')
+            ->from('MongoboxGroupBundle:GroupLiveTag', 'glt')
+            ->where("glt.group = :group")
+            ->andWhere("glt.selected = 0")
+            ->setParameters(
+                array(
+                    'group' => $group
+                )
+            );
+        $query = $qb->getQuery();
+        $glt_u = $query->getResult();
+        $gltu = array();
+        foreach ($glt_u as $u) {
+            $gltu[] = $u->getVideoTag();
+        }
 
-		if(count($gltu) > 0)
-		{
-			$qb = $em->createQueryBuilder();
-			$qb->select('vg')
-			->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
-			->leftJoin('vg.video', 'v')
-			->leftJoin('v.tags', 'vt')
-			->innerJoin('vt.group_live_tag', 'glt')
-			->where("glt.video_tag IN (:gltu)")
-			->groupBy('vg.id')
-			->setParameters( array(
-					'gltu' => $gltu,
-			));
-			$query = $qb->getQuery();
-			$results = $query->getResult();
-		}
-		else $results = array();
+        if (count($gltu) > 0) {
+            $qb = $em->createQueryBuilder();
+            $qb->select('vg')
+                ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+                ->leftJoin('vg.video', 'v')
+                ->leftJoin('v.tags', 'vt')
+                ->innerJoin('vt.group_live_tag', 'glt')
+                ->where("glt.video_tag IN (:gltu)")
+                ->groupBy('vg.id')
+                ->setParameters(
+                    array(
+                        'gltu' => $gltu,
+                    )
+                );
+            $query = $qb->getQuery();
+            $results = $query->getResult();
+        } else {
+            $results = array();
+        }
 
-		$parameters = array(
-			'group' => $group,
-			'today' => new \Datetime('today')
-			);
+        $parameters = array(
+            'group' => $group,
+            'today' => new \Datetime('today')
+        );
 
-		$qb = $em->createQueryBuilder();
-		$qb->select('vg')
-		->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
-		->leftJoin('vg.playlist', 'p')
-		->leftJoin('vg.video', 'v')
-		->leftJoin('v.tags', 'vt')
-		->where("vg.group = :group")
-		->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")
-		->groupBy('vg.id');
+        $qb = $em->createQueryBuilder();
+        $qb->select('vg')
+            ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+            ->leftJoin('vg.playlist', 'p')
+            ->leftJoin('vg.video', 'v')
+            ->leftJoin('v.tags', 'vt')
+            ->where("vg.group = :group")
+            ->andWhere("(vg.lastBroadcast < :today OR vg.lastBroadcast IS NULL)")
+            ->groupBy('vg.id');
 
-		if(count($playlist) > 0)
-		{
-			$qb->andWhere("vg.id NOT IN (:playlist)");
-			$parameters['playlist'] = $playlist;
-		}
+        if (count($playlist) > 0) {
+            $qb->andWhere("vg.id NOT IN (:playlist)");
+            $parameters['playlist'] = $playlist;
+        }
 
-		if(count($results) > 0)
-		{
-			$qb->andWhere('vg.id NOT IN (:results)');
-			$parameters['results'] = $results;
-		}
+        if (count($results) > 0) {
+            $qb->andWhere('vg.id NOT IN (:results)');
+            $parameters['results'] = $results;
+        }
 
-		$qb->setParameters( $parameters );
-
-
-
-		/* TODO */
-		//$qb->andWhere('(DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL')
-
-		$query = $qb->getQuery();
-		$results = $query->getResult();
-
-		if(count($glts) > 0)
-		{
-			$qb = $em->createQueryBuilder();
-			$qb->select('vg')
-			->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
-			->leftJoin('vg.video', 'v')
-			->leftJoin('v.tags', 'vt')
-			->leftJoin('vt.group_live_tag', 'glt')
-			->where("glt.video_tag IN (:glts)")
-			->andWhere('vg.id IN (:results)')
-			->groupBy('vg.id')
-			->setParameters( array(
-					'glts' => $glts,
-					'results' => $results
-			));
-			$query = $qb->getQuery();
-			$results = $query->getResult();
-		}
+        $qb->setParameters($parameters);
 
 
-		//var_dump($results);
-        if (count($results) > 0)
-		{
+        /* TODO */
+        //$qb->andWhere('(DATE(vg.last_broadcast) < DATE(NOW()) OR vg.last_broadcast IS NULL')
+
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+
+        if (count($glts) > 0) {
+            $qb = $em->createQueryBuilder();
+            $qb->select('vg')
+                ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+                ->leftJoin('vg.video', 'v')
+                ->leftJoin('v.tags', 'vt')
+                ->leftJoin('vt.group_live_tag', 'glt')
+                ->where("glt.video_tag IN (:glts)")
+                ->andWhere('vg.id IN (:results)')
+                ->groupBy('vg.id')
+                ->setParameters(
+                    array(
+                        'glts'    => $glts,
+                        'results' => $results
+                    )
+                );
+            $query = $qb->getQuery();
+            $results = $query->getResult();
+        }
+
+        if (count($results) > 0) {
             $songs = array();
             foreach ($results as $song) {
                 $songs[] = $song->getDiffusion() - $song->getVotes();
@@ -173,21 +187,23 @@ class VideoGroupRepository extends EntityRepository
             $video = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->find($rand);
 
             return $video;
-        } else return null;
+        } else {
+            return null;
+        }
     }
 
     /**
-    * getRandomWeightedElement()
-    * Utility function for getting random values with weighting.
-    * Pass in an associative array, such as array('A'=>5, 'B'=>45, 'C'=>50)
-    * An array like this means that "A" has a 5% chance of being selected, "B" 45%, and "C" 50%.
-    * The return value is the array key, A, B, or C in this case.  Note that the values assigned
-    * do not have to be percentages.  The values are simply relative to each other.  If one value
-    * weight was 2, and the other weight of 1, the value with the weight of 2 has about a 66%
-    * chance of being selected.  Also note that weights should be integers.
-    *
-    * @param array $weightedValues
-    */
+     * getRandomWeightedElement()
+     * Utility function for getting random values with weighting.
+     * Pass in an associative array, such as array('A'=>5, 'B'=>45, 'C'=>50)
+     * An array like this means that "A" has a 5% chance of being selected, "B" 45%, and "C" 50%.
+     * The return value is the array key, A, B, or C in this case.  Note that the values assigned
+     * do not have to be percentages.  The values are simply relative to each other.  If one value
+     * weight was 2, and the other weight of 1, the value with the weight of 2 has about a 66%
+     * chance of being selected.  Also note that weights should be integers.
+     *
+     * @param array $weightedValues
+     */
     public function getRandomWeightedElement(array $weightedValues)
     {
         $rand = mt_rand(1, (int) array_sum($weightedValues));
@@ -200,20 +216,57 @@ class VideoGroupRepository extends EntityRepository
         }
     }
 
-	/**
-	 * Function to get videos names in gorup
-	 * @param int $group_id
-	 */
-	public function getVideoNameInGroup($group_id)
-	{
-		$qb = $this->getEntityManager()->createQueryBuilder();
-		$qb
-			->select('v.title')
-			->from('MongoboxJukeboxBundle:Videos', 'v')
-			->innerJoin('v.video_groups', 'g')
-			->where('g.group = :group')
-			->setParameter('group', $group_id)
-		;
-		return $qb->getQuery()->getArrayResult();
-	}
+    /**
+     * Function to get videos names in gorup
+     *
+     * @param int $group_id
+     */
+    public function getVideoNameInGroup($groupId)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('v.title')
+            ->from('MongoboxJukeboxBundle:Videos', 'v')
+            ->innerJoin('v.video_groups', 'g')
+            ->where('g.group = :group')
+            ->setParameter('group', $groupId);
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Get list of disabled videos by user
+     *
+     * @param string|int $groupId
+     * @param string|int $userId
+     *
+     * @return array
+     */
+    public function getDisabledVideosByUser($groupId, $userId)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb
+            ->select('vg')
+            ->from('MongoboxJukeboxBundle:VideoGroup', 'vg')
+            ->innerJoin('vg.video', 'v')
+            ->innerJoin('v.tags', 'vt')
+            ->where('vg.group = :group')
+            ->andWhere('vg.user =:user')
+            ->andWhere('vt.system_name =:tag')
+            ->setParameters(
+                array(
+                    'group' => $groupId,
+                    'user'  => $userId,
+                    'tag'   => VideoTag::VIDEO_TAG_REPLACE
+                )
+            );
+
+        $query = $qb->getQuery();
+
+        $videos = $query->getResult();
+
+        return $videos;
+    }
 }
