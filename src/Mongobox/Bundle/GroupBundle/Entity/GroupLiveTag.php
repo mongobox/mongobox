@@ -1,6 +1,7 @@
 <?php
 
 namespace Mongobox\Bundle\GroupBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use \Doctrine\Common\Collections\ArrayCollection;
 
@@ -36,12 +37,14 @@ class GroupLiveTag
      */
     protected $selected;
 
-	/**
+    /**
      * Constructor
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
-	public function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -57,6 +60,7 @@ class GroupLiveTag
      * Set the value of group.
      *
      * @param  string $group
+     *
      * @return \Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag
      */
     public function setGroup($group)
@@ -80,6 +84,7 @@ class GroupLiveTag
      * Set the value of video_tag.
      *
      * @param  string $video_tag
+     *
      * @return \Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag
      */
     public function setVideoTag($video_tag)
@@ -98,11 +103,12 @@ class GroupLiveTag
     {
         return $this->video_tag;
     }
-	
-	/**
+
+    /**
      * Set the value of selected.
      *
      * @param  string $selected
+     *
      * @return \Mongobox\Bundle\GroupBundle\Entity\GroupLiveTag
      */
     public function setSelected($selected)

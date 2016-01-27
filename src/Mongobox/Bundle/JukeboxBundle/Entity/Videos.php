@@ -245,7 +245,7 @@ class Videos
      *
      * @return array  Associative array containing the different components.
      */
-    public static function parse_url_detail($url)
+    public static function parseUrlDetail($url)
     {
         $parts = parse_url($url);
         if (isset($parts['query'])) {
@@ -292,10 +292,11 @@ class Videos
     }
 
     /**
+     * Add video tag
      *
-     * @param TumblrTag $tag
+     * @param VideoTag $tag
      */
-    public function addTag($tag)
+    public function addTag(VideoTag $tag)
     {
         if (!$this->tags->contains($tag)) {
             $tag->addVideo($this);
@@ -306,11 +307,11 @@ class Videos
     }
 
     /**
-     * Fonction to delete tag
+     * Delete video tag
      *
-     * @param Discussion $discussion
+     * @param VideoTag $tag
      */
-    public function removeTag($tag)
+    public function removeTag(VideoTag $tag)
     {
         $this->tags->removeElement($tag);
     }

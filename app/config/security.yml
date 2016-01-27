@@ -37,6 +37,6 @@ security:
         - { path: ^/login$, roles: [ IS_AUTHENTICATED_ANONYMOUSLY ] }
         - { path: ^/registration, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/imagine, roles: [IS_AUTHENTICATED_FULLY,IS_AUTHENTICATED_ANONYMOUSLY] }
-        - { path: ^/, roles: [ ROLE_USER,IS_AUTHENTICATED_REMEMBERED ]}
+        - { path: ^/, roles: [ ROLE_USER,IS_AUTHENTICATED_FULLY,IS_AUTHENTICATED_REMEMBERED ]}
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

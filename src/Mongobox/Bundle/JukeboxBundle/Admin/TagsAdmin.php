@@ -11,19 +11,21 @@ class TagsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name','text')
-            ->add('system_name','text',array(
-                'required' => false,
-                'read_only' => true
-            ))
-        ;
+            ->add('name', 'text')
+            ->add(
+                'system_name',
+                'text',
+                array(
+                    'required'  => false,
+                    'read_only' => true
+                )
+            );
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-        ;
+            ->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper)

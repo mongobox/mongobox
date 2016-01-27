@@ -32,7 +32,8 @@ class Youtube
         $this->initClient();
     }
 
-    private function initClient(){
+    private function initClient()
+    {
 
         $this->client = new Google_Client();
         $this->client->setApplicationName($this->googleAppName);
@@ -44,9 +45,8 @@ class Youtube
     /**
      *
      */
-    public function getYoutubeApi(){
+    public function getYoutubeApi()
+    {
         return $this->youtubeApi;
     }
-
-
 }

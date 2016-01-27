@@ -9,20 +9,20 @@ class Tumblr
      */
     public function __construct(\Doctrine\ORM\EntityManager $dm)
     {
-        $this->documentManager  = $dm;
+        $this->documentManager = $dm;
     }
 
     public function getStatistics()
     {
-        $usersTags          = $this->getUsersTags();
-        $tumblrRepository   = $this->getTumblrRepository();
+        $usersTags = $this->getUsersTags();
+        $tumblrRepository = $this->getTumblrRepository();
 
-        $timelineChart      = new Tumblr\Timeline($tumblrRepository);
-        $usersRankingChart  = new Tumblr\Users($tumblrRepository, $usersTags);
+        $timelineChart = new Tumblr\Timeline($tumblrRepository);
+        $usersRankingChart = new Tumblr\Users($tumblrRepository, $usersTags);
 
         return array(
-            'timeline'      => $timelineChart->getSeries(),
-            'usersRanking'  => $usersRankingChart->getSeries()
+            'timeline'     => $timelineChart->getSeries(),
+            'usersRanking' => $usersRankingChart->getSeries()
         );
     }
 
@@ -39,7 +39,7 @@ class Tumblr
             'Marion',
             'Pierre',
             'Roxane',
-			'Jérôme'
+            'Jérôme'
         );
     }
 

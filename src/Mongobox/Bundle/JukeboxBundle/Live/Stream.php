@@ -17,13 +17,13 @@ class Stream implements MessageComponentInterface
      */
     protected $_logger;
 
-	/**
-	 * Constructor
-	 */
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->_clients = new \SplObjectStorage;
-        $this->_logger  = new Logger('live-stream');
+        $this->_logger = new Logger('live-stream');
     }
 
     /**

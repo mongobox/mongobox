@@ -112,7 +112,7 @@ class ImportCommand extends ContainerAwareCommand
     	if (($handle = fopen($this->_file, 'r')) !== false) {
 			while (($data = fgetcsv($handle, 1000, ';')) !== false) {
 				try{
-				$videoId = Videos::parse_url_detail($data[0]);
+				$videoId = Videos::parseUrlDetail($data[0]);
 
 				$video = new Videos();
 				$video->setLien($videoId);

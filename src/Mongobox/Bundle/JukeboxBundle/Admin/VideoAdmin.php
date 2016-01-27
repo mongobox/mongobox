@@ -12,7 +12,7 @@ class VideoAdmin extends Admin
     // setup the default sort column and order
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
-        '_sort_by' => 'id'
+        '_sort_by'    => 'id'
     );
 
     protected function configureFormFields(FormMapper $formMapper)
@@ -21,10 +21,10 @@ class VideoAdmin extends Admin
         $video = $this->getSubject();
 
         // use $thumbnailFieldOptions so we can add other options to the field
-        $thumbnailFieldOptions = array('required' => false,'read_only' => true);
+        $thumbnailFieldOptions = array('required' => false, 'read_only' => true);
         if ($video && $thumbnail = $video->getThumbnail()) {
             // add a 'help' option containing the preview's img tag
-            $thumbnailFieldOptions['help'] = '<img src="'.$thumbnail.'" class="admin-preview" />';
+            $thumbnailFieldOptions['help'] = '<img src="' . $thumbnail . '" class="admin-preview" />';
         }
 
         // use $thumbnailFieldOptions so we can add other options to the field
@@ -33,32 +33,43 @@ class VideoAdmin extends Admin
             // add a 'help' option containing the preview's img tag
             $urlVideo = "https://www.youtube.com/embed/{$lien}";
             $lienFieldOptions['help'] = '<iframe width="300" height="169"
-src="'.$urlVideo.'" frameborder="0" allowfullscreen></iframe>';
+src="' . $urlVideo . '" frameborder="0" allowfullscreen></iframe>';
         }
 
         $formMapper
             ->with('General')
-                ->add('title', 'text')
-                ->add('lien', 'text',$lienFieldOptions)
-                ->add('duration', 'text')
-                ->add('thumbnail','text',$thumbnailFieldOptions)
-            ->add('artist', 'text', array(
-                'label' => 'Artiste'
-            ))
-            ->add('songName', 'text', array(
-                'label' => 'Nom de la vidéo'
-            ))
+            ->add('title', 'text')
+            ->add('lien', 'text', $lienFieldOptions)
+            ->add('duration', 'text')
+            ->add('thumbnail', 'text', $thumbnailFieldOptions)
+            ->add(
+                'artist',
+                'text',
+                array(
+                    'label' => 'Artiste'
+                )
+            )
+            ->add(
+                'songName',
+                'text',
+                array(
+                    'label' => 'Nom de la vidéo'
+                )
+            )
             ->end()
             ->with('Tags')
-                ->add('tags', 'sonata_type_model', array(
-                    'required' => false,
-                    'expanded' => false,
-                    'multiple' => true,
+            ->add(
+                'tags',
+                'sonata_type_model',
+                array(
+                    'required'     => false,
+                    'expanded'     => false,
+                    'multiple'     => true,
                     'by_reference' => false,
-                    'attr'=>array('data-sonata-select2'=>'true')
-                ))
-            ->end()
-            ;
+                    'attr'         => array('data-sonata-select2' => 'true')
+                )
+            )
+            ->end();
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -66,8 +77,7 @@ src="'.$urlVideo.'" frameborder="0" allowfullscreen></iframe>';
         $datagridMapper
             ->add('title')
             ->add('lien')
-            ->add('tags')
-        ;
+            ->add('tags');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -77,9 +87,6 @@ src="'.$urlVideo.'" frameborder="0" allowfullscreen></iframe>';
             ->addIdentifier('title')
             ->add('lien')
             ->add('date')
-            ->add('tags')
-        ;
+            ->add('tags');
     }
-
-
 }

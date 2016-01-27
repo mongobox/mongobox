@@ -1,8 +1,11 @@
 <?php
 
 namespace Mongobox\Bundle\JukeboxBundle\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use \Doctrine\Common\Collections\ArrayCollection;
+use Mongobox\Bundle\GroupBundle\Entity\Group;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
@@ -83,10 +86,10 @@ class VideoGroup
     /**
      * Set the value of video.
      *
-     * @param  string $video
+     * @param  Videos $video
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
      */
-    public function setVideo($video)
+    public function setVideo(Videos $video)
     {
         $this->video = $video;
 
@@ -96,7 +99,7 @@ class VideoGroup
     /**
      * Get the value of video.
      *
-     * @return string
+     * @return Videos
      */
     public function getVideo()
     {
@@ -109,7 +112,7 @@ class VideoGroup
      * @param  string $group
      * @return \Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup
      */
-    public function setGroup($group)
+    public function setGroup(Group $group)
     {
         $this->group = $group;
 
@@ -119,7 +122,7 @@ class VideoGroup
     /**
      * Get the value of group.
      *
-     * @return string
+     * @return Group
      */
     public function getGroup()
     {
@@ -199,10 +202,11 @@ class VideoGroup
     /**
      * Set user
      *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $user
+     * @param User $user
+     *
      * @return VideoGroup
      */
-    public function setUser(\Mongobox\Bundle\UsersBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -212,7 +216,7 @@ class VideoGroup
     /**
      * Get user
      *
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {

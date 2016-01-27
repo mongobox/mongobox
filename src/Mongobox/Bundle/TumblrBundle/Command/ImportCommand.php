@@ -147,7 +147,6 @@ class ImportCommand extends ContainerAwareCommand
                     $_item->setLocalPath($localImageUrl);
 
                     $em->persist($_item);
-                    $em->flush();
 
                     $this->_logger->addDebug(
                         'Recovery of the remote image done successfully.',
@@ -167,6 +166,7 @@ class ImportCommand extends ContainerAwareCommand
                 }
             }
         }
+        $em->flush();
 
         // Finish the progress bar
         if ($this->_progressBar === true) {

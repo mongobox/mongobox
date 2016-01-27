@@ -365,7 +365,7 @@ class VideosController extends Controller
         if ('POST' === $request->getMethod()) {
             $form_video->submit($request);
             if ($form_video->isValid()) {
-                $video->setLien(Videos::parse_url_detail($video->getLien()));
+                $video->setLien(Videos::parseUrlDetail($video->getLien()));
 
                 // Check if video already exist
                 $video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(
@@ -639,7 +639,7 @@ class VideosController extends Controller
         $youtubeService = $this->get('mongobox_jukebox.api_youtube');
         $em = $this->getDoctrine()->getManager();
 
-        $lien = Videos::parse_url_detail($request->request->get('lien'));
+        $lien = Videos::parseUrlDetail($request->request->get('lien'));
 
         $video_new = $em->getRepository('MongoboxJukeboxBundle:Videos')->findOneby(array('lien' => $lien));
         //Si la vidéo existe déjà, on dit au JS que tu zappe tout, on la rajoute à la playlist

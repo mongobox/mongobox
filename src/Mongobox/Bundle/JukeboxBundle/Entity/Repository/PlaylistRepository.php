@@ -49,5 +49,6 @@ class PlaylistRepository extends EntityRepository
                 $this->_em->flush();
             }
         }
+
     }
 }
