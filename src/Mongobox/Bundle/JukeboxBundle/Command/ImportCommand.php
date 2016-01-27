@@ -143,7 +143,6 @@ class ImportCommand extends ContainerAwareCommand
 						;
 
 						$em->persist($video);
-						$em->flush();
 
 						$newVideosCount++;
 						$this->_logger->addDebug('Video imported successfully.', array('videoId' => $videoId));
@@ -156,6 +155,7 @@ class ImportCommand extends ContainerAwareCommand
 				}
 
 			}
+			$em->flush();
     	}
 
     	if ($newVideosCount === 0) {

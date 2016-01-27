@@ -408,7 +408,7 @@ class VideosController extends Controller
                             ->setSongName($songName);
 
                         $em->persist($video);
-                        $em->flush();
+
 
                         $video_new = $video;
 
@@ -432,7 +432,6 @@ class VideosController extends Controller
                         ->setVolume(50)
                         ->setVotes(0);
                     $em->persist($video_group);
-                    $em->flush();
                 }
 
                 // Add video into playlist

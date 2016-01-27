@@ -117,13 +117,20 @@ class ImportController extends Controller
         );
     }
 
-	/**
-	 * Fonction pour charger en ajax le nom de vidéos
-	 * @Route("/import/group/{group_id}/load/videos", name="ajax_load_group_video")
-	 */
-	public function ajaxLoadGroupVideo($group_id)
-	{
-		$videosName = $this->getDoctrine()->getManager()->getRepository('MongoboxJukeboxBundle:VideoGroup')->getVideoNameInGroup($group_id);
-		return $this->render('MongoboxBookmarkBundle:Import/Videos:listeVideos.html.twig', array('videos' => $videosName));
-	}
+    /**
+     * Fonction pour charger en ajax le nom de vidéos
+     * @Route("/import/group/{group_id}/load/videos", name="ajax_load_group_video")
+     */
+    public function ajaxLoadGroupVideoAction($group_id)
+    {
+        $videosName =
+            $this->getDoctrine()->getManager()->getRepository('MongoboxJukeboxBundle:VideoGroup')->getVideoNameInGroup(
+                $group_id
+            );
+
+        return $this->render(
+            'MongoboxBookmarkBundle:Import/Videos:listeVideos.html.twig',
+            array('videos' => $videosName)
+        );
+    }
 }

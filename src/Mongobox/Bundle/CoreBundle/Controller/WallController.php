@@ -29,37 +29,6 @@ class WallController extends Controller
     protected $feedUrl4Gifs = 'http://4gifs.tumblr.com/rss';
 
     /**
-     * Parse RSS feed
-     *
-     * @param $url
-     * @param bool $filter_type
-     * @param bool $filter
-     * @param int $limit
-     *
-     * @return array
-     */
-    protected function _getFeedData($url, $filter_type = false, $filter = false, $limit = 6)
-    {
-        $feed = @simplexml_load_file($url);
-        $results = array();
-        $i = 0;
-
-        if (false !== $feed) {
-            foreach ($feed->channel->item as $article) {
-                if (!$filter || (string) $article->{$filter_type} == $filter) {
-                    $results[] = $article;
-                }
-                $i++;
-                if ($i == $limit) {
-                    break;
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    /**
      * @Template()
      * @Route( "/", name="wall_index")
      */
@@ -215,7 +184,7 @@ class WallController extends Controller
      *
      * @Route( "/ajax_is_vote_next", name="ajax_is_vote_next")
      */
-    public function ajaxIsVoteNext(Request $request)
+    public function ajaxIsVoteNextAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         /*$video_en_cours = $em->getRepository('MongoboxJukeboxBundle:VideoCurrent')->findAll();*/
@@ -230,23 +199,8 @@ class WallController extends Controller
     }
 
     /**
-     * @Template()
-     * @Route( "/infos/{id_video}", name="infos_video")
-     */
-    public function infosAction(Request $request, $id_video)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $video = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id_video);
-        $feed = 'http://gdata.youtube.com/feeds/api/videos/' . $video->getLien();
-        $xml = simplexml_load_file($feed);
-        echo '<pre>';
-        var_dump($xml);
-        exit;
-
-        return array();
-    }
-
-    /**
+     * Display block current video
+     *
      * @Template("MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig")
      * @Route( "/video_en_cours", name="video_en_cours")
      */
@@ -290,6 +244,8 @@ class WallController extends Controller
     }
 
     /**
+     * Display block statistics
+     *
      * @Template("MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig")
      * @Route( "/statistiques", name="statistiques")
      */
@@ -339,6 +295,39 @@ class WallController extends Controller
     }
 
     /**
+     * Parse RSS feed
+     *
+     * @param $url
+     * @param bool $filter_type
+     * @param bool $filter
+     * @param int $limit
+     *
+     * @return array
+     */
+    protected function getFeedData($url, $filter_type = false, $filter = false, $limit = 6)
+    {
+        $feed = @simplexml_load_file($url);
+        $results = array();
+        $i = 0;
+
+        if (false !== $feed) {
+            foreach ($feed->channel->item as $article) {
+                if (!$filter || (string) $article->{$filter_type} == $filter) {
+                    $results[] = $article;
+                }
+                $i++;
+                if ($i == $limit) {
+                    break;
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Action for Flux RSS Blocks
+     *
      * @Template("MongoboxCoreBundle:Wall/Blocs:fluxRss.html.twig")
      * @Route( "/flux_rss", name="flux_rss")
      */
@@ -347,19 +336,19 @@ class WallController extends Controller
         $flux_rss = array(
             array(
                 'title'       => 'Page Pute',
-                'items'       => $this->_getFeedData($this->feedUrlPP, 'category', 'Page Pute'),
+                'items'       => $this->getFeedData($this->feedUrlPP, 'category', 'Page Pute'),
                 'link'        => true,
                 'description' => false
             ),
             array(
                 'title'       => 'Les Joies du Code',
-                'items'       => $this->_getFeedData($this->feedUrlJDC),
+                'items'       => $this->getFeedData($this->feedUrlJDC),
                 'link'        => true,
                 'description' => false
             ),
             array(
                 'title'       => '4Gifs',
-                'items'       => $this->_getFeedData($this->feedUrl4Gifs),
+                'items'       => $this->getFeedData($this->feedUrl4Gifs),
                 'link'        => false,
                 'description' => true
             )

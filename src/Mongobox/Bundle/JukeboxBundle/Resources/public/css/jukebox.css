@@ -90,7 +90,7 @@ Video en cours
 }*/
 
 .loader {
-    background-image: url('../img/ajax-loader.gif');
+    background-image: url('/bundles/mongoboxjukebox/img/ajax-loader.gif');
     width: 16px;
     height: 16px;
     display: none;
@@ -200,16 +200,20 @@ Playlist
  Tags
 ------------------------------------ */
 
-#container-selected-tags span, #video_tags_list span {
+form .container-selected-tags span, #video_tags_list span {
     float: left;
     margin-left: 5px;
 }
 
-#container-selected-tags span span, #video_tags_list span span {
+form .container-selected-tags ul{
+    list-style-type: none;
+}
+
+form .container-selected-tags span span, #video_tags_list span span {
     padding: 7px 0 0 2px;
 }
 
-#container-selected-tags span button, #video_tags_list span button {
+form .container-selected-tags span button, #video_tags_list span button {
     margin: 0 0 0 2px;
     width: 20px;
 }
@@ -257,4 +261,9 @@ Playlist
 
 #admin-control {
     margin: 5px 0px 0px 0px;
+}
+
+ul.ui-autocomplete{
+    z-index: 1050;
+
 }

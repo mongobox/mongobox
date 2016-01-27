@@ -1,19 +1,19 @@
 var refreshRss;
 var refreshRssInProgress = 0;
 
-var loadRSS = function () {
+function loadRSS() {
     if (refreshStatistiquesInProgress === 0) {
         refreshRssInProgress = 1;
         $('#flux_rss').load(basepath + 'flux_rss', function () {
             refreshRssInProgress = 0;
         });
     }
-};
+}
 
 var refreshTumblrVote;
 var refreshTumblrVoteInProgress = 0;
 
-var loadProposeVotes = function () {
+function loadProposeVotes() {
     if (refreshTumblrVoteInProgress === 0) {
         refreshTumblrVoteInProgress = 1;
         $.ajax({
@@ -28,13 +28,13 @@ var loadProposeVotes = function () {
             }
         });
     }
-};
+}
 
 var refreshStatistiques;
 var refreshStatistiquesInProgress = 0;
 var refreshStatistiquesFail = 0;
 
-var loadStatistiques = function () {
+function loadStatistiques() {
     if (refreshStatistiquesInProgress === 0) {
         refreshStatistiquesInProgress = 1;
 
@@ -53,16 +53,16 @@ var loadStatistiques = function () {
                 if (refreshStatistiquesFail >= 3) clearInterval(refreshStatistiques);
             });
     }
-};
+}
 
-$(document).ready(function () {
-    // polling stats
-    refreshStatistiques = setInterval(loadStatistiques(), 300000);
 
-    // polling RSS
-    refreshRss = setInterval(loadRSS(), 600000);
+// polling stats
+refreshStatistiques = setInterval(loadStatistiques, 100000);
 
-    // polling Tumblr Votes
-    refreshTumblrVote = setInterval(loadProposeVotes(), 300000);
-});
+// polling RSS
+refreshRss = setInterval(loadRSS, 600000);
+
+// polling Tumblr Votes
+refreshTumblrVote = setInterval(loadProposeVotes, 300000);
+
 

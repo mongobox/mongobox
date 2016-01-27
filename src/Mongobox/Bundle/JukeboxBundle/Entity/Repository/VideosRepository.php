@@ -92,8 +92,11 @@ class VideosRepository extends EntityRepository
 	{
 		$em = $this->getEntityManager();
 		$conn = $em->getConnection();
-		$sql = "DELETE FROM video_videos_tags WHERE id_video = ".$video->getId();
-		$conn->executeUpdate($sql);
+		$sql = "DELETE FROM video_videos_tags WHERE id_video = :videoId";
+        $params = array(
+            'videoId' => $video->getId()
+        );
+		$conn->executeUpdate($sql,$params);
 	}
 
     /**

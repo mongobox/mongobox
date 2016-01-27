@@ -1,5 +1,6 @@
 {
   "name": "mongobox/mongobox",
+  "license": "proprietary",
   "description": "Mongobox - Le jukebox collaboratif à écouter et à regarder entre amis",
   "minimum-stability": "dev",
   "autoload": {

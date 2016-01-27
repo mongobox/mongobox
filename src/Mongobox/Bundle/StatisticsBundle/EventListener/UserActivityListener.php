@@ -29,7 +29,8 @@ class UserActivityListener
     protected function getCurrentUser()
     {
         $securityContext = $this->container->get('security.authorization_checker');
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        //var_dump($s)
+        if ($securityContext->isGranted('ROLE_USER')) {
             return $this->container->get('security.token_storage')->getToken()->getUser();
         }
 

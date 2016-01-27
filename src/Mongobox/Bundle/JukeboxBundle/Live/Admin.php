@@ -30,7 +30,7 @@ class Admin
     public function isCurrentAdmin()
     {
         $securityContext = $this->container->get('security.authorization_checker');
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($securityContext->isGranted('ROLE_USER')) {
             $currentUser = $this->container->get('security.token_storage')->getToken()->getUser();
         } else {
             return false;

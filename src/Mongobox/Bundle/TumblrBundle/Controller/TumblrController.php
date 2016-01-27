@@ -415,7 +415,7 @@ class TumblrController extends Controller
     /**
      * Fonction pour récupérer la route referrer
      */
-    public function getReferrerRouteName()
+    private function getReferrerRouteName()
     {
         $request = $this->get('request');
         $baseUrl = $request->getBaseUrl();

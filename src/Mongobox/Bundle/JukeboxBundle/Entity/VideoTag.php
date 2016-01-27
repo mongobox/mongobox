@@ -98,7 +98,7 @@ class VideoTag
 	 */
 	public function setSystemName($systemName)
 	{
-		$this->system_name = $this::build_SystemName($systemName);
+		$this->system_name = $this::buildSystemName($systemName);
 		return $this;
 	}
 
@@ -131,7 +131,7 @@ class VideoTag
 	/**
 	 * http://www.ficgs.com/How-to-remove-accents-in-PHP-f3057.html
 	 */
-	static function build_SystemName($string)
+	static function buildSystemName($string)
 	{
 		/**
 		 * http://www.ficgs.com/How-to-remove-accents-in-PHP-f3057.html

@@ -16,85 +16,110 @@ class TumblrVoteRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $query = $em
-                ->createQuery('SELECT t as tumblr, SUM(tv.note) as total FROM MongoboxTumblrBundle:Tumblr t LEFT JOIN t.tumblr_vote tv WHERE tv.tumblr = '.$tumblr->getIdTumblr())
-                ;
+            ->createQuery(
+                "SELECT t as tumblr, SUM(tv.note) as total
+                    FROM MongoboxTumblrBundle:Tumblr t
+                    LEFT JOIN t.tumblr_vote tv
+                    WHERE tv.tumblr = :tumblr"
+            )
+            ->setParameters(
+                array(
+                    'tumblr' => $tumblr->getIdTumblr()
+                )
+            );
         $result = $query->getResult();
-        if(is_null($result[0][1])) $somme = 0;
-        else $somme = (int) $result[0][1];
+        if (is_null($result[0][1])) {
+            $somme = 0;
+        } else {
+            $somme = (int) $result[0][1];
+        }
+
         return $somme;
     }
-    
+
     public function top($group, $max = 5)
     {
         $em = $this->getEntityManager();
         $q = $em
-                ->createQuery("
-					SELECT tv, SUM(tv.note) as total
+            ->createQuery(
+                "SELECT tv, SUM(tv.note) as total
 					FROM MongoboxTumblrBundle:TumblrVote tv WHERE tv.tumblr IN (
 					SELECT t.id_tumblr FROM MongoboxTumblrBundle:Tumblr t JOIN t.groups tg
 					WHERE tg.id IN (:group)
 					)
 					GROUP BY tv.tumblr
-					ORDER BY total DESC")
-                ->setParameters(array(
-                		'group' => $group
-                ))
-                ->setMaxResults($max)
-                ;
-        
-        //echo $q->getSQL();exit;
-        
-        if($max == 1) $result = $q->getOneOrNullResult ();
-        else $result = $q->getResult();
+					ORDER BY total DESC"
+            )
+            ->setParameters(
+                array(
+                    'group' => $group
+                )
+            )
+            ->setMaxResults($max);
+
+        if ($max == 1) {
+            $result = $q->getOneOrNullResult();
+        } else {
+            $result = $q->getResult();
+        }
+
         return $result;
     }
 
     public function topPeriod($group, $days = 7, $max = 5)
     {
-        $date = date('Y-m-d 00:00:00', strtotime('-'.$days.' day'));
+        $date = date('Y-m-d 00:00:00', strtotime('-' . $days . ' day'));
         $em = $this->getEntityManager();
         $q = $em
-                ->createQuery("
+            ->createQuery(
+                "
 					SELECT tv, SUM(tv.note) as total
 					FROM MongoboxTumblrBundle:TumblrVote tv WHERE tv.tumblr IN (
 					SELECT t.id_tumblr FROM MongoboxTumblrBundle:Tumblr t JOIN t.groups tg
 					WHERE tg.id IN (:group)
-					AND t.date > '".$date."'
+					AND t.date > :date
 					)
 					GROUP BY tv.tumblr
-					ORDER BY total DESC")
-                ->setParameters(array(
-                		'group' => $group
-                ))
-				->setMaxResults($max)
-                ;
-        
-        if($max == 1) $result = $q->getOneOrNullResult ();
-        else $result = $q->getResult();
+					ORDER BY total DESC"
+            )
+            ->setParameters(
+                array(
+                    'group' => $group,
+                    'date'  => $date
+                )
+            )
+            ->setMaxResults($max);
+
+        if ($max == 1) {
+            $result = $q->getOneOrNullResult();
+        } else {
+            $result = $q->getResult();
+        }
+
         return $result;
     }
 
     public function getUserVotes($user)
     {
         $em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
-		$qb->select('t.id_tumblr')
-			->from('MongoboxTumblrBundle:Tumblr', 't')
-			->join('t.tumblr_vote', 'tv')
-			->where("tv.user = :user")
-			->setParameters(array('user' => $user))
-		;
-			
-		$query = $qb->getQuery();
+        $qb = $em->createQueryBuilder();
+        $qb->select('t.id_tumblr')
+            ->from('MongoboxTumblrBundle:Tumblr', 't')
+            ->join('t.tumblr_vote', 'tv')
+            ->where("tv.user = :user")
+            ->setParameters(array('user' => $user));
+
+        $query = $qb->getQuery();
         $result = $query->getResult();
-		return $result;
+
+        return $result;
     }
 
     public function getProposeTumblrVotes($user, $max = 3, $tumblrs_exclude = array())
     {
         $em = $this->getEntityManager();
 
-		$sql = 'SELECT t as tumblr, COUNT(tv.user) as total
+        $sql = 'SELECT t as tumblr, COUNT(tv.user) as total
 					FROM MongoboxTumblrBundle:Tumblr t
 					LEFT JOIN t.groups g
 					LEFT JOIN t.tumblr_vote tv
@@ -102,22 +127,25 @@ class TumblrVoteRepository extends EntityRepository
 						SELECT tt.id_tumblr FROM MongoboxTumblrBundle:Tumblr tt
 						LEFT JOIN tt.tumblr_vote ttv
 						WHERE ttv.user = :user)';
-		if(count($tumblrs_exclude) > 0) $sql .= 'AND t.id_tumblr NOT IN ('.implode(', ', $tumblrs_exclude).')';
-		$sql .= 'AND g.id IN(:user_group)
+        if (count($tumblrs_exclude) > 0) {
+            $sql .= 'AND t.id_tumblr NOT IN (' . implode(', ', $tumblrs_exclude) . ')';
+        }
+        $sql .= 'AND g.id IN(:user_group)
 					GROUP BY t.id_tumblr
 					ORDER BY total ASC, t.date ASC';
 
-		$query = $em
-                ->createQuery($sql)
-                ;
-		$query->setMaxResults($max);
-		$query->setParameters(array(
-			'user' => $user,
-			'user_group' => $user->getGroupsIds()
-			));
-		//echo $query->getSQL().'<br />';
-		//exit;
+        $query = $em
+            ->createQuery($sql);
+        $query->setMaxResults($max);
+        $query->setParameters(
+            array(
+                'user'       => $user,
+                'user_group' => $user->getGroupsIds()
+            )
+        );
+
         $result = $query->getResult();
-		return $result;
+
+        return $result;
     }
 }

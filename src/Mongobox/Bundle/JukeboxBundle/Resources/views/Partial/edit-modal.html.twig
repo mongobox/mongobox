@@ -1,34 +1,46 @@
 {% form_theme form_video_info 'MongoboxCoreBundle:Form:mongobox_form_theme.html.twig' %}
 
-<form id="form_video_info" method="post" action="{{url('video_edit_modal', {'id_video' : video.id})}}">
-	{{ form_widget(form_video_info) }}
-	{{ form_rest(form_video_info) }}
-	{{ form_widget(form_video_info.tag) }}
-	<span class="btn btn-default" id="video-button-add-tag"><span class="glyphicon glyphicon-plus"></span> Ajouter</span>
-	<div id="container-selected-tags">
-		<ul>
-		{% for tag in list_tags %}
-			<span class="tag-item label label-primary"><span>{{tag.name}}</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="{{tag.id}}" /></span>
-		{% endfor %}
-		</ul>
-	</div>
-	{% set tagDataPrototype = '<span>__name__</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="__id__" />' %}
-	<div id="video_tags_list" class="tags manage-tags" data-prototype="{{ tagDataPrototype }}">
-	</div>
-	<input type="hidden" name="id_video" value="{{video.id}}" />
-	<div class="total-clear-fix">
-		<input type="submit" value="Enregistrer" class="btn btn-success" />
-	</div>
+<form id="form_video_info" method="post" action="{{ url('video_edit_modal', {'id_video' : video.id}) }}">
+    {{ form_widget(form_video_info) }}
+    {{ form_rest(form_video_info) }}
+    {{ form_widget(form_video_info.tag) }}
+    <span class="btn btn-default" id="video-button-add-tag"><span
+                class="glyphicon glyphicon-plus"></span> Ajouter</span>
+    <div class="container-selected-tags">
+        <ul>
+            {% for tag in list_tags %}
+            <li>
+				<span class="tag-item label label-primary"><span>{{ tag.name }}</span>
+					<button class="close btn btn-sm">&times;</button>
+					<input type="hidden" name="video_info[tags][]" value="{{ tag.id }}"/>
+				</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% set tagDataPrototype = '<li><span>__name__</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="__id__" /></li>' %}
+    <div class="tag-data-prototype" data-prototype="{{ tagDataPrototype }}"></div>
+    <input type="hidden" name="id_video" value="{{ video.id }}"/>
+    <div class="total-clear-fix">
+        <input type="submit" value="Enregistrer" class="btn btn-success"/>
+    </div>
 </form>
 
 {% block javascripts %}
-	<script type="text/javascript">
-		$('#video_info_tag').autocompleter({
-			url_list: '{{ url('video_tags_ajax_autocomplete') }}',
-			url_get: 'video-ajax-get-tag/'
-		});
+    <script type="text/javascript">
+        $('#video_info_tag').autocompleter({
+            url_list: '{{ url('video_tags_ajax_autocomplete') }}',
+            url_get: 'video-ajax-get-tag/'
+        });
 
-		videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
-		videoTags.init();
-	</script>
+        videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
+        videoTags.form = $('#form_video_info');
+
+        listVideoTags = [];
+        {% for tag in list_tags %}
+        listVideoTags.push({{ tag.id }});
+        {% endfor %}
+
+        videoTags.init();
+    </script>
 {% endblock javascripts %}

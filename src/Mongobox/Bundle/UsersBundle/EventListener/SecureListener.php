@@ -29,7 +29,7 @@ class SecureListener
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
-        if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->security->isGranted('ROLE_USER')) {
             $user = $this->security->getToken()->getUser();
             $entity = $this->em->getRepository('MongoboxUsersBundle:UserOld')->findByLastId($user->getId());
 

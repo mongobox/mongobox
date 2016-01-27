@@ -4,20 +4,28 @@
     <div class="loader"></div>
     <form id="form_replace_video">
         {{ form_widget(edit_form) }}
-        {{ form_widget(edit_form.tag) }}
-        <span class="btn btn-default" id="video-button-add-tag"><span class="glyphicon glyphicon-plus"></span> Ajouter</span>
-        <div id="container-selected-tags">
+
+        <div class="input-group manage-tags">
+            {{ form_widget(edit_form.tag) }}
+            <span class="btn btn-default" id="video-button-add-tag"><span class="glyphicon glyphicon-plus"></span> Ajouter</span>
+        </div>
+        <div class="container-selected-tags">
             <ul>
                 {% for tag in list_tags %}
-                    <span class="tag-item label label-primary"><span>{{tag.name}}</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="{{tag.id}}" /></span>
+                    <li>
+                        <span class="tag-item label label-primary">
+                            <span>{{ tag.name }}</span>
+                            <button class="close btn btn-sm">&times;</button>
+                            <input type="hidden" name="Mongobox_bundle_jukeboxbundle_live_replace_video[tags][]" value="{{ tag.id }}"/>
+                        </span>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
-        {% set tagDataPrototype = '<span>__name__</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="video_info[tags][]" value="__id__" />' %}
-        <div id="video_tags_list" class="tags manage-tags" data-prototype="{{ tagDataPrototype }}">
-        </div>
+        {% set tagDataPrototype = '<li><span>__name__</span><button class="close btn btn-sm" >&times;</button><input type="hidden" name="Mongobox_bundle_jukeboxbundle_live_replace_video[tags][]" value="__id__" /><li>' %}
+        <div class="tag-data-prototype" data-prototype="{{ tagDataPrototype }}"></div>
         <div class="total-clear-fix">
-            <input type="submit" value="Remplacer" class="btn btn-success" id="submit-replace-btn" />
+            <input type="submit" value="Remplacer" class="btn btn-success" id="submit-replace-btn"/>
         </div>
         {{ form_rest(edit_form) }}
     </form>
@@ -29,17 +37,24 @@
         });
 
         videoTags.urlLoadTag = '{{ url('video_tags_load_item') }}';
+        videoTags.form = $('#form_replace_video');
+
+        listVideoTags = [];
+        {% for tag in list_tags %}
+        listVideoTags.push({{ tag.id }});
+        {% endfor %}
+
         videoTags.init();
 
-        $("#submit-replace-btn").click(function() {
-            var replaceUrl          = '{{ path('live_replace') }}';
+        $("#submit-replace-btn").click(function () {
+            var replaceUrl = '{{ path('live_replace') }}';
             $('.loader').show();
 
             $.ajax({
                 type: 'POST',
                 url: replaceUrl,
                 data: $('#form_replace_video').serialize()
-            }).done(function(response) {
+            }).done(function (response) {
                 $('.loader').hide();
                 $('#replace-video-modal .modal-body').html(response);
             });

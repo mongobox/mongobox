@@ -1,6 +1,4 @@
-var refreshLoadVideo;
-var refreshLoadVideoInProgress = 0;
-var refreshLoadVideoEnCoursFail = 0;
+
 
 $(document).on("click", ".btn-vote", function (e) {
     e.preventDefault();
@@ -22,29 +20,32 @@ var delay = (function () {
     };
 })();
 
-var loadVideoEnCours = function () {
+var refreshLoadVideo;
+var refreshLoadVideoInProgress = 0;
+var refreshLoadVideoEnCoursFail = 0;
+function loadVideoEnCours() {
     if (refreshLoadVideoInProgress === 0) {
         refreshLoadVideoInProgress = 1;
 
-        $('.video-thumbnail').tooltip('destroy');
+        //$('.video-thumbnail').tooltip('destroy');
 
         $.ajax({
             type: "GET",
             dataType: "json",
             url: basepath + 'video_en_cours?json'
-        }).done(
-            function (json) {
-                refreshLoadVideoEnCoursFail = 0;
-                refreshLoadVideoInProgress = 0;
-                $('#video_en_cours').html(json.render);
-                $('.video-thumbnail').tooltip({'html': 'true', 'placement': 'left'});
-            }).fail(
-            function () {
-                refreshLoadVideoEnCoursFail++;
-                if (refreshLoadVideoEnCoursFail >= 3) clearInterval(refreshLoadVideoEnCours);
-            });
+        }).done(function (json) {
+            refreshLoadVideoEnCoursFail = 0;
+            refreshLoadVideoInProgress = 0;
+            $('#video_en_cours').html(json.render);
+           // $('.video-thumbnail').tooltip({'html': 'true', 'placement': 'left'});
+        }).fail(function () {
+            refreshLoadVideoEnCoursFail++;
+            if (refreshLoadVideoEnCoursFail >= 3) clearInterval(refreshLoadVideo);
+        });
     }
-};
+}
+
+refreshLoadVideo = setInterval(loadVideoEnCours, 15000);
 
 function btn_submit_video() {
     $.ajax({
@@ -61,7 +62,7 @@ function btn_submit_video() {
 }
 
 $(document).ready(function () {
-    refreshLoadVideo = setInterval(loadVideoEnCours(), 15000);
+
 
     $(document).on('click', '#add-video-button', function (e) {
         e.preventDefault();
@@ -158,7 +159,7 @@ $(document).ready(function () {
             });
     });
 
-    $('.video-thumbnail').tooltip({'html': 'true', 'placement': 'left'});
+    //$('.video-thumbnail').tooltip({'html': 'true', 'placement': 'left'});
 
     $(document).on('mouseover', '.show-edit-video', function (e) {
         $(this).find('.edit-video').addClass('edit-video-visible');
@@ -183,7 +184,7 @@ $(document).ready(function () {
                 $('#action-video-modal .modal-body').html(data.content);
             }
         });
-    })
+    });
 
     $(document).on('keyup', '#video_search_search', function (e) {
         // On met un delai pour éviter de chercher pour chaque lettre tappée

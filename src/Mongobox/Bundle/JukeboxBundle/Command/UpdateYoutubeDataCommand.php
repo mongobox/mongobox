@@ -149,7 +149,7 @@ class UpdateYoutubeDataCommand extends ContainerAwareCommand
                 $video->addTag($this->tagReplace);
 
                 $this->output->writeln(
-                    'Update Video to replace: <fg=yellow>(id=' . $video->getId() . ') ' . $video->getTitle() . '</>'
+                    "Update Video to replace: <fg=yellow>(id= {$video->getId()}) {$video->getTitle()} </>"
                 );
 
                 $this->updatedVideosStatus++;
@@ -161,7 +161,7 @@ class UpdateYoutubeDataCommand extends ContainerAwareCommand
                     ->setThumbnailHq($youtubeVideo['thumbnailHq']);
 
                 $this->output->writeln(
-                    'Update Video: <fg=green>(id=' . $video->getId() . ') ' . $video->getTitle() . '</>'
+                    "Update Video: <fg=green>(id={$video->getId()}) {$video->getTitle()}</>"
                 );
             }
 

@@ -31,7 +31,7 @@ class SecureController extends Controller
         $status = 1;
         //on verifie si on est pas deja connecté
         $securityContext = $this->get('security.authorization_checker');
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($securityContext->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl('homepage'));
         }
 
@@ -72,7 +72,7 @@ class SecureController extends Controller
     {
         //on verifie si on est pas deja connecte
         $securityContext = $this->get('security.authorization_checker');
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($securityContext->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl('wall_index'));
         }
 

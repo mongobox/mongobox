@@ -11,12 +11,10 @@ var videoTags = videoTags || {};
     };
 
     videoTags.clear = function () {
-        videoTags.form = $('#form_video_info');
-        videoTags.containerSelectedTags = $('#container-selected-tags');
+        videoTags.containerSelectedTags = this.form.find('.container-selected-tags');
 
-        // Get the div that holds the collection of videoTags
-        videoTags.collectionHolder = $('#video_tags_list');
-
+        // Get the div that holds the collection of videoTags tag-data-prototype
+        videoTags.collectionHolder = this.form.find('div.tag-data-prototype');
 
         videoTags.addTagButton = '#video-button-add-tag';
         videoTags.removeTagButton = this.collectionHolder.find('button.close');
@@ -25,24 +23,23 @@ var videoTags = videoTags || {};
         // count the current form inputs we have (e.g. 2), use that as the new
         // index when inserting a new item (e.g. 2)
         videoTags.collectionHolder.data('index', videoTags.collectionHolder.find(':input').length);
-        videoTags.videoTags = new Array();
-        videoTags.autocompleteField = $('#form_video_info').find('input.ui-autocomplete-input');
+        videoTags.autocompleteField = this.form.find('input.ui-autocomplete-input');
     };
 
     videoTags.observeAddTag = function () {
-        $(document).on('click', this.addTagButton, function (event) {
+        $(this.addTagButton).click(function (event) {
             event.preventDefault();
             videoTags.loadTag(videoTags.autocompleteField.val());
         });
     };
 
     videoTags.observeSubmitForm = function () {
-        $(document).on('submit', '#form_video_info', function (e) {
+        $(this.form).submit(function (e) {
             e.preventDefault();
 
             // Check tag choices
-            if ($('#video_tags_list div.tag-item').length === 0) {
-                $('#video_tags_list').parents('.span4:first').append('<div class="alert alert-danger error-add-video">A tag must be added.</div>')
+            if ($(videoTags.containerSelectedTags).find('span.tag-item').length === 0) {
+                $(videoTags.containerSelectedTags).parents('.span4:first').append('<div class="alert alert-danger error-add-video">A tag must be added.</div>')
                 return false;
             }
 
@@ -68,9 +65,9 @@ var videoTags = videoTags || {};
         if (jQuery.inArray(tag.id, this.videoTags) == -1) {
 
             // Save list tag
-            videoTags.videoTags.push(tag.id);
+            listVideoTags.push(tag.id);
 
-            videoTags.prototypeTagsContainer = $('#video_tags_list');
+            videoTags.prototypeTagsContainer = this.form.find('.container-selected-tags > ul');
             videoTags.prototypeTags = this.prototypeTagsContainer.attr('data-prototype');
 
             // Get the data-prototype explained earlier
@@ -84,15 +81,16 @@ var videoTags = videoTags || {};
             var newTagItem = prototype.replace(/__name__/g, tag.name);
             newTagItem = newTagItem.replace(/__id__/g, tag.id);
 
-            var $newFormLi = $('<span class="tag-item label label-primary"></span>').append(newTagItem);
-            videoTags.collectionHolder.append($newFormLi);
+            var newFormLi = $('<span class="tag-item label label-primary"></span>').append(newTagItem);
+            videoTags.prototypeTagsContainer.append(newFormLi);
 
             // increase the index with one for the next item
             videoTags.collectionHolder.data('index', index + 1);
 
             videoTags.autocompleteField.val('');
+
             videoTags.observeRemoveTag();
-            console.log(prototype, index);
+
         }
         else {
             alert('Tag already selected');
@@ -100,15 +98,17 @@ var videoTags = videoTags || {};
     };
 
     videoTags.observeRemoveTag = function () {
-        $(document).on('click', '#form_video_info .tag-item button.close', function (event) {
+        var btnClose = videoTags.containerSelectedTags.find('.tag-item button.close');
+        $(btnClose).click(function (event) {
             event.preventDefault();
+
             videoTags.removeTag(this);
         });
     };
 
     videoTags.removeTag = function (element) {
         var tagId = $(element).next('input:hidden').val();
-        this.videoTags.splice($.inArray(tagId, this.videoTags), 1);
+        listVideoTags.splice($.inArray(tagId, listVideoTags), 1);
         $(element).parent().remove();
         return false;
     };
