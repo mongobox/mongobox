@@ -16,7 +16,7 @@ class UserEditType extends AbstractType
     {
         $builder
             ->add(
-                'login',
+                'username',
                 'text',
                 array(
                     'label' => 'Login',

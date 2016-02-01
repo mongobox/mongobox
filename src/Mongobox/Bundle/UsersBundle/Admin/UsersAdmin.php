@@ -33,7 +33,7 @@ class UsersAdmin extends Admin
 
         $formMapper
             ->with('General')
-            ->add('login')
+            ->add('username')
             ->add('email')
             //->add('plainPassword', 'text', array('required' => false))
             ->end()
@@ -75,7 +75,7 @@ class UsersAdmin extends Admin
             ))*/
             //  ->add('locked', null, array('required' => false))
             //  ->add('expired', null, array('required' => false))
-            ->add('actif', null, array('required' => false))
+            //->add('actif', null, array('required' => false))
             //  ->add('credentialsExpired', null, array('required' => false))
             ->end()
             // ;
@@ -88,8 +88,8 @@ class UsersAdmin extends Admin
     {
         $datagridMapper
             ->add('email')
-            ->add('login')
-            ->add('actif');
+            ->add('username');
+            //->add('actif');
     }
 
     protected function configureListFields(ListMapper $listMapper)
@@ -97,10 +97,10 @@ class UsersAdmin extends Admin
         $listMapper
             ->add('avatar', 'string', array('template' => 'MongoboxUsersBundle::Admin/list_avatar.html.twig'))
             ->addIdentifier('email')
-            ->add('login')
+            ->add('username')
             ->add('name', 'string', array('template' => 'MongoboxUsersBundle::Admin/User/Fields/name.html.twig'))
-            ->add('groups')
-            ->add('actif');
+            ->add('groups');
+          //  ->add('actif');
     }
 
     /**

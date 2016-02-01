@@ -19,7 +19,6 @@ use Mongobox\Bundle\UsersBundle\Form\Type\UserSearchType;
 
 /**
  * @Route( "/group")
- *
  */
 class GroupController extends Controller
 {
@@ -29,11 +28,19 @@ class GroupController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
         $em = $this->getDoctrine()->getManager();
-        $groups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
+        $publicGroups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(array('private' => 0));
+
+        $privateGroups = $em->getRepository('MongoboxGroupBundle:Group')->findBy(
+            array('private' => 1, "id" => $user->getGroupsIds())
+        );
+
 
         return array(
-            'groups' => $groups
+            'publicGroups'  => $publicGroups,
+            'privateGroups' => $privateGroups
         );
     }
 
@@ -55,12 +62,13 @@ class GroupController extends Controller
             if ($form->isValid()) {
                 $secretKey = $this->get('mongobox_jukebox.live_configurator')->generateSecretKey();
                 $group->setSecretKey($secretKey);
+                $group->addRole('ROLE_USER');
 
                 $em->persist($group);
-                $em->flush();
 
-                //On rajoute l'utilisateur courant dans le groupe
-                $group->getUsers()->add($user);
+                // On ajoute l'utilisateur courant dans le groupe
+                $user->addGroup($group);
+                $em->persist($user);
 
                 $em->flush();
 
@@ -107,7 +115,7 @@ class GroupController extends Controller
                     ),
                     "message"     => "Le groupe a bien été crée",
                     "group_id"    => $group->getId(),
-                    "group_text"  => $group->getTitle()
+                    "group_text"  => $group->getName()
                 );
 
                 return new JsonResponse($json);
@@ -188,19 +196,22 @@ class GroupController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            $group->getUsers()->add($user);
+            $group->addUser($user);
 
+            $em->persist($group);
             $em->flush();
 
             $this->get('session')->getFlashBag()->add(
                 'success',
-                'Inscription au groupe "' . $group->getTitle() . '" réussie.'
+                'Inscription au groupe "' . $group->getName() . '" réussie.'
             );
+
+            return $this->redirect($this->generateUrl('group_change', array('id_group' => $group->getId())));
         } else {
             $this->get('session')->getFlashBag()->add('notice', 'Vous ne pouvez pas vous inscrire à un groupe privé.');
-        }
 
-        return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->generateUrl('group_index'));
+        }
     }
 
     /**
@@ -215,23 +226,38 @@ class GroupController extends Controller
             if ($user->isMemberFrom($group->getId())) {
                 $em = $this->getDoctrine()->getManager();
 
-                //On créer le formulaire en utilisant un utilisateur vide
+                // On créer le formulaire en utilisant un utilisateur vide
                 $form = $this->createForm(new UserSearchType());
 
                 if ('POST' === $request->getMethod()) {
                     $form->submit($request);
                     if ($form->isValid()) {
                         $user = $form->get('user')->getData();
-                        if (is_object($user)) {
-                            $group->getUsersInvitations()->add($user);
-                            $em->flush();
 
-                            $this->get('session')->getFlashBag()->add(
-                                'success',
-                                'Invitation à l\'utilisateur "' . $user->getLogin() . '" bien envoyée.'
-                            );
+                        if ($user instanceof User) {
 
-                            return $this->redirect($this->generateUrl('homepage'));
+                            if (!$group->hasUsersInvitation($user)) {
+                                $group->addUsersInvitation($user);
+
+                                $em->persist($group);
+                                $em->flush();
+
+                                $this->get('session')->getFlashBag()->add(
+                                    'success',
+                                    'Invitation à l\'utilisateur "' . $user->getUsername() . '" bien envoyée.'
+                                );
+
+                                return $this->redirect($this->generateUrl('homepage'));
+                            } else {
+                                $this->get('session')->getFlashBag()->add(
+                                    'info',
+                                    'Une invitation a déjà été envoyée à l\'utilisateur "' . $user->getUsername() . '".'
+                                );
+
+                                return $this->redirect(
+                                    $this->generateUrl('group_invite', array('id' => $group->getId()))
+                                );
+                            }
                         }
                     }
                 }
@@ -254,19 +280,19 @@ class GroupController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //Suppression de l'invitation
+        // Delete user invitation
         $group->getUsersInvitations()->removeElement($user);
 
-        //Ajout au groupe
+        // Add user in group
         $group->getUsers()->add($user);
         $em->flush();
 
         $this->get('session')->getFlashBag()->add(
             'success',
-            'Inscription au groupe "' . $group->getTitle() . '" réussie.'
+            'Inscription au groupe "' . $group->getName() . '" réussie.'
         );
 
-        return $this->redirect($this->generateUrl('homepage'));
+        return $this->redirect($this->generateUrl('group_index'));
     }
 
     /**
@@ -282,7 +308,7 @@ class GroupController extends Controller
             $session = $request->getSession();
             $session->set('id_group', $id_group);
 
-            //On met l'id du groupe en cookie
+            // On met l'id du groupe en cookie
             $response = new RedirectResponse($this->generateUrl('wall_index'));
             $response->headers->setCookie(new Cookie('id_group', $id_group));
 

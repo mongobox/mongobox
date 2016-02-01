@@ -5,7 +5,7 @@
 {% endif %}
 
 <li id="user-{{ app.user.id }}-block" class="clearfix show-edit-video over-highlight">
-    <a href="{{ url('profile_user', {'id' : app.user.id}) }}">
+    <a href="{{ url('fos_user_profile_edit', {'id' : app.user.id}) }}">
         <span class="live-user">
             <img src="{{avatar}}" alt="" title="" class="photo-small" />
             {{ app.user.firstname }} {{ app.user.lastname }}

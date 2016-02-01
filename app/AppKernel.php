@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             new Sonata\AdminBundle\SonataAdminBundle(),
             new PUGX\AutocompleterBundle\PUGXAutocompleterBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
 			// Mongobox
             new Mongobox\Bundle\TumblrBundle\MongoboxTumblrBundle(),
         	new Mongobox\Bundle\JukeboxBundle\MongoboxJukeboxBundle(),

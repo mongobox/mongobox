@@ -3,6 +3,7 @@
 namespace Mongobox\Bundle\UsersBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Mongobox\Bundle\UsersBundle\Entity\User;
 
 /**
  * UserRepository
@@ -12,21 +13,33 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
-    public function findUser($value)
+    /**
+     * Find user by username, firstname and lastname
+     *
+     * @param string $value
+     * @param User $currentUser
+     *
+     * @return array
+     */
+    public function findUser($value, User $currentUser)
     {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
 
         $qb->select('u')
-        ->from('MongoboxUsersBundle:User', 'u')
-        ->where("u.login LIKE :value")
-        ->orWhere("u.firstname LIKE :value")
-        ->orWhere("u.lastname LIKE :value")
-        ->orderBy('u.login', 'ASC')
-        ->setMaxResults(10)
-        ->setParameters( array(
-                'value' => '%'.$value.'%'
-        ));
+            ->from('MongoboxUsersBundle:User', 'u')
+            ->where("u.username LIKE :value")
+            ->orWhere("u.firstname LIKE :value")
+            ->orWhere("u.lastname LIKE :value")
+            ->andWhere("u.id != :currentUser")
+            ->orderBy('u.username', 'ASC')
+            ->setMaxResults(5)
+            ->setParameters(
+                array(
+                    'currentUser' => $currentUser->getId(),
+                    'value'       => '%' . $value . '%'
+                )
+            );
 
         $query = $qb->getQuery();
 
@@ -38,6 +51,7 @@ class UserRepository extends EntityRepository
      * If no group is given, then retrieves the total number of users in the application.
      *
      * @param  integer $groupId
+     *
      * @return integer
      */
     public function getCount($groupId = null)
@@ -47,15 +61,13 @@ class UserRepository extends EntityRepository
 
         $qb
             ->select('count(u.id)')
-            ->from('MongoboxUsersBundle:User', 'u')
-        ;
+            ->from('MongoboxUsersBundle:User', 'u');
 
         if ($groupId !== null) {
             $qb
                 ->innerJoin('u.groups', 'g')
                 ->where('g.id = :group')
-                ->setParameter('group', $groupId)
-            ;
+                ->setParameter('group', $groupId);
         }
 
         $query = $qb->getQuery();
@@ -77,8 +89,7 @@ class UserRepository extends EntityRepository
             ->select('u')
             ->from('MongoboxUsersBundle:User', 'u')
             ->orderBy('u.date_create', 'DESC')
-            ->setMaxResults(1)
-        ;
+            ->setMaxResults(1);
 
         $query = $qb->getQuery();
 

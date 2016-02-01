@@ -14,7 +14,7 @@ class GroupAdmin extends Admin
         $formMapper
             ->with('General')
             ->add(
-                'title',
+                'name',
                 'text',
                 array(
                     'label' => 'Titre',
@@ -33,7 +33,8 @@ class GroupAdmin extends Admin
                 'private',
                 'checkbox',
                 array(
-                    'label' => 'Privé'
+                    'label' => 'Privé',
+                    'required'     => false,
                 )
             )
             ->add(
@@ -70,13 +71,25 @@ class GroupAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('title');
+            ->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('title')
+            ->addIdentifier('name')
             ->add('private');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prePersist($group)
+    {
+        $container = $this->getConfigurationPool()->getContainer();
+        $secreyKey = $container->get('mongobox_jukebox.live_configurator')->generateSecretKey();
+
+        $group
+            ->setSecretKey($secreyKey);
     }
 }

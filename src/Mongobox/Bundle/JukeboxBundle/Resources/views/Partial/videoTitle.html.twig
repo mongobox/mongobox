@@ -4,7 +4,7 @@
 
 {% set userLogin = '' %}
 {% if videoGroup.user is not null %}
-	{% set userLogin = videoGroup.user.login %}
+	{% set userLogin = videoGroup.user.username %}
 {% endif %}
 
 {% if infos is not defined %}

@@ -46,12 +46,12 @@ MongoboxStatisticsBundle:
     type:     annotation
     prefix:   /
 
-_login_check:
-    path: /login_check
-    methods : [POST]
+#_login_check:
+#    path: /login_check
+#    methods : [POST]
 
-_logout:
-    path: /logout
+#_logout:
+#    path: /logout
 
 # Internal routing configuration to handle ESI
 #_internal:
@@ -70,3 +70,11 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+
+# app/config/routing.yml
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group

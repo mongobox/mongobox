@@ -3,7 +3,7 @@
 {% block body %}
         
 	<h1>Invitation d'un utilisateur</h1>
-	<form action="{{ path('group_invite', {'id' : group.id}) }}" class="content-block form-inline" method="POST" {{ form_start(form) }} novalidate>
+	<form action="{{ path('group_invite', {'id' : group.id}) }}" class="content-block form-inline" method="POST" novalidate>
 		{{ form_widget(form) }}
 
 		<hr />
@@ -14,6 +14,11 @@
 {% endblock body %}
 
 {% block javascripts %}
-{{ form_stylesheet(form) }}
-{{ form_javascript(form) }}
+	<script type="text/javascript">
+		$('#ajax_user_search_user').autocompleter({
+			url_list: '{{ path('ajax_user_search') }}',
+			url_get: 'users-ajax-get-user/'
+		});
+
+	</script>
 {% endblock %}
