@@ -9,10 +9,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
-
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Mongobox\Bundle\GroupBundle\Entity\Group;
+
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * Mongobox\Bundle\UsersBundle\Entity\User
@@ -20,41 +21,17 @@ use Mongobox\Bundle\GroupBundle\Entity\Group;
  * @ORM\Entity(repositoryClass="Mongobox\Bundle\UsersBundle\Entity\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="users")
- * @UniqueEntity(fields="login", message="Login already in use.")
+ * @UniqueEntity(fields="username", message="Login already in use.")
  * @UniqueEntity(fields="email", message="Email already in use.")
  */
-class User implements AdvancedUserInterface
+class User extends BaseUser
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id",type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     */
-    protected $email;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
-    protected $login;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
-    protected $password;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    protected $salt;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -81,13 +58,6 @@ class User implements AdvancedUserInterface
     protected $avatar;
 
     /**
-     * @var boolean $actif
-     *
-     * @ORM\Column(type="boolean")
-     */
-    protected $actif;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     protected $date_create;
@@ -96,11 +66,6 @@ class User implements AdvancedUserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $date_update;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $last_connect;
 
     /**
      * @ORM\Column(type="boolean")
@@ -116,11 +81,6 @@ class User implements AdvancedUserInterface
 	 * @ORM\OneToMany(targetEntity="Mongobox\Bundle\JukeboxBundle\Entity\VideoGroup", mappedBy="user")
 	 **/
 	protected $videos_group;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", mappedBy="users", cascade={"all"})
-     */
-    protected $groups;
 
     /**
      * @ORM\OneToMany(targetEntity="Mongoeat\Bundle\VoteBundle\Entity\Vote", mappedBy="user", cascade={"persist"})
@@ -142,11 +102,22 @@ class User implements AdvancedUserInterface
 	 */
 	protected $listes_favoris;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Mongobox\Bundle\GroupBundle\Entity\Group", inversedBy="users")
+     * @ORM\JoinTable(name="users_groups",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
+
     public function __construct()
     {
+        parent::__construct();
+        // your own logic
+
         //valeurs par défaut
         $this->date_create = new \DateTime();
-        $this->actif = 1;
         $this->nsfw_mode = 0;
         $this->groups = new ArrayCollection();
         $this->groups_invitations = new ArrayCollection();
@@ -175,98 +146,6 @@ class User implements AdvancedUserInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set the value of email.
-     *
-     * @param string $email
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of email.
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set the value of login.
-     *
-     * @param string $login
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setLogin($login)
-    {
-        $this->login = $login;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of login.
-     *
-     * @return string
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * Set the value of password.
-     *
-     * @param string $password
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of password.
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set the value of salt.
-     *
-     * @param string $salt
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of salt.
-     *
-     * @return string
-     */
-    public function getSalt()
-    {
-        return $this->salt;
     }
 
     /**
@@ -339,29 +218,6 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * Set the value of actif.
-     *
-     * @param integer $actif
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setActif($actif)
-    {
-        $this->actif = $actif;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of actif.
-     *
-     * @return boolean
-     */
-    public function getActif()
-    {
-        return $this->actif;
-    }
-
-    /**
      * Set the value of date_create.
      *
      * @param integer $date_create
@@ -405,29 +261,6 @@ class User implements AdvancedUserInterface
     public function getDateUpdate()
     {
         return $this->date_update;
-    }
-
-    /**
-     * Set the value of last_connect.
-     *
-     * @param integer $last_connect
-     * @return \Mongobox\Bundle\UsersBundle\Entity\User
-     */
-    public function setLastConnect($last_connect)
-    {
-        $this->last_connect = $last_connect;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of last_connect.
-     *
-     * @return integer
-     */
-    public function getLastConnect()
-    {
-        return $this->last_connect;
     }
 
     /**
@@ -498,16 +331,6 @@ class User implements AdvancedUserInterface
     }
 
     /* -------------------- Manage groups ------------------------- */
-    public function addGroup(Group $group)
-    {
-        if (!$this->groups->contains($group)) {
-            $group->addUser($this);
-            $this->groups[] = $group;
-        }
-
-        return $this;
-    }
-
     public function getGroups()
     {
         return $this->groups;
@@ -520,16 +343,7 @@ class User implements AdvancedUserInterface
         return $this;
     }
 
-    /**
-     * Function to delete group
-     *
-     * @param Group $group
-     */
-    public function removeGroup(Group $group)
-    {
-        //$group->removeUser($this);
-        $this->groups->removeElement($group);
-    }
+
 
     /* -------------------- Manage groups invitations ------------------------- */
     public function getGroupsInvitations()
@@ -551,36 +365,6 @@ class User implements AdvancedUserInterface
         return $groups[0]->getId();
     }
 
-    /**
-     * Fonction permettant de faire la correspondance entre les rôles en BDD et ceux de Symfony
-     * @param integer $id_role
-     */
-    public function getRoleCorrespondance($id_role)
-    {
-        switch ($id_role) {
-            case 1 :
-                return 'ROLE_SUPER_ADMIN';
-            break;
-            case 2 :
-                return 'ROLE_ADMIN';
-            break;
-            case 3 :
-                return 'ROLE_USER';
-            break;
-        }
-    }
-
-    /**
-     * Récupère tous les rôles symfony de l'utilisateur en fonction de ses communautés
-     */
-    public function getRoles()
-    {
-        $roles = array('ROLE_USER');
-
-        return $roles;
-    }
-
-
     public function getGroupsIds()
     {
         $groups_ids = array();
@@ -600,79 +384,6 @@ class User implements AdvancedUserInterface
         return false;
     }
 
-    /**
-     * Encode le mot de passe
-     * @param PasswordEncoderInterface $encoder
-     */
-    public function encodePassword(PasswordEncoderInterface $encoder)
-    {
-        if ($this->password) {
-            $this->salt = sha1(uniqid().time().rand(0,999999));
-            $this->password = $encoder->encodePassword
-            (
-                $this->password,
-                $this->salt
-            );
-        }
-    }
-
-    /**
-     * Renvoi si le compte est non-expiré
-     */
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    /**
-     * Renvoi si le compte est actif
-     */
-    public function isEnabled()
-    {
-        if($this->actif == 1) return true;
-        else return false;
-    }
-
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    public function eraseCredentials()
-    {
-        $this->Password = null;
-    }
-
-    /**
-     * Retourne l'username
-     */
-    public function getUsername()
-    {
-        return $this->login;
-    }
-
-     public function serialize()
-     {
-            return serialize($this->getUserName());
-     }
-
-     public function unserialize($data)
-     {
-            $this->username = unserialize($data);
-     }
-
-    /**
-     * Renvoi le role de l'utilisateur
-     */
-    public function getRole()
-    {
-        return 'User';
-    }
 
     public function getGravatar($s = 50)
     {
@@ -793,29 +504,6 @@ class User implements AdvancedUserInterface
     }
 
     /**
-     * Set group
-     *
-     * @param  \Mongobox\Bundle\GroupBundle\Entity\Group $group
-     * @return User
-     */
-    public function setGroup(\Mongobox\Bundle\GroupBundle\Entity\Group $group = null)
-    {
-        $this->group = $group;
-
-        return $this;
-    }
-
-    /**
-     * Get group
-     *
-     * @return \Mongobox\Bundle\GroupBundle\Entity\Group
-     */
-    public function getGroup()
-    {
-        return $this->group;
-    }
-
-    /**
      * Add votes
      *
      * @param  \Mongoeat\Bundle\VoteBundle\Entity\Vote $votes
@@ -878,7 +566,7 @@ class User implements AdvancedUserInterface
 
     public function __sleep()
     {
-        return array('id', 'login', 'email');
+        return array('id', 'username', 'email');
     }
 
     public function getName()

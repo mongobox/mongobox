@@ -36,18 +36,22 @@
 
             <div class="col-md-12">
                 <div class="progress">
-                    <div class="progress-bar"
-                         style="width: {{ (date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U')) / video_en_cours.videoGroup.video.duration * 100 }}%;">
-                        {{ (date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U'))|niceTime }}
-                        / {{ video_en_cours.videoGroup.video.duration|niceTime }}
-                    </div>
+                    {% if video_en_cours.videoGroup.video.duration > 0 %}
+                        <div class="progress-bar"
+                             style="width: {{ (date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U')) / video_en_cours.videoGroup.video.duration * 100 }}%;">
+
+                            {{ (date_actuelle | date('U') - video_en_cours.videoGroup.lastBroadcast| date('U'))|niceTime }}
+                            / {{ video_en_cours.videoGroup.video.duration|niceTime }}
+
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
     <script type="application/javascript">
-        var videoTitle = "{{video_en_cours.videoGroup.video.name}}";
+        var videoTitle = "{{ video_en_cours.videoGroup.video.name }}";
         document.title = videoTitle + ' [' + document.location.host + '] ';
     </script>
 {% endif %}

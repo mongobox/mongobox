@@ -1,0 +1,13 @@
+services:
+    fos_user.doctrine_registry:
+        alias: doctrine
+
+    mongobox.form.registration:
+        class: Mongobox\Bundle\UsersBundle\Form\Type\RegistrationType
+        tags:
+            - { name: form.type, alias: mongobox_user_registration }
+
+    mongobox.form.profile:
+            class: Mongobox\Bundle\UsersBundle\Form\Type\ProfileType
+            tags:
+                - { name: form.type, alias: mongobox_user_profile }

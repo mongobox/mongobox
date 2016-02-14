@@ -11,4 +11,4 @@
 	{% set loginClass = '' %}
 {% endif %}
 
-<img src="{{avatar}}" alt="" class="photo{% if avatarMini is defined %}-small{% endif %}"/>{% if notext is not defined or not notext %} <span class="{{loginClass}}">{{ user.login }}</span>{% endif %}
+<img src="{{avatar}}" alt="" class="photo{% if avatarMini is defined %}-small{% endif %}"/>{% if notext is not defined or not notext %} <span class="{{loginClass}}">{{ user.username }}</span>{% endif %}

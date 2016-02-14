@@ -165,12 +165,44 @@ sonata_admin:
                    icon: fa-pencil-square-o
                    text: Tumblr
 
-            -
-               class:    col-lg-4 col-xs-6
-               position: top
-               type:     sonata.admin.block.stats
-               settings:
-                   code: sonata.admin.users
-                   icon: fa-users
-                   text: Users
-                   color: bg-green
+            #-
+            #   class:    col-lg-4 col-xs-6
+            #   position: top
+            #   type:     sonata.admin.block.stats
+            #   settings:
+            #       code: sonata.admin.users
+            #       icon: fa-users
+            #       text: Users
+            #     color: bg-green
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: Mongobox\Bundle\UsersBundle\Entity\User
+    group:
+        group_class: Mongobox\Bundle\GroupBundle\Entity\Group
+    registration:
+        form:
+            #type: AppBundle\Form\RegistrationType
+            # if you are using Symfony < 2.8 you should use the type name instead
+            type: mongobox_user_registration
+        confirmation:
+            enabled:    true
+    profile:
+        form:
+            #type: AppBundle\Form\RegistrationType
+            # if you are using Symfony < 2.8 you should use the type name instead
+            type: mongobox_user_profile
+
+    from_email:
+        address:        noreply@mongobox.fr
+        sender_name:    Mongobox
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+    

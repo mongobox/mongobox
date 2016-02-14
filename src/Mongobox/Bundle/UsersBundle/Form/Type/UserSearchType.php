@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class UserSearchType
+ *
  * @package Mongobox\Bundle\UsersBundle\Form
  */
 class UserSearchType extends AbstractType
@@ -17,13 +18,15 @@ class UserSearchType extends AbstractType
         $builder
             ->add(
                 'user',
-                'genemu_jqueryautocompleter_entity',
-                array
-                (
-                    'label'      => 'Utilisateur',
-                    'route_name' => 'ajax_user_search',
-                    'class'      => 'Mongobox\Bundle\UsersBundle\Entity\User',
-                    'property'   => 'id'
+                'autocomplete',
+                array(
+                    'class'    => 'MongoboxUsersBundle:User',
+                    'label'    => 'Utilisateur',
+                    'attr'     => array(
+                        'placeholder' => 'Rechercher un utilisateur'
+                    ),
+                    'required' => false,
+                    'mapped'   => false
                 )
             );
     }
@@ -35,8 +38,10 @@ class UserSearchType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'intention' => $this->getName(),
-        ));
+        $resolver->setDefaults(
+            array(
+                'intention' => $this->getName(),
+            )
+        );
     }
 }

@@ -3,13 +3,60 @@
 {% block title -%}- Accueil{%- endblock title %}
 
 {% block body %}
-<h1>Liste des groupes</h1>
-<div class="groups">
-    {% for group in groups %}
-        <div class="well">
-            {{group.title}} <a href="{{path('group_inscription', {'id' : group.id})}}">S'inscrire</a>
+    <h1>Liste des groupes</h1>
+
+    {% if app.user.groupsInvitations|length > 0 %}
+        <h2>Invitations</h2>
+        <div class="groups">
+            {% for invitation in app.user.groupsInvitations %}
+                <div class="well">
+                    Vous avez reçu une invitation pour rejoindre le groupe <strong>{{ invitation.name }}</strong> :
+                    <a href="{{ path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id}) }}"
+                       title="Accepter l'invitation dans le groupe '{{ invitation.name }}'">Accepter</a>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
-<a href="{{path('group_create')}}" class="btn btn-success btn-lg">Créer un groupe</a>
+    {% endif %}
+
+    {% if privateGroups %}
+        <h2>Mes groupes privés</h2>
+        <div class="groups">
+            {% for group in privateGroups %}
+                <div class="well">
+                    {% if group.id == app.session.get('id_group') %}
+                        <span>✔ {{ group.name }}</span>
+                    {% else %}
+                        {{ group.name }} <a href="{{ path('group_change', {'id_group' : group.id}) }}">Rejoindre</a>
+                    {% endif %}
+
+                    -
+
+                    <a href="{{ path('group_invite', {'id' : group.id}) }}" title="Inviter un utilisateur">Inviter un
+                        utilisateur</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if publicGroups %}
+        <h2>Groupes publics</h2>
+        <div class="groups">
+            {% for group in publicGroups %}
+                <div class="well">
+                    {% if group.id == app.session.get('id_group') %}
+                        <span>✔ {{ group.name }}</span>
+                    {% else %}
+                        {{ group.name }}
+                        {% if group in app.user.groups %}
+                            <a href="{{ path('group_change', {'id_group' : group.id}) }}">Rejoindre</a>
+                        {% else %}
+                            <a href="{{ path('group_inscription', {'id' : group.id}) }}">S'inscrire</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <a href="{{ path('group_create') }}" class="btn btn-success btn-lg">Créer un groupe</a>
 {% endblock body %}

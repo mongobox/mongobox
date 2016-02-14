@@ -29,16 +29,10 @@
                 </li>
                 {% if app.user.groupsInvitations|length > 0 %}
                     <li class="dropdown-submenu">
-                        <a href="" title="Invitations">{{ app.user.groupsInvitations|length }}
-                            invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}</a>
-                        <ul class="dropdown-menu">
-                            {% for invitation in app.user.groupsInvitations %}
-                                <li>
-                                    <a href="{{ path('group_accept_invite', {'group' : invitation.id, 'user' : app.user.id}) }}"
-                                       title="Accepter l'invitation dans le groupe '{{ invitation.title }}'">{{ invitation.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        <a href="{{ path('group_index') }}" title="Invitations">
+                            <span class="badge">{{ app.user.groupsInvitations|length }}</span>
+                            invitation{% if app.user.groupsInvitations|length > 1 %}s{% endif %}
+                        </a>
                     </li>
                 {% endif %}
                 {% if app.user.groups|length %}
@@ -53,11 +47,11 @@
                                 class="fa fa-bookmark fa-fw"></i> Vos favoris</a>
                 </li>
                 <li>
-                    <a href="{{ path('user_edit') }}" title="Modifier votre compte"><i class="fa fa-user fa-fw"></i>
+                    <a href="{{ path('fos_user_profile_edit') }}" title="Modifier votre compte"><i class="fa fa-user fa-fw"></i>
                         Modifier votre compte</a>
                 </li>
                 <li>
-                    <a href="{{ path('_logout') }}" title="Déconnexion"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
+                    <a href="{{ path('fos_user_security_logout') }}" title="Déconnexion"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
                 </li>
             </ul>
         </li>

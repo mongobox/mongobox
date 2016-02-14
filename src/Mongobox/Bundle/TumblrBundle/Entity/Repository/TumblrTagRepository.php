@@ -12,43 +12,44 @@ use Doctrine\ORM\EntityRepository;
  */
 class TumblrTagRepository extends EntityRepository
 {
-	
-	/**
-	 * Function pour récupérer les mots clés pour l'autocomplétion
-	 * @param string $value
-	 * @return array
-	 */
-	public function getTags($value)
-	{
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
-		$qb->select('t')
-			->from('MongoboxTumblrBundle:TumblrTag', 't')
-			->where("t.name LIKE :tag")
-			->orderBy('t.name', 'ASC')
-			->setParameter('tag', $value.'%')
-            ->setMaxResults(10)
-		;
-			
-		$query = $qb->getQuery();
-		$tags = $query->getResult();
-			
-		$json = array();
-		foreach ($tags as $mot) {
-			$json[] = array(
-					'id' => $mot->getId(),
-					'label' => $mot->getName(),
-					'value' => $mot->getName()
-			);
-		}
-	
-		return $json;
-	}
+    /**
+     * Function pour récupérer les mots clés pour l'autocomplétion
+     *
+     * @param string $value
+     *
+     * @return array
+     */
+    public function getTags($value)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('t')
+            ->from('MongoboxTumblrBundle:TumblrTag', 't')
+            ->where("t.name LIKE :tag")
+            ->orderBy('t.name', 'ASC')
+            ->setParameter('tag', $value . '%')
+            ->setMaxResults(10);
+
+        $query = $qb->getQuery();
+        $tags = $query->getResult();
+
+        $json = array();
+        foreach ($tags as $mot) {
+            $json[] = array(
+                'id'    => $mot->getId(),
+                'label' => $mot->getName(),
+                'value' => $mot->getName()
+            );
+        }
+
+        return $json;
+    }
 
     /**
      * Funtion to load TumblrTab by name
      *
      * @param string $tag
+     *
      * @return boolean
      */
     public function loadOneTagByName($tag)
@@ -57,15 +58,12 @@ class TumblrTagRepository extends EntityRepository
             ->createQuery('SELECT tt.id,tt.name FROM MongoboxTumblrBundle:TumblrTag tt WHERE tt.name LIKE :tag')
             ->setParameter('tag', $tag);
 
-        try
-        {
+        try {
             $result = $query->getSingleResult();
-            return $result;
 
-        } catch (\Doctrine\ORM\NoResultException $e)
-        {
+            return $result;
+        } catch (\Doctrine\ORM\NoResultException $e) {
             return false;
         }
-
     }
 }

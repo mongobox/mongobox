@@ -3,7 +3,7 @@
         <a href="#" id="putsch-button" class="btn btn-primary" role="button">Devenir l'administrateur</a>
         {% if current_admin is not null %}
             <p>
-                Actuellement : <b>{{ current_admin.firstname }} {{ current_admin.lastname }}</b> (<i>{{ current_admin.login }})</i>
+                Actuellement : <b>{{ current_admin.firstname }} {{ current_admin.lastname }}</b> (<i>{{ current_admin.username }})</i>
             </p>
         {% endif %}
     </div>

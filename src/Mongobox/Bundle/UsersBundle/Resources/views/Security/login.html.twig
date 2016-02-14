@@ -1,0 +1,42 @@
+{% extends "MongoboxUsersBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin">
+        <h2>Connexion</h2>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-user"></i></div>
+                <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}"
+                       placeholder="{{ 'security.login.username'|trans }}" required="required"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                <input class="form-control" type="password" id="password" name="_password"
+                       placeholder="{{ 'security.login.password'|trans }}" required="required"/>
+            </div>
+        </div>
+
+        <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+        <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+
+        <button class="btn btn-lg btn-primary btn-block btn-signin"
+                type="submit">{{ 'security.login.submit'|trans }}</button>
+    </form>
+    <p class="text-center mt30 mb0">
+        <a href="{{ path('fos_user_resetting_request') }}" title="Mot de passe oublié ?">Mot de passe oublié ?</a>
+    </p>
+    <p class="text-center mt30 mb0">
+        <a href="{{ path('fos_user_registration_register') }}" title="Inscription">Inscription</a>
+    </p>
+{% endblock fos_user_content %}

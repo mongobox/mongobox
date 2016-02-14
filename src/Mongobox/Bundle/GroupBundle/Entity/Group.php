@@ -2,6 +2,7 @@
 
 namespace Mongobox\Bundle\GroupBundle\Entity;
 
+use FOS\UserBundle\Model\Group as BaseGroup;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,7 +15,7 @@ use Mongobox\Bundle\UsersBundle\Entity\User;
  * @ORM\Entity(repositoryClass="Mongobox\Bundle\GroupBundle\Entity\Repository\GroupRepository")
  * @ORM\Table(name="groups")
  */
-class Group
+class Group extends BaseGroup
 {
     /**
      * @ORM\Id
@@ -23,11 +24,7 @@ class Group
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
-    protected $title;
+    protected $roles =array();
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -70,11 +67,7 @@ class Group
     protected $liveCurrentAdmin;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", inversedBy="groups")
-     * @ORM\JoinTable(name="users_groups",
-     * 		joinColumns={@ORM\JoinColumn(name="id_group", referencedColumnName="id")},
-     * 		inverseJoinColumns={@ORM\JoinColumn(name="id_user", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity="\Mongobox\Bundle\UsersBundle\Entity\User", mappedBy="groups", cascade={"all"})
      */
     protected $users;
 
@@ -124,6 +117,9 @@ class Group
      */
     public function __construct()
     {
+       // var_dump(__METHOD__,$name,$roles);exit;
+        //parent::__construct($name, $roles);
+
 		$this->private              = true;
         $this->users                = new ArrayCollection();
         $this->users_invitations    = new ArrayCollection();
@@ -151,29 +147,6 @@ class Group
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set the value of title.
-     *
-     * @param string $title
-     * @return \Mongobox\Bundle\GroupsBundle\Entity\Group
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of title.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -294,6 +267,8 @@ class Group
         $this->tumblrs->removeElement($tumblr);
     }
 
+    /** ---------- USER INVITATIONS ---------- */
+
     public function getUsersInvitations()
     {
     	return $this->users_invitations;
@@ -303,6 +278,35 @@ class Group
     {
     	$this->users_invitations = $users_invitations;
     	return $this;
+    }
+
+    /**
+     * Add users_invitations
+     *
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations
+     * @return Group
+     */
+    public function addUsersInvitation(User $usersInvitations)
+    {
+        if (!$this->users_invitations->contains($usersInvitations)) {
+            $this->users_invitations[] = $usersInvitations;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove users_invitations
+     *
+     * @param \Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations
+     */
+    public function removeUsersInvitation(User $usersInvitations)
+    {
+        $this->users_invitations->removeElement($usersInvitations);
+    }
+
+    public function hasUsersInvitation(User $usersInvitations){
+        return $this->users_invitations->contains($usersInvitations);
     }
 
     /**
@@ -427,29 +431,6 @@ class Group
         return $this->group_live_tag;
     }
 
-    /**
-     * Add users_invitations
-     *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations
-     * @return Group
-     */
-    public function addUsersInvitation(\Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations)
-    {
-        $this->users_invitations[] = $usersInvitations;
-
-        return $this;
-    }
-
-    /**
-     * Remove users_invitations
-     *
-     * @param \Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations
-     */
-    public function removeUsersInvitation(\Mongobox\Bundle\UsersBundle\Entity\User $usersInvitations)
-    {
-        $this->users_invitations->removeElement($usersInvitations);
-    }
-
 
     /**
      * Add decisions
@@ -509,6 +490,6 @@ class Group
 
     public function __toString()
     {
-        return $this->title ? : 'New Group';
+        return $this->name ? : 'New Group';
     }
 }
