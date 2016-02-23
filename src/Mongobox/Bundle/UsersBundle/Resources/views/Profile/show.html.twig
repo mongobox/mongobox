@@ -1,0 +1,7 @@
+{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+
+{% block title %}- Profil de {{user.firstName}} {{user.lastName}}{% endblock title %}
+
+{% block fos_user_content %}
+{% include "FOSUserBundle:Profile:show_content.html.twig" %}
+{% endblock fos_user_content %}

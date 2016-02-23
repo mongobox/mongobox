@@ -1,13 +1,10 @@
-{% extends "MongoboxUsersBundle:User:layout.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
 
-{% block title %}- Profil de {{user.firstName}} {{user.lastName}}{% endblock title %}
-
-{% block body %}
 <div class="container">
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-12">
-                 <div class="content-block clearfix">
+                <div class="content-block clearfix">
                     <h2>{% include "MongoboxUsersBundle:User/Avatar:avatarBig.html.twig" %} - Profil</h2>
                     <ul class="list-unstyled">
                         <li><strong>Date d'inscription :</strong> {{user.dateCreate|date("d-m-Y")}}</li>
@@ -19,4 +16,3 @@
         </div>
     </div>
 </div>
-{% endblock body %}

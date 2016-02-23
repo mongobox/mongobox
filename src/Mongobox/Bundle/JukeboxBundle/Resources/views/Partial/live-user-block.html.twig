@@ -1,4 +1,4 @@
-{% if app.user.avatar is not null %}
+{% if app.user.avatar is not empty %}
     {% set avatar = app.user.avatarWebPath|apply_filter('avatar_thumbnail')%}
 {% else %}
     {% set avatar = app.user.gravatar(20) %}

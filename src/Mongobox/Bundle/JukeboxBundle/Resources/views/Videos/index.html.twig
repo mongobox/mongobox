@@ -3,7 +3,8 @@
 {% block body %}
 <h1>Liste des vidéos</h1>
 
-<form class="form-search form-inline" id="" action="{{ path('videos') }}" method="POST" {{ form_start(searchVideosForm) }}>
+    <form class="form-search form-inline" action="{{ path('videos') }}" method="POST" name="Mongobox_bundle_jukeboxbundle_search_videos_type">
+
     <div class="input-group">
         {{ form_widget(searchVideosForm.search) }}
         <span class="input-group-btn">

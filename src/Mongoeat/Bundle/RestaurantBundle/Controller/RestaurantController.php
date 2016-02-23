@@ -61,7 +61,8 @@ class RestaurantController extends Controller
 
             return $this->redirect($this->generateUrl('restaurant'));
         else
-            var_dump($p->getErrorOutput());
+            $logger = $this->get('logger');
+            $logger->error($p->getErrorOutput());
         exit;
     }
 

@@ -1,4 +1,4 @@
-{% if user.avatar is not null %}
+{% if user.avatar is not empty %}
     {% set avatar = user.avatarWebPath|apply_filter('avatar_thumbnail') %}
 {% else %}
     {% if avatarMini is defined %}

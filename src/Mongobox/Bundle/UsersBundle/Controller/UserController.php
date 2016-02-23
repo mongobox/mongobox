@@ -21,18 +21,6 @@ use Mongobox\Bundle\UsersBundle\Entity\User;
  */
 class UserController extends Controller
 {
-    /**
-     * Profil d'un utilisateur
-     * @Template()
-     * @Route("/profile/{id}", name="profile_user")
-     * @ParamConverter("user", class="MongoboxUsersBundle:User")
-     */
-    /*public function profileAction(Request $request, User $user)
-    {
-        return array(
-            'user' => $user
-        );
-    }*/
 
     /**
      * Fonction permettant de récupérer via JSON la liste des utilisateurs

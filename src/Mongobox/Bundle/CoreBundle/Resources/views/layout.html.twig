@@ -124,7 +124,7 @@
             {% if app.user %}
                 <footer class="footer navbar-inverse">
                     <div class="container">
-                        {# render(controller("MongoboxStatisticsBundle:Footer:statistics") ) #}
+                        {{ render(controller("MongoboxStatisticsBundle:Footer:statistics") ) }}
                         <p>© {{ project_name }} {{ version }} By {{ team_name }}</p>
                     </div>
                 </footer>

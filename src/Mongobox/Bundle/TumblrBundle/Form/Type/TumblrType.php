@@ -20,7 +20,7 @@ class TumblrType extends AbstractType
 		$this->listGroups = array();
 		foreach($groups as $group)
 		{
-			$this->listGroups[$group->getId()] = $group->getTitle();
+			$this->listGroups[$group->getId()] = $group->getName();
 			if($group->getPrivate()) $this->listGroups[$group->getId()] .= ' <i class="glyphicon glyphicon-lock" title="Groupe Privé"></i>';
 			else $this->listGroups[$group->getId()] .= ' <i class="glyphicon glyphicon-globe" title="Groupe Publique"></i>';
 		}

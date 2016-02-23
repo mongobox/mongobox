@@ -1,4 +1,4 @@
-{% if user.avatar is not null %}
+{% if user.avatar is not empty %}
 	{% set avatar = user.avatarWebPath|apply_filter('avatar_thumbnail')%}
 {% else %}
 	{% if avatarMini is defined %}
@@ -11,4 +11,5 @@
 	{% set loginClass = '' %}
 {% endif %}
 
-<img src="{{avatar}}" alt="" class="photo{% if avatarMini is defined %}-small{% endif %}"/>{% if notext is not defined or not notext %} <span class="{{loginClass}}">{{ user.username }}</span>{% endif %}
+<img src="{{avatar}}" alt="" class="photo{% if avatarMini is defined %}-small{% endif %}"/>
+{% if notext is not defined or not notext %} <span class="{{loginClass}}">{{ user.username }}</span>{% endif %}

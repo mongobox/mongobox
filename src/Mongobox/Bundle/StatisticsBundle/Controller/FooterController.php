@@ -24,6 +24,8 @@ class FooterController extends Controller
         ;
 
         $currentGroupId = (int) $request->cookies->get('id_group', 0);
+        $session = $request->getSession();
+        $currentGroupId = $session->get('id_group');
 
         $videosRepository   = $dm->getRepository('MongoboxJukeboxBundle:Videos');
         $videosGroupCount   = $videosRepository->getCount($currentGroupId);

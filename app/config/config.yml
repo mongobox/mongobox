@@ -36,7 +36,7 @@ twig:
     globals:
       project_name: MongoBox
       team_name:    Mongo Application
-      version:      "1.6"
+      version:      "1.8"
 
     form:
       resources:

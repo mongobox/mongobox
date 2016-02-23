@@ -99,7 +99,9 @@ class UsersAdmin extends Admin
             ->addIdentifier('email')
             ->add('username')
             ->add('name', 'string', array('template' => 'MongoboxUsersBundle::Admin/User/Fields/name.html.twig'))
-            ->add('groups');
+            ->add('groups')
+            ->add('lastLogin')
+        ;
           //  ->add('actif');
     }
 
