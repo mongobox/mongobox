@@ -24,6 +24,8 @@ var videoTags = videoTags || {};
         // index when inserting a new item (e.g. 2)
         videoTags.collectionHolder.data('index', videoTags.collectionHolder.find(':input').length);
         videoTags.autocompleteField = this.form.find('input.ui-autocomplete-input');
+
+        videoTags.error = 0;
     };
 
     videoTags.observeAddTag = function () {
@@ -38,8 +40,9 @@ var videoTags = videoTags || {};
             e.preventDefault();
 
             // Check tag choices
-            if ($(videoTags.containerSelectedTags).find('span.tag-item').length === 0) {
-                $(videoTags.containerSelectedTags).parents('.span4:first').append('<div class="alert alert-danger error-add-video">A tag must be added.</div>')
+            if ($(videoTags.containerSelectedTags).find('span.tag-item').length === 0 && videoTags.error == 0) {
+                videoTags.error = 1;
+                $('#video_info').append('<div class="alert alert-danger error-add-video">A tag must be added.</div>');
                 return false;
             }
 
@@ -130,4 +133,6 @@ var videoTags = videoTags || {};
             }
         });
     };
+
+
 })(jQuery);
