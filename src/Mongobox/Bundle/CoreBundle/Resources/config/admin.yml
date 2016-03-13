@@ -1,0 +1,13 @@
+# Mongobox/Bundle/CoreBundle/Resources/config/admin.yml
+services:
+    sonata.admin.feed.rss:
+        class: Mongobox\Bundle\CoreBundle\Admin\FeedAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Administration", label: "Flux RSS" }
+        arguments:
+            - ~
+            - Mongobox\Bundle\CoreBundle\Entity\Feed
+            - ~
+        calls:
+            - [ setTranslationDomain, [MongoboxCoreBundle]]
+

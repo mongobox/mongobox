@@ -6,8 +6,8 @@
                 <ul class="list-unstyled fluxrss">
                     {% for entity in flux.items %}
                         <li>
-                            {% if flux.link %}<a href="{{ entity.link }}">{{ entity.title }}</a>{% endif %}
-                            {% if flux.description %}
+                            {% if flux.link and entity.link %}<a href="{{ entity.link }}">{{ entity.title }}</a>{% endif %}
+                            {% if flux.description and entity.description %}
                                 <p>
                                     {{ entity.description|raw }}
                                 </p>

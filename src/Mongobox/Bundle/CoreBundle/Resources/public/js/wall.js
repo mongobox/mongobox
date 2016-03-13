@@ -57,7 +57,7 @@ function loadStatistiques() {
 
 
 // polling stats
-refreshStatistiques = setInterval(loadStatistiques, 100000);
+refreshStatistiques = setInterval(loadStatistiques, 50000);
 
 // polling RSS
 refreshRss = setInterval(loadRSS, 600000);

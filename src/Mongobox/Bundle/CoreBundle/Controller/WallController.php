@@ -23,11 +23,6 @@ use Mongobox\Bundle\JukeboxBundle\Form\Type\VideoType;
  */
 class WallController extends Controller
 {
-
-    protected $feedUrlPP = 'http://www.brain-magazine.fr/rss.php';
-    protected $feedUrlJDC = 'http://lesjoiesducode.tumblr.com/rss';
-    protected $feedUrl4Gifs = 'http://4gifs.tumblr.com/rss';
-
     /**
      * @Template()
      * @Route( "/", name="wall_index")
@@ -146,7 +141,7 @@ class WallController extends Controller
     /**
      * @Template()
      * @Route( "/vote/{id}/{sens}", name="vote")
-     * @ParamConverter("playlist", class="MongoboxJukeboxBundle:Playlist")     *
+     * @ParamConverter("playlist", class="MongoboxJukeboxBundle:Playlist")
      */
     public function voteAction(Request $request, $playlist, $sens)
     {
@@ -154,7 +149,7 @@ class WallController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        //Wipe de son ancien vote
+        // Wipe de son ancien vote
         $old_vote = $em->getRepository('MongoboxJukeboxBundle:Vote')
             ->findOneBy(
                 array(
@@ -295,37 +290,6 @@ class WallController extends Controller
     }
 
     /**
-     * Parse RSS feed
-     *
-     * @param $url
-     * @param bool $filter_type
-     * @param bool $filter
-     * @param int $limit
-     *
-     * @return array
-     */
-    protected function getFeedData($url, $filter_type = false, $filter = false, $limit = 6)
-    {
-        $feed = @simplexml_load_file($url);
-        $results = array();
-        $i = 0;
-
-        if (false !== $feed) {
-            foreach ($feed->channel->item as $article) {
-                if (!$filter || (string) $article->{$filter_type} == $filter) {
-                    $results[] = $article;
-                }
-                $i++;
-                if ($i == $limit) {
-                    break;
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    /**
      * Action for Flux RSS Blocks
      *
      * @Template("MongoboxCoreBundle:Wall/Blocs:fluxRss.html.twig")
@@ -333,30 +297,12 @@ class WallController extends Controller
      */
     public function fluxRssAction(Request $request)
     {
-        $flux_rss = array(
-            array(
-                'title'       => 'Page Pute',
-                'items'       => $this->getFeedData($this->feedUrlPP, 'category', 'Page Pute'),
-                'link'        => true,
-                'description' => false
-            ),
-            array(
-                'title'       => 'Les Joies du Code',
-                'items'       => $this->getFeedData($this->feedUrlJDC),
-                'link'        => true,
-                'description' => false
-            ),
-            array(
-                'title'       => '4Gifs',
-                'items'       => $this->getFeedData($this->feedUrl4Gifs),
-                'link'        => false,
-                'description' => true
-            )
-        );
+        $em = $this->getDoctrine()->getManager();
+        $rssFeeds = $em->getRepository('MongoboxCoreBundle:Feed')->findAll();
 
         return array
         (
-            'flux_rss' => $flux_rss
+            'flux_rss' => $rssFeeds
         );
     }
 }
