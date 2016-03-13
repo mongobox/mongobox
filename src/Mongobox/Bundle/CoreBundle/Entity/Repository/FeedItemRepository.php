@@ -65,4 +65,8 @@ class FeedItemRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function findAll()
+    {
+        return $this->findBy(array(), array('pubDate' => 'DESC'));
+    }
 }

@@ -201,40 +201,41 @@ class WallController extends Controller
      */
     public function videoEnCoursAction(Request $request)
     {
+        $somme = 0;
+        $video_en_cours = null;
+
         $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
+
         if (!is_null($session->get('id_group'))) {
             $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(
-                array('group' => $session->get('id_group'), 'current' => 1)
+                array(
+                    'group'   => $session->get('id_group'),
+                    'current' => 1
+                )
             );
+
             if (is_object($video_en_cours)) {
                 $somme = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeVotes($video_en_cours->getId());
-            } else {
-                $somme = 0;
             }
-        } else {
-            $video_en_cours = null;
-            $somme = 0;
         }
+
+        $data = array(
+            'video_en_cours' => $video_en_cours,
+            'date_actuelle'  => new \Datetime(),
+            'somme'          => $somme
+        );
 
         if (!is_null($request->query->get('json'))) {
             $render = $this->render(
                 'MongoboxCoreBundle:Wall/Blocs:videoEnCours.html.twig',
-                array(
-                    'video_en_cours' => $video_en_cours,
-                    'date_actuelle'  => new \Datetime(),
-                    'somme'          => $somme
-                )
+                $data
             );
             $json = array('render' => $render->getContent());
 
             return new Response(json_encode($json));
         } else {
-            return array(
-                'video_en_cours' => $video_en_cours,
-                'date_actuelle'  => new \Datetime(),
-                'somme'          => $somme
-            );
+            return $data;
         }
     }
 
@@ -249,40 +250,41 @@ class WallController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $session = $request->getSession();
-        $user->getGroups();
 
         //Si l'utilisateur a au moins un groupe
         if (count($user->getGroups()) > 0) {
-            $playlist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->next(10, $session->get('id_group'));
-            $videos_historique =
-                $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $session->get('id_group'));
-            $video_en_cours = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(
-                array('group' => $session->get('id_group'), 'current' => 1)
+            $currentGroup = $session->get('id_group');
+            $repositoryPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist');
+            
+            $playlist = $repositoryPlaylist->next(10, $currentGroup);
+            $videos_historique = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findLast(5, $currentGroup);
+            $video_en_cours = $repositoryPlaylist->findOneBy(
+                array(
+                    'group'   => $currentGroup,
+                    'current' => 1
+                )
             );
+
             $somme_pl = $em->getRepository('MongoboxJukeboxBundle:Vote')->sommeAllVotes();
+
+            $data = array(
+                'video_en_cours'    => $video_en_cours,
+                //'total_video' => $total_video,
+                'playlist'          => $playlist,
+                'videos_historique' => $videos_historique,
+                'somme_pl'          => $somme_pl
+            );
 
             if (!is_null($request->query->get('json'))) {
                 $render = $this->render(
                     'MongoboxCoreBundle:Wall/Blocs:statistiques.html.twig',
-                    array(
-                        'video_en_cours'    => $video_en_cours,
-                        //'total_video' => $total_video,
-                        'playlist'          => $playlist,
-                        'videos_historique' => $videos_historique,
-                        'somme_pl'          => $somme_pl
-                    )
+                    $data
                 );
                 $json = array('render' => $render->getContent());
 
                 return new Response(json_encode($json));
             } else {
-                return array(
-                    'video_en_cours'    => $video_en_cours,
-                    //'total_video' => $total_video,
-                    'playlist'          => $playlist,
-                    'videos_historique' => $videos_historique,
-                    'somme_pl'          => $somme_pl
-                );
+                return $data;
             }
         }
 

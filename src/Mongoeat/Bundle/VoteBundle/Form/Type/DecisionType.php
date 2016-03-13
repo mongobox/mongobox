@@ -16,16 +16,17 @@ class DecisionType extends AbstractType
     {
         $builder
             ->add('date')
-            ->add('group')
-        ;
+            ->add('group');
     }
 
-    public function configureOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Mongoeat\Bundle\VoteBundle\Entity\Decision',
-            'intention' => $this->getName()
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Mongoeat\Bundle\VoteBundle\Entity\Decision',
+                'intention'  => $this->getName()
+            )
+        );
     }
 
     public function getName()

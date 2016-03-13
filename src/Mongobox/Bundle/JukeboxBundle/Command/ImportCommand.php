@@ -147,7 +147,7 @@ class ImportCommand extends ContainerAwareCommand
 						$newVideosCount++;
 						$this->_logger->addDebug('Video imported successfully.', array('videoId' => $videoId));
 					}
-					catch(Exception $e){
+					catch(\Exception $e){
 						$this->_logger->addWarning('Video foireuse step2');
 						continue;
 		

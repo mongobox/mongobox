@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongoeat\Bundle\VoteBundle\Form;
+namespace Mongoeat\Bundle\VoteBundle\Form\Type;
 
 use Mongoeat\Bundle\RestaurantBundle\Entity\RestaurantRepository;
 use Symfony\Component\Form\AbstractType;
@@ -17,30 +17,35 @@ class VoteType extends AbstractType
 
     public function __construct($city)
     {
-        $this->city=$city;
+        $this->city = $city;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $city = $this->city;
         $builder
-            ->add('restaurant','entity',array(
-                'class' => 'MongoeatRestaurantBundle:Restaurant',
-                'query_builder' => function(RestaurantRepository $er) use ($city) {
-                    return $er->findSortVotes($city);
-                },
-                'multiple'	=> false,
-                'expanded'	=> true,
-            ))
-        ;
+            ->add(
+                'restaurant',
+                'entity',
+                array(
+                    'class'         => 'MongoeatRestaurantBundle:Restaurant',
+                    'query_builder' => function (RestaurantRepository $er) use ($city) {
+                        return $er->findSortVotes($city);
+                    },
+                    'multiple'      => false,
+                    'expanded'      => true,
+                )
+            );
     }
 
-    public function configureOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Mongoeat\Bundle\VoteBundle\Entity\Vote',
-            'intention' => $this->getName()
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Mongoeat\Bundle\VoteBundle\Entity\Vote',
+                'intention'  => $this->getName()
+            )
+        );
     }
 
     public function getName()
