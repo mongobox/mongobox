@@ -60,24 +60,7 @@
 
     <div role="navigation" class="navbar-default sidebar navbar-inverse">
         <div class="sidebar-nav navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-            <form action="{{ path('videos') }}" method="POST">
-                <ul class="nav in">
-                    <li class="sidebar-search">
-                        <div class="input-group custom-search-form">
-                            <input type="text" id="Mongobox_bundle_jukeboxbundle_search_videos_type_search"
-                                   name="Mongobox_bundle_jukeboxbundle_search_videos_type[search]"
-                                   placeholder="Search..."
-                                   required="required" size="15" class="form-control">
-
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </li>
-                </ul>
-            </form>
+            {{ render(controller("MongoboxJukeboxBundle:Videos:searchForm")) }}
 
             <ul class="nav in">
                 <li class="current first">

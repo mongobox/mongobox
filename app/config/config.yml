@@ -39,10 +39,6 @@ twig:
       team_name:    Mongo Application
       version:      "1.8"
 
-    form:
-      resources:
-        - 'bootstrap_3_layout.html.twig'
-
 # Service Configuration
 services:
     twig.extension.intl:

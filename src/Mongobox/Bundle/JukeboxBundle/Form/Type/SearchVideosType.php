@@ -16,24 +16,30 @@ class SearchVideosType extends AbstractType
     {
         $builder
             ->add(
+                'query',
                 'search',
-                'text',
                 array(
-                    'label' => 'Lien Youtube ou Id de la vidéo',
-                    'attr'  => array('size' => 15, 'class' => 'col-md-2 form-control search-query')
+                    'label' => false,
+                    'attr'  => array(
+                        'size'        => 15,
+                        'class'       => 'search-query',
+                        'placeholder' => "Search Video..."
+                    )
                 )
             );
     }
 
     public function getName()
     {
-        return 'Mongobox_bundle_jukeboxbundle_search_videos_type';
+        return null;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'intention' => $this->getName(),
-        ));
+        $resolver->setDefaults(
+            array(
+                'intention' => $this->getName(),
+            )
+        );
     }
 }

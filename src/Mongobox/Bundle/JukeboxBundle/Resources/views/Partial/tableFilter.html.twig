@@ -3,15 +3,26 @@
      - route
      - property
      - label
+     - query
 
 #}
+{% set params = {} %}
+
+{% if query is not empty %}
+    {% set params = params|merge({ 'query': query }) %}
+{% endif %}
+
 {% if filters.sortBy == property %}
 
     {% if filters.orderBy == 'desc' %}
-        <a class="filter" href="{{ path( route, {'sortBy':property, 'orderBy': 'asc'}) }}">{{ label }} <i class="glyphicon glyphicon-chevron-down"></i></a>
+        {% set params = params|merge({'sortBy':property, 'orderBy': 'asc'}) %}
+        <a class="filter" href="{{ path( route, params) }}">{{ label }} <i class="glyphicon glyphicon-chevron-down"></i></a>
     {% elseif filters.orderBy == 'asc' %}
-        <a class="filter" href="{{ path( route, {'sortBy':property, 'orderBy': 'desc'}) }}">{{ label }} <i class="glyphicon glyphicon-chevron-up"></i></a>
+        {% set params = params|merge({'sortBy':property, 'orderBy': 'desc'}) %}
+        <a class="filter" href="{{ path( route, params) }}">{{ label }} <i class="glyphicon glyphicon-chevron-up"></i></a>
     {% endif %}
+
 {% else %}
-    <a class="filter" href="{{ path( route, {'sortBy':property, 'orderBy': 'desc'}) }}">{{ label }}</a>
+    {% set params = params|merge({'sortBy':property, 'orderBy': 'desc'}) %}
+    <a class="filter" href="{{ path( route, params) }}">{{ label }}</a>
 {% endif %}

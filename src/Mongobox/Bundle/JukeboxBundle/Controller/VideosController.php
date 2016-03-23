@@ -34,203 +34,137 @@ use Google_Service_YouTube;
  */
 class VideosController extends Controller
 {
-    protected $_limitPagination = 50;
+    protected $_limitPagination = 30;
+
+    /**
+     * Block search videos
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function searchFormAction()
+    {
+        $formSearchVideos = $this->createForm(new SearchVideosType());
+
+        return $this->render(
+            'MongoboxJukeboxBundle:Videos/Blocs:searchVideos.html.twig',
+            array('form' => $formSearchVideos->createView())
+        );
+    }
+
+    /**
+     * Search video entities.
+     *
+     * @Route("/search", name="search_videos")
+     */
+    public function searchAction(Request $request)
+    {
+        $searchQuery = $request->get('query');
+
+        $response = $this->forward('MongoboxJukeboxBundle:Videos:index', array('page' => 1, 'query' => $searchQuery));
+
+        return $response;
+    }
 
     /**
      * Lists all Videos entities.
      *
-     * @Route("/{page}", name="videos",requirements={"page" = "\d+"}, defaults={"page" = 1})
+     * @Route("/{page}", name="videos", requirements={"page" = "\d+"}, defaults={"page" = 1})
      * @Template()
      */
-    public function indexAction(Request $request, $page)
+    public function indexAction(Request $request, $page, $query = null)
     {
         $em = $this->getDoctrine()->getManager();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($request->getSession()->get('id_group'));
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($request->getSession()->get('id_group'));
         $videosRepository = $em->getRepository('MongoboxJukeboxBundle:Videos');
         $videoGroupRepository = $em->getRepository('MongoboxJukeboxBundle:VideoGroup');
 
-        $formSearchVideos = $this->createForm(new SearchVideosType());
-
         $criteria = array();
-         if (  'POST' === $request->getMethod() ) {
-             $formSearchVideos->submit($request);
-             $criteria = array('title' => $formSearchVideos->get('search')->getData());
-         }
+        if (!empty($query)) {
+            $criteria = array('title' => $query);
+        }
 
-     	// filtre par defaut
+        // filtre par defaut
         $filters = array('sortBy' => 'vg.lastBroadcast', 'orderBy' => 'desc');
 
         // $_GET parameters
         $sortBy = $request->query->get('sortBy');
         $orderBy = $request->query->get('orderBy');
 
-        if( !empty($sortBy) && !empty($orderBy) ){
-        	$filters = array(
-        		'sortBy' => $sortBy,
-        		'orderBy' => $orderBy
-        	);
+        if (!empty($sortBy) && !empty($orderBy)) {
+            $filters = array(
+                'sortBy'  => $sortBy,
+                'orderBy' => $orderBy
+            );
         }
 
         $entities = $videosRepository->search(
-				$group,
-                $criteria,
-                $page,
-                $this->_limitPagination,
-        		$filters
+            $group,
+            $criteria,
+            $page,
+            $this->_limitPagination,
+            $filters
         );
 
-        $nbPages = (int) (count($videoGroupRepository->findBy(array('group' => $group->getId())))  / $this->_limitPagination);
+        $nbPages = 0;
+        if (empty($criteria)) {
+            $groupVideos = $videoGroupRepository->findBy(array('group' => $group->getId()));
+            $nbPages = (int) (count($groupVideos) / $this->_limitPagination);
+        }
 
         $displayFilters = $filters;
-        ( 'DESC' === $displayFilters['orderBy'] ) ? $displayFilters['orderBy'] = 'ASC' : $displayFilters['orderBy'] = 'DESC';
+        ('DESC' === $displayFilters['orderBy']) ? $displayFilters['orderBy'] = 'ASC' :
+            $displayFilters['orderBy'] = 'DESC';
 
         return array(
-            'searchVideosForm' => $formSearchVideos->createView(),
-            'entities' => $entities,
+            'entities'   => $entities,
             'pagination' => array(
-                'page' => $page,
-                'page_total' => $nbPages,
-                'page_gauche' => ( $page-1 > 0 ) ? $page-1 : 1,
-                'page_droite' => ( $page+1 < $nbPages ) ? $page+1 : $nbPages,
-                'limite' =>  $this->_limitPagination
+                'page'        => $page,
+                'page_total'  => $nbPages,
+                'page_gauche' => ($page - 1 > 0) ? $page - 1 : 1,
+                'page_droite' => ($page + 1 < $nbPages) ? $page + 1 : $nbPages,
+                'limite'      => $this->_limitPagination
             ),
-        	'filters' => $filters
+            'filters'    => $filters,
+            'query'      => $query
         );
-    }
-
-    /**
-     * Finds and displays a Videos entity.
-     *
-     * @Route("/{id}/show", name="videos_show")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Videos entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Displays a form to edit an existing Videos entity.
-     *
-     * @Route("/{id}/edit", name="videos_edit")
-     * @Template()
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Videos entity.');
-        }
-
-        $editForm = $this->createForm(new VideosType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Edits an existing Videos entity.
-     *
-     * @Route("/{id}/update", name="videos_update")
-     * @Method("POST")
-     * @Template("MongoboxJukeboxBundle:Videos:edit.html.twig")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Videos entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new VideosType(), $entity);
-        $editForm->submit($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('videos_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Deletes a Videos entity.
-     *
-     * @Route("/{id}/delete", name="videos_delete")
-     * @Method("POST")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->submit($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MongoboxJukeboxBundle:Videos')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Videos entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('videos'));
     }
 
     /**
      * Add the video to the playlist entity.
      *
-     * @Route("/{id}/add_to_playlist_vg", name="videos_add_to_playlist_vg")
+     * @Route("/add-video-playlist/{id}", name="videos_add_to_playlist_vg")
      * @ParamConverter("video", class="MongoboxJukeboxBundle:VideoGroup")
      */
     public function addToPlaylistVGAction(Request $request, VideoGroup $video)
     {
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $session = $request->getSession();
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
 
-        $playlist_add = new Playlist();
-        $playlist_add->setVideoGroup($video);
-		$playlist_add->setGroup($group);
-        $playlist_add->setRandom(0);
-		$playlist_add->setCurrent(0);
-        $playlist_add->setDate(new \Datetime());
-        $em->persist($playlist_add);
-        $em->flush();
+        $itemPlaylist = $em->getRepository('MongoboxJukeboxBundle:Playlist')->findOneBy(
+            array(
+                'group'       => $group,
+                'video_group' => $video,
+                'random'      => 0
+            )
+        );
 
-        $this->get('session')->getFlashBag()->add('success', 'Vidéo ajoutée à la playlist');
+        if (!empty($itemPlaylist)) {
+            $this->get('session')->getFlashBag()->add('erreur', 'Cette vidéo a déjà été ajoutée à la playlist');
+        } else {
+            $playlist_add = new Playlist();
+            $playlist_add->setVideoGroup($video);
+            $playlist_add->setGroup($group);
+            $playlist_add->setRandom(0);
+            $playlist_add->setCurrent(0);
+            $playlist_add->setDate(new \Datetime());
+
+            $em->persist($playlist_add);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Vidéo ajoutée à la playlist');
+        }
+
 
         return $this->redirect($this->generateUrl('videos'));
     }
@@ -244,37 +178,38 @@ class VideosController extends Controller
     public function addToPlaylistAction(Request $request, Videos $video)
     {
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$is_added = false;
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-		$videoGroup = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneBy(array('group' => $group, 'video' => $video));
-		if(is_object($videoGroup))
-		{
-			$playlist_add = new Playlist();
-			$playlist_add->setVideoGroup($videoGroup);
-			$playlist_add->setGroup($group);
-			$playlist_add->setRandom(0);
-			$playlist_add->setCurrent(0);
-			$playlist_add->setDate(new \Datetime());
-			$em->persist($playlist_add);
-			$em->flush();
-			$is_added = true;
-		}
+        $session = $request->getSession();
+        $is_added = false;
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $videoGroup = $em->getRepository('MongoboxJukeboxBundle:VideoGroup')->findOneBy(
+            array('group' => $group, 'video' => $video)
+        );
+        if (is_object($videoGroup)) {
+            $playlist_add = new Playlist();
+            $playlist_add->setVideoGroup($videoGroup);
+            $playlist_add->setGroup($group);
+            $playlist_add->setRandom(0);
+            $playlist_add->setCurrent(0);
+            $playlist_add->setDate(new \Datetime());
 
-		$retour = array(
-			'success' => $is_added,
-			'message' => ($is_added) ? "Vidéo ajoutée à la playlist": "Echec lors de l'ajout",
-		);
+            $em->persist($playlist_add);
+            $em->flush();
+            $is_added = true;
+        }
 
-		return new Response(json_encode($retour));
+        $retour = array(
+            'success' => $is_added,
+            'message' => ($is_added) ? "Vidéo ajoutée à la playlist" : "Echec lors de l'ajout",
+        );
+
+        return new Response(json_encode($retour));
     }
 
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
-            ->getForm()
-        ;
+            ->getForm();
     }
 
     /**
@@ -325,20 +260,19 @@ class VideosController extends Controller
 
         // Check if tag Already exist
         $resultTag = $videoTagsRepository->loadOneTagByName($value);
-        if( false === $resultTag ){
+        if (false === $resultTag) {
 
             // Create a new tag
             $newEntityTag = new VideoTag();
             $newEntityTag
                 ->setName($value)
-                ->setSystemName($value)
-            ;
+                ->setSystemName($value);
             $em->persist($newEntityTag);
             $em->flush();
 
             // Parsing result
             $resultTag = array(
-                'id' => $newEntityTag->getId(),
+                'id'   => $newEntityTag->getId(),
                 'name' => $newEntityTag->getName()
             );
         }
@@ -397,7 +331,7 @@ class VideosController extends Controller
 
                         $artist = $request->request->get('artist');
                         $songName = $request->request->get('songName');
-                        if( empty($artist) && empty($songName) ) {
+                        if (empty($artist) && empty($songName)) {
                             $infos = $video->guessVideoInfos();
                             $artist = $infos['artist'];
                             $songName = $infos['songName'];
@@ -472,7 +406,7 @@ class VideosController extends Controller
         $content = $this->render(
             "MongoboxCoreBundle:Wall/Blocs:postVideo.html.twig",
             array(
-                'form_video' => $form_video->createView(),
+                'form_video'  => $form_video->createView(),
                 'form_search' => $form_search->createView()
             )
         )->getContent();
@@ -490,58 +424,59 @@ class VideosController extends Controller
      * Action to edit a video from a modal
      *
      * @Route("/edit_modal/{id_video}", name="video_edit_modal")
-	 * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos", options={"id" = "id_video"})
+     * @ParamConverter("video", class="MongoboxJukeboxBundle:Videos", options={"id" = "id_video"})
      */
     public function editVideoModalAction(Request $request, Videos $video)
     {
         $em = $this->getDoctrine()->getManager();
 
-		$editForm = $this->createForm(new VideoInfoType(), $video);
+        $editForm = $this->createForm(new VideoInfoType(), $video);
         // Process the form on POST
-        if ($request->isMethod('POST'))
-		{
+        if ($request->isMethod('POST')) {
             $editForm->submit($request);
-            if ( $editForm->isValid() )
-			{
-				//On supprime les anciens tags de la vidéo
-				$em->getRepository('MongoboxJukeboxBundle:Videos')->wipeTags($video);
+            if ($editForm->isValid()) {
+                //On supprime les anciens tags de la vidéo
+                $em->getRepository('MongoboxJukeboxBundle:Videos')->wipeTags($video);
 
-				//On rajoute les tags
-				$tags = $editForm->get('tags')->getData();
-				if(is_array($tags))
-				{
-					foreach($tags as $tag_id)
-					{
-						$entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
-						$entityTag->getVideos()->add($video);
-					}
-				}
-				$em->flush();
+                //On rajoute les tags
+                $tags = $editForm->get('tags')->getData();
+                if (is_array($tags)) {
+                    foreach ($tags as $tag_id) {
+                        $entityTag = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->find($tag_id);
+                        $entityTag->getVideos()->add($video);
+                    }
+                }
+                $em->flush();
 
-				$content = 'Modification enregistrée avec succès';
-				$title = '';
+                $content = 'Modification enregistrée avec succès';
+                $title = '';
 
-				$return = array(
-					'content' => $content,
-					'title' => $title
-				);
-				return new Response(json_encode($return));
-			};
-		};
+                $return = array(
+                    'content' => $content,
+                    'title'   => $title
+                );
 
-		$list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video);
+                return new Response(json_encode($return));
+            };
+        };
 
-		$content = $this->render('MongoboxJukeboxBundle:Partial:edit-modal.html.twig', array(
-						'form_video_info' => $editForm->createView(),
-						'video' => $video,
-						'list_tags' => $list_tags
-					))->getContent();
-		$title = 'Edition de la vidéo : '.$video->getName();
+        $list_tags = $em->getRepository('MongoboxJukeboxBundle:VideoTag')->getVideoTags($video);
 
-		$return = array(
-			'content' => $content,
-			'title' => $title
-		);
+        $content = $this->render(
+            'MongoboxJukeboxBundle:Partial:edit-modal.html.twig',
+            array(
+                'form_video_info' => $editForm->createView(),
+                'video'           => $video,
+                'list_tags'       => $list_tags
+            )
+        )->getContent();
+        $title = 'Edition de la vidéo : ' . $video->getName();
+
+        $return = array(
+            'content' => $content,
+            'title'   => $title
+        );
+
         return new Response(json_encode($return));
     }
 
@@ -571,45 +506,55 @@ class VideosController extends Controller
         $youtubeService = $this->get('mongobox_jukebox.api_youtube');
 
         $em = $this->getDoctrine()->getManager();
-		$session = $request->getSession();
-		$group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
-		$video = new Videos();
-		$form_search = $this->createForm(new VideoSearchType(), $video);
-		$youtube_video = array();
-		$mongobox_video = array();
+        $session = $request->getSession();
+        $group = $em->getRepository('MongoboxGroupBundle:Group')->find($session->get('id_group'));
+        $video = new Videos();
+        $form_search = $this->createForm(new VideoSearchType(), $video);
+        $youtube_video = array();
+        $mongobox_video = array();
 
-		if ( 'POST' === $request->getMethod() )
-		{
-			$form_search->submit($request);
-			$keyword = $form_search->get('search')->getData();
+        if ('POST' === $request->getMethod()) {
+            $form_search->submit($request);
+            $keyword = $form_search->get('search')->getData();
 
-            $response = $youtubeService->getYoutubeApi()->search->listSearch("id,snippet", array('q' => $keyword,'maxResults'=>10));
-			foreach($response->getItems() as $video)
-			{
+            $response = $youtubeService->getYoutubeApi()->search->listSearch(
+                "id,snippet",
+                array('q' => $keyword, 'maxResults' => 10)
+            );
+            foreach ($response->getItems() as $video) {
                 $snippet = $video->getSnippet();
                 $url = "https://www.youtube.com/watch?v={$video->getId()->getVideoId()}";
                 $youtube_video[] = array('title' => $snippet->getTitle(), 'url' => $url);
-			}
+            }
 
-			//Récupération des infos Mongobox
-			$search = array('title' => $keyword);
-			$mongobox_videos = $em->getRepository('MongoboxJukeboxBundle:Videos')->search($group, $search, 1, 10);
-			foreach($mongobox_videos as $mv)
-			{
-				$mongobox_video[] = array('title' => $mv->getVideo()->getName(), 'url' => $mv->getVideo()->getLien());
-			}
-		}
+            //Récupération des infos Mongobox
+            $search = array('title' => $keyword);
+            $mongobox_videos = $em->getRepository('MongoboxJukeboxBundle:Videos')->search($group, $search, 1, 10);
+            foreach ($mongobox_videos as $mv) {
+                $mongobox_video[] = array('title' => $mv->getVideo()->getName(), 'url' => $mv->getVideo()->getLien());
+            }
+        }
 
-        return new Response(json_encode(array(
-			'youtube' => $this->render('MongoboxJukeboxBundle:Partial:search-listing.html.twig', array(
-						'video_listing' => $youtube_video,
-						'title' => 'Youtube'
-					))->getContent(),
-			'mongobox' => $this->render('MongoboxJukeboxBundle:Partial:search-listing.html.twig', array(
-						'video_listing' => $mongobox_video,
-						'title' => 'Mongobox'
-					))->getContent()
-			)));
+        return new Response(
+            json_encode(
+                array(
+                    'youtube'  => $this->render(
+                        'MongoboxJukeboxBundle:Partial:search-listing.html.twig',
+                        array(
+                            'video_listing' => $youtube_video,
+                            'title'         => 'Youtube'
+                        )
+                    )->getContent(),
+                    'mongobox' => $this->render(
+                        'MongoboxJukeboxBundle:Partial:search-listing.html.twig',
+                        array(
+                            'video_listing' => $mongobox_video,
+                            'title'         => 'Mongobox'
+                        )
+                    )->getContent()
+                )
+            )
+        );
     }
 
     /**
@@ -658,8 +603,7 @@ class VideosController extends Controller
                 $video = new Videos();
                 $video
                     ->setLien($lien)
-                    ->setTitle($snippet->getTitle())
-                ;
+                    ->setTitle($snippet->getTitle());
 
                 //On fait un bête split pour chopper artist et songName pour le moment
                 $response = $video->guessVideoInfos();

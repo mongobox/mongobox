@@ -1,0 +1,18 @@
+{# Bloc Contact form #}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+<form action="{{ path('search_videos') }}" method="GET" {{ form_enctype(form) }}>
+    <ul class="nav in">
+        <li class="sidebar-search">
+            <div class="input-group custom-search-form">
+
+                {{ form_widget(form.query) }}
+
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </li>
+    </ul>
+</form>
