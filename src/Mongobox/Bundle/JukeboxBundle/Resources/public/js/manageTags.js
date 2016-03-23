@@ -26,16 +26,21 @@ var videoTags = videoTags || {};
         videoTags.autocompleteField = this.form.find('input.ui-autocomplete-input');
 
         videoTags.error = 0;
+        videoTags.loadInProgress = 0;
     };
 
     videoTags.observeAddTag = function () {
         $(this.addTagButton).click(function (event) {
             event.preventDefault();
-            videoTags.loadTag(videoTags.autocompleteField.val());
+            var tagQuery = videoTags.autocompleteField.val();
+            if (tagQuery) {
+                videoTags.loadTag(tagQuery);
+            }
         });
     };
 
     videoTags.observeSubmitForm = function () {
+
         $(this.form).submit(function (e) {
             e.preventDefault();
 
@@ -45,22 +50,28 @@ var videoTags = videoTags || {};
                 $('#video_info').append('<div class="alert alert-danger error-add-video">A tag must be added.</div>');
                 return false;
             }
-
-            videoTags.loadAjax();
+            else {
+                videoTags.loadAjax();
+            }
         });
     };
 
     videoTags.loadAjax = function () {
-        this.submitting = true;
-        $.ajax({
-            type: 'POST',
-            url: this.form.attr('action'),
-            data: this.form.serialize(),
-            dataType: 'json',
-            success: function (data) {
-                $('#action-video-modal').modal('hide')
-            }
-        });
+        if (videoTags.loadInProgress === 0) {
+            videoTags.loadInProgress = 1;
+            $.ajax({
+                type: 'POST',
+                url: this.form.attr('action'),
+                data: this.form.serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    $('#action-video-modal').modal('hide')
+                },
+                complete: function (data) {
+                    videoTags.loadInProgress = 0;
+                }
+            });
+        }
     };
 
     videoTags.addTag = function (tag) {

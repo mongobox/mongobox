@@ -1,5 +1,3 @@
-
-
 $(document).on("click", ".btn-vote", function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -37,7 +35,7 @@ function loadVideoEnCours() {
             refreshLoadVideoEnCoursFail = 0;
             refreshLoadVideoInProgress = 0;
             $('#video_en_cours').html(json.render);
-           // $('.video-thumbnail').tooltip({'html': 'true', 'placement': 'left'});
+            // $('.video-thumbnail').tooltip({'html': 'true', 'placement': 'left'});
         }).fail(function () {
             refreshLoadVideoEnCoursFail++;
             if (refreshLoadVideoEnCoursFail >= 3) clearInterval(refreshLoadVideo);
@@ -47,22 +45,29 @@ function loadVideoEnCours() {
 
 refreshLoadVideo = setInterval(loadVideoEnCours, 15000);
 
+
+var submitVideoInProgress = 0;
 function btn_submit_video() {
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: basepath + 'videos/post_video',
-        data: $('#form_video').serialize(),
-        success: function (data) {
-            $('.loader').hide();
-            $('#action-video-modal .modal-header h3').html(data.title);
-            $('#action-video-modal .modal-body').html(data.content);
-        }
-    });
+    if (submitVideoInProgress === 0) {
+        submitVideoInProgress = 1;
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: basepath + 'videos/post_video',
+            data: $('#form_video').serialize(),
+            success: function (data) {
+                $('.loader').hide();
+                $('#action-video-modal .modal-header h3').html(data.title);
+                $('#action-video-modal .modal-body').html(data.content);
+            },
+            complete: function (data) {
+                submitVideoInProgress = 0;
+            }
+        });
+    }
 }
 
 $(document).ready(function () {
-
 
     $(document).on('click', '#add-video-button', function (e) {
         e.preventDefault();
@@ -79,7 +84,7 @@ $(document).ready(function () {
                 $('#action-video-modal .modal-header h3').html(data.title);
                 $('#action-video-modal .modal-body').html(data.content);
             },
-            complete: function(){
+            complete: function () {
                 $('.loader').hide();
             }
         });
@@ -101,7 +106,7 @@ $(document).ready(function () {
                 $('#action-video-modal .modal-header h3').html(data.title);
                 $('#action-video-modal .modal-body').html(data.content);
             },
-            complete: function(){
+            complete: function () {
                 $('.loader').hide();
             }
         });
@@ -186,11 +191,17 @@ $(document).ready(function () {
         });
     });
 
+    var searchVideoRequest;
     $(document).on('keyup', '#video_search_search', function (e) {
         // On met un delai pour éviter de chercher pour chaque lettre tappée
         delay(function () {
+
+            if (searchVideoRequest) {
+                searchVideoRequest.abort();
+            }
+
             // Loading content from twig template
-            $.ajax({
+            searchVideoRequest = $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: basepath + 'videos/ajax/search/keyword',
@@ -200,7 +211,9 @@ $(document).ready(function () {
                     $('#youtube_search').html(data.youtube);
                 }
             });
+
         }, 500);
+
     });
 
     $(document).on('click', '.video_search_send', function (e) {
