@@ -33,3 +33,6 @@ L'application s'enrichit désormais de nouvelles fonctionnalités de jour en jou
 
 ## Problèmes connus
   * Aucun design actuellement réalisé donc l'intégration se résume à un thème Bootstrap classique... bientôt peut-être !
+  
+## SensioLabs Insight
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6e018aea-3e8f-4c36-9542-c63fe410e309/big.png)](https://insight.sensiolabs.com/projects/6e018aea-3e8f-4c36-9542-c63fe410e309)
