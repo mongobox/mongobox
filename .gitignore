@@ -22,10 +22,9 @@
 # Composer PHAR
 /composer.phar
 
+
 /web/bundles/
 /web/imagine/
 /composer.lock
 
 /app/phpunit.xml
-
-
