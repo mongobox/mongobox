@@ -31,12 +31,9 @@ LivePlayer = function()
             if (parseInt(userId) === parseInt(this.userId)) {
                 clearInterval(this.putschTimer);
 
-                $('#putsch-modal').modal('show');
-                $('.loader').show();
-                $('#putsch-modal .modal-content').html($('#putsch-request-callback').html());
-                $('.loader').hide();
-
-                return;
+                var putschModal = $('#putsch-modal');
+                putschModal.find('.modal-content').html($('#putsch-request-callback').html());
+                putschModal.modal('show');
             }
         }.bind(this));
 
@@ -48,12 +45,9 @@ LivePlayer = function()
 
         socket.on('putsch failed', function(userId) {
             if (parseInt(userId) === parseInt(this.userId)) {
-                $('#putsch-modal').modal('show');
-                $('.loader').show();
-                $('#putsch-modal .modal-content').html($('#putsch-refuse-callback').html());
-                $('.loader').hide();
-
-                return;
+                var putschModal = $('#putsch-modal');
+                putschModal.find('.modal-content').html($('#putsch-refuse-callback').html());
+                putschModal.modal('show');
             }
         }.bind(this));
     },
@@ -214,10 +208,9 @@ LivePlayer = function()
                 socket.emit('putsch started');
                 this.waitPutschAcknowledgment();
             } else {
-                $('#putsch-modal').modal('show');
-                $('.loader').show();
-                $('#putsch-modal .modal-content').html(data.details);
-                $('.loader').hide();
+                var putschModal = $('#putsch-modal');
+                putschModal.find('.modal-content').html(data.details);
+                putschModal.modal('show');
             }
         }.bind(this));
     },
