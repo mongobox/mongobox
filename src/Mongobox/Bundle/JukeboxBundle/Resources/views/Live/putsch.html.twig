@@ -27,24 +27,23 @@
     </div>
 
     <script type="text/javascript">
-        $(function(){
-            $(".digits").countdown({
-                image: "{{ asset('bundles/mongoboxjukebox/img/digits.png') }}",
-                format: "mm:ss",
-                startTime: "00:59",
-                timerEnd: function() {
-                    if ($('#putsch-modal').is(':visible')) {
-                        livePlayer.acceptPutsch({{ user.id }});
-                    }
+        $(function () {
+            var putschModal = $('#putsch-modal');
+            putschModal.find('.digits').countdown({
+                image: '{{ asset('bundles/mongoboxjukebox/img/digits.png') }}',
+                format: 'mm:ss',
+                startTime: '01:00',
+                timerEnd: function () {
+                    livePlayer.acceptPutsch({{ user.id }});
                 }
             });
 
-            $('#accept-putsch').click(function(event) {
+            $('#accept-putsch').click(function (event) {
                 event.preventDefault();
                 livePlayer.acceptPutsch({{ user.id }});
             });
 
-            $('#refuse-putsch').click(function(event) {
+            $('#refuse-putsch').click(function (event) {
                 event.preventDefault();
                 livePlayer.refusePutsch({{ user.id }});
             });
