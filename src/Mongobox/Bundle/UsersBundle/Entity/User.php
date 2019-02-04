@@ -387,7 +387,7 @@ class User extends BaseUser
 
     public function getGravatar($s = 50)
     {
-        return 'http://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->getEmail() ) ) ).'?s='.$s;
+        return 'https://www.gravatar.com/avatar/'.md5( strtolower( trim( $this->getEmail() ) ) ).'?s='.$s;
     }
 
     /**

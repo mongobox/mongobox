@@ -73,7 +73,10 @@ class ImportCommand extends ContainerAwareCommand
         $this->_logger->addInfo('Tumblr images import - START');
 
         $em = $this->getContainer()->get('doctrine')->getManager('default');
-        $tumblrImages   = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findAll();
+        $tumblrImages   = $em->getRepository('MongoboxTumblrBundle:Tumblr')->findBy( 
+							['local_path' => null],
+							['id_tumblr' => 'desc']
+	);
         $nbTumblrImages = count($tumblrImages);
 
         $basePath = realpath($this->getContainer()->getParameter('kernel.root_dir')
@@ -156,6 +159,11 @@ class ImportCommand extends ContainerAwareCommand
                     $reports['success']++;
                 }
             }
+
+	    if( $i % 100 === 0){
+		$this->_logger->addDebug('FLUSH');
+		$em->flush();
+		} 
 
             // Advance the progress bar
             if ($this->_progressBar === true) {
